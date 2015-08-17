@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    
+
     <!--This is the main shell of the application.
     All common layout goes here.-->
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -16,7 +16,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <!--Top row is for menu button and other things-->
         <Grid Grid.Row="0">
             <ToggleButton x:Name="TogglePaneButton"
@@ -28,30 +28,108 @@
                           AutomationProperties.Name="Menu"
                           ToolTipService.ToolTip="Menu" />
         </Grid>
-        
+
         <!--Menu and content-->
         <SplitView x:Name="NavMenu"
                    Style="{StaticResource SplitViewStyle}"
                    Grid.Row="1"
                    IsPaneOpen="False"
-                   DisplayMode="CompactOverlay"
+                   DisplayMode="CompactOverlay" 
                    >
             <SplitView.Pane>
-                
+
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
+                    <!--settings menu-->
+                    <ListBox Grid.Row="1"
+                             Background="Transparent"
+                             Foreground="White"
+                             >
 
+
+                        <ListBoxItem>
+                            <ListBoxItem.Resources>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Grid Background="{TemplateBinding Background}">
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualState x:Name="Normal" />
+                                                            <VisualState x:Name="MouseOver">
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetName="fillColor" Storyboard.TargetProperty="Opacity" Duration="0" To=".35"/>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Disabled">
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetName="contentPresenter" Storyboard.TargetProperty="Opacity" Duration="0" To=".55" />
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                        </VisualStateGroup>
+                                                        <VisualStateGroup x:Name="SelectionStates">
+                                                            <VisualState x:Name="Unselected" />
+                                                            <VisualState x:Name="Selected">
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetName="fillColor2" Storyboard.TargetProperty="Opacity" Duration="0" To=".75"/>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                        </VisualStateGroup>
+                                                        <VisualStateGroup x:Name="FocusStates">
+                                                            <VisualState x:Name="Focused">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="Visibility" Duration="0">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0">
+                                                                            <DiscreteObjectKeyFrame.Value>
+                                                                                <Visibility>Visible</Visibility>
+                                                                            </DiscreteObjectKeyFrame.Value>
+                                                                        </DiscreteObjectKeyFrame>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Unfocused"/>
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+                                                    <Rectangle x:Name="fillColor" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
+                                                    <Rectangle x:Name="fillColor2" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
+                                                    <ContentPresenter
+                          x:Name="contentPresenter"
+                          Content="{TemplateBinding Content}"
+                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          Margin="{TemplateBinding Padding}"/>
+                                                    <Rectangle x:Name="FocusVisualElement" Stroke="#FF6DBDD1" StrokeThickness="1" Visibility="Collapsed" RadiusX="1" RadiusY="1" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                </Style>
+                            </ListBoxItem.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <SymbolIcon Symbol="Setting" Grid.Column="0" Margin="2,0,14,0" />
+                                <TextBlock Text="Settings" Grid.Column="1" />
+                            </Grid>
+
+                        </ListBoxItem>
+                    </ListBox>
 
                 </Grid>
 
 
             </SplitView.Pane>
-            
-            
+
+
             <SplitView.Content>
 
                 <!--Navigating="OnNavigatingToPage"
