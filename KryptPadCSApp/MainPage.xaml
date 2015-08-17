@@ -1,0 +1,105 @@
+﻿<Page
+    x:Class="KryptPadCSApp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KryptPadCSApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    
+    <!--This is the main shell of the application.
+    All common layout goes here.-->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!--Top row is for menu button and other things-->
+        <Grid Grid.Row="0">
+            <ToggleButton x:Name="TogglePaneButton"
+                          
+                          TabIndex="1"
+                          Style="{StaticResource SplitViewTogglePaneButtonStyle}"
+                          IsChecked="{Binding IsPaneOpen, ElementName=NavMenu, Mode=TwoWay}"
+                          
+                          AutomationProperties.Name="Menu"
+                          ToolTipService.ToolTip="Menu" />
+        </Grid>
+        
+        <!--Menu and content-->
+        <SplitView x:Name="NavMenu"
+                   Style="{StaticResource SplitViewStyle}"
+                   Grid.Row="1"
+                   IsPaneOpen="False"
+                   DisplayMode="CompactOverlay"
+                   >
+            <SplitView.Pane>
+                
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+
+
+                </Grid>
+
+
+            </SplitView.Pane>
+            
+            
+            <SplitView.Content>
+
+                <!--Navigating="OnNavigatingToPage"
+                   Navigated="OnNavigatedToPage"-->
+                <Frame x:Name="PageFrame"
+                   
+                       >
+                    <Frame.ContentTransitions>
+                        <TransitionCollection>
+                            <NavigationThemeTransition>
+                                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                                    <EntranceNavigationTransitionInfo/>
+                                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                            </NavigationThemeTransition>
+                        </TransitionCollection>
+                    </Frame.ContentTransitions>
+                </Frame>
+            </SplitView.Content>
+        </SplitView>
+
+        <!--manage visual states-->
+        <!--<VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualStatePhone">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="NavMenu.DisplayMode" Value="CompactOverlay" />
+                        <Setter Target="NavMenu.IsPaneOpen" Value="False" />
+                    </VisualState.Setters>
+                </VisualState>
+
+
+                <VisualState x:Name="VisualStateDesktop">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="NavMenu.DisplayMode" Value="CompactInline" />
+                        <Setter Target="NavMenu.IsPaneOpen" Value="True" />
+                    </VisualState.Setters>
+                </VisualState>
+
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>-->
+
+    </Grid>
+</Page>
