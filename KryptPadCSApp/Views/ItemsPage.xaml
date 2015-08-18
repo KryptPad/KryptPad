@@ -10,9 +10,10 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <!--Here we define our layout for the items list.
         We need a way to switch categories, and bind the GridView to that category's items.-->
-        <Pivot ItemsSource="{Binding Categories}"
+        <Pivot ItemsSource="{Binding Categories}" 
               >
-
+            
+            
             <!--Define the header template-->
             <Pivot.HeaderTemplate>
                 <DataTemplate>

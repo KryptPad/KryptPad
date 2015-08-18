@@ -6,6 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.Resources>
+        
+    </Page.Resources>
 
 
     <!--This is the main shell of the application.
@@ -19,14 +22,27 @@
 
         <!--Top row is for menu button and other things-->
         <Grid Grid.Row="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <!--Menu button-->
             <ToggleButton x:Name="TogglePaneButton"
-                          
+                          Grid.Column="0"
                           TabIndex="1"
                           Style="{StaticResource SplitViewTogglePaneButtonStyle}"
                           IsChecked="{Binding IsPaneOpen, ElementName=NavMenu, Mode=TwoWay}"
-                          
                           AutomationProperties.Name="Menu"
                           ToolTipService.ToolTip="Menu" />
+            
+            <!--Application title-->
+            <TextBlock Grid.Column="1" Text="KryptPad" 
+                       VerticalAlignment="Center"
+                       FontFamily="{ThemeResource PivotHeaderItemFontFamily}"
+                       FontSize="{ThemeResource PivotHeaderItemFontSize}" Margin="10,0,0,0"/>
+            
         </Grid>
 
         <!--Menu and content-->
@@ -45,83 +61,10 @@
                     </Grid.RowDefinitions>
 
                     <!--settings menu-->
-                    <ListBox Grid.Row="1"
-                             Background="Transparent"
-                             Foreground="White"
-                             >
+                    <ListBox Grid.Row="1">
 
+                        <ListBoxItem Style="{StaticResource MenuListBoxItemStyle}" >
 
-                        <ListBoxItem>
-                            <ListBoxItem.Resources>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ListBoxItem">
-                                                <Grid Background="{TemplateBinding Background}">
-                                                    
-                                                    <VisualStateManager.VisualStateGroups>
-                                                        <VisualStateGroup x:Name="CommonStates">
-                                                            <!--<VisualState x:Name="Normal" />-->
-                                                            <VisualState x:Name="Normal">
-                                                                <!--<Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetName="fillColor" Storyboard.TargetProperty="Opacity" Duration="0" To=".35"/>
-                                                                </Storyboard>-->
-                                                                <Storyboard>
-                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="fillcolor">
-                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Yellow"/>
-                                                                    </ObjectAnimationUsingKeyFrames>
-                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Green"/>
-                                                                    </ObjectAnimationUsingKeyFrames>
-                                                                </Storyboard>
-
-
-                                                            </VisualState>
-                                                            <VisualState x:Name="Disabled">
-                                                                <Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetName="contentPresenter" Storyboard.TargetProperty="Opacity" Duration="0" To=".55" />
-                                                                </Storyboard>
-                                                            </VisualState>
-                                                        </VisualStateGroup>
-                                                        <VisualStateGroup x:Name="SelectionStates">
-                                                            <VisualState x:Name="Unselected" />
-                                                            <VisualState x:Name="Selected">
-                                                                <Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetName="fillColor2" Storyboard.TargetProperty="Opacity" Duration="0" To=".75"/>
-                                                                </Storyboard>
-                                                            </VisualState>
-                                                        </VisualStateGroup>
-                                                        <VisualStateGroup x:Name="FocusStates">
-                                                            <VisualState x:Name="Focused">
-                                                                <Storyboard>
-                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="Visibility" Duration="0">
-                                                                        <DiscreteObjectKeyFrame KeyTime="0">
-                                                                            <DiscreteObjectKeyFrame.Value>
-                                                                                <Visibility>Visible</Visibility>
-                                                                            </DiscreteObjectKeyFrame.Value>
-                                                                        </DiscreteObjectKeyFrame>
-                                                                    </ObjectAnimationUsingKeyFrames>
-                                                                </Storyboard>
-                                                            </VisualState>
-                                                            <VisualState x:Name="Unfocused"/>
-                                                        </VisualStateGroup>
-                                                    </VisualStateManager.VisualStateGroups>
-                                                    <Rectangle x:Name="fillColor" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
-                                                    <Rectangle x:Name="fillColor2" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
-                                                    <ContentPresenter
-                          x:Name="contentPresenter"
-                          Content="{TemplateBinding Content}"
-                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                          Margin="{TemplateBinding Padding}"/>
-                                                    <Rectangle x:Name="FocusVisualElement" Stroke="#FF6DBDD1" StrokeThickness="1" Visibility="Collapsed" RadiusX="1" RadiusY="1" />
-                                                </Grid>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-
-                                </Style>
-                            </ListBoxItem.Resources>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />

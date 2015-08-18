@@ -19,6 +19,7 @@ namespace KryptPadCSApp.Models
             Categories.Add(new Category() { Name = "Category 1" });
             Categories.Add(new Category() { Name = "Category 2" });
             Categories.Add(new Category() { Name = "Category 3" });
+            Categories.Add(new Category() { Name = "Category 4" });
 
             Categories[0].Items.Add(new Profile() { Name = "Profile 1" });
             Categories[0].Items.Add(new Note() { Name = "Note 1" });
