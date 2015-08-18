@@ -58,13 +58,24 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="ListBoxItem">
                                                 <Grid Background="{TemplateBinding Background}">
+                                                    
                                                     <VisualStateManager.VisualStateGroups>
                                                         <VisualStateGroup x:Name="CommonStates">
-                                                            <VisualState x:Name="Normal" />
-                                                            <VisualState x:Name="MouseOver">
-                                                                <Storyboard>
+                                                            <!--<VisualState x:Name="Normal" />-->
+                                                            <VisualState x:Name="Normal">
+                                                                <!--<Storyboard>
                                                                     <DoubleAnimation Storyboard.TargetName="fillColor" Storyboard.TargetProperty="Opacity" Duration="0" To=".35"/>
+                                                                </Storyboard>-->
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="fillcolor">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Yellow"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Green"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
                                                                 </Storyboard>
+
+
                                                             </VisualState>
                                                             <VisualState x:Name="Disabled">
                                                                 <Storyboard>
