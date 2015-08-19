@@ -6,132 +6,29 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Page.Resources>
-        
-    </Page.Resources>
 
 
-    <!--This is the main shell of the application.
-    All common layout goes here.-->
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <SplitView x:Name="ShellSplitView" DisplayMode="CompactOverlay"
+               IsPaneOpen="False" CompactPaneLength="48" OpenPaneLength="200"
+               PaneBackground="{ThemeResource SplitViewBackgroundBrush}">
+        <SplitView.Pane>
+            <StackPanel>
+                <!-- Menu (hamburger) button -->
+                <RadioButton Style="{StaticResource SplitViewMenuButtonStyle}" Click="OnMenuButtonClicked" />
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+                <!-- Home button -->
+                <RadioButton Tag="&#xe10f;" Content="Home" Style="{StaticResource SplitViewNavButtonStyle}" IsChecked="True" Checked="OnHomeButtonChecked" />
 
-        <!--Top row is for menu button and other things-->
-        <Grid Grid.Row="0">
+                <!-- Search button -->
+                <RadioButton Tag="&#xe11a;" Content="Search" Style="{StaticResource SplitViewNavButtonStyle}" />
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            
-            <!--Menu button-->
-            <ToggleButton x:Name="TogglePaneButton"
-                          Grid.Column="0"
-                          TabIndex="1"
-                          Style="{StaticResource SplitViewTogglePaneButtonStyle}"
-                          IsChecked="{Binding IsPaneOpen, ElementName=NavMenu, Mode=TwoWay}"
-                          AutomationProperties.Name="Menu"
-                          ToolTipService.ToolTip="Menu" />
-            
-            <!--Application title-->
-            <TextBlock Grid.Column="1" Text="KryptPad" 
-                       VerticalAlignment="Center"
-                       FontFamily="{ThemeResource PivotHeaderItemFontFamily}"
-                       FontSize="{ThemeResource PivotHeaderItemFontSize}" Margin="10,0,0,0"/>
-            
-        </Grid>
+                <!-- Settings button -->
+                <RadioButton Tag="&#xe115;" Content="Settings" Style="{StaticResource SplitViewNavButtonStyle}"  />
 
-        <!--Menu and content-->
-        <SplitView x:Name="NavMenu"
-                   Style="{StaticResource SplitViewStyle}"
-                   Grid.Row="1"
-                   IsPaneOpen="False"
-                   DisplayMode="CompactOverlay" 
-                   >
-            <SplitView.Pane>
+                <!-- About button -->
+                <RadioButton Tag="&#xe783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" />
+            </StackPanel>
+        </SplitView.Pane>
+    </SplitView>
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
-
-                    <!--settings menu-->
-                    <ListBox Grid.Row="1">
-
-                        <ListBoxItem Style="{StaticResource MenuListBoxItemStyle}" >
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <SymbolIcon Symbol="Setting" Grid.Column="0" Margin="2,0,14,0" />
-                                <TextBlock Text="Settings" Grid.Column="1" />
-                            </Grid>
-
-                        </ListBoxItem>
-                    </ListBox>
-
-                </Grid>
-
-
-            </SplitView.Pane>
-
-
-            <SplitView.Content>
-
-                <!--Navigating="OnNavigatingToPage"
-                   Navigated="OnNavigatedToPage"-->
-                <Frame x:Name="PageFrame"
-                   
-                       >
-                    <Frame.ContentTransitions>
-                        <TransitionCollection>
-                            <NavigationThemeTransition>
-                                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
-                                    <EntranceNavigationTransitionInfo/>
-                                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
-                            </NavigationThemeTransition>
-                        </TransitionCollection>
-                    </Frame.ContentTransitions>
-                </Frame>
-            </SplitView.Content>
-        </SplitView>
-
-        <!--manage visual states-->
-        <!--<VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStateGroup">
-                <VisualState x:Name="VisualStatePhone">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-
-                    <VisualState.Setters>
-                        <Setter Target="NavMenu.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="NavMenu.IsPaneOpen" Value="False" />
-                    </VisualState.Setters>
-                </VisualState>
-
-
-                <VisualState x:Name="VisualStateDesktop">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="800" />
-                    </VisualState.StateTriggers>
-
-                    <VisualState.Setters>
-                        <Setter Target="NavMenu.DisplayMode" Value="CompactInline" />
-                        <Setter Target="NavMenu.IsPaneOpen" Value="True" />
-                    </VisualState.Setters>
-                </VisualState>
-
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>-->
-
-    </Grid>
 </Page>

@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Views;
+﻿using KryptPadCSApp.Models;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,22 +27,35 @@ namespace KryptPadCSApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public MainPage()
+        public MainPage(Frame frame)
         {
             this.InitializeComponent();
 
+            //set context
+            DataContext = new MainPageViewModel();
             //var text = "Some text to encrypt that is a lot longer than the first one and should be a bigger cypher text size";
 
             //var cypherText = KryptPad.Security.Encryption.Encrypt(text, "P@ssw0rd!");
 
             //var decryptedText = KryptPad.Security.Encryption.Decrypt(cypherText, "P@ssw0rd!");
 
-            PageFrame.Navigate(typeof(ItemsPage));
+            ShellSplitView.Content = frame;
 
 
         }
 
+        private void OnMenuButtonClicked(object sender, RoutedEventArgs e)
+        {
+            ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
+            ((RadioButton)sender).IsChecked = false;
+        }
 
+        private void OnHomeButtonChecked(object sender, RoutedEventArgs e)
+        {
+            ShellSplitView.IsPaneOpen = false;
+            if (ShellSplitView.Content != null)
+                ((Frame)ShellSplitView.Content).Navigate(typeof(ItemsPage));
+        }
 
     }
 }
