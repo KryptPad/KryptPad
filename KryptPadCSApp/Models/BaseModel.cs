@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.Models
 {
-    class BaseModel : INotifyPropertyChanged
+    public class BaseModel : INotifyPropertyChanged
     {
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;

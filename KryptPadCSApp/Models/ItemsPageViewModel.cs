@@ -8,10 +8,17 @@ namespace KryptPadCSApp.Models
 {
     class ItemsPageViewModel : BaseModel
     {
+        #region Properties
         /// <summary>
         /// Gets the collection of categories
         /// </summary>
+        //public CategoryCollection Categories
+        //{
+        //    get { App.Current.Document.Categories; }
+        //}
         public CategoryCollection Categories { get; private set; } = new CategoryCollection();
+        #endregion
+
 
         public ItemsPageViewModel()
         {

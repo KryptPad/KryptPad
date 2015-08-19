@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Views;
+﻿using KryptPadCSApp.Models;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,9 +23,14 @@ namespace KryptPadCSApp
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    partial class App : Application
     {
         private Frame _rootFrame;
+
+        #region MyRegion
+        //public Document Document{ get; set; } = new Document();
+        #endregion
+
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
