@@ -7,11 +7,27 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <!--<Page.TopAppBar>
+        
+    </Page.TopAppBar>-->
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <CommandBar>
+                <AppBarButton Icon="Accept" Label="Save Changes" />
+            </CommandBar>
+        </Grid>
+        
         <!--Here we define our layout for the items list.
         We need a way to switch categories, and bind the GridView to that category's items.-->
         <Pivot ItemsSource="{Binding Categories}" 
-              >
+               Grid.Row="1">
             
             
             <!--Define the header template-->
