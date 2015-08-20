@@ -1,62 +1,77 @@
-﻿using System;
+﻿using KryptPadCSApp.Views;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
     class MainPageViewModel : BaseModel
     {
-
+        
         #region Properties
-        public ObservableCollection<MenuItem> MenuItems { get; set; } = new ObservableCollection<MenuItem>();
 
-        /// <summary>
-        /// Gets or sets the selected menu item
-        /// </summary>
-        private MenuItem _selectedMenuItem;
+        public static Document Document { get; set; } = new Document();
 
-        public MenuItem SelectedMenuItem
+        public ICommand HomeNavButtonCommand { get; private set; }
+
+        public ICommand MenuButtonCommand { get; private set; }
+
+        private bool _isPaneOpen;
+
+        public bool IsPaneOpen
         {
-            get { return _selectedMenuItem; }
+            get { return _isPaneOpen; }
             set
             {
-                _selectedMenuItem = value;
-
-                //if we have a selected item, then nav pane is not open
-                IsNavPaneOpen = false;
-
+                _isPaneOpen = value;
                 //notify change
-                OnPropertyChanged(nameof(SelectedMenuItem));
+                OnPropertyChanged(nameof(IsPaneOpen));
             }
         }
 
+        private bool _isMenuButtonChecked;
 
-        private bool _isNavPaneOpen;
-
-        public bool IsNavPaneOpen
+        public bool IsMenuButtonChecked
         {
-            get { return _isNavPaneOpen; }
+            get { return _isMenuButtonChecked; }
             set
             {
-                _isNavPaneOpen = value;
+                _isMenuButtonChecked = value;
                 //notify change
-                OnPropertyChanged(nameof(IsNavPaneOpen));
+                OnPropertyChanged(nameof(IsMenuButtonChecked));
             }
         }
-
-
 
         #endregion
 
         public MainPageViewModel()
         {
-            //create menu items
-            MenuItems.Add(new MenuItem() { Symbol = Symbol.Home, Text = "Home" });
-            MenuItems.Add(new MenuItem() { Symbol = Symbol.Tag, Text = "Manage Categories" });
+            RegisterCommands();
+        }
+
+        /// <summary>
+        /// Registers commands for UI elements
+        /// </summary>
+        private void RegisterCommands()
+        {
+            HomeNavButtonCommand = new Command((p) =>
+            {
+                IsPaneOpen = false;
+                //navigate
+                Navigate(typeof(ItemsPage));
+            });
+
+            MenuButtonCommand = new Command((p) =>
+            {
+                IsPaneOpen = !IsPaneOpen;
+                IsMenuButtonChecked = false;
+            });
         }
 
     }

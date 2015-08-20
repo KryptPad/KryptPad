@@ -27,35 +27,37 @@ namespace KryptPadCSApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public Frame RootFrame { get; private set; }
+
         public MainPage(Frame frame)
         {
             this.InitializeComponent();
 
             //set context
-            DataContext = new MainPageViewModel();
+            //DataContext = new MainPageViewModel();
             //var text = "Some text to encrypt that is a lot longer than the first one and should be a bigger cypher text size";
 
             //var cypherText = KryptPad.Security.Encryption.Encrypt(text, "P@ssw0rd!");
 
             //var decryptedText = KryptPad.Security.Encryption.Decrypt(cypherText, "P@ssw0rd!");
-
-            ShellSplitView.Content = frame;
+            RootFrame = frame;
+            ShellSplitView.Content = RootFrame;
 
 
         }
 
-        private void OnMenuButtonClicked(object sender, RoutedEventArgs e)
-        {
-            ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
-            ((RadioButton)sender).IsChecked = false;
-        }
+        //private void OnMenuButtonClicked(object sender, RoutedEventArgs e)
+        //{
+        //    ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
+        //    ((RadioButton)sender).IsChecked = false;
+        //}
 
-        private void OnHomeButtonChecked(object sender, RoutedEventArgs e)
-        {
-            ShellSplitView.IsPaneOpen = false;
-            if (ShellSplitView.Content != null)
-                ((Frame)ShellSplitView.Content).Navigate(typeof(ItemsPage));
-        }
+        //private void OnHomeButtonChecked(object sender, RoutedEventArgs e)
+        //{
+        //    ShellSplitView.IsPaneOpen = false;
+        //    if (ShellSplitView.Content != null)
+        //        ((Frame)ShellSplitView.Content).Navigate(typeof(ItemsPage));
+        //}
 
     }
 }

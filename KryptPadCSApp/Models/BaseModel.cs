@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace KryptPadCSApp.Models
 {
@@ -11,6 +12,51 @@ namespace KryptPadCSApp.Models
     {
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Navigates the frame to a page type
+        /// </summary>
+        /// <param name="pageType"></param>
+        protected void Navigate(Type pageType)
+        {
+            Navigate(pageType, null);
+
+        }
+
+        protected void Navigate(Type pageType, object parameter)
+        {
+            var mainPage = Window.Current.Content as MainPage;
+
+            if (mainPage != null)
+            {
+                var frame = mainPage.RootFrame;
+                if (frame != null)
+                {
+                    frame.Navigate(pageType, parameter);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Navigates back to the previous page in the stack
+        /// </summary>
+        protected void GoBack()
+        {
+            var mainPage = Window.Current.Content as MainPage;
+
+            if (mainPage != null)
+            {
+                var frame = mainPage.RootFrame;
+                if (frame != null)
+                {
+                    frame.GoBack();
+                }
+            }
+        }
         #endregion
 
         #region Event Handlers

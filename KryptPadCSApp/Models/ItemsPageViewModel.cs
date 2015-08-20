@@ -1,8 +1,10 @@
-﻿using System;
+﻿using KryptPadCSApp.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KryptPadCSApp.Models
 {
@@ -12,29 +14,36 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets the collection of categories
         /// </summary>
-        //public CategoryCollection Categories
-        //{
-        //    get { App.Current.Document.Categories; }
-        //}
-        public CategoryCollection Categories { get; private set; } = new CategoryCollection();
+        public CategoryCollection Categories
+        {
+            get { return MainPageViewModel.Document.Categories; }
+        }
+        //public CategoryCollection Categories { get; private set; } = new CategoryCollection();
+
+        /// <summary>
+        /// Opens new category page
+        /// </summary>
+        public ICommand AddCategoryCommand { get; private set; }
+
         #endregion
 
 
         public ItemsPageViewModel()
         {
-            //add some fake categories
-            Categories.Add(new Category() { Name = "Category 1" });
-            Categories.Add(new Category() { Name = "Category 2" });
-            Categories.Add(new Category() { Name = "Category 3" });
-            Categories.Add(new Category() { Name = "Category 4" });
+            RegisterCommands();
+        }
 
-            Categories[0].Items.Add(new Profile() { Name = "Profile 1" });
-            Categories[0].Items.Add(new Note() { Name = "Note 1" });
-            Categories[0].Items.Add(new Profile() { Name = "Profile 2" });
+        /// <summary>
+        /// Registers commands for UI elements
+        /// </summary>
+        private void RegisterCommands()
+        {
+            AddCategoryCommand = new Command((p) =>
+            {
+                //navigate
+                Navigate(typeof(NewCategoryPage));
+            });
 
-            Categories[1].Items.Add(new Note() { Name = "Note 2" });
-            Categories[1].Items.Add(new Note() { Name = "Profile 3" });
-            Categories[1].Items.Add(new Profile() { Name = "Profile 3" });
         }
 
     }

@@ -1,42 +1,49 @@
 ﻿<Page
-    x:Class="KryptPadCSApp.Views.ItemsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    xmlns:Models="using:KryptPadCSApp.Models"
+    x:Class="KryptPadCSApp.Views.ItemsPage"
+    mc:Ignorable="d"
+    >
+
+    <Page.DataContext>
+        <Models:ItemsPageViewModel/>
+    </Page.DataContext>
 
     <!--<Page.TopAppBar>
         
     </Page.TopAppBar>-->
-    
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0">
             <CommandBar>
-                <AppBarButton Icon="Accept" Label="Save Changes" />
+                <AppBarButton Icon="Add" Label="Add Category" Command="{Binding AddCategoryCommand}" />
             </CommandBar>
         </Grid>
-        
+
         <!--Here we define our layout for the items list.
         We need a way to switch categories, and bind the GridView to that category's items.-->
-        <Pivot ItemsSource="{Binding Categories}" 
-               Grid.Row="1">
-            
-            
+        <Pivot x:Name="CategoryPivot"
+            ItemsSource="{Binding Categories}" 
+			Grid.Row="1">
+
+
             <!--Define the header template-->
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name }"/>
+                    <TextBlock Text="{Binding Name}"/>
                 </DataTemplate>
             </Pivot.HeaderTemplate>
-            
+
             <!--Define the item template. In this case, it is just a grid view.-->
             <Pivot.ItemTemplate>
                 <DataTemplate>
@@ -48,7 +55,7 @@
                             </DataTemplate>
                         </GridView.ItemTemplate>
                     </GridView>
-                    
+
                 </DataTemplate>
             </Pivot.ItemTemplate>
         </Pivot>

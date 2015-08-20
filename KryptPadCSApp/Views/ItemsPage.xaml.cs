@@ -27,7 +27,17 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
 
-            this.DataContext = new ItemsPageViewModel();
+            
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            if (e.Parameter != null && e.Parameter is Category)
+            {
+                //CategoryPivot.SelectedItem = e.Parameter;
+            }
         }
     }
 }

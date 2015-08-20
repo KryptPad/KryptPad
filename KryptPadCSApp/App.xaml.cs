@@ -23,13 +23,11 @@ namespace KryptPadCSApp
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    partial class App : Application
+    public partial class App : Application
     {
         private Frame _rootFrame;
 
-        #region MyRegion
-        //public Document Document{ get; set; } = new Document();
-        #endregion
+        
 
 
         /// <summary>
