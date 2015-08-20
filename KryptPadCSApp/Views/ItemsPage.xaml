@@ -33,8 +33,9 @@
         <!--Here we define our layout for the items list.
         We need a way to switch categories, and bind the GridView to that category's items.-->
         <Pivot x:Name="CategoryPivot"
-            ItemsSource="{Binding Categories}" 
-			Grid.Row="1">
+               ItemsSource="{Binding Categories}"
+               SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+			   Grid.Row="1">
 
 
             <!--Define the header template-->

@@ -8,42 +8,34 @@ using System.Windows.Input;
 
 namespace KryptPadCSApp.Models
 {
-    class ItemsPageViewModel : BaseModel
+    class NewCategoryPageViewModel : BaseModel
     {
         #region Properties
-        /// <summary>
-        /// Gets the collection of categories
-        /// </summary>
-        public CategoryCollection Categories
-        {
-            get { return MainPageViewModel.Document.Categories; }
-        }
 
-        private Category _selectedCategory;
         /// <summary>
-        /// Gets or sets the selected category
+        /// Gets or sets the name of the new category
         /// </summary>
-        public Category SelectedCategory
+        private string _categoryName;
+
+        public string CategoryName
         {
-            get { return _selectedCategory; }
+            get { return _categoryName; }
             set
             {
-                _selectedCategory = value;
+                _categoryName = value;
                 //notify change
-                OnPropertyChanged(nameof(SelectedCategory));
+                OnPropertyChanged(nameof(CategoryName));
             }
         }
 
 
         /// <summary>
-        /// Opens new category page
+        /// Adds the new category top the current document
         /// </summary>
         public ICommand AddCategoryCommand { get; private set; }
-
         #endregion
 
-
-        public ItemsPageViewModel()
+        public NewCategoryPageViewModel()
         {
             RegisterCommands();
         }
@@ -55,11 +47,19 @@ namespace KryptPadCSApp.Models
         {
             AddCategoryCommand = new Command((p) =>
             {
+                //create new category
+                var category = new Category()
+                {
+                    Name = CategoryName
+                };
+
+                //add to the list
+                MainPageViewModel.Document.Categories.Add(category);
+
                 //navigate
-                Navigate(typeof(NewCategoryPage));
+                Navigate(typeof(ItemsPage), category);
             });
 
         }
-
     }
 }
