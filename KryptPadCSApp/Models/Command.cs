@@ -3,19 +3,43 @@ using System.Windows.Input;
 
 namespace KryptPadCSApp.Models
 {
-    internal class Command : ICommand
+    class Command : ICommand
     {
         public event EventHandler CanExecuteChanged;
-        public Action<object> _action;
+
+        private Action<object> _action;
+        //private Func<object, bool> _canExecute;
+
+        #region Properties
+        private bool _commandCanExecute;
+
+        public bool CommandCanExecute
+        {
+            get { return _commandCanExecute; }
+            set {
+                _commandCanExecute = value;
+                //raise event
+                OnCanExecuteChanged();
+            }
+        }
+
+        #endregion
 
         public Command(Action<object> action)
         {
             _action = action;
+            CommandCanExecute = true;
+        }
+
+        public Command(Action<object> action, bool canExecute)
+        {
+            _action = action;
+            CommandCanExecute = canExecute;
         }
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return CommandCanExecute;
         }
 
         public void Execute(object parameter)
@@ -23,6 +47,18 @@ namespace KryptPadCSApp.Models
             if (_action != null)
             {
                 _action(parameter);
+            }
+        }
+
+        /// <summary>
+        /// Raises CanExecuteChanged event
+        /// </summary>
+        private void OnCanExecuteChanged()
+        {
+            var handler = CanExecuteChanged;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
             }
         }
     }

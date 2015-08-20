@@ -22,7 +22,7 @@
         <Grid Margin="10">
             <StackPanel HorizontalAlignment="Left" Width="250">
                 <TextBlock Text="Category name" />
-                <TextBox Text="{Binding CategoryName, Mode=TwoWay}" />
+                <TextBox Text="{Binding CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 
             </StackPanel>

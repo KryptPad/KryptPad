@@ -22,9 +22,20 @@ namespace KryptPadCSApp.Models
             get { return _categoryName; }
             set
             {
-                _categoryName = value;
+                //ensure it is not null
+                if (value == null)
+                {
+                    value = string.Empty;
+                }
+
+                //set value
+                _categoryName = value.Trim();
+
                 //notify change
                 OnPropertyChanged(nameof(CategoryName));
+
+                //if there is some text, then we can execute
+                AddCategoryCommand.CommandCanExecute = !string.IsNullOrWhiteSpace(_categoryName);
             }
         }
 
@@ -32,7 +43,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Adds the new category top the current document
         /// </summary>
-        public ICommand AddCategoryCommand { get; private set; }
+        public Command AddCategoryCommand { get; private set; }
         #endregion
 
         public NewCategoryPageViewModel()
@@ -58,7 +69,7 @@ namespace KryptPadCSApp.Models
 
                 //navigate
                 Navigate(typeof(ItemsPage), category);
-            });
+            }, false);
 
         }
     }
