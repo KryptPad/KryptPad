@@ -44,6 +44,8 @@ namespace KryptPadCSApp.Models
         /// Adds the new category top the current document
         /// </summary>
         public Command AddCategoryCommand { get; private set; }
+
+        public ICommand CancelCommand { get; private set; }
         #endregion
 
         public NewCategoryPageViewModel()
@@ -56,6 +58,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
+            //add the category
             AddCategoryCommand = new Command((p) =>
             {
                 //create new category
@@ -70,6 +73,9 @@ namespace KryptPadCSApp.Models
                 //navigate
                 Navigate(typeof(ItemsPage), category);
             }, false);
+
+            //cancel command
+            CancelCommand = new Command((p) => { GoBack(); });
 
         }
     }
