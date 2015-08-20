@@ -24,10 +24,25 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <CommandBar>
+        <Grid Grid.Row="0" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            
+            <CommandBar Grid.Column="1">
                 <AppBarButton Icon="Add" Label="Add Category" Command="{Binding AddCategoryCommand}" />
             </CommandBar>
+
+            <AutoSuggestBox Grid.Column="2" Width="175"
+                            
+                            VerticalAlignment="Center"
+                            QueryIcon="Find"
+                            PlaceholderText="Search">
+                
+            </AutoSuggestBox>
+            
         </Grid>
 
         <!--Here we define our layout for the items list.
