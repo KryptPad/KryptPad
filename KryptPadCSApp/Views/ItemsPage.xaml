@@ -30,7 +30,7 @@
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            
+
             <CommandBar Grid.Column="1">
                 <AppBarButton Icon="Add" Label="Add Category" Command="{Binding AddCategoryCommand}" />
             </CommandBar>
@@ -40,9 +40,9 @@
                             VerticalAlignment="Center"
                             QueryIcon="Find"
                             PlaceholderText="Search">
-                
+
             </AutoSuggestBox>
-            
+
         </Grid>
 
         <!--Here we define our layout for the items list.
@@ -67,7 +67,14 @@
                     <GridView ItemsSource="{Binding Items}">
                         <GridView.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
+                                <Grid Width="150" Height="150">
+                                    <StackPanel Padding="10" VerticalAlignment="Center" >
+                                        <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
+                                                   Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                                   Margin="0,0,0,10"/>
+                                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </Grid>
                             </DataTemplate>
                         </GridView.ItemTemplate>
                     </GridView>

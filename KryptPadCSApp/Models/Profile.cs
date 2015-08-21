@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
@@ -25,7 +26,21 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Name));
             }
         }
-
+        
+        private char _icon;
+        /// <summary>
+        /// Gets or sets the category symbol from font icon set
+        /// </summary>
+        public char Icon
+        {
+            get { return _icon; }
+            set
+            {
+                _icon = value;
+                //raise change event
+                OnPropertyChanged(nameof(Icon));
+            }
+        }
         #endregion
     }
 }

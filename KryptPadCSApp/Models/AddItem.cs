@@ -9,6 +9,9 @@ namespace KryptPadCSApp.Models
 {
     class AddItem : BaseModel, IItem
     {
+
+        #region Properties
+
         private string _name;
         /// <summary>
         /// Gets or sets the name of the profile
@@ -25,19 +28,27 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        private SymbolIcon _symbol;
+        private char _icon;
         /// <summary>
         /// Gets or sets the category symbol from font icon set
         /// </summary>
-        public SymbolIcon Symbol
+        public char Icon
         {
-            get { return _symbol; }
+            get { return _icon; }
             set
             {
-                _symbol = value;
+                _icon = value;
                 //raise change event
-                OnPropertyChanged(nameof(Symbol));
+                OnPropertyChanged(nameof(Icon));
             }
+        }
+
+        #endregion
+
+        public AddItem()
+        {
+            Name = "Add Item";
+            Icon = (char)0xE109;
         }
     }
 }

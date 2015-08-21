@@ -10,7 +10,7 @@ namespace KryptPadCSApp.Models
 {
     class Category : BaseModel, ICategory
     {
-        
+
         #region Properties
 
         private string _name;
@@ -51,5 +51,11 @@ namespace KryptPadCSApp.Models
         public ObservableCollection<IItem> Items { get; private set; } = new ObservableCollection<IItem>();
 
         #endregion
+
+        public Category()
+        {
+            //initialize collection with an add item as the first item
+            Items.Add(new AddItem());
+        }
     }
 }

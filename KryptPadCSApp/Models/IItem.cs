@@ -10,6 +10,6 @@ namespace KryptPadCSApp.Models
     interface IItem
     {
         string Name { get; set; }
-        SymbolIcon Symbol { get; set; }
+        char Icon { get; set; }
     }
 }
