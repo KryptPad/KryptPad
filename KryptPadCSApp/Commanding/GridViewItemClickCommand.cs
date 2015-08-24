@@ -12,7 +12,11 @@ namespace Commanding
     public class GridViewItemClickCommand
     {
         public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(GridViewItemClickCommand), new PropertyMetadata(null, CommandPropertyChanged));
+            DependencyProperty.RegisterAttached(
+                "Command",
+                typeof(ICommand),
+                typeof(GridViewItemClickCommand),
+                new PropertyMetadata(null, CommandPropertyChanged));
 
 
         public static void SetCommand(DependencyObject attached, ICommand value)

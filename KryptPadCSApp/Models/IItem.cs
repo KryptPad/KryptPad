@@ -13,6 +13,5 @@ namespace KryptPadCSApp.Models
         string Name { get; set; }
         char Icon { get; set; }
 
-        ICommand ItemClickCommand { get; set;}
     }
 }

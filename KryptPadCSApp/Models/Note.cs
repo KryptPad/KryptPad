@@ -43,8 +43,6 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        public ICommand ItemClickCommand { get; set; }
-
         #endregion
     }
 }

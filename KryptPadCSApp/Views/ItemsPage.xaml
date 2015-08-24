@@ -65,6 +65,7 @@
             <Pivot.ItemTemplate>
                 <DataTemplate>
 
+                    <!--ItemClick="GridView_ItemClick"-->
                     <GridView ItemsSource="{Binding Items}"
                               SelectionMode="None"
                               IsItemClickEnabled="True"

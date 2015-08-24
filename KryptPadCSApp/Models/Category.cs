@@ -1,9 +1,11 @@
-﻿using System;
+﻿using KryptPadCSApp.Views;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
@@ -50,12 +52,35 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public ObservableCollection<IItem> Items { get; private set; } = new ObservableCollection<IItem>();
 
+        /// <summary>
+        /// Handles item click event
+        /// </summary>
+        public ICommand ItemClickCommand { get; set; }
+
         #endregion
 
         public Category()
         {
             //initialize collection with an add item as the first item
             Items.Add(new AddItem());
+
+            RegisterCommands();
+        }
+
+        /// <summary>
+        /// Registers commands for UI elements
+        /// </summary>
+        private void RegisterCommands()
+        {
+            //handle item click
+            ItemClickCommand = new Command((p) =>
+            {
+                if (p is AddItem)
+                {
+                    //navigate
+                    Navigate(typeof(NewItemPage), this);
+                }
+            }, false);
         }
     }
 }

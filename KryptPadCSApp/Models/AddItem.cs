@@ -44,34 +44,15 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Icon));
             }
         }
-
-        public ICommand ItemClickCommand { get; set; }
         
-
         #endregion
 
         public AddItem()
         {
             Name = "Add Item";
             Icon = (char)0xE109;
-
-            RegisterCommands();
         }
 
 
-        /// <summary>
-        /// Registers commands for UI elements
-        /// </summary>
-        private void RegisterCommands()
-        {
-            //add the category
-            ItemClickCommand = new Command((p) =>
-            {
-                //navigate
-                Navigate(typeof(NewItemPage), this);
-            }, false);
-
-            
-        }
     }
 }
