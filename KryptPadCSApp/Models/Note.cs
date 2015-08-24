@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
@@ -41,6 +42,8 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Icon));
             }
         }
+
+        public ICommand ItemClickCommand { get; set; }
 
         #endregion
     }

@@ -40,6 +40,11 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public ICommand AddCategoryCommand { get; private set; }
 
+        /// <summary>
+        /// Handles item click event
+        /// </summary>
+        public ICommand ItemClickCommand { get; set; }
+
         #endregion
 
 
@@ -59,6 +64,13 @@ namespace KryptPadCSApp.Models
                 Navigate(typeof(NewCategoryPage));
             });
 
+            //handle item click
+            ItemClickCommand = new Command((p) =>
+            {
+
+                //navigate
+                Navigate(typeof(NewItemPage), this);
+            }, false);
         }
 
     }

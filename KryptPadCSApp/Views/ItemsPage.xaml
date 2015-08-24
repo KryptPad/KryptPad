@@ -7,6 +7,7 @@
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.ItemsPage"
     mc:Ignorable="d"
+    xmlns:Commanding="using:Commanding"
     >
 
     <Page.DataContext>
@@ -64,10 +65,13 @@
             <Pivot.ItemTemplate>
                 <DataTemplate>
 
-                    <GridView ItemsSource="{Binding Items}">
+                    <GridView ItemsSource="{Binding Items}"
+                              SelectionMode="None"
+                              IsItemClickEnabled="True"
+                              Commanding:GridViewItemClickCommand.Command="{Binding ItemClickCommand}">
                         <GridView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Width="150" Height="150">
+                                <Grid Width="150" Height="150" >
                                     <StackPanel Padding="10" VerticalAlignment="Center" >
                                         <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
                                                    Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"

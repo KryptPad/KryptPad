@@ -1,8 +1,10 @@
-﻿using System;
+﻿using KryptPadCSApp.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
@@ -43,12 +45,33 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        public ICommand ItemClickCommand { get; set; }
+        
+
         #endregion
 
         public AddItem()
         {
             Name = "Add Item";
             Icon = (char)0xE109;
+
+            RegisterCommands();
+        }
+
+
+        /// <summary>
+        /// Registers commands for UI elements
+        /// </summary>
+        private void RegisterCommands()
+        {
+            //add the category
+            ItemClickCommand = new Command((p) =>
+            {
+                //navigate
+                Navigate(typeof(NewItemPage), this);
+            }, false);
+
+            
         }
     }
 }
