@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace KryptPadCSApp.Models
 {
@@ -44,7 +45,8 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Icon));
             }
         }
-        
+
+        public Brush Background { get; private set; }
         #endregion
 
         public AddItem()

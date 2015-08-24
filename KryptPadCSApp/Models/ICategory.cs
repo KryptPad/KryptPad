@@ -12,6 +12,6 @@ namespace KryptPadCSApp.Models
     {
         string Name { get; set; }
         SymbolIcon Symbol { get; set; }
-        ObservableCollection<IItem> Items { get;  }
+        ObservableCollection<IItem> Items { get; }
     }
 }

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace KryptPadCSApp.Models
 {
@@ -43,6 +45,7 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        public Brush Background { get; private set; } = new SolidColorBrush(Colors.Purple);
         #endregion
     }
 }
