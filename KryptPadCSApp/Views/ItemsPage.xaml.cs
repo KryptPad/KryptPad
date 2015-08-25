@@ -51,10 +51,6 @@ namespace KryptPadCSApp.Views
             }
         }
 
-        //private void GridView_ItemClick(object sender, ItemClickEventArgs e)
-        //{
-        //    //call command
-        //    ((ItemsPageViewModel)DataContext).ItemClickCommand.Execute(e.ClickedItem);
-        //}
+        
     }
 }
