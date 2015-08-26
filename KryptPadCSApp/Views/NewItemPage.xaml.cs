@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,25 @@ namespace KryptPadCSApp.Views
         public NewItemPage()
         {
             this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// Handles navigation to this page
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            //set the category of the NewItemPageViewModel
+            if (e.Parameter != null && e.Parameter is Category)
+            {
+                var model = DataContext as NewItemPageViewModel;
+                if (model != null)
+                {
+                    model.Category = e.Parameter as Category;
+                }
+            }
         }
     }
 }

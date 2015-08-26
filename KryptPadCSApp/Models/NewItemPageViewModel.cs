@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace KryptPadCSApp.Models
 {
-    class NewItemViewModel : BaseModel
+    class NewItemPageViewModel : BaseModel
     {
         #region Properties
 
@@ -36,20 +36,41 @@ namespace KryptPadCSApp.Models
                 //notify change
                 OnPropertyChanged(nameof(ItemName));
                 //if there is some text, then we can execute
-                AddItemCommand.CommandCanExecute = !string.IsNullOrWhiteSpace(_itemName);
+                AddItemCommand.CommandCanExecute = CanAddItem();
             }
         }
 
-        public Command AddItemCommand { get; private set; }
+        public string[] ItemTypes { get; protected set; }
 
-        public ICommand CancelCommand { get; private set; }
+        private string _selectedItem;
+        /// <summary>
+        /// Gets or sets the selected item
+        /// </summary>
+        public string SelectedItem
+        {
+            get { return _selectedItem; }
+            set
+            {
+                _selectedItem = value;
+                //notify change
+                OnPropertyChanged(nameof(SelectedItem));
+                //if there is some text, then we can execute
+                AddItemCommand.CommandCanExecute = CanAddItem();
+            }
+        }
+
+
+        public Command AddItemCommand { get; protected set; }
+
+        public ICommand CancelCommand { get; protected set; }
 
 
         #endregion
 
-        public NewItemViewModel()
+        public NewItemPageViewModel()
         {
             RegisterCommands();
+            ItemTypes = new string[] { "Profile", "Note" };
         }
 
         /// <summary>
@@ -69,13 +90,23 @@ namespace KryptPadCSApp.Models
                 //add the item to the current category
                 Category.Items.Add(item);
 
-                //navigate
-                Navigate(typeof(ItemsPage), item);
+                //navigate back to items and make sure category is selected
+                Navigate(typeof(ItemsPage), Category);
+               
             }, false);
 
             //cancel command
             CancelCommand = new Command((p) => { GoBack(); });
 
         }
+
+        /// <summary>
+        /// Determines if the user can add an item
+        /// </summary>
+        /// <returns></returns>
+        private bool CanAddItem() => SelectedItem !=null && !string.IsNullOrWhiteSpace(_itemName);
+        
+            
+
     }
 }

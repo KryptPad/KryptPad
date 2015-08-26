@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <Page.DataContext>
-        <Models:NewItemViewModel/>
+        <Models:NewItemPageViewModel/>
     </Page.DataContext>
 
     <Page.BottomAppBar>
@@ -20,10 +20,11 @@
     </Page.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="10">
-        <StackPanel HorizontalAlignment="Left" Width="250">
+        <StackPanel HorizontalAlignment="Left" Width="250" Margin="0,0,0,10">
+            <TextBlock Text="{Binding Category.Name}" FontSize="{ThemeResource SplitViewLargeNavFontSize }" />
             <TextBlock Text="Item type" />
-            <RadioButton GroupName="ItemType" Content="Profile" />
-            <RadioButton GroupName="ItemType" Content="Note" />
+            <ComboBox ItemsSource="{Binding ItemTypes}"
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Item name" />
             <TextBox Text="{Binding ItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
