@@ -27,6 +27,11 @@
                       SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Item name" />
             <TextBox Text="{Binding ItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            
+            <!--Field list-->
+            <ItemsControl ItemsSource="{Binding Fields}">
+                
+            </ItemsControl>
         </StackPanel>
 
     </Grid>

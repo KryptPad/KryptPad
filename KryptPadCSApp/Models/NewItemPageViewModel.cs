@@ -59,6 +59,10 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        /// <summary>
+        /// Gets a collection of fields
+        /// </summary>
+        public FieldCollection Fields { get; protected set; } = new FieldCollection();
 
         public Command AddItemCommand { get; protected set; }
 

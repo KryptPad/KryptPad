@@ -14,6 +14,9 @@ namespace KryptPadCSApp.Models
     {
         #region Properties
 
+        /// <summary>
+        /// Gets a collection of fields
+        /// </summary>
         public FieldCollection Fields { get; protected set; } = new FieldCollection();
         
         #endregion
