@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml;
 
 namespace KryptPadCSApp.Models
 {
@@ -54,6 +55,7 @@ namespace KryptPadCSApp.Models
                 _selectedItem = value;
                 //notify change
                 OnPropertyChanged(nameof(SelectedItem));
+                OnPropertyChanged(nameof(FieldsVisibility));
                 //if there is some text, then we can execute
                 AddItemCommand.CommandCanExecute = CanAddItem();
             }
@@ -64,7 +66,20 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public FieldCollection Fields { get; protected set; } = new FieldCollection();
 
+        /// <summary>
+        /// Gets whether or not to display the fields list
+        /// </summary>
+        public Visibility FieldsVisibility
+        {
+            get
+            {
+                return SelectedItem == "Profile" ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         public Command AddItemCommand { get; protected set; }
+
+        public Command AddFieldCommand { get; protected set; }
 
         public ICommand CancelCommand { get; protected set; }
 
@@ -98,6 +113,12 @@ namespace KryptPadCSApp.Models
                 Navigate(typeof(ItemsPage), Category);
                
             }, false);
+
+            AddFieldCommand = new Command((p) => {
+                var field = new Field();
+                //add to list of fields
+                Fields.Add(field);
+            });
 
             //cancel command
             CancelCommand = new Command((p) => { GoBack(); });
