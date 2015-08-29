@@ -11,7 +11,7 @@ namespace KryptPadCSApp.Models
     interface ICategory
     {
         string Name { get; set; }
-        SymbolIcon Symbol { get; set; }
+        char Icon { get; set; }
         ObservableCollection<IItem> Items { get;  }
     }
 }
