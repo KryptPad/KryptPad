@@ -14,11 +14,13 @@ namespace KryptPadCSApp.Models
     {
         #region Properties
 
+        public FieldCollection Fields { get; protected set; } = new FieldCollection();
         
         #endregion
 
         public Profile()
         {
+            //set background color for profile items
             Background = new SolidColorBrush(Colors.LightBlue);
         }
     }

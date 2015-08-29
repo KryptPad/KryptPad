@@ -111,6 +111,8 @@
     <Compile Include="Models\CategoryCollection.cs" />
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\Document.cs" />
+    <Compile Include="Models\Field.cs" />
+    <Compile Include="Models\FieldCollection.cs" />
     <Compile Include="Models\ICategory.cs" />
     <Compile Include="Models\IItem.cs" />
     <Compile Include="Models\ItemBase.cs" />
