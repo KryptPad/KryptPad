@@ -40,6 +40,8 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public ICommand AddCategoryCommand { get; private set; }
 
+        
+
         #endregion
 
 

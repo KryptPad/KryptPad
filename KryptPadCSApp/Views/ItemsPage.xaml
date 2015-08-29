@@ -7,6 +7,7 @@
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.ItemsPage"
     mc:Ignorable="d"
+    xmlns:Commanding="using:Commanding"
     >
 
     <Page.DataContext>
@@ -64,17 +65,23 @@
             <Pivot.ItemTemplate>
                 <DataTemplate>
 
-                    <GridView ItemsSource="{Binding Items}">
+                    <!--ItemClick="GridView_ItemClick"-->
+                    <GridView ItemsSource="{Binding Items}"
+                              SelectionMode="None"
+                              IsItemClickEnabled="True"
+                              Commanding:GridViewItemClickCommand.Command="{Binding ItemClickCommand}">
                         <GridView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Width="150" Height="150">
-                                    <StackPanel Padding="10" VerticalAlignment="Center" >
-                                        <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
+                                <Border Background="{Binding Background}">
+                                    <Grid Width="150" Height="150" >
+                                        <StackPanel Padding="10" VerticalAlignment="Center" >
+                                            <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
                                                    Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                                    Margin="0,0,0,10"/>
-                                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" />
-                                    </StackPanel>
-                                </Grid>
+                                            <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
                             </DataTemplate>
                         </GridView.ItemTemplate>
                     </GridView>

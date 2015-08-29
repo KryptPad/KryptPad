@@ -18,15 +18,13 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid Margin="10">
-            <StackPanel HorizontalAlignment="Left" Width="250">
-                <TextBlock Text="Category name" />
-                <TextBox Text="{Binding CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"  Margin="10">
 
+        <StackPanel HorizontalAlignment="Left" Width="250">
+            <TextBlock Text="Category name" />
+            <TextBox Text="{Binding CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
 
-            </StackPanel>
-        </Grid>
 
 
     </Grid>

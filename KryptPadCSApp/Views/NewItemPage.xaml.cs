@@ -21,12 +21,11 @@ namespace KryptPadCSApp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ItemsPage : Page
+    public sealed partial class NewItemPage : Page
     {
-        public ItemsPage()
+        public NewItemPage()
         {
             this.InitializeComponent();
-            
         }
 
         /// <summary>
@@ -37,20 +36,15 @@ namespace KryptPadCSApp.Views
         {
             base.OnNavigatedTo(e);
 
-            //if we are coming from the add new category page, then the
-            //parameter is the new category that was added. set the selected
-            //item to the category, and when binding occurs, the pivot control
-            //will select the new category
+            //set the category of the NewItemPageViewModel
             if (e.Parameter != null && e.Parameter is Category)
             {
-                var model = DataContext as ItemsPageViewModel;
+                var model = DataContext as NewItemPageViewModel;
                 if (model != null)
                 {
-                    model.SelectedCategory = e.Parameter as Category;
+                    model.Category = e.Parameter as Category;
                 }
             }
         }
-
-        
     }
 }
