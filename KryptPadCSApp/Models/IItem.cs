@@ -11,6 +11,7 @@ namespace KryptPadCSApp.Models
 {
     interface IItem
     {
+        Category Category { get; set; }
         string Name { get; set; }
         char Icon { get; set; }
         Brush Background { get; }

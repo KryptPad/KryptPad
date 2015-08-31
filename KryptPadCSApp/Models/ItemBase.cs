@@ -12,6 +12,22 @@ namespace KryptPadCSApp.Models
     {
         #region Properties
 
+        private Category _category;
+        /// <summary>
+        /// Gets or sets the category this item is filed under
+        /// </summary>
+        public Category Category
+        {
+            get { return _category; }
+            set
+            {
+                _category = value;
+                //raise change event
+                OnPropertyChanged(nameof(Category));
+            }
+        }
+
+
         private string _name;
         /// <summary>
         /// Gets or sets the name of the profile
@@ -46,7 +62,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets or sets the background color of the item
         /// </summary>
-        public Brush Background { get; protected set; } 
+        public Brush Background { get; protected set; }
         #endregion
     }
 }

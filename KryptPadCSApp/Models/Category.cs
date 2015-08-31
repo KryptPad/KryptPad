@@ -77,8 +77,14 @@ namespace KryptPadCSApp.Models
             {
                 if (p is AddItem)
                 {
-                    //navigate
+                    //navigate to add new
                     Navigate(typeof(NewItemPage), this);
+                }
+                else if(p is IItem)
+                {
+                    (p as IItem).Category = this;
+                    //navigate to edit
+                    Navigate(typeof(EditItemPage), p);
                 }
             }, false);
         }

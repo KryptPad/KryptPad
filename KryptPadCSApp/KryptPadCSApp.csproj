@@ -130,6 +130,9 @@
     <Compile Include="Views\NewCategoryPage.xaml.cs">
       <DependentUpon>NewCategoryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EditItemPage.xaml.cs">
+      <DependentUpon>EditItemPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NewItemPage.xaml.cs">
       <DependentUpon>NewItemPage.xaml</DependentUpon>
     </Compile>
@@ -165,6 +168,10 @@
     <Page Include="Views\NewCategoryPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditItemPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\NewItemPage.xaml">
       <SubType>Designer</SubType>

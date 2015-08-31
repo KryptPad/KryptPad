@@ -158,6 +158,8 @@ namespace KryptPad.Security
         /// <returns></returns>
         public static string Decrypt(string cypherText, string password)
         {
+            //no cypher text? return null
+            if (string.IsNullOrWhiteSpace(cypherText)) return null;
 
             //create a buffer from the cypherText
             var cypherBuffer = CryptographicBuffer.DecodeFromBase64String(cypherText);

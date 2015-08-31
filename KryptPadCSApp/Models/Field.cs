@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPad.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,16 +27,36 @@ namespace KryptPadCSApp.Models
 
         private string _value;
         /// <summary>
-        /// Gets or sets the name of the field
+        /// Gets or sets the value of the field. Encrypts any value set to it.
         /// </summary>
         public string Value
         {
-            get { return _value; }
+            get { return Encryption.Decrypt(_value, "MyT3stP@$$w0rd!"); ; }
             set
             {
-                _value = value;
+                //encrypt the value
+                _value = Encryption.Encrypt(value, "MyT3stP@$$w0rd!");
+
+                //set the encrypted value
+                EncryptedValue = _value;
+
                 //notify change
                 OnPropertyChanged(nameof(Value));
+            }
+        }
+
+        private string _encryptedValue;
+        /// <summary>
+        /// Gets or sets the value of the field. Assumes data being set to it is already encrypted.
+        /// </summary>
+        public string EncryptedValue
+        {
+            get { return _encryptedValue; }
+            set
+            {
+                _encryptedValue = value;
+                //notify change
+                OnPropertyChanged(nameof(EncryptedValue));
             }
         }
 

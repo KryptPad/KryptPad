@@ -1,0 +1,80 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KryptPadCSApp.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Models="using:KryptPadCSApp.Models"
+    x:Class="KryptPadCSApp.Views.EditItemPage"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <Models:NewItemPageViewModel/>
+    </Page.DataContext>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Accept" Label="Done" Command="{Binding AddItemCommand}" />
+            <AppBarButton Icon="Cancel" Label="Cancel" Command="{Binding CancelCommand}" />
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+
+            <TextBlock Text="{Binding Category.Name}" FontSize="{ThemeResource SplitViewLargeNavFontSize }" />
+
+            <!--<TextBlock Text="Item type" />
+            <ComboBox ItemsSource="{Binding ItemTypes}"
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+
+            <TextBlock Text="Item name" />
+            <TextBox Text="{Binding ItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     HorizontalAlignment="Left"
+                     Width="250"/>
+        </StackPanel>
+
+        <Grid Visibility="{Binding FieldsVisibility}" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <!--Field list-->
+                <TextBlock TextWrapping="WrapWholeWords">
+                        Add fields to this profile (e.g. Username, Password, etc...)
+                </TextBlock>
+                <Button Command="{Binding AddFieldCommand}">Add Field</Button>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1" Margin="0,10,0,0">
+                <!--Display a list of fields-->
+                <ItemsControl ItemsSource="{Binding Fields}" Margin="0,0,0,50">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="{Binding Name}" />
+                                <!--<TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Field name" Margin="0,0,0,5" />-->
+                                <!--<TextBlock Text="Value (e.g. MyP@$$w0rd!)" />-->
+                                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Value" Margin="0,0,0,5"/>
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+            </ScrollViewer>
+
+
+        </Grid>
+
+
+    </Grid>
+</Page>

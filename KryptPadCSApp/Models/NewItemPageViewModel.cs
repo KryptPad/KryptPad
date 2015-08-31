@@ -60,7 +60,7 @@ namespace KryptPadCSApp.Models
                 AddItemCommand.CommandCanExecute = CanAddItem();
             }
         }
-
+        
         /// <summary>
         /// Gets a collection of fields
         /// </summary>
@@ -103,21 +103,31 @@ namespace KryptPadCSApp.Models
                 //create new category
                 var item = new Profile()
                 {
+                    Category = Category,
                     Name = ItemName
                 };
+
+                //add the fields that have names to the profile
+                foreach (var field in Fields.Where(f => !string.IsNullOrWhiteSpace(f.Name)))
+                {
+                    item.Fields.Add(field);
+                }
 
                 //add the item to the current category
                 Category.Items.Add(item);
 
                 //navigate back to items and make sure category is selected
                 Navigate(typeof(ItemsPage), Category);
-               
+
             }, false);
 
-            AddFieldCommand = new Command((p) => {
+            AddFieldCommand = new Command((p) =>
+            {
                 var field = new Field();
                 //add to list of fields
                 Fields.Add(field);
+                //update the accept command
+                //AddItemCommand.CommandCanExecute = false;
             });
 
             //cancel command
@@ -126,12 +136,32 @@ namespace KryptPadCSApp.Models
         }
 
         /// <summary>
+        /// Loads an IItem into the view model
+        /// </summary>
+        /// <param name="item"></param>
+        public void LoadItem(IItem item)
+        {
+            ItemName = item.Name;
+            Category = item.Category;
+
+            //if this is a profile, then we have fields
+            if (item is Profile) {
+                Fields = (item as Profile).Fields;
+                SelectedItem = "Profile";
+            }
+            
+
+        }
+
+        /// <summary>
         /// Determines if the user can add an item
         /// </summary>
         /// <returns></returns>
-        private bool CanAddItem() => SelectedItem !=null && !string.IsNullOrWhiteSpace(_itemName);
-        
-            
+        private bool CanAddItem() => SelectedItem != null
+            && !string.IsNullOrWhiteSpace(_itemName);
+            //&& (Fields.Count == 0 || (Fields.Count > 0 && Fields.All(f => !string.IsNullOrWhiteSpace(f.Name))));
+
+
 
     }
 }
