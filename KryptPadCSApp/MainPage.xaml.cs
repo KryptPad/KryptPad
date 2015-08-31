@@ -43,8 +43,14 @@ namespace KryptPadCSApp
             RootFrame = frame;
             ShellSplitView.Content = RootFrame;
 
-
+            
         }
+
+        //private void LoginPopup_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    LoginPopup.HorizontalOffset = (Window.Current.CoreWindow.Bounds.Width / 2) - (400 / 2);
+        //    LoginPopup.VerticalOffset = (Window.Current.CoreWindow.Bounds.Height / 2) - (150 / 2);
+        //}
 
         //private void OnMenuButtonClicked(object sender, RoutedEventArgs e)
         //{

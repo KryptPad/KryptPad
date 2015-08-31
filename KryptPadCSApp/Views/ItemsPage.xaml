@@ -36,13 +36,13 @@
                 <AppBarButton Icon="Add" Label="Add Category" Command="{Binding AddCategoryCommand}" />
             </CommandBar>
 
-            <AutoSuggestBox Grid.Column="2" Width="175"
+            <!--<AutoSuggestBox Grid.Column="2" Width="175"
                             
                             VerticalAlignment="Center"
                             QueryIcon="Find"
                             PlaceholderText="Search">
 
-            </AutoSuggestBox>
+            </AutoSuggestBox>-->
 
         </Grid>
 
