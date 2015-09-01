@@ -12,7 +12,7 @@
     <Page.DataContext>
         <Models:MainPageViewModel/>
     </Page.DataContext>
-        
+
     <Grid>
         <SplitView x:Name="ShellSplitView" DisplayMode="CompactOverlay"
 		IsPaneOpen="{Binding IsPaneOpen}" CompactPaneLength="48" OpenPaneLength="200"
@@ -37,13 +37,17 @@
             </SplitView.Pane>
         </SplitView>
 
-        <!--{StaticResource ApplicationPageBackgroundThemeBrush}-->
-        <!--<Popup x:Uid="LoginPopup" IsOpen="True" Name="LoginPopup" HorizontalAlignment="Stretch"
+        <!---->
+        <Popup x:Uid="LoginPopup" IsOpen="True" Name="LoginPopup" HorizontalAlignment="Stretch"
                Loaded="LoginPopup_Loaded">
-            <Grid Background="Red" HorizontalAlignment="Stretch" >
-                <Button>This is a test button</Button>
-            </Grid>
-        </Popup>-->
+            <Border Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
+                    BorderThickness="2"
+                    BorderBrush="{StaticResource ApplicationForegroundThemeBrush}">
+                <Grid  HorizontalAlignment="Stretch" >
+                    <Button>This is a test button</Button>
+                </Grid>
+            </Border>
+        </Popup>
 
     </Grid>
     
