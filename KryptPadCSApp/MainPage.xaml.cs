@@ -37,17 +37,10 @@ namespace KryptPadCSApp
             RootFrame = frame;
             ShellSplitView.Content = RootFrame;
 
-            this.Loaded += async (sender, e) =>
-            {
-                var dialog = new ContentDialog()
-                {
-                    Title = "Authenticate",
-                    MaxWidth = ActualWidth,
-                    Content = new LoginUserControl()
-                };
-
-                var res = await dialog.ShowAsync();
-            };
+            //this.Loaded += async (sender, e) =>
+            //{
+                
+            //};
         }
 
        

@@ -27,12 +27,22 @@ namespace KryptPadCSApp.UserControls
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
-
+            picker.FileTypeFilter.Add(".kdf");
             var res = await picker.PickSingleFileAsync();
 
             if (res != null)
             {
 
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var dialog = Parent as ContentDialog;
+
+            if (dialog != null)
+            {
+                dialog.Hide();
             }
         }
     }
