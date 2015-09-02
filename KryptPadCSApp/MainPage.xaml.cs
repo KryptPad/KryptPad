@@ -1,4 +1,5 @@
 ﻿using KryptPadCSApp.Models;
+using KryptPadCSApp.UserControls;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -32,38 +33,24 @@ namespace KryptPadCSApp
         public MainPage(Frame frame)
         {
             this.InitializeComponent();
-
-            //set context
-            //DataContext = new MainPageViewModel();
-            //var text = "Some text to encrypt that is a lot longer than the first one and should be a bigger cypher text size";
-
-            //var cypherText = KryptPad.Security.Encryption.Encrypt(text, "P@ssw0rd!");
-
-            //var decryptedText = KryptPad.Security.Encryption.Decrypt(cypherText, "P@ssw0rd!");
+            
             RootFrame = frame;
             ShellSplitView.Content = RootFrame;
 
-            
+            this.Loaded += async (sender, e) =>
+            {
+                var dialog = new ContentDialog()
+                {
+                    Title = "Authenticate",
+                    MaxWidth = ActualWidth,
+                    Content = new LoginUserControl()
+                };
+
+                var res = await dialog.ShowAsync();
+            };
         }
 
-        //private void LoginPopup_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    LoginPopup.HorizontalOffset = (Window.Current.CoreWindow.Bounds.Width / 2) - (400 / 2);
-        //    LoginPopup.VerticalOffset = (Window.Current.CoreWindow.Bounds.Height / 2) - (150 / 2);
-        //}
-
-        //private void OnMenuButtonClicked(object sender, RoutedEventArgs e)
-        //{
-        //    ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
-        //    ((RadioButton)sender).IsChecked = false;
-        //}
-
-        //private void OnHomeButtonChecked(object sender, RoutedEventArgs e)
-        //{
-        //    ShellSplitView.IsPaneOpen = false;
-        //    if (ShellSplitView.Content != null)
-        //        ((Frame)ShellSplitView.Content).Navigate(typeof(ItemsPage));
-        //}
+       
 
     }
 }

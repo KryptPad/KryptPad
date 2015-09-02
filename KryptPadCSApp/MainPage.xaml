@@ -37,20 +37,9 @@
             </SplitView.Pane>
         </SplitView>
 
-        <!---->
-        <Popup x:Uid="LoginPopup" IsOpen="True" Name="LoginPopup" 
-              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Border Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
-                    BorderThickness="2" Width="300" Height="400"
-                    BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" Padding="10">
-                <StackPanel HorizontalAlignment="Stretch" >
-                    <TextBlock>Enter your password</TextBlock>
-                    <PasswordBox />
-                    <Button HorizontalAlignment="Center" Margin="0,20,0,0">Authenticate</Button>
-                </StackPanel>
-            </Border>
-        </Popup>
-
+        
     </Grid>
+    
+    
     
 </Page>
