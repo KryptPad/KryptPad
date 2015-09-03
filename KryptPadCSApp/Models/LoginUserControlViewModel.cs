@@ -32,7 +32,10 @@ namespace KryptPadCSApp.Models
             }
         }
 
-
+        /// <summary>
+        /// Gets the command to handle unlocking
+        /// </summary>
+        public Command UnlockCommand { get; protected set; }
         #endregion
 
         public LoginUserControlViewModel()
@@ -46,6 +49,20 @@ namespace KryptPadCSApp.Models
 
             //simulate getting recent documents
             RecentDocuments.Add("my passwords.kdf");
+
+            //register commands
+            RegisterCommands();
+        }
+
+        /// <summary>
+        /// Register commands
+        /// </summary>
+        private void RegisterCommands()
+        {
+            UnlockCommand = new Command((p)=> {
+
+
+            });
         }
     }
 }

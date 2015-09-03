@@ -29,8 +29,10 @@
                     </Grid.ColumnDefinitions>
 
                     <PasswordBox PlaceholderText="Enter your password" Grid.Column="0" />
-                    <Button Content="&#xE9AC;" Grid.Column="1" Click="Button_Click_1" 
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"/>
+                    <Button x:Name="UnlockButton"
+                            Content="&#xE9AC;" Grid.Column="1" Click="UnlockButton_Click" 
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            VerticalAlignment="Stretch"/>
                 </Grid>
                 
             </StackPanel>
@@ -44,7 +46,7 @@
 
                 <Button Content="Create New" Grid.Column="0" Margin="0,0,10,0"/>
                 <Button Content="Open Existing" Grid.Column="1" Click="Button_Click"
-                        VerticalAlignment="Stretch"/>
+                        />
             </Grid>
 
             <!--All the most recent documents, first being the latest one-->
