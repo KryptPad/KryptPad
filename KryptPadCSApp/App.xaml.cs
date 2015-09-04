@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Models;
+﻿using KryptPadCSApp.Classes;
+using KryptPadCSApp.Models;
 using KryptPadCSApp.UserControls;
 using KryptPadCSApp.Views;
 using System;
@@ -49,7 +50,7 @@ namespace KryptPadCSApp
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override async void OnLaunched(LaunchActivatedEventArgs e)
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -88,14 +89,8 @@ namespace KryptPadCSApp
             // Ensure the current window is active
             Window.Current.Activate();
 
-            var dialog = new ContentDialog()
-            {
-                Title = "KryptPad",
-                MaxWidth = Window.Current.Bounds.Width,
-                Content = new LoginUserControl()
-            };
-            
-            var res = await dialog.ShowAsync();
+            //prompt to login
+            DialogHelper.LoginDialog();
         }
 
         /// <summary>

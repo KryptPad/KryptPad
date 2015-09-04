@@ -29,7 +29,8 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
-                    <PasswordBox x:Name="Password" Password="{Binding Password, Mode=TwoWay}" PlaceholderText="Enter your password" Grid.Column="0" />
+                    <PasswordBox x:Name="Password" Password="{Binding Password, Mode=TwoWay}" 
+                                 PlaceholderText="Enter your password" Grid.Column="0" />
                     <Button x:Name="UnlockButton"
                             Content="&#xE9AC;" Grid.Column="1"
                             Command="{Binding UnlockCommand}"
@@ -47,8 +48,11 @@
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
 
-                <Button Content="Create New" Grid.Column="0" Margin="0,0,10,0"/>
-                <Button Content="Open Existing" Grid.Column="1" Click="Button_Click"
+                <Button Content="Create New" Grid.Column="0" Margin="0,0,10,0"
+                        Command="{Binding NewDocumentCommand}"
+                        CommandParameter="{Binding ElementName=LoginDialogPage}"/>
+                
+                <Button Content="Open Existing" Grid.Column="1"
                         />
             </Grid>
 

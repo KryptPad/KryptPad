@@ -17,12 +17,11 @@ using Windows.UI.Xaml.Navigation;
 
 namespace KryptPadCSApp.UserControls
 {
-    public sealed partial class LoginUserControl : UserControl
+    public sealed partial class CreatePasswordUserControl : UserControl
     {
-        public LoginUserControl()
+        public CreatePasswordUserControl()
         {
             this.InitializeComponent();
         }
-        
     }
 }

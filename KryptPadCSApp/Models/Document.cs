@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using KryptPad.Security;
 using System.IO;
+using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace KryptPadCSApp.Models
 {
@@ -35,19 +37,36 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets or sets the current working file
         /// </summary>
-        public string FileName { get; set; }
+        public StorageFile SelectedFile { get; set; }
 
         #endregion
 
         public Document()
         {
+            //listen to category changes
+            Categories.CollectionChanged += (sender, e) => {
+                //whenever a change occurs, like a new category is added, or
+                //a category is deleted, save the document
+                Save();
 
+                //each item added will have change tracking on its Name property
+                foreach( Category item in e.NewItems)
+                {
+                    item.PropertyChanged += Item_PropertyChanged;
+                }
+            };
+        }
+
+        private void Item_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            //when a property is changed, call save
+            Save();
         }
 
         /// <summary>
         /// Saves the current document
         /// </summary>
-        public void Save()
+        public async void Save()
         {
             //check if we have a password stored, this is used to encrypt the data
             if (string.IsNullOrWhiteSpace(SessionPassword))
@@ -57,7 +76,7 @@ namespace KryptPadCSApp.Models
             }
 
             //check for a working filename
-            if (string.IsNullOrWhiteSpace(FileName))
+            if (SelectedFile == null)
             {
                 //must have a password set
                 throw new Exception("You must specify a file before you can save your document.");
@@ -70,11 +89,65 @@ namespace KryptPadCSApp.Models
             var encryptedData = Encryption.Encrypt(jsonData, SessionPassword);
 
             //write the changes to disk
-            using (var fs = File.OpenWrite(FileName))
-            {
-
-            }
+            await FileIO.WriteBytesAsync(SelectedFile, encryptedData);
 
         }
+
+        /// <summary>
+        /// Gi
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static Document Load(string filePath, string password)
+        {
+            //check if we have a password stored, this is used to encrypt the data
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                //must have a password set
+                throw new Exception("Password cannot be null.");
+            }
+
+            //check for a working filename
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                //must have a password set
+                throw new Exception("File name cannot be null.");
+            }
+
+            //holds the encrypted data
+            string encryptedData;
+
+            //write the document from the disk
+            using (var fs = File.OpenRead(filePath))
+            using (var sr = new StreamReader(fs))
+            {
+                //read the encrypted data
+                encryptedData = sr.ReadToEnd();
+            }
+
+            //try to decrypt the data
+            try
+            {
+                //attempt to decrypt. failure here is likely a password error
+                var jsonData = Encryption.Decrypt(encryptedData, password);
+
+                //deserialize
+                var document = JsonConvert.DeserializeObject<Document>(jsonData);
+
+                return document;
+            }
+            catch (Exception ex)
+            {
+                //throw a new exception
+                throw new Exception("Could not decrypt your document. Make sure you have entered the correct password.", ex);
+            }
+
+            
+
+        }
+
+
+
     }
 }

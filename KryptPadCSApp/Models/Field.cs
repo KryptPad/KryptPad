@@ -31,32 +31,14 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public string Value
         {
-            get { return Encryption.Decrypt(_value, "MyT3stP@$$w0rd!"); ; }
+            get { return _value; }
             set
             {
                 //encrypt the value
-                _value = Encryption.Encrypt(value, "MyT3stP@$$w0rd!");
-
-                //set the encrypted value
-                EncryptedValue = _value;
-
+                _value = value;
+                
                 //notify change
                 OnPropertyChanged(nameof(Value));
-            }
-        }
-
-        private string _encryptedValue;
-        /// <summary>
-        /// Gets or sets the value of the field. Assumes data being set to it is already encrypted.
-        /// </summary>
-        public string EncryptedValue
-        {
-            get { return _encryptedValue; }
-            set
-            {
-                _encryptedValue = value;
-                //notify change
-                OnPropertyChanged(nameof(EncryptedValue));
             }
         }
 

@@ -122,7 +122,7 @@ namespace KryptPad.Security
         /// </summary>
         /// <param name="plainText"></param>
         /// <param name="password"></param>
-        public static string Encrypt(string plainText, string password)
+        public static byte[] Encrypt(string plainText, string password)
         {
             //create buffer of data to encrypt
             var dataBuffer = CryptographicBuffer.ConvertStringToBinary(plainText, BinaryStringEncoding.Utf8);
@@ -144,10 +144,11 @@ namespace KryptPad.Security
             var resultBuffer = CreatePayload(cypherBuffer, saltBuffer, ivBuffer);
 
             //encode to base64
-            var result = CryptographicBuffer.EncodeToBase64String(resultBuffer);
+            byte[] resultBytes;
+            CryptographicBuffer.CopyToByteArray(resultBuffer, out resultBytes);
 
             //return result
-            return result;
+            return resultBytes;
         }
 
         /// <summary>

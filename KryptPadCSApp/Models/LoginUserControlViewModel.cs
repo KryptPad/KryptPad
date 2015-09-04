@@ -1,9 +1,11 @@
-﻿using System;
+﻿using KryptPadCSApp.Classes;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -53,6 +55,9 @@ namespace KryptPadCSApp.Models
         /// Gets the command to handle unlocking
         /// </summary>
         public Command UnlockCommand { get; protected set; }
+
+        public Command NewDocumentCommand { get; protected set; }
+
         #endregion
 
         public LoginUserControlViewModel()
@@ -76,24 +81,44 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            UnlockCommand = new Command((p) =>
-            {
+            UnlockCommand = new Command(UnlockCommandHandler, false);
 
-                //p is the parent framework element
-                var page = p as FrameworkElement;
-
-                if (page != null)
-                {
-                    //the parent is the host dialog
-                    var dialog = page.Parent as ContentDialog;
-                    
-                    if (dialog != null)
-                    {
-                        dialog.Hide();
-                    }
-                }
-                
-            }, false);
+            NewDocumentCommand = new Command(NewDocumentCommandHandler);
         }
+
+        #region Command handlers
+        private void UnlockCommandHandler(object p)
+        {
+            //close the dialog
+            DialogHelper.CloseDialog(p as FrameworkElement);
+        }
+
+        private async void NewDocumentCommandHandler(object p)
+        {
+            var picker = new FileSavePicker();
+            //add filters for our document type
+            //picker.FileTypeFilter.Add(".kdf");
+            //TODO: move to string resource
+            picker.DefaultFileExtension = ".kdf";
+            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            picker.FileTypeChoices.Add("KryptPad Document Format", new List<string>() { ".kdf" });
+            //prompt to save
+            var res = await picker.PickSaveFileAsync();
+
+            if (res != null)
+            {
+                //set the filepath
+                MainPageViewModel.Document.SelectedFile = res;
+                
+                //close the dialog
+                DialogHelper.CloseDialog(p as FrameworkElement);
+
+                //open the create password dialog
+                DialogHelper.CreatePasswordDialog();
+            }
+        }
+
+        
+        #endregion
     }
 }
