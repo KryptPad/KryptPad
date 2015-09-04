@@ -43,6 +43,8 @@ namespace KryptPadCSApp.Models
                 _password = value;
                 //notify change
                 OnPropertyChanged(nameof(PromptToUnlock));
+                //update can execute
+                UnlockCommand.CommandCanExecute = !string.IsNullOrWhiteSpace(_password);
             }
         }
 
@@ -84,16 +86,14 @@ namespace KryptPadCSApp.Models
                 {
                     //the parent is the host dialog
                     var dialog = page.Parent as ContentDialog;
-                    var f = Password;
+                    
                     if (dialog != null)
                     {
                         dialog.Hide();
                     }
                 }
-
-
-
-            });
+                
+            }, false);
         }
     }
 }
