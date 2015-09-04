@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
@@ -31,6 +32,20 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(PromptToUnlock));
             }
         }
+
+        private string _password;
+
+        public string Password
+        {
+            get { return _password; }
+            set
+            {
+                _password = value;
+                //notify change
+                OnPropertyChanged(nameof(PromptToUnlock));
+            }
+        }
+
 
         /// <summary>
         /// Gets the command to handle unlocking
@@ -59,7 +74,23 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            UnlockCommand = new Command((p)=> {
+            UnlockCommand = new Command((p) =>
+            {
+
+                //p is the parent framework element
+                var page = p as FrameworkElement;
+
+                if (page != null)
+                {
+                    //the parent is the host dialog
+                    var dialog = page.Parent as ContentDialog;
+                    var f = Password;
+                    if (dialog != null)
+                    {
+                        dialog.Hide();
+                    }
+                }
+
 
 
             });

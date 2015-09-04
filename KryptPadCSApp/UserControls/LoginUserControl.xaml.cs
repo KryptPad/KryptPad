@@ -32,19 +32,9 @@ namespace KryptPadCSApp.UserControls
 
             if (res != null)
             {
-
+                
             }
         }
 
-        private void UnlockButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-            var dialog = Parent as ContentDialog;
-
-            if (dialog != null)
-            {
-                dialog.Hide();
-            }
-        }
     }
 }

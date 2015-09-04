@@ -8,7 +8,8 @@
     x:Class="KryptPadCSApp.UserControls.LoginUserControl"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    Name="LoginDialogPage">
 
     <UserControl.DataContext>
         <Models:LoginUserControlViewModel/>
@@ -28,9 +29,11 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
-                    <PasswordBox PlaceholderText="Enter your password" Grid.Column="0" />
+                    <PasswordBox x:Name="Password" Password="{Binding Password, Mode=TwoWay}" PlaceholderText="Enter your password" Grid.Column="0" />
                     <Button x:Name="UnlockButton"
-                            Content="&#xE9AC;" Grid.Column="1" Click="UnlockButton_Click" 
+                            Content="&#xE9AC;" Grid.Column="1"
+                            Command="{Binding UnlockCommand}"
+                            CommandParameter="{Binding ElementName=LoginDialogPage}"
                             FontFamily="{StaticResource SymbolThemeFontFamily}"
                             VerticalAlignment="Stretch"/>
                 </Grid>
