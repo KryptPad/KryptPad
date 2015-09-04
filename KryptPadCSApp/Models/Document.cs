@@ -8,6 +8,7 @@ using KryptPad.Security;
 using System.IO;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Popups;
 
 namespace KryptPadCSApp.Models
 {
@@ -88,8 +89,19 @@ namespace KryptPadCSApp.Models
             //encrypt the data
             var encryptedData = Encryption.Encrypt(jsonData, SessionPassword);
 
-            //write the changes to disk
-            await FileIO.WriteBytesAsync(SelectedFile, encryptedData);
+            try
+            {
+                //write the changes to disk
+                await FileIO.WriteBytesAsync(SelectedFile, encryptedData);
+            }
+            catch (Exception)
+            {
+
+                var msg = new MessageDialog("An error occurred while trying to save your document. Your changes have not been saved.", "Error");
+                
+                await msg.ShowAsync();
+            }
+            
 
         }
 
