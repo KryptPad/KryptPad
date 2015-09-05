@@ -48,7 +48,7 @@ namespace KryptPadCSApp.Models
 
         #endregion
 
-        public Document()        {        }
+        public Document() { }
 
         public Document(bool initialize)
         {
@@ -65,7 +65,8 @@ namespace KryptPadCSApp.Models
         private void InitializeDocument()
         {
             //listen to category changes
-            Categories.CollectionChanged += (sender, e) => {
+            Categories.CollectionChanged += (sender, e) =>
+            {
                 //whenever a change occurs, like a new category is added, or
                 //a category is deleted, save the document
                 Save();
@@ -82,6 +83,24 @@ namespace KryptPadCSApp.Models
 
                 }
             };
+
+            InitializeItemCollectionChangeTracking();
+
+        }
+
+        private void InitializeItemCollectionChangeTracking()
+        {
+            //each item added will have change tracking on its Name property
+            foreach (Category category in Categories)
+            {
+
+                //event handler for collection changed
+                category.Items.CollectionChanged += Items_CollectionChanged;
+
+                //handle property changes for category
+                category.PropertyChanged += Item_PropertyChanged;
+
+            }
         }
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -90,7 +109,7 @@ namespace KryptPadCSApp.Models
             Save();
 
             //for each item in the category, listen to changes
-            foreach (IItem item in e.NewItems)
+            foreach (ItemBase item in e.NewItems)
             {
                 //handle property changes for item
                 item.PropertyChanged += Item_PropertyChanged;
@@ -127,7 +146,7 @@ namespace KryptPadCSApp.Models
                 //must have a password set
                 throw new Exception("You must specify a file before you can save your document.");
             }
-            
+
             //now that those checks are out of the way, we can serialize the data into a JSON string and encrypt it.
             var jsonData = JsonConvert.SerializeObject(this);
 
@@ -143,10 +162,10 @@ namespace KryptPadCSApp.Models
             {
 
                 var msg = new MessageDialog("An error occurred while trying to save your document. Your changes have not been saved.", "Error");
-                
+
                 await msg.ShowAsync();
             }
-            
+
 
         }
 
@@ -171,7 +190,7 @@ namespace KryptPadCSApp.Models
                 //must have a password set
                 throw new Exception("File name cannot be null.");
             }
-            
+
             //read the document from the disk
             var buffer = await FileIO.ReadBufferAsync(selectedFile);
             byte[] encryptedData = new byte[buffer.Length];
@@ -207,7 +226,7 @@ namespace KryptPadCSApp.Models
                 throw new Exception("Could not decrypt your document. Make sure you have entered the correct password.", ex);
             }
 
-            
+
 
         }
 

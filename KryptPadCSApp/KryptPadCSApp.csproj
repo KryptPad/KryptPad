@@ -107,7 +107,6 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\AddItem.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryCollection.cs" />
@@ -124,8 +123,6 @@
     <Compile Include="Models\MainPageViewModel.cs" />
     <Compile Include="Models\NewCategoryPageViewModel.cs" />
     <Compile Include="Models\NewItemPageViewModel.cs" />
-    <Compile Include="Models\Note.cs" />
-    <Compile Include="Models\Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\CreatePasswordUserControl.xaml.cs">
       <DependentUpon>CreatePasswordUserControl.xaml</DependentUpon>

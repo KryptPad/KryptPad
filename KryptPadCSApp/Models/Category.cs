@@ -64,7 +64,7 @@ namespace KryptPadCSApp.Models
         public Category()
         {
             //initialize collection with an add item as the first item
-            Items.Add(new AddItem());
+            Items.Add(ItemBase.CreateAddItem());
 
             RegisterCommands();
         }
@@ -77,17 +77,21 @@ namespace KryptPadCSApp.Models
             //handle item click
             ItemClickCommand = new Command((p) =>
             {
-                if (p is AddItem)
+                var item = p as ItemBase;
+
+                if (item.ItemType == Classes.ItemType.AddItem)
                 {
                     //navigate to add new
                     Navigate(typeof(NewItemPage), this);
                 }
-                else if(p is IItem)
+                else 
                 {
-                    (p as IItem).Category = this;
+                    //TODO: fix this...
+                    item.Category = this;
                     //navigate to edit
-                    Navigate(typeof(EditItemPage), p);
+                    Navigate(typeof(EditItemPage), item);
                 }
+
             }, false);
         }
     }

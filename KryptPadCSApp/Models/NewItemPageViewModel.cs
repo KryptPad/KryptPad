@@ -101,10 +101,11 @@ namespace KryptPadCSApp.Models
             AddItemCommand = new Command((p) =>
             {
                 //create new category
-                var item = new Profile()
+                var item = new ItemBase()
                 {
                     Category = Category,
-                    Name = ItemName
+                    Name = ItemName,
+                    ItemType = SelectedItem == "Profile" ? Classes.ItemType.Profile : Classes.ItemType.Note
                 };
 
                 //add the fields that have names to the profile
@@ -139,15 +140,19 @@ namespace KryptPadCSApp.Models
         /// Loads an IItem into the view model
         /// </summary>
         /// <param name="item"></param>
-        public void LoadItem(IItem item)
+        public void LoadItem(ItemBase item)
         {
             ItemName = item.Name;
             Category = item.Category;
 
             //if this is a profile, then we have fields
-            if (item is Profile) {
-                Fields = (item as Profile).Fields;
+            if (item.ItemType == Classes.ItemType.Profile) {
+                Fields = item.Fields;
                 SelectedItem = "Profile";
+            }
+            else
+            {
+                SelectedItem = "Note";
             }
             
 
