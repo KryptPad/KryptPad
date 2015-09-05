@@ -193,6 +193,10 @@ namespace KryptPadCSApp.Models
 
                 //now that the document is loaded, we can wire up change listeners
                 document.InitializeDocument();
+                //set session password
+                document.SessionPassword = password;
+                //set current file
+                document.SelectedFile = selectedFile;
 
                 //return the document
                 return document;

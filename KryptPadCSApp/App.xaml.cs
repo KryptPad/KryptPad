@@ -32,7 +32,7 @@ namespace KryptPadCSApp
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private Document _document = new Document();
+        private Document _document = new Document(true);
 
         /// <summary>
         /// Gets or sets the current document instance

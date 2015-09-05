@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using KryptPadCSApp.Classes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,11 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Category));
             }
         }
+
+        /// <summary>
+        /// Gets the item type
+        /// </summary>
+        public ItemType ItemType { get; set; }
 
 
         private string _name;

@@ -134,7 +134,7 @@ namespace KryptPadCSApp.Models
             if (res != null)
             {
                 var document = await Document.Load(res, "12345678");
-
+                
                 (App.Current as App).Document = document;
 
                 //close the dialog
