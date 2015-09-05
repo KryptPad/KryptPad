@@ -66,12 +66,12 @@ namespace KryptPadCSApp.Models
             DoneCommand = new Command((p) =>
             {
                 //set the password on the document
-                MainPageViewModel.Document.SessionPassword = Password;
+                (App.Current as App).Document.SessionPassword = "12345678";//s Password;
 
                 //close the dialog
                 DialogHelper.CloseDialog(p as FrameworkElement);
 
-            }, false);
+            }, true);
 
         }
 

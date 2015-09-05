@@ -9,7 +9,7 @@ using Windows.Foundation.Collections;
 
 namespace KryptPadCSApp.Models
 {
-    class ItemCollection : ObservableCollection<IItem>
+    class ItemCollection : ObservableCollection<ItemBase>
     {
 
     }

@@ -1,4 +1,5 @@
 ﻿using KryptPadCSApp.Views;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
-    class Category : BaseModel, ICategory
+    class Category : BaseModel
     {
 
         #region Properties
@@ -50,11 +51,12 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets the list of items in the category
         /// </summary>
-        public ObservableCollection<IItem> Items { get; private set; } = new ObservableCollection<IItem>();
+        public ItemCollection Items { get; private set; } = new ItemCollection();
 
         /// <summary>
         /// Handles item click event
         /// </summary>
+        [JsonIgnore]
         public ICommand ItemClickCommand { get; set; }
 
         #endregion

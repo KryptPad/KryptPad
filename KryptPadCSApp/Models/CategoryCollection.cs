@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.Models
 {
-    class CategoryCollection : ObservableCollection<ICategory>
+    class CategoryCollection : ObservableCollection<Category>
     {
     }
 }

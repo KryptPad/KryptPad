@@ -13,10 +13,8 @@ namespace KryptPadCSApp.Models
 {
     class MainPageViewModel : BaseModel
     {
-        
-        #region Properties
 
-        public static Document Document { get; set; } = new Document();
+        #region Properties
 
         public ICommand HomeNavButtonCommand { get; private set; }
 
@@ -74,5 +72,6 @@ namespace KryptPadCSApp.Models
             });
         }
 
+        
     }
 }

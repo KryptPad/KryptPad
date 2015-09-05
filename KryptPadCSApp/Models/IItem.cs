@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +13,13 @@ namespace KryptPadCSApp.Models
 {
     interface IItem
     {
+        event PropertyChangedEventHandler PropertyChanged;
+
+        [JsonIgnore]
         Category Category { get; set; }
         string Name { get; set; }
         char Icon { get; set; }
+        [JsonIgnore]
         Brush Background { get; }
     }
 }

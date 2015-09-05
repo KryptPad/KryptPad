@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets or sets the category this item is filed under
         /// </summary>
+        [JsonIgnore]
         public Category Category
         {
             get { return _category; }
@@ -62,6 +64,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets or sets the background color of the item
         /// </summary>
+        [JsonIgnore]
         public Brush Background { get; protected set; }
         #endregion
     }
