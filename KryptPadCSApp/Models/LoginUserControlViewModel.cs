@@ -133,13 +133,16 @@ namespace KryptPadCSApp.Models
 
             if (res != null)
             {
-                var document = await Document.Load(res, "12345678");
-                
-                (App.Current as App).Document = document;
+                //store the file we want to open temorarily while we wait for a password
+                //from the user
+                (App.Current as App).SelectedFile = res;
 
                 //close the dialog
                 DialogHelper.CloseDialog(p as FrameworkElement);
-                                
+
+                //load the authentication dialog
+                DialogHelper.AuthenticateDialog();
+                
             }
         }
 

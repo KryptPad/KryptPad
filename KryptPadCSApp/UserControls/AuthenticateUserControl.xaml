@@ -1,13 +1,19 @@
 ﻿<UserControl
-    x:Class="KryptPadCSApp.UserControls.AuthenticateUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp.UserControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Models="using:KryptPadCSApp.Models"
+    x:Class="KryptPadCSApp.UserControls.AuthenticateUserControl"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    Name="AuthenticateDialogPage">
+
+    <UserControl.DataContext>
+        <Models:AuthenticateUserControlViewModel/>
+    </UserControl.DataContext>
 
     <Grid>
         <StackPanel Margin="0,10,0,0">
@@ -24,15 +30,19 @@
                 </Grid.ColumnDefinitions>
 
                 <PasswordBox x:Name="Password" Password="{Binding Password, Mode=TwoWay}" 
-                                 PlaceholderText="Enter your password" Grid.Column="0" />
+					PlaceholderText="Enter your password" Grid.Column="0" />
                 <Button x:Name="UnlockButton"
-                            Content="&#xE9AC;" Grid.Column="1"
-                            Command="{Binding UnlockCommand}"
-                            CommandParameter="{Binding ElementName=LoginDialogPage}"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            VerticalAlignment="Stretch"/>
+					Content="&#xE9AC;" Grid.Column="1"
+					Command="{Binding UnlockCommand}"
+					CommandParameter="{Binding ElementName=AuthenticateDialogPage}"
+					FontFamily="{StaticResource SymbolThemeFontFamily}"
+					VerticalAlignment="Stretch"/>
             </Grid>
 
+            <!--user can cancel-->
+            <Button Content="Cancel" Margin="0,10,0,0" 
+                    Command="{Binding CancelCommand}"
+					CommandParameter="{Binding ElementName=AuthenticateDialogPage}"/>
 
         </StackPanel>
     </Grid>

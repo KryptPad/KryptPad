@@ -30,6 +30,21 @@ namespace KryptPadCSApp.Classes
         }
 
         /// <summary>
+        /// Displays the authentication dialog
+        /// </summary>
+        public static async void AuthenticateDialog()
+        {
+            var dialog = new ContentDialog()
+            {
+                Title = "Authenticate",
+                MaxWidth = Window.Current.Bounds.Width,
+                Content = new AuthenticateUserControl()
+            };
+
+            var res = await dialog.ShowAsync();
+        }
+
+        /// <summary>
         /// Displays the create password dialog
         /// </summary>
         public static async void CreatePasswordDialog()

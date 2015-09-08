@@ -12,6 +12,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -32,6 +33,7 @@ namespace KryptPadCSApp
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        #region Properties
         private Document _document = new Document(true);
 
         /// <summary>
@@ -48,6 +50,12 @@ namespace KryptPadCSApp
 
             }
         }
+
+        /// <summary>
+        /// Gets or sets the file to load
+        /// </summary>
+        internal StorageFile SelectedFile { get; set; }
+        #endregion
 
 
         /// <summary>
