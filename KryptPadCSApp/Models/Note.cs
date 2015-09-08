@@ -14,6 +14,7 @@ namespace KryptPadCSApp.Models
     {
         #region Properties
 
+        public string Notes { get; set; }
 
         #endregion
 

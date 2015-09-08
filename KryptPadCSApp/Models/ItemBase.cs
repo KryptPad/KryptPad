@@ -45,7 +45,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(ItemType));
 
                 //configure defaults based on type
-                ConfigureItemDefaults();
+                //ConfigureItemDefaults();
             }
         }
 
@@ -92,7 +92,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets a collection of fields
         /// </summary>
-        public FieldCollection Fields { get; protected set; } = new FieldCollection();
+        //public FieldCollection Fields { get; protected set; } = new FieldCollection();
         #endregion
 
         public ItemBase()
@@ -103,24 +103,19 @@ namespace KryptPadCSApp.Models
         //Returns an instance of ItemBase configured for Add Item
         public static ItemBase CreateAddItem()
         {
-            return new ItemBase()
-            {
-                ItemType = ItemType.AddItem,
-                Name = "Add Item",
-                Icon = (char)0xE109
-            };
+            return new AddItem();
         }
 
-        private void ConfigureItemDefaults()
-        {
-            if (ItemType == ItemType.Note)
-            {
-                Background = new SolidColorBrush(Colors.Lavender);
-            }
-            else if (ItemType == ItemType.Profile)
-            {
-                Background = new SolidColorBrush(Colors.LightBlue);
-            }
-        }
+        //private void ConfigureItemDefaults()
+        //{
+        //    if (ItemType == ItemType.Note)
+        //    {
+        //        Background = new SolidColorBrush(Colors.Lavender);
+        //    }
+        //    else if (ItemType == ItemType.Profile)
+        //    {
+        //        Background = new SolidColorBrush(Colors.LightBlue);
+        //    }
+        //}
     }
 }

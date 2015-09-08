@@ -147,8 +147,10 @@ namespace KryptPadCSApp.Models
                 throw new Exception("You must specify a file before you can save your document.");
             }
 
+            //create settings
+            var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             //now that those checks are out of the way, we can serialize the data into a JSON string and encrypt it.
-            var jsonData = JsonConvert.SerializeObject(this);
+            var jsonData = JsonConvert.SerializeObject(this, settings);
 
             //encrypt the data
             var encryptedData = Encryption.Encrypt(jsonData, SessionPassword);
@@ -207,8 +209,10 @@ namespace KryptPadCSApp.Models
                 //attempt to decrypt. failure here is likely a password error
                 var jsonData = Encryption.Decrypt(encryptedData, password);
 
+                //create settings
+                var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
                 //deserialize
-                var document = JsonConvert.DeserializeObject<Document>(jsonData);
+                var document = JsonConvert.DeserializeObject<Document>(jsonData, settings);
 
                 //now that the document is loaded, we can wire up change listeners
                 document.InitializeDocument();

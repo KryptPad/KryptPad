@@ -10,6 +10,30 @@
     d:DesignWidth="400">
 
     <Grid>
+        <StackPanel Margin="0,10,0,0">
 
+            <!--Password prompt shows if there is a last document opened (most recent)-->
+
+            <TextBlock>
+				<Run Text="Unlock your document"/>
+            </TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <PasswordBox x:Name="Password" Password="{Binding Password, Mode=TwoWay}" 
+                                 PlaceholderText="Enter your password" Grid.Column="0" />
+                <Button x:Name="UnlockButton"
+                            Content="&#xE9AC;" Grid.Column="1"
+                            Command="{Binding UnlockCommand}"
+                            CommandParameter="{Binding ElementName=LoginDialogPage}"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            VerticalAlignment="Stretch"/>
+            </Grid>
+
+
+        </StackPanel>
     </Grid>
 </UserControl>
