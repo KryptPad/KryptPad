@@ -16,7 +16,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public CategoryCollection Categories
         {
-            get { return MainPageViewModel.Document.Categories; }
+            get { return (App.Current as App).Document.Categories; }
         }
 
         private Category _selectedCategory;
@@ -40,14 +40,25 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public ICommand AddCategoryCommand { get; private set; }
 
-        
+
 
         #endregion
 
 
         public ItemsPageViewModel()
         {
+            //register commands
             RegisterCommands();
+
+            //listen for changes to document. this occurs mainly when a new document
+            //is created. we have to let the model know so we can notify changes to the
+            //categories property
+            (App.Current as App).PropertyChanged += (sender, e) =>
+            {
+                //raise property changed event for categories
+                OnPropertyChanged(nameof(Categories));
+            };
+
         }
 
         /// <summary>

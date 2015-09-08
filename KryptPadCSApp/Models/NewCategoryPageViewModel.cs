@@ -68,7 +68,7 @@ namespace KryptPadCSApp.Models
                 };
 
                 //add to the list
-                MainPageViewModel.Document.Categories.Add(category);
+                (App.Current as App).Document.Categories.Add(category);
 
                 //navigate
                 Navigate(typeof(ItemsPage), category);

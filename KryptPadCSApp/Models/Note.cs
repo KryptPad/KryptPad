@@ -14,12 +14,14 @@ namespace KryptPadCSApp.Models
     {
         #region Properties
 
+        public string Notes { get; set; }
 
         #endregion
 
         public Note()
         {
             Background = new SolidColorBrush(Colors.Lavender);
+            ItemType = Classes.ItemType.Note;
         }
     }
 }

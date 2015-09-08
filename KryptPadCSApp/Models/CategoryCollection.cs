@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.Models
 {
-    class CategoryCollection : ObservableCollection<ICategory>
+    class CategoryCollection : ObservableCollection<Category>
     {
+        protected override void InsertItem(int index, Category item)
+        {
+            base.InsertItem(index, item);
+        }
     }
 }

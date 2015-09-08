@@ -58,6 +58,8 @@ namespace KryptPadCSApp.Models
 
         public Command NewDocumentCommand { get; protected set; }
 
+        public Command OpenExistingCommand { get; protected set; }
+
         #endregion
 
         public LoginUserControlViewModel()
@@ -84,6 +86,8 @@ namespace KryptPadCSApp.Models
             UnlockCommand = new Command(UnlockCommandHandler, false);
 
             NewDocumentCommand = new Command(NewDocumentCommandHandler);
+
+            OpenExistingCommand = new Command(OpenExistingCommandHandler);
         }
 
         #region Command handlers
@@ -96,8 +100,7 @@ namespace KryptPadCSApp.Models
         private async void NewDocumentCommandHandler(object p)
         {
             var picker = new FileSavePicker();
-            //add filters for our document type
-            //picker.FileTypeFilter.Add(".kdf");
+            
             //TODO: move to string resource
             picker.DefaultFileExtension = ".kdf";
             picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
@@ -108,7 +111,7 @@ namespace KryptPadCSApp.Models
             if (res != null)
             {
                 //set the filepath
-                MainPageViewModel.Document.SelectedFile = res;
+                (App.Current as App).Document.SelectedFile = res;
                 
                 //close the dialog
                 DialogHelper.CloseDialog(p as FrameworkElement);
@@ -118,7 +121,29 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        
+        private async void OpenExistingCommandHandler(object p)
+        {
+            var picker = new FileOpenPicker();
+
+            //add filters for our document type
+            picker.FileTypeFilter.Add(".kdf");
+
+            //prompt to save
+            var res = await picker.PickSingleFileAsync();
+
+            if (res != null)
+            {
+                var document = await Document.Load(res, "12345678");
+                
+                (App.Current as App).Document = document;
+
+                //close the dialog
+                DialogHelper.CloseDialog(p as FrameworkElement);
+                                
+            }
+        }
+
+
         #endregion
     }
 }

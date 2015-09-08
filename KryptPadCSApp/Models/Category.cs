@@ -1,4 +1,5 @@
 ﻿using KryptPadCSApp.Views;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
-    class Category : BaseModel, ICategory
+    class Category : BaseModel
     {
 
         #region Properties
@@ -50,11 +51,12 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets the list of items in the category
         /// </summary>
-        public ObservableCollection<IItem> Items { get; private set; } = new ObservableCollection<IItem>();
+        public ItemCollection Items { get; private set; } = new ItemCollection();
 
         /// <summary>
         /// Handles item click event
         /// </summary>
+        [JsonIgnore]
         public ICommand ItemClickCommand { get; set; }
 
         #endregion
@@ -62,7 +64,7 @@ namespace KryptPadCSApp.Models
         public Category()
         {
             //initialize collection with an add item as the first item
-            Items.Add(new AddItem());
+            Items.Add(ItemBase.CreateAddItem());
 
             RegisterCommands();
         }
@@ -75,17 +77,21 @@ namespace KryptPadCSApp.Models
             //handle item click
             ItemClickCommand = new Command((p) =>
             {
-                if (p is AddItem)
+                var item = p as ItemBase;
+
+                if (item.ItemType == Classes.ItemType.AddItem)
                 {
                     //navigate to add new
                     Navigate(typeof(NewItemPage), this);
                 }
-                else if(p is IItem)
+                else 
                 {
-                    (p as IItem).Category = this;
+                    //TODO: fix this...
+                    item.Category = this;
                     //navigate to edit
-                    Navigate(typeof(EditItemPage), p);
+                    Navigate(typeof(EditItemPage), item);
                 }
+
             }, false);
         }
     }

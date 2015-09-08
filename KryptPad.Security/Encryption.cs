@@ -157,13 +157,13 @@ namespace KryptPad.Security
         /// <param name="cypherText"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static string Decrypt(string cypherText, string password)
+        public static string Decrypt(byte[] cypherData, string password)
         {
             //no cypher text? return null
-            if (string.IsNullOrWhiteSpace(cypherText)) return null;
+            if (cypherData == null) return null;
 
             //create a buffer from the cypherText
-            var cypherBuffer = CryptographicBuffer.DecodeFromBase64String(cypherText);
+            var cypherBuffer = CryptographicBuffer.CreateFromByteArray(cypherData);
 
             IBuffer saltBuffer;
             IBuffer ivBuffer;

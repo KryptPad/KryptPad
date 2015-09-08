@@ -42,7 +42,7 @@ namespace KryptPadCSApp.Views
                 var model = DataContext as NewItemPageViewModel;
                 if (model != null)
                 {
-                   model.LoadItem(e.Parameter as IItem);
+                   model.LoadItem(e.Parameter as ItemBase);
                 }
             }
         }

@@ -25,6 +25,7 @@ namespace KryptPadCSApp.Models
         {
             //set background color for profile items
             Background = new SolidColorBrush(Colors.LightBlue);
+            ItemType = Classes.ItemType.Profile;
         }
     }
 }

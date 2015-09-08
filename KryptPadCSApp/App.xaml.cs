@@ -4,6 +4,7 @@ using KryptPadCSApp.UserControls;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -25,11 +26,28 @@ namespace KryptPadCSApp
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    public partial class App : Application
+    public partial class App : Application, INotifyPropertyChanged
     {
         private Frame _rootFrame;
 
-        
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private Document _document = new Document(true);
+
+        /// <summary>
+        /// Gets or sets the current document instance
+        /// </summary>
+        internal Document Document
+        {
+            get { return _document; }
+            set
+            {
+                _document = value;
+                //notify change
+                OnPropertyChanged(nameof(Document));
+
+            }
+        }
 
 
         /// <summary>
@@ -134,5 +152,22 @@ namespace KryptPadCSApp
                 _rootFrame.GoBack();
             }
         }
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Raises the PropertyChanged event for a property
+        /// </summary>
+        /// <param name="name"></param>
+        protected void OnPropertyChanged(string name)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        #endregion
     }
 }

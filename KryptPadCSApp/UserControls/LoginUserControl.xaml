@@ -53,7 +53,8 @@
                         CommandParameter="{Binding ElementName=LoginDialogPage}"/>
                 
                 <Button Content="Open Existing" Grid.Column="1"
-                        />
+                        Command="{Binding OpenExistingCommand}"
+                        CommandParameter="{Binding ElementName=LoginDialogPage}"/>
             </Grid>
 
             <!--All the most recent documents, first being the latest one-->

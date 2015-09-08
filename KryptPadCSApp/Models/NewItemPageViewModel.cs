@@ -60,7 +60,7 @@ namespace KryptPadCSApp.Models
                 AddItemCommand.CommandCanExecute = CanAddItem();
             }
         }
-        
+
         /// <summary>
         /// Gets a collection of fields
         /// </summary>
@@ -101,16 +101,26 @@ namespace KryptPadCSApp.Models
             AddItemCommand = new Command((p) =>
             {
                 //create new category
-                var item = new Profile()
+                ItemBase item;
+                if (SelectedItem == "Profile")
                 {
-                    Category = Category,
-                    Name = ItemName
-                };
+                    item = new Profile();
+                }
+                else
+                {
+                    item = new Note();
+                }
 
-                //add the fields that have names to the profile
-                foreach (var field in Fields.Where(f => !string.IsNullOrWhiteSpace(f.Name)))
+                item.Category = Category;
+                item.Name = ItemName;
+
+                if (item is Profile)
                 {
-                    item.Fields.Add(field);
+                    //add the fields that have names to the profile
+                    foreach (var field in Fields.Where(f => !string.IsNullOrWhiteSpace(f.Name)))
+                    {
+                        (item as Profile).Fields.Add(field);
+                    }
                 }
 
                 //add the item to the current category
@@ -139,17 +149,22 @@ namespace KryptPadCSApp.Models
         /// Loads an IItem into the view model
         /// </summary>
         /// <param name="item"></param>
-        public void LoadItem(IItem item)
+        public void LoadItem(ItemBase item)
         {
             ItemName = item.Name;
             Category = item.Category;
 
             //if this is a profile, then we have fields
-            if (item is Profile) {
+            if (item is Profile)
+            {
                 Fields = (item as Profile).Fields;
                 SelectedItem = "Profile";
             }
-            
+            else
+            {
+                SelectedItem = "Note";
+            }
+
 
         }
 
@@ -159,7 +174,7 @@ namespace KryptPadCSApp.Models
         /// <returns></returns>
         private bool CanAddItem() => SelectedItem != null
             && !string.IsNullOrWhiteSpace(_itemName);
-            //&& (Fields.Count == 0 || (Fields.Count > 0 && Fields.All(f => !string.IsNullOrWhiteSpace(f.Name))));
+        //&& (Fields.Count == 0 || (Fields.Count > 0 && Fields.All(f => !string.IsNullOrWhiteSpace(f.Name))));
 
 
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KryptPadCSApp.Classes;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +18,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets or sets the category this item is filed under
         /// </summary>
+        [JsonIgnore]
         public Category Category
         {
             get { return _category; }
@@ -26,6 +29,27 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Category));
             }
         }
+
+        /// <summary>
+        /// Gets the item type
+        /// </summary>
+        private ItemType _itemType;
+
+        public ItemType ItemType
+        {
+            get { return _itemType; }
+            set
+            {
+                _itemType = value;
+                //raise change event
+                OnPropertyChanged(nameof(ItemType));
+
+                //configure defaults based on type
+                //ConfigureItemDefaults();
+            }
+        }
+
+
 
 
         private string _name;
@@ -62,7 +86,36 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets or sets the background color of the item
         /// </summary>
+        [JsonIgnore]
         public Brush Background { get; protected set; }
+
+        /// <summary>
+        /// Gets a collection of fields
+        /// </summary>
+        //public FieldCollection Fields { get; protected set; } = new FieldCollection();
         #endregion
+
+        public ItemBase()
+        {
+
+        }
+
+        //Returns an instance of ItemBase configured for Add Item
+        public static ItemBase CreateAddItem()
+        {
+            return new AddItem();
+        }
+
+        //private void ConfigureItemDefaults()
+        //{
+        //    if (ItemType == ItemType.Note)
+        //    {
+        //        Background = new SolidColorBrush(Colors.Lavender);
+        //    }
+        //    else if (ItemType == ItemType.Profile)
+        //    {
+        //        Background = new SolidColorBrush(Colors.LightBlue);
+        //    }
+        //}
     }
 }

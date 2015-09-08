@@ -18,7 +18,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>KryptPadCSApp_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>101DA3292BA5F8BA536C0869242EE16A6C936FC4</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>B18C4352948EB8986BB9DA6EDE4BCA3E8DFAD3FD</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -101,12 +101,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Enumerators.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />
     <Compile Include="Classes\DialogHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AddItem.cs" />
+    <Compile Include="Models\AuthenticateUserControlViewModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryCollection.cs" />
@@ -115,7 +117,6 @@
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\FieldCollection.cs" />
-    <Compile Include="Models\ICategory.cs" />
     <Compile Include="Models\IItem.cs" />
     <Compile Include="Models\ItemBase.cs" />
     <Compile Include="Models\ItemCollection.cs" />
@@ -127,6 +128,9 @@
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\AuthenticateUserControl.xaml.cs">
+      <DependentUpon>AuthenticateUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CreatePasswordUserControl.xaml.cs">
       <DependentUpon>CreatePasswordUserControl.xaml</DependentUpon>
     </Compile>
@@ -169,6 +173,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\AuthenticateUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\CreatePasswordUserControl.xaml">
       <SubType>Designer</SubType>
