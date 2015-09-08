@@ -94,7 +94,7 @@ namespace KryptPadCSApp.Models
         private void UnlockCommandHandler(object p)
         {
             //close the dialog
-            DialogHelper.CloseDialog(p as FrameworkElement);
+            //DialogHelper.CloseDialog(p as FrameworkElement);
         }
 
         private async void NewDocumentCommandHandler(object p)
