@@ -27,13 +27,13 @@ namespace KryptPad.Security
             //get a password buffer
             var pwBuffer = CryptographicBuffer.ConvertStringToBinary(password, BinaryStringEncoding.Utf8);
             
-            //derive key material for password size 32 bytes for AES256 algorithm
-            var keyDerivationProvider = KeyDerivationAlgorithmProvider.OpenAlgorithm(KeyDerivationAlgorithmNames.Sp800108CtrHmacSha256);
-            //using salt and specified iterations
-            var pbkdf2Parms = KeyDerivationParameters.BuildForPbkdf2(saltBuffer, KEY_DERIVATION_ITERATION);
-
+            //create provider
+            var keyDerivationProvider = KeyDerivationAlgorithmProvider.OpenAlgorithm(KeyDerivationAlgorithmNames.Pbkdf2Sha512);
             //create a key based on original key and derivation parmaters
             var keyOriginal = keyDerivationProvider.CreateKey(pwBuffer);
+
+            //using salt and specified iterations
+            var pbkdf2Parms = KeyDerivationParameters.BuildForPbkdf2(saltBuffer, KEY_DERIVATION_ITERATION);
             //derive new key
             var keyMaterial = CryptographicEngine.DeriveKeyMaterial(keyOriginal, pbkdf2Parms, 32);
             
