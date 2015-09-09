@@ -67,7 +67,7 @@
                 <ItemsControl ItemsSource="{Binding RecentDocuments}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" />
+                            <TextBlock Text="{Binding Name}" Margin="0,5,0,0" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

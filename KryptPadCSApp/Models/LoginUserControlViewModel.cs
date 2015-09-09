@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,7 +20,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets a list of recently accessed documents
         /// </summary>
-        public ObservableCollection<string> RecentDocuments { get; protected set; } = new ObservableCollection<string>();
+        public ObservableCollection<StorageFile> RecentDocuments { get; protected set; } = new ObservableCollection<StorageFile>();
 
         private Visibility _promptToUnlock = Visibility.Collapsed;
         /// <summary>
@@ -72,17 +73,27 @@ namespace KryptPadCSApp.Models
                 PromptToUnlock = RecentDocuments.Any() ? Visibility.Visible : Visibility.Collapsed;
             };
 
-            ////simulate getting recent documents
-            //RecentDocuments.Add("my passwords.kdf");
-            var recentFiles = (App.Current as App).GetRecentFiles();
-
-            foreach (var recentFile in recentFiles)
-            {
-                RecentDocuments.Add(recentFile);
-            }
+            //load the recently used list
+            PrepareMostRecentlyUsedList();
 
             //register commands
             RegisterCommands();
+        }
+
+        private async void PrepareMostRecentlyUsedList()
+        {
+            //get the most recently used list
+            var list = StorageApplicationPermissions.MostRecentlyUsedList;
+            
+            foreach (var entry in list.Entries.OrderByDescending((e) => DateTime.Parse(e.Metadata)))
+            {
+                //get the file info
+                var file = await list.GetFileAsync(entry.Token);
+                //add to the recent documents list
+                RecentDocuments.Add(file);
+            }
+
+            
         }
 
         /// <summary>
@@ -103,20 +114,15 @@ namespace KryptPadCSApp.Models
             //close the dialog
             DialogHelper.CloseDialog(p as FrameworkElement);
 
-            var selectedFile = await StorageFile.GetFileFromPathAsync(RecentDocuments.FirstOrDefault());
+            //get the most recent file
+            var selectedFile = RecentDocuments.FirstOrDefault();
 
-            //store the file we want to open temorarily while we wait for a password
-            //from the user
-            (App.Current as App).SelectedFile = selectedFile;
-
-            //update the settings for our recently accessed files
-            //(App.Current as App).PushRecentFile(selectedFile);
+            //load the most recent file
+            (App.Current as App).Document = await Document.Load(selectedFile, Password);
 
             //close the dialog
             DialogHelper.CloseDialog(p as FrameworkElement);
-
-            //load the authentication dialog
-            DialogHelper.AuthenticateDialog();
+            
         }
 
         private async void NewDocumentCommandHandler(object p)
