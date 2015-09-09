@@ -30,24 +30,24 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        /// <summary>
-        /// Gets the item type
-        /// </summary>
-        private ItemType _itemType;
+        ///// <summary>
+        ///// Gets the item type
+        ///// </summary>
+        //private ItemType _itemType;
 
-        public ItemType ItemType
-        {
-            get { return _itemType; }
-            set
-            {
-                _itemType = value;
-                //raise change event
-                OnPropertyChanged(nameof(ItemType));
+        //public ItemType ItemType
+        //{
+        //    get { return _itemType; }
+        //    set
+        //    {
+        //        _itemType = value;
+        //        //raise change event
+        //        OnPropertyChanged(nameof(ItemType));
 
-                //configure defaults based on type
-                //ConfigureItemDefaults();
-            }
-        }
+        //        //configure defaults based on type
+        //        //ConfigureItemDefaults();
+        //    }
+        //}
 
 
 

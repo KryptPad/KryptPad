@@ -22,7 +22,7 @@ namespace KryptPadCSApp.Models
         {
             Name = "Add Item";
             Icon = (char)0xE109;
-            ItemType = Classes.ItemType.AddItem;
+            //ItemType = Classes.ItemType.AddItem;
         }
 
 

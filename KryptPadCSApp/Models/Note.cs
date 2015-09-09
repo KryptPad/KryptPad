@@ -21,7 +21,7 @@ namespace KryptPadCSApp.Models
         public Note()
         {
             Background = new SolidColorBrush(Colors.Lavender);
-            ItemType = Classes.ItemType.Note;
+            //ItemType = Classes.ItemType.Note;
         }
     }
 }

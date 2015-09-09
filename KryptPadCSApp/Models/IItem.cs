@@ -18,7 +18,7 @@ namespace KryptPadCSApp.Models
 
         [JsonIgnore]
         Category Category { get; set; }
-        ItemType ItemType { get; }
+        //ItemType ItemType { get; }
         string Name { get; set; }
         char Icon { get; set; }
         [JsonIgnore]

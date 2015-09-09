@@ -20,9 +20,16 @@
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="d24b2947-2f75-427f-82f2-b8c9597e74f4">
+            <uap:DisplayName>KryptPad Document Format</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.kdf</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
-  <Capabilities>
-    <Capability Name="internetClient" />
-  </Capabilities>
 </Package>

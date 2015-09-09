@@ -182,6 +182,7 @@ namespace KryptPadCSApp
 
         public void PushRecentFile(StorageFile selectedFile)
         {
+   
             //push our file onto the top of the stack
             List<string> recentFiles = null;
 

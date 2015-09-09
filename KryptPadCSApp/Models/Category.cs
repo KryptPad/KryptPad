@@ -79,7 +79,7 @@ namespace KryptPadCSApp.Models
             {
                 var item = p as ItemBase;
 
-                if (item.ItemType == Classes.ItemType.AddItem)
+                if (item is AddItem)
                 {
                     //navigate to add new
                     Navigate(typeof(NewItemPage), this);

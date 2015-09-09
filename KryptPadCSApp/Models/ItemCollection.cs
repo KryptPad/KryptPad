@@ -15,8 +15,8 @@ namespace KryptPadCSApp.Models
         {
             //before we insert the add item, make sure it does not exist in the list already.
             //check collection for an existing AddItem
-            if (item.ItemType == Classes.ItemType.AddItem
-                && this.Any((i) => i.ItemType == Classes.ItemType.AddItem))
+            if (item is AddItem
+                && this.Any((i) => i is AddItem))
             {
                 return;
             }
