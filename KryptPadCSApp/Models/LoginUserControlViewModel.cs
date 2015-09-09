@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -71,8 +72,14 @@ namespace KryptPadCSApp.Models
                 PromptToUnlock = RecentDocuments.Any() ? Visibility.Visible : Visibility.Collapsed;
             };
 
-            //simulate getting recent documents
-            RecentDocuments.Add("my passwords.kdf");
+            ////simulate getting recent documents
+            //RecentDocuments.Add("my passwords.kdf");
+            var recentFiles = (App.Current as App).GetRecentFiles();
+
+            foreach (var recentFile in recentFiles)
+            {
+                RecentDocuments.Add(recentFile);
+            }
 
             //register commands
             RegisterCommands();
@@ -91,16 +98,31 @@ namespace KryptPadCSApp.Models
         }
 
         #region Command handlers
-        private void UnlockCommandHandler(object p)
+        private async void UnlockCommandHandler(object p)
         {
             //close the dialog
-            //DialogHelper.CloseDialog(p as FrameworkElement);
+            DialogHelper.CloseDialog(p as FrameworkElement);
+
+            var selectedFile = await StorageFile.GetFileFromPathAsync(RecentDocuments.FirstOrDefault());
+
+            //store the file we want to open temorarily while we wait for a password
+            //from the user
+            (App.Current as App).SelectedFile = selectedFile;
+
+            //update the settings for our recently accessed files
+            //(App.Current as App).PushRecentFile(selectedFile);
+
+            //close the dialog
+            DialogHelper.CloseDialog(p as FrameworkElement);
+
+            //load the authentication dialog
+            DialogHelper.AuthenticateDialog();
         }
 
         private async void NewDocumentCommandHandler(object p)
         {
             var picker = new FileSavePicker();
-            
+
             //TODO: move to string resource
             picker.DefaultFileExtension = ".kdf";
             picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
@@ -112,7 +134,10 @@ namespace KryptPadCSApp.Models
             {
                 //set the filepath
                 (App.Current as App).Document.SelectedFile = res;
-                
+
+                //update the settings for our recently accessed files
+                (App.Current as App).PushRecentFile(res);
+
                 //close the dialog
                 DialogHelper.CloseDialog(p as FrameworkElement);
 
@@ -137,12 +162,15 @@ namespace KryptPadCSApp.Models
                 //from the user
                 (App.Current as App).SelectedFile = res;
 
+                //update the settings for our recently accessed files
+                (App.Current as App).PushRecentFile(res);
+
                 //close the dialog
                 DialogHelper.CloseDialog(p as FrameworkElement);
 
                 //load the authentication dialog
                 DialogHelper.AuthenticateDialog();
-                
+
             }
         }
 

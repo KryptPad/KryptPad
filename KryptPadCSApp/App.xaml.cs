@@ -177,5 +177,58 @@ namespace KryptPadCSApp
         }
 
         #endregion
+
+        #region Public methods
+
+        public void PushRecentFile(StorageFile selectedFile)
+        {
+            //push our file onto the top of the stack
+            List<string> recentFiles = null;
+
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey("RecentFiles"))
+            {
+                recentFiles = ((string[])ApplicationData.Current.LocalSettings.Values["RecentFiles"]).ToList();
+            }
+            else
+            {
+                recentFiles = new List<string>();
+                ApplicationData.Current.LocalSettings.Values.Add("RecentFiles", recentFiles.ToArray());
+            }
+
+            //push onto the stack if the storage file doesn't already exist. if it does, pop it off and push it again
+            var existingFile = recentFiles.Find(sf => sf == selectedFile.Path);
+
+            if (existingFile != null)
+            {
+                //remove from wherever it is
+                recentFiles.Remove(existingFile);
+                //move it to the beginning
+                recentFiles.Insert(0, existingFile);
+            }
+            else
+            {
+                recentFiles.Insert(0, selectedFile.Path);
+            }
+
+            ApplicationData.Current.LocalSettings.Values["RecentFiles"] = recentFiles.ToArray();
+        }
+
+        public List<string> GetRecentFiles()
+        {
+            List<string> recentFiles = null;
+
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey("RecentFiles"))
+            {
+                recentFiles = ((string[])ApplicationData.Current.LocalSettings.Values["RecentFiles"]).ToList();
+            }
+            else
+            {
+                recentFiles = new List<string>();
+            }
+
+            return recentFiles;
+        }
+
+        #endregion
     }
 }
