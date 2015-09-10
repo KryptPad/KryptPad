@@ -52,6 +52,22 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private StorageFile _selectedDocument;
+        /// <summary>
+        /// Gets or sets the selected document
+        /// </summary>
+        public StorageFile SelectedDocument
+        {
+            get { return _selectedDocument; }
+            set
+            {
+                _selectedDocument = value;
+                //notify change
+                OnPropertyChanged(nameof(SelectedDocument));
+            }
+        }
+
+
 
         /// <summary>
         /// Gets the command to handle unlocking
@@ -61,6 +77,8 @@ namespace KryptPadCSApp.Models
         public Command NewDocumentCommand { get; protected set; }
 
         public Command OpenExistingCommand { get; protected set; }
+
+        public Command OpenFromRecentCommand { get; protected set; }
 
         #endregion
 
@@ -80,11 +98,14 @@ namespace KryptPadCSApp.Models
             RegisterCommands();
         }
 
+        /// <summary>
+        /// Prepares the RecentDocuments collection with items from the MRU
+        /// </summary>
         private async void PrepareMostRecentlyUsedList()
         {
             //get the most recently used list
             var list = StorageApplicationPermissions.MostRecentlyUsedList;
-            
+
             foreach (var entry in list.Entries.OrderByDescending((e) => DateTime.Parse(e.Metadata)))
             {
                 //get the file info
@@ -93,7 +114,7 @@ namespace KryptPadCSApp.Models
                 RecentDocuments.Add(file);
             }
 
-            
+
         }
 
         /// <summary>
@@ -106,6 +127,8 @@ namespace KryptPadCSApp.Models
             NewDocumentCommand = new Command(NewDocumentCommandHandler);
 
             OpenExistingCommand = new Command(OpenExistingCommandHandler);
+
+            OpenFromRecentCommand = new Command(OpenFromRecentCommandHandler);
         }
 
         #region Command handlers
@@ -122,7 +145,7 @@ namespace KryptPadCSApp.Models
 
             //close the dialog
             DialogHelper.CloseDialog(p as FrameworkElement);
-            
+
         }
 
         private async void NewDocumentCommandHandler(object p)
@@ -180,6 +203,21 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private void OpenFromRecentCommandHandler(object p)
+        {
+            //store the file we want to open temorarily while we wait for a password
+            //from the user
+            (App.Current as App).SelectedFile = SelectedDocument;
+
+            //update the settings for our recently accessed files
+            (App.Current as App).PushRecentFile(SelectedDocument);
+
+            //close the dialog
+            DialogHelper.CloseDialog(p as FrameworkElement);
+
+            //load the authentication dialog
+            DialogHelper.AuthenticateDialog();
+        }
 
         #endregion
     }

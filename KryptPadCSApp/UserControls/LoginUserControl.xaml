@@ -9,15 +9,30 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
+    Width="300"
+    VerticalAlignment="Stretch"
     Name="LoginDialogPage">
 
     <UserControl.DataContext>
         <Models:LoginUserControlViewModel/>
     </UserControl.DataContext>
 
+
     <Grid>
-        <StackPanel Margin="0,10,0,0">
-            
+
+        <Grid.DataContext>
+            <Models:LoginUserControlViewModel/>
+        </Grid.DataContext>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="0,10,0,0"
+                    Grid.Row="0">
+
             <!--Password prompt shows if there is a last document opened (most recent)-->
             <StackPanel Visibility="{Binding PromptToUnlock}">
                 <TextBlock>
@@ -38,9 +53,9 @@
                             FontFamily="{StaticResource SymbolThemeFontFamily}"
                             VerticalAlignment="Stretch"/>
                 </Grid>
-                
+
             </StackPanel>
-            
+
             <!--Create new or open an existing document-->
             <Grid Margin="0,40,0,0">
                 <Grid.ColumnDefinitions>
@@ -51,29 +66,56 @@
                 <Button Content="Create New" Grid.Column="0" Margin="0,0,10,0"
                         Command="{Binding NewDocumentCommand}"
                         CommandParameter="{Binding ElementName=LoginDialogPage}"/>
-                
+
                 <Button Content="Open Existing" Grid.Column="1"
                         Command="{Binding OpenExistingCommand}"
                         CommandParameter="{Binding ElementName=LoginDialogPage}"/>
             </Grid>
 
-            <!--All the most recent documents, first being the latest one-->
-            <StackPanel Margin="0,10,0,0">
-                <TextBlock>
-					<Run Text="Your recent documents"/>
-                </TextBlock>
-                
-                <!--List all of the recent documents, most recent first-->
-                <ItemsControl ItemsSource="{Binding RecentDocuments}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" Margin="0,5,0,0" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                
-            </StackPanel>
 
         </StackPanel>
+
+        <!--All the most recent documents, first being the latest one-->
+        <TextBlock Margin="0,10,0,10"
+                   Grid.Row="1"
+                   Text="Your recent documents">
+			
+        </TextBlock>
+
+        <!--List all of the recent documents, most recent first-->
+        <ListBox ItemsSource="{Binding RecentDocuments}"
+                 SelectedItem="{Binding SelectedDocument, Mode=TwoWay}"
+                 VerticalAlignment="Stretch"
+                 Grid.Row="2">
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding Name}" 
+                                   VerticalAlignment="Center"
+                                   Grid.Column="0" />
+
+                        <Button Grid.Column="1">
+                            <SymbolIcon Symbol="Delete" />
+                        </Button>
+                    </Grid>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
     </Grid>
+
 </UserControl>

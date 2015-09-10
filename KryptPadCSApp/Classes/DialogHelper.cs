@@ -19,6 +19,7 @@ namespace KryptPadCSApp.Classes
         /// </summary>
         public static async void LoginDialog()
         {
+            
             var dialog = new ContentDialog()
             {
                 Title = "KryptPad",
