@@ -23,5 +23,17 @@ namespace KryptPadCSApp.UserControls
         {
             this.InitializeComponent();
         }
+
+        private void PasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            //fire command if user hit enter
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                e.Handled = true;
+
+                //execute the command of our button
+                UnlockButton.Command.Execute(null);
+            }
+        }
     }
 }

@@ -14,20 +14,24 @@ namespace KryptPadCSApp.Classes
     /// </summary>
     class DialogHelper
     {
+
+        //store a reference to the currently open ContentDialog
+        private static ContentDialog _currentDialog;
+
         /// <summary>
         /// Displays the login dialog
         /// </summary>
         public static async void LoginDialog()
         {
-            
-            var dialog = new ContentDialog()
+
+            _currentDialog = new ContentDialog()
             {
                 Title = "KryptPad",
                 MaxWidth = Window.Current.Bounds.Width,
                 Content = new LoginUserControl()
             };
 
-            var res = await dialog.ShowAsync();
+            var res = await _currentDialog.ShowAsync();
         }
 
         /// <summary>
@@ -35,14 +39,14 @@ namespace KryptPadCSApp.Classes
         /// </summary>
         public static async void AuthenticateDialog()
         {
-            var dialog = new ContentDialog()
+            _currentDialog = new ContentDialog()
             {
                 Title = "Authenticate",
                 MaxWidth = Window.Current.Bounds.Width,
                 Content = new AuthenticateUserControl()
             };
 
-            var res = await dialog.ShowAsync();
+            var res = await _currentDialog.ShowAsync();
         }
 
         /// <summary>
@@ -51,31 +55,25 @@ namespace KryptPadCSApp.Classes
         public static async void CreatePasswordDialog()
         {
             //prompt for a new password
-            var dialog = new ContentDialog()
+            _currentDialog = new ContentDialog()
             {
                 Title = "Create Password",
                 MaxWidth = Window.Current.Bounds.Width,
                 Content = new CreatePasswordUserControl()
             };
 
-            var res = await dialog.ShowAsync();
+            var res = await _currentDialog.ShowAsync();
         }
 
         /// <summary>
         /// Closes the dialog window
         /// </summary>
         /// <param name="parent">The framework element set as the Content of the ContentDialog</param>
-        public static void CloseDialog(FrameworkElement parent)
+        public static void CloseDialog()
         {
-            if (parent != null)
+            if (_currentDialog != null)
             {
-                //the parent is the host dialog
-                var dialog = parent.Parent as ContentDialog;
-
-                if (dialog != null)
-                {
-                    dialog.Hide();
-                }
+                _currentDialog.Hide();
             }
         }
     }

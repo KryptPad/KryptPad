@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI.Xaml;
 
 namespace KryptPadCSApp.Models
@@ -29,6 +30,20 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private StorageFile _selectedFile;
+
+        public StorageFile SelectedFile
+        {
+            get { return _selectedFile; }
+            set
+            {
+                _selectedFile = value;
+                //notify change
+                OnPropertyChanged(nameof(SelectedFile));
+            }
+        }
+
+
         public Command UnlockCommand { get; protected set; }
 
         public Command CancelCommand { get; protected set; }
@@ -37,6 +52,9 @@ namespace KryptPadCSApp.Models
 
         public AuthenticateUserControlViewModel()
         {
+            //get the file we temporarily stored
+            SelectedFile = (App.Current as App).SelectedFile;
+
             //register commands
             RegisterCommands();
         }
@@ -48,21 +66,21 @@ namespace KryptPadCSApp.Models
         {
             UnlockCommand = new Command(async (p) =>
             {
-                //get the file we temporarily stored
-                var selectedFile = (App.Current as App).SelectedFile;
+                
                 //set the password on the document
-                var document = await Document.Load(selectedFile, Password);
+                var document = await Document.Load(SelectedFile, Password);
                 //set the document
                 (App.Current as App).Document = document;
 
                 //close the dialog
-                DialogHelper.CloseDialog(p as FrameworkElement);
+                DialogHelper.CloseDialog();
 
             }, false);
 
-            CancelCommand = new Command((p) => {
+            CancelCommand = new Command((p) =>
+            {
                 //close this dialog and go back to login
-                DialogHelper.CloseDialog(p as FrameworkElement);
+                DialogHelper.CloseDialog();
 
                 //open login
                 DialogHelper.LoginDialog();

@@ -64,9 +64,25 @@ namespace KryptPadCSApp.Models
                 _selectedDocument = value;
                 //notify change
                 OnPropertyChanged(nameof(SelectedDocument));
+                //open from recent list
+                OpenFromRecent(_selectedDocument);
             }
         }
 
+        private StorageFile _mostRecentFile;
+
+        public StorageFile MostRecentFile
+        {
+            get { return _mostRecentFile; }
+            set
+            {
+                _mostRecentFile = value;
+                //notify change
+                OnPropertyChanged(nameof(SelectedDocument));
+                //change visibility of unlock
+                PromptToUnlock = _mostRecentFile != null ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
 
 
         /// <summary>
@@ -84,13 +100,6 @@ namespace KryptPadCSApp.Models
 
         public LoginUserControlViewModel()
         {
-            //listent to changes to the list
-            RecentDocuments.CollectionChanged += (sender, e) =>
-            {
-                //notify that the property is changing
-                PromptToUnlock = RecentDocuments.Any() ? Visibility.Visible : Visibility.Collapsed;
-            };
-
             //load the recently used list
             PrepareMostRecentlyUsedList();
 
@@ -114,6 +123,8 @@ namespace KryptPadCSApp.Models
                 RecentDocuments.Add(file);
             }
 
+            //get the most recent and set it
+            MostRecentFile = RecentDocuments.FirstOrDefault();
 
         }
 
@@ -128,23 +139,36 @@ namespace KryptPadCSApp.Models
 
             OpenExistingCommand = new Command(OpenExistingCommandHandler);
 
-            OpenFromRecentCommand = new Command(OpenFromRecentCommandHandler);
+            //OpenFromRecentCommand = new Command(OpenFromRecentCommandHandler);
+        }
+
+        private void OpenFromRecent(StorageFile selectedFile)
+        {
+            //store the file we want to open temorarily while we wait for a password
+            //from the user
+            (App.Current as App).SelectedFile = selectedFile;
+
+            //update the settings for our recently accessed files
+            (App.Current as App).PushRecentFile(selectedFile);
+
+            //close the dialog
+            DialogHelper.CloseDialog();
+
+            //load the authentication dialog
+            DialogHelper.AuthenticateDialog();
         }
 
         #region Command handlers
         private async void UnlockCommandHandler(object p)
         {
             //close the dialog
-            DialogHelper.CloseDialog(p as FrameworkElement);
-
-            //get the most recent file
-            var selectedFile = RecentDocuments.FirstOrDefault();
+            DialogHelper.CloseDialog();
 
             //load the most recent file
-            (App.Current as App).Document = await Document.Load(selectedFile, Password);
+            (App.Current as App).Document = await Document.Load(MostRecentFile, Password);
 
             //close the dialog
-            DialogHelper.CloseDialog(p as FrameworkElement);
+            DialogHelper.CloseDialog();
 
         }
 
@@ -168,7 +192,7 @@ namespace KryptPadCSApp.Models
                 (App.Current as App).PushRecentFile(res);
 
                 //close the dialog
-                DialogHelper.CloseDialog(p as FrameworkElement);
+                DialogHelper.CloseDialog();
 
                 //open the create password dialog
                 DialogHelper.CreatePasswordDialog();
@@ -195,7 +219,7 @@ namespace KryptPadCSApp.Models
                 (App.Current as App).PushRecentFile(res);
 
                 //close the dialog
-                DialogHelper.CloseDialog(p as FrameworkElement);
+                DialogHelper.CloseDialog();
 
                 //load the authentication dialog
                 DialogHelper.AuthenticateDialog();
@@ -203,21 +227,7 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        private void OpenFromRecentCommandHandler(object p)
-        {
-            //store the file we want to open temorarily while we wait for a password
-            //from the user
-            (App.Current as App).SelectedFile = SelectedDocument;
 
-            //update the settings for our recently accessed files
-            (App.Current as App).PushRecentFile(SelectedDocument);
-
-            //close the dialog
-            DialogHelper.CloseDialog(p as FrameworkElement);
-
-            //load the authentication dialog
-            DialogHelper.AuthenticateDialog();
-        }
 
         #endregion
     }

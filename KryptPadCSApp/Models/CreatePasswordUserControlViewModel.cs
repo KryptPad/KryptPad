@@ -69,7 +69,7 @@ namespace KryptPadCSApp.Models
                 (App.Current as App).Document.SessionPassword = Password;
 
                 //close the dialog
-                DialogHelper.CloseDialog(p as FrameworkElement);
+                DialogHelper.CloseDialog();
 
             }, false);
 
