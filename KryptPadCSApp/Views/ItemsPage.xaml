@@ -34,6 +34,11 @@
 
             <CommandBar Grid.Column="1">
                 <AppBarButton Icon="Add" Label="Add Category" Command="{Binding AddCategoryCommand}" />
+                <AppBarButton Icon="57746" Label="Change Password" />
+                
+                <CommandBar.SecondaryCommands>
+                    <AppBarButton Label="Export Encryption Key" />
+                </CommandBar.SecondaryCommands>
             </CommandBar>
 
             <!--<AutoSuggestBox Grid.Column="2" Width="175"

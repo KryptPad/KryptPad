@@ -15,25 +15,38 @@
 
     <Grid>
         <SplitView x:Name="ShellSplitView" DisplayMode="CompactOverlay"
-		IsPaneOpen="{Binding IsPaneOpen}" CompactPaneLength="48" OpenPaneLength="200"
+		IsPaneOpen="{Binding IsPaneOpen}" CompactPaneLength="48" OpenPaneLength="250"
 		PaneBackground="{ThemeResource SplitViewBackgroundBrush}">
             <SplitView.Pane>
-                <StackPanel>
-                    <!-- Menu (hamburger) button -->
-                    <RadioButton Style="{StaticResource SplitViewMenuButtonStyle}" Command="{Binding MenuButtonCommand}" IsChecked="{Binding IsMenuButtonChecked}" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <StackPanel Grid.Row="0">
+                        <!-- Menu (hamburger) button -->
+                        <RadioButton Style="{StaticResource SplitViewMenuButtonStyle}" Command="{Binding MenuButtonCommand}" IsChecked="{Binding IsMenuButtonChecked}" />
 
-                    <!-- Home button -->
-                    <RadioButton Tag="&#xE10F;" Content="Home" Style="{StaticResource SplitViewNavButtonStyle}" IsChecked="True" Command="{Binding HomeNavButtonCommand}" />
+                        <!-- Home button -->
+                        <RadioButton Tag="&#xE10F;" Content="Home" Style="{StaticResource SplitViewNavButtonStyle}" IsChecked="True" Command="{Binding HomeNavButtonCommand}" />
 
-                    <!-- Search button -->
-                    <RadioButton Tag="&#xE11A;" Content="Search" Style="{StaticResource SplitViewNavButtonStyle}" />
+                        <!-- Search button -->
+                        <RadioButton Tag="&#xE11A;" Content="Search" Style="{StaticResource SplitViewNavButtonStyle}" />
 
-                    <!-- Settings button -->
-                    <RadioButton Tag="&#xE115;" Content="Settings" Style="{StaticResource SplitViewNavButtonStyle}"  />
+                        <!-- Settings button -->
+                        <RadioButton Tag="&#xE115;" Content="Settings" Style="{StaticResource SplitViewNavButtonStyle}"  />
 
-                    <!-- About button -->
-                    <RadioButton Tag="&#xE783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" />
-                </StackPanel>
+                        <!-- About button -->
+                        <RadioButton Tag="&#xE783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1">
+                        <!-- Search button -->
+                        <RadioButton Tag="&#xE748;" Content="Log Out" Style="{StaticResource SplitViewNavButtonStyle}" Command="{Binding LogoutNavButtonCommand}" />
+                    </StackPanel>
+                </Grid>
+               
             </SplitView.Pane>
         </SplitView>
 

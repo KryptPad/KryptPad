@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Views;
+﻿using KryptPadCSApp.Classes;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,9 +17,11 @@ namespace KryptPadCSApp.Models
 
         #region Properties
 
-        public ICommand HomeNavButtonCommand { get; private set; }
+        public Command HomeNavButtonCommand { get; private set; }
 
-        public ICommand MenuButtonCommand { get; private set; }
+        public Command LogoutNavButtonCommand { get; private set; }
+
+        public Command MenuButtonCommand { get; private set; }
 
         private bool _isPaneOpen;
 
@@ -34,7 +37,9 @@ namespace KryptPadCSApp.Models
         }
 
         private bool _isMenuButtonChecked;
-
+        /// <summary>
+        /// Gets or sets whether the menu button is checked
+        /// </summary>
         public bool IsMenuButtonChecked
         {
             get { return _isMenuButtonChecked; }
@@ -63,6 +68,15 @@ namespace KryptPadCSApp.Models
                 IsPaneOpen = false;
                 //navigate
                 Navigate(typeof(ItemsPage));
+            });
+
+            LogoutNavButtonCommand = new Command((p) =>
+            {
+                IsPaneOpen = false;
+                //logout
+                (App.Current as App).Document = new Document(true);
+                //navigate
+                DialogHelper.LoginDialog();
             });
 
             MenuButtonCommand = new Command((p) =>
