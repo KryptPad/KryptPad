@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 
 namespace KryptPadCSApp.Models
@@ -66,14 +67,22 @@ namespace KryptPadCSApp.Models
         {
             UnlockCommand = new Command(async (p) =>
             {
-                
-                //set the password on the document
-                var document = await Document.Load(SelectedFile, Password);
-                //set the document
-                (App.Current as App).Document = document;
 
-                //close the dialog
-                DialogHelper.CloseDialog();
+                try
+                {
+                    //load the most recent file
+                    (App.Current as App).Document = await Document.Load(SelectedFile, Password);
+
+                    //close the dialog
+                    DialogHelper.CloseDialog();
+                }
+                catch (Exception ex)
+                {
+                    //alert the user that something wen't wrong here
+                    var msgBox = new MessageDialog(ex.Message);
+                    //show
+                    await msgBox.ShowAsync();
+                }
 
             }, false);
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -164,11 +165,22 @@ namespace KryptPadCSApp.Models
             //close the dialog
             DialogHelper.CloseDialog();
 
-            //load the most recent file
-            (App.Current as App).Document = await Document.Load(MostRecentFile, Password);
+            try
+            {
+                //load the most recent file
+                (App.Current as App).Document = await Document.Load(MostRecentFile, Password);
 
-            //close the dialog
-            DialogHelper.CloseDialog();
+                //close the dialog
+                DialogHelper.CloseDialog();
+            }
+            catch (Exception ex)
+            {
+                //alert the user that something wen't wrong here
+                var msgBox = new MessageDialog(ex.Message);
+                //show
+                await msgBox.ShowAsync();
+            }
+
 
         }
 
