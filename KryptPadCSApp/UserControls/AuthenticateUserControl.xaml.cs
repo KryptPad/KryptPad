@@ -32,7 +32,10 @@ namespace KryptPadCSApp.UserControls
                 e.Handled = true;
 
                 //execute the command of our button
-                UnlockButton.Command.Execute(null);
+                if (UnlockButton.Command.CanExecute(null))
+                {
+                    UnlockButton.Command.Execute(null);
+                }
             }
         }
     }
