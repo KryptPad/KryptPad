@@ -29,7 +29,9 @@ namespace KryptPadCSApp.Models
         }
 
         private string _confirmPassword;
-
+        /// <summary>
+        /// Gets or sets the re-entered password
+        /// </summary>
         public string ConfirmPassword
         {
             get { return _confirmPassword; }
@@ -49,6 +51,11 @@ namespace KryptPadCSApp.Models
         /// Gets the command to handle unlocking
         /// </summary>
         public Command DoneCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets the command to handle user cancel
+        /// </summary>
+        public Command CancelCommand { get; protected set; }
         #endregion
 
         public CreatePasswordUserControlViewModel()
@@ -72,6 +79,15 @@ namespace KryptPadCSApp.Models
                 DialogHelper.CloseDialog();
 
             }, false);
+
+            CancelCommand = new Command((p) =>
+            {
+                //close this dialog and go back to login
+                DialogHelper.CloseDialog();
+
+                //open login
+                DialogHelper.LoginDialog();
+            });
 
         }
 

@@ -162,8 +162,6 @@ namespace KryptPadCSApp.Models
         #region Command handlers
         private async void UnlockCommandHandler(object p)
         {
-            //close the dialog
-            DialogHelper.CloseDialog();
 
             try
             {
