@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Views;
+﻿using KryptPadCSApp.Classes;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,9 +132,18 @@ namespace KryptPadCSApp.Models
 
             }, false);
 
-            AddFieldCommand = new Command((p) =>
+            AddFieldCommand = new Command(async (p) =>
             {
+
+                //show the add field dialog
+                await DialogHelper.ShowAddFieldDialog();
+
+                
+
                 var field = new Field();
+
+
+
                 //add to list of fields
                 Fields.Add(field);
                 //update the accept command

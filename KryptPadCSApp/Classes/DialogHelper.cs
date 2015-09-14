@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.UserControls;
+﻿using KryptPadCSApp.Dialogs;
+using KryptPadCSApp.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +64,20 @@ namespace KryptPadCSApp.Classes
             };
 
             var res = await _currentDialog.ShowAsync();
+        }
+
+        /// <summary>
+        /// Displays the create password dialog
+        /// </summary>
+        public static async Task<ContentDialogResult> ShowAddFieldDialog()
+        {
+            //prompt for a new password
+            _currentDialog = new AddFieldDialog()
+            {
+                MaxWidth = Window.Current.Bounds.Width
+            };
+
+            return await _currentDialog.ShowAsync();
         }
 
         /// <summary>
