@@ -20,6 +20,11 @@ namespace KryptPadCSApp.Classes
         private static ContentDialog _currentDialog;
 
         /// <summary>
+        /// Gets or sets the result object
+        /// </summary>
+        private static object _result;
+
+        /// <summary>
         /// Displays the login dialog
         /// </summary>
         public static async void LoginDialog()
@@ -69,7 +74,7 @@ namespace KryptPadCSApp.Classes
         /// <summary>
         /// Displays the create password dialog
         /// </summary>
-        public static async Task<ContentDialogResult> ShowAddFieldDialog()
+        public static async Task<object> ShowAddFieldDialog()
         {
             //prompt for a new password
             _currentDialog = new AddFieldDialog()
@@ -77,17 +82,37 @@ namespace KryptPadCSApp.Classes
                 MaxWidth = Window.Current.Bounds.Width
             };
 
-            return await _currentDialog.ShowAsync();
+            //show dialog
+            await _currentDialog.ShowAsync();
+
+            return _result;
+
+            //return await Task.Factory.StartNew(async () => {
+                
+            //    //return result
+            //    return _result;
+            //});
+ 
+        }
+
+        /// <summary>
+        /// Closes the dialog window
+        /// </summary>
+        public static void CloseDialog()
+        {
+            CloseDialog(null);
         }
 
         /// <summary>
         /// Closes the dialog window
         /// </summary>
         /// <param name="parent">The framework element set as the Content of the ContentDialog</param>
-        public static void CloseDialog()
+        public static void CloseDialog(object result)
         {
             if (_currentDialog != null)
             {
+                _result = result;
+                //hide the dialog
                 _currentDialog.Hide();
             }
         }

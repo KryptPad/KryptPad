@@ -136,18 +136,20 @@ namespace KryptPadCSApp.Models
             {
 
                 //show the add field dialog
-                await DialogHelper.ShowAddFieldDialog();
+                var res = await DialogHelper.ShowAddFieldDialog();
 
-                
+                //get the result
+                if (res != null)
+                {
+                    //create new field
+                    var field = new Field()
+                    {
+                        Name = (string)res
+                    };
 
-                var field = new Field();
-
-
-
-                //add to list of fields
-                Fields.Add(field);
-                //update the accept command
-                //AddItemCommand.CommandCanExecute = false;
+                    //add to list of fields
+                    Fields.Add(field);
+                }
             });
 
             //cancel command
