@@ -6,7 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.NewItemPage"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Name="AddNewItemPage">
 
     <Page.DataContext>
         <Models:NewItemPageViewModel/>
@@ -30,20 +31,23 @@
 
             <TextBlock Text="{Binding Category.Name}" FontSize="{ThemeResource SplitViewLargeNavFontSize }" />
 
-            <TextBlock Text="Item type" />
-            <ComboBox ItemsSource="{Binding ItemTypes}"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
             <TextBlock Text="Item name" />
             <TextBox Text="{Binding ItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      HorizontalAlignment="Left"
                      Width="250"/>
+
+            <TextBlock Text="Item type" />
+            <ComboBox ItemsSource="{Binding ItemTypes}"
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
         </StackPanel>
 
-        <Grid 
+        <!--Visibility="{Binding FieldsVisibility}"-->
+        <Grid Visibility="{Binding FieldsVisibility}"
               Grid.Row="1"
-              MaxWidth="250"
-              HorizontalAlignment="Stretch"
+              Width="250"
+              
+              HorizontalAlignment="Left"
             >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -93,7 +97,9 @@
 
 
                                 <Button Grid.Row="1"
-                                        Grid.Column="1">
+                                        Grid.Column="1"
+                                        Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage}"
+                                        CommandParameter="{Binding}">
                                     <SymbolIcon Symbol="Delete" />
                                 </Button>
 

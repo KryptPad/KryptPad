@@ -86,10 +86,8 @@ namespace KryptPadCSApp.Models
                 }
                 else 
                 {
-                    //TODO: fix this...
-                    item.Category = this;
                     //navigate to edit
-                    Navigate(typeof(EditItemPage), item);
+                    Navigate(typeof(EditItemPage), new EditItemPageParams() { Category = this, Item = item });
                 }
 
             }, false);

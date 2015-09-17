@@ -64,45 +64,74 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void InitializeDocument()
         {
-            //listen to category changes
-            Categories.CollectionChanged += (sender, e) =>
+
+            InitializeCategoryCollectionChangeTracking();
+
+            //for existing categories, listen to the items collection and properties
+            foreach (var category in Categories)
             {
-                //whenever a change occurs, like a new category is added, or
-                //a category is deleted, save the document
-                Save();
+                InitializeItemCollectionChangeTracking(category);
 
-                //each item added will have change tracking on its Name property
-                foreach (Category category in e.NewItems)
+                //listen to items
+                foreach(var item in category.Items)
                 {
-
-                    //event handler for collection changed
-                    category.Items.CollectionChanged += Items_CollectionChanged;
-
-                    //handle property changes for category
-                    category.PropertyChanged += Item_PropertyChanged;
-
+                    InitializeFieldCollectionChangeTracking(item);
                 }
-            };
-
-            InitializeItemCollectionChangeTracking();
+            }
 
         }
 
-        private void InitializeItemCollectionChangeTracking()
+        /// <summary>
+        /// Listen to changed to the categories collection. When something is added or removed, call Save()
+        /// </summary>
+        private void InitializeCategoryCollectionChangeTracking()
         {
-            //each item added will have change tracking on its Name property
-            foreach (Category category in Categories)
+            //list to the categories collection for new items
+            Categories.CollectionChanged += Categories_CollectionChanged;
+
+        }
+
+        /// <summary>
+        /// Listen to the Items collection for a category. Also listen to category properties
+        /// </summary>
+        private void InitializeItemCollectionChangeTracking(Category category)
+        {
+            //event handler for collection changed
+            category.Items.CollectionChanged += Items_CollectionChanged;
+
+            //handle property changes for category
+            category.PropertyChanged += Item_PropertyChanged;
+
+        }
+
+
+        private void InitializeFieldCollectionChangeTracking(ItemBase item)
+        {
+
+            //event handler for collection changed
+            if (item is Profile)
             {
+                (item as Profile).Fields.CollectionChanged += Fields_CollectionChanged;
+            }
 
-                //event handler for collection changed
-                category.Items.CollectionChanged += Items_CollectionChanged;
+            //handle property changes for item
+            item.PropertyChanged += Item_PropertyChanged;
 
-                //handle property changes for category
-                category.PropertyChanged += Item_PropertyChanged;
+        }
 
+        private void Categories_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            //whenever a change occurs, like a new category is added, or
+            //a category is deleted, save the document
+            Save();
+
+            //for each new category, listen to the items collection
+            foreach (Category category in e.NewItems)
+            {
+                InitializeItemCollectionChangeTracking(category);
             }
         }
-
+        
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             //when an item is created or deleted
@@ -111,9 +140,23 @@ namespace KryptPadCSApp.Models
             //for each item in the category, listen to changes
             foreach (ItemBase item in e.NewItems)
             {
-                //handle property changes for item
-                item.PropertyChanged += Item_PropertyChanged;
+                InitializeFieldCollectionChangeTracking(item);
             }
+        }
+
+        private void Fields_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            //when a field is created or deleted
+            Save();
+
+            //listen to changes in the fields
+            foreach (Field field in e.NewItems)
+            {
+                //handle property changes for category
+                field.PropertyChanged += Item_PropertyChanged;
+            }
+
+
         }
 
         private void Item_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -121,13 +164,7 @@ namespace KryptPadCSApp.Models
             //when a property is changed, call save
             Save();
         }
-
-        //private void Category_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        //{
-        //    //when a property is changed, call save
-        //    Save();
-        //}
-
+        
         /// <summary>
         /// Saves the current document
         /// </summary>

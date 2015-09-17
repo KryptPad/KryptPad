@@ -16,8 +16,8 @@ namespace KryptPadCSApp.Models
     {
         event PropertyChangedEventHandler PropertyChanged;
 
-        [JsonIgnore]
-        Category Category { get; set; }
+        //[JsonIgnore]
+        //Category Category { get; set; }
         //ItemType ItemType { get; }
         string Name { get; set; }
         char Icon { get; set; }

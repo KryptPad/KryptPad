@@ -19,6 +19,24 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public Category Category { get; set; }
 
+        private ItemBase _item;
+        /// <summary>
+        /// Gets or sets the current item for editing
+        /// </summary>
+        public ItemBase Item
+        {
+            get { return _item; }
+            set
+            {
+                _item = value;
+                //notify change
+                OnPropertyChanged(nameof(Item));
+                //load the item
+                LoadItem(_item);
+            }
+        }
+
+
         private string _itemName;
         /// <summary>
         /// Gets or sets the name of the item
@@ -82,8 +100,9 @@ namespace KryptPadCSApp.Models
 
         public Command AddFieldCommand { get; protected set; }
 
-        public ICommand CancelCommand { get; protected set; }
+        public Command CancelCommand { get; protected set; }
 
+        public Command DeleteFieldCommand { get; protected set; }
 
         #endregion
 
@@ -101,31 +120,46 @@ namespace KryptPadCSApp.Models
             //add the category
             AddItemCommand = new Command((p) =>
             {
-                //create new category
-                ItemBase item;
-                if (SelectedItem == "Profile")
-                {
-                    item = new Profile();
-                }
-                else
-                {
-                    item = new Note();
-                }
 
-                item.Category = Category;
-                item.Name = ItemName;
-
-                if (item is Profile)
+                //if we do not have an item for editing, then create the instance now
+                if (Item == null)
                 {
-                    //add the fields that have names to the profile
-                    foreach (var field in Fields.Where(f => !string.IsNullOrWhiteSpace(f.Name)))
+                    //create new item and add it to the category
+                    if (SelectedItem == "Profile")
                     {
-                        (item as Profile).Fields.Add(field);
+                        Item = new Profile();
+                    }
+                    else
+                    {
+                        Item = new Note();
+                    }
+
+                    //add the item to the current category
+                    Category.Items.Add(Item);
+                }
+
+                //set the properties of the item. If this was loaded from an existing item
+                //then the properties will contain the name and category
+                Item.Category = Category;
+                Item.Name = ItemName;
+
+                //if the item is a profile, add the fields that do not exist
+                if (Item is Profile)
+                {
+                    //we need reference to profile
+                    var profileItem = Item as Profile;
+
+                    //compare to the fields already in the item
+                    var itemsNotInProfile = (from f in Fields
+                                             where !profileItem.Fields.Contains(f)
+                                             select f);
+
+                    //add the fields that are not already in the list
+                    foreach (var field in itemsNotInProfile)
+                    {
+                        profileItem.Fields.Add(field);
                     }
                 }
-
-                //add the item to the current category
-                Category.Items.Add(item);
 
                 //navigate back to items and make sure category is selected
                 Navigate(typeof(ItemsPage), Category);
@@ -152,6 +186,14 @@ namespace KryptPadCSApp.Models
                 }
             });
 
+            DeleteFieldCommand = new Command((p) =>
+            {
+
+                Fields.Remove(p as Field);
+            });
+
+
+
             //cancel command
             CancelCommand = new Command((p) => { GoBack(); });
 
@@ -161,7 +203,7 @@ namespace KryptPadCSApp.Models
         /// Loads an IItem into the view model
         /// </summary>
         /// <param name="item"></param>
-        public void LoadItem(ItemBase item)
+        private void LoadItem(ItemBase item)
         {
             ItemName = item.Name;
             Category = item.Category;
@@ -169,7 +211,12 @@ namespace KryptPadCSApp.Models
             //if this is a profile, then we have fields
             if (item is Profile)
             {
-                Fields = (item as Profile).Fields;
+                //copy the fields to the fields property
+                foreach (var field in (item as Profile).Fields)
+                {
+                    Fields.Add(field);
+                }
+                
                 SelectedItem = "Profile";
             }
             else

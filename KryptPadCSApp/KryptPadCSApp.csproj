@@ -119,6 +119,7 @@
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\CreatePasswordUserControlViewModel.cs" />
     <Compile Include="Models\Document.cs" />
+    <Compile Include="Models\EditItemPageParams.cs" />
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\FieldCollection.cs" />
     <Compile Include="Models\IItem.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Models\NewCategoryPageViewModel.cs" />
     <Compile Include="Models\NewItemPageViewModel.cs" />
     <Compile Include="Models\Note.cs" />
+    <Compile Include="Models\PageNavigationParamsBase.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\AuthenticateUserControl.xaml.cs">

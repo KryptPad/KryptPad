@@ -59,16 +59,47 @@
                 <ItemsControl ItemsSource="{Binding Fields}" Margin="0,0,0,50">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="0,0,0,20">
-                                <TextBlock Text="{Binding Name}" />
-                                <!--<TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Field name" Margin="0,0,0,5" />-->
+
+                            <Grid Margin="0,0,0,20">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+
+
+                                <!--<TextBlock Text="Field name (e.g. Password)" />-->
+                                <TextBlock Text="{Binding Name}" 
+                                               Grid.Row="0"
+                                               Grid.Column="0" />
+
                                 <!--<TextBlock Text="Value (e.g. MyP@$$w0rd!)" />-->
-                                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Value" Margin="0,0,0,5"/>
-                            </StackPanel>
+                                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                             PlaceholderText="Value" 
+                                             Grid.Row="1"
+                                             Grid.Column="0"/>
+
+
+                                <Button Grid.Row="1"
+                                        Grid.Column="1"
+                                        Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage}"
+                                        CommandParameter="{Binding}">
+                                    <SymbolIcon Symbol="Delete" />
+                                </Button>
+
+                            </Grid>
+
+
+
 
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-
                 </ItemsControl>
             </ScrollViewer>
 

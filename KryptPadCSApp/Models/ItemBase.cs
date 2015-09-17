@@ -14,21 +14,21 @@ namespace KryptPadCSApp.Models
     {
         #region Properties
 
-        private Category _category;
-        /// <summary>
-        /// Gets or sets the category this item is filed under
-        /// </summary>
-        [JsonIgnore]
-        public Category Category
-        {
-            get { return _category; }
-            set
-            {
-                _category = value;
-                //raise change event
-                OnPropertyChanged(nameof(Category));
-            }
-        }
+        //private Category _category;
+        ///// <summary>
+        ///// Gets or sets the category this item is filed under
+        ///// </summary>
+        //[JsonIgnore]
+        //public Category Category
+        //{
+        //    get { return _category; }
+        //    set
+        //    {
+        //        _category = value;
+        //        //raise change event
+        //        OnPropertyChanged(nameof(Category));
+        //    }
+        //}
 
         ///// <summary>
         ///// Gets the item type
