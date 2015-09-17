@@ -36,14 +36,17 @@ namespace KryptPadCSApp.Views
         {
             base.OnNavigatedTo(e);
 
+            //get the page params
+            var pageParams = e.Parameter as EditItemPageParams;
+            //get the model
+            var model = DataContext as NewItemPageViewModel;
+
             //set the category of the NewItemPageViewModel
-            if (e.Parameter != null && e.Parameter is IItem)
+            if (pageParams != null && model != null)
             {
-                var model = DataContext as NewItemPageViewModel;
-                if (model != null)
-                {
-                   model.Item = e.Parameter as ItemBase;
-                }
+                //set properties on the model
+                model.Category = pageParams.Category;
+                model.Item = pageParams.Item;
             }
         }
     }
