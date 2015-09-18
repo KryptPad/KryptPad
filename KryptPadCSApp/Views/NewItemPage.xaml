@@ -118,5 +118,10 @@
         </Grid>
 
 
+        <!--<Grid Grid.Row="1">
+            
+            <RichEditBox/>
+        </Grid>-->
+        
     </Grid>
 </Page>
