@@ -75,6 +75,7 @@ namespace KryptPadCSApp.Models
                 //notify change
                 OnPropertyChanged(nameof(SelectedItem));
                 OnPropertyChanged(nameof(FieldsVisibility));
+                OnPropertyChanged(nameof(NotesVisibility));
                 //if there is some text, then we can execute
                 AddItemCommand.CommandCanExecute = CanAddItem();
             }
@@ -85,6 +86,22 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public FieldCollection Fields { get; protected set; } = new FieldCollection();
 
+        private string _notes;
+        /// <summary>
+        /// Gets or sets the text for Note items
+        /// </summary>
+        public string Notes
+        {
+            get { return _notes; }
+            set
+            {
+                _notes = value;
+                //notify change
+                OnPropertyChanged(nameof(Notes));
+            }
+        }
+
+
         /// <summary>
         /// Gets whether or not to display the fields list
         /// </summary>
@@ -93,6 +110,17 @@ namespace KryptPadCSApp.Models
             get
             {
                 return SelectedItem == "Profile" ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        /// <summary>
+        /// Gets whether or not to display the fields list
+        /// </summary>
+        public Visibility NotesVisibility
+        {
+            get
+            {
+                return SelectedItem == "Note" ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -134,9 +162,9 @@ namespace KryptPadCSApp.Models
                     {
                         item = new Note();
                     }
-                    
+
                 }
-                
+
 
                 //set the properties of the item. If this was loaded from an existing item
                 //then the properties will contain the name and category
@@ -158,6 +186,11 @@ namespace KryptPadCSApp.Models
                     {
                         profileItem.Fields.Add(field);
                     }
+                }
+                else
+                {
+                    //set notes property
+                    (item as Note).Notes = Notes;
                 }
 
                 //check if the item is in the category
@@ -213,7 +246,7 @@ namespace KryptPadCSApp.Models
         private void LoadItem(ItemBase item)
         {
             ItemName = item.Name;
-            
+
             //if this is a profile, then we have fields
             if (item is Profile)
             {
@@ -222,11 +255,13 @@ namespace KryptPadCSApp.Models
                 {
                     Fields.Add(field);
                 }
-                
+
                 SelectedItem = "Profile";
             }
             else
             {
+                Notes = (item as Note).Notes;
+
                 SelectedItem = "Note";
             }
 

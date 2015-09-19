@@ -14,7 +14,21 @@ namespace KryptPadCSApp.Models
     {
         #region Properties
 
-        public string Notes { get; set; }
+        private string _notes;
+        /// <summary>
+        /// Gets or sets the notes for this item
+        /// </summary>
+        public string Notes
+        {
+            get { return _notes; }
+            set
+            {
+                _notes = value;
+                //notify change
+                OnPropertyChanged(nameof(Notes));
+            }
+        }
+
 
         #endregion
 

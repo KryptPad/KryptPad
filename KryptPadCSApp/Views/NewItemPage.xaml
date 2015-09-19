@@ -118,10 +118,12 @@
         </Grid>
 
 
-        <!--<Grid Grid.Row="1">
-            
-            <RichEditBox/>
-        </Grid>-->
+        <Grid Visibility="{Binding NotesVisibility}"
+              Grid.Row="1">
+
+            <TextBox Text="{Binding Notes, Mode=TwoWay}"
+                     AcceptsReturn="True"/>
+        </Grid>
         
     </Grid>
 </Page>

@@ -73,9 +73,10 @@ namespace KryptPadCSApp.Models
                 InitializeItemCollectionChangeTracking(category);
 
                 //listen to items
-                foreach(var item in category.Items)
+                foreach (var item in category.Items)
                 {
                     InitializeFieldCollectionChangeTracking(item);
+
                 }
             }
 
@@ -113,7 +114,7 @@ namespace KryptPadCSApp.Models
             {
                 (item as Profile).Fields.CollectionChanged += Fields_CollectionChanged;
             }
-
+            
             //handle property changes for item
             item.PropertyChanged += Item_PropertyChanged;
 
@@ -131,7 +132,7 @@ namespace KryptPadCSApp.Models
                 InitializeItemCollectionChangeTracking(category);
             }
         }
-        
+
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             //when an item is created or deleted
@@ -164,7 +165,7 @@ namespace KryptPadCSApp.Models
             //when a property is changed, call save
             Save();
         }
-        
+
         /// <summary>
         /// Saves the current document
         /// </summary>
