@@ -39,11 +39,14 @@
 
                         <!-- About button -->
                         <RadioButton Tag="&#xE783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" />
+                        
+                        
+                        
                     </StackPanel>
 
                     <StackPanel Grid.Row="1">
                         <!-- Search button -->
-                        <RadioButton Tag="&#xE748;" Content="Log Out" Style="{StaticResource SplitViewNavButtonStyle}" Command="{Binding LogoutNavButtonCommand}" />
+                        <RadioButton Tag="&#xE19C;" Content="Close Document" Style="{StaticResource SplitViewNavButtonStyle}" Command="{Binding LogoutNavButtonCommand}" />
                     </StackPanel>
                 </Grid>
                

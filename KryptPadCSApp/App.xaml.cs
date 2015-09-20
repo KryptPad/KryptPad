@@ -35,7 +35,7 @@ namespace KryptPadCSApp
         public event PropertyChangedEventHandler PropertyChanged;
 
         #region Properties
-        private Document _document = new Document(true);
+        private Document _document = null;// = new Document(true);
 
         /// <summary>
         /// Gets or sets the current document instance
@@ -70,7 +70,10 @@ namespace KryptPadCSApp
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.Resuming += OnResuming;
         }
+
+        
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -120,12 +123,26 @@ namespace KryptPadCSApp
             DialogHelper.LoginDialog();
         }
 
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            base.OnActivated(args);
+        }
+
+        protected override void OnFileActivated(FileActivatedEventArgs args)
+        {
+            base.OnFileActivated(args);
+        }
+
+        
+        
+
+        #region Events
         /// <summary>
         /// Invoked when Navigation to a certain page fails
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
@@ -153,6 +170,11 @@ namespace KryptPadCSApp
             deferral.Complete();
         }
 
+        private void OnResuming(object sender, object e)
+        {
+            
+        }
+
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
             if (_rootFrame != null && _rootFrame.CanGoBack)
@@ -161,6 +183,7 @@ namespace KryptPadCSApp
                 _rootFrame.GoBack();
             }
         }
+        #endregion
 
         #region Event Handlers
 

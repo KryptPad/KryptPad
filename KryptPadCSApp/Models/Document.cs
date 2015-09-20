@@ -9,6 +9,8 @@ using System.IO;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
+using Windows.Storage.Pickers;
+using KryptPadCSApp.Classes;
 
 namespace KryptPadCSApp.Models
 {
@@ -59,6 +61,8 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        #region Initialize change tracking
+
         /// <summary>
         /// Wires up change event listeners to auto save the document
         /// </summary>
@@ -83,7 +87,7 @@ namespace KryptPadCSApp.Models
         }
 
         /// <summary>
-        /// Listen to changed to the categories collection. When something is added or removed, call Save()
+        /// Listen to changed to the categories collection. When something is added or removed, call OnSave()
         /// </summary>
         private void InitializeCategoryCollectionChangeTracking()
         {
@@ -105,7 +109,10 @@ namespace KryptPadCSApp.Models
 
         }
 
-
+        /// <summary>
+        /// Listent to the Fields collection for changes
+        /// </summary>
+        /// <param name="item"></param>
         private void InitializeFieldCollectionChangeTracking(ItemBase item)
         {
 
@@ -166,25 +173,14 @@ namespace KryptPadCSApp.Models
             Save();
         }
 
+        #endregion
+        
+
         /// <summary>
         /// Saves the current document
         /// </summary>
-        public async void Save()
+        private async void Save()
         {
-            //check if we have a password stored, this is used to encrypt the data
-            if (string.IsNullOrWhiteSpace(SessionPassword))
-            {
-                //must have a password set
-                throw new Exception("You cannot save your document without a password.");
-            }
-
-            //check for a working filename
-            if (SelectedFile == null)
-            {
-                //must have a password set
-                throw new Exception("You must specify a file before you can save your document.");
-            }
-
             //create settings
             var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             //now that those checks are out of the way, we can serialize the data into a JSON string and encrypt it.

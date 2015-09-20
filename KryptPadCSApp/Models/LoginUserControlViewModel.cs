@@ -101,6 +101,9 @@ namespace KryptPadCSApp.Models
 
         public LoginUserControlViewModel()
         {
+            //logout
+            (App.Current as App).Document = null;// = new Document(true);
+
             //load the recently used list
             PrepareMostRecentlyUsedList();
 
@@ -195,6 +198,9 @@ namespace KryptPadCSApp.Models
 
             if (res != null)
             {
+                //create new document
+                (App.Current as App).Document = new Document(true);
+
                 //set the filepath
                 (App.Current as App).Document.SelectedFile = res;
 
@@ -213,6 +219,7 @@ namespace KryptPadCSApp.Models
         {
             var picker = new FileOpenPicker();
 
+            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             //add filters for our document type
             picker.FileTypeFilter.Add(".kdf");
 

@@ -16,7 +16,10 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public CategoryCollection Categories
         {
-            get { return (App.Current as App).Document.Categories; }
+            get {
+                //return list of categories
+                return (App.Current as App).Document?.Categories;
+            }
         }
 
         private Category _selectedCategory;
@@ -38,7 +41,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Opens new category page
         /// </summary>
-        public ICommand AddCategoryCommand { get; private set; }
+        public Command AddCategoryCommand { get; private set; }
 
 
 
@@ -55,8 +58,15 @@ namespace KryptPadCSApp.Models
             //categories property
             (App.Current as App).PropertyChanged += (sender, e) =>
             {
+                
                 //raise property changed event for categories
                 OnPropertyChanged(nameof(Categories));
+
+                //enable controls?
+                var enabled = (App.Current as App).Document != null;
+
+                //set the command CanExecute
+                AddCategoryCommand.CommandCanExecute = enabled;
             };
 
         }
@@ -70,7 +80,7 @@ namespace KryptPadCSApp.Models
             {
                 //navigate
                 Navigate(typeof(NewCategoryPage));
-            });
+            }, (App.Current as App).Document != null);
 
         }
 

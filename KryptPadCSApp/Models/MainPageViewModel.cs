@@ -73,8 +73,7 @@ namespace KryptPadCSApp.Models
             LogoutNavButtonCommand = new Command((p) =>
             {
                 IsPaneOpen = false;
-                //logout
-                (App.Current as App).Document = new Document(true);
+                
                 //navigate
                 DialogHelper.LoginDialog();
             });
