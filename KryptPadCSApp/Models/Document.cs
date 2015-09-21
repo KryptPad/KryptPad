@@ -191,6 +191,7 @@ namespace KryptPadCSApp.Models
 
             try
             {
+               
                 //write the changes to disk
                 await FileIO.WriteBytesAsync(SelectedFile, encryptedData);
             }
@@ -206,7 +207,7 @@ namespace KryptPadCSApp.Models
         }
 
         /// <summary>
-        /// Gi
+        /// Loads the document
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="password"></param>

@@ -121,10 +121,26 @@ namespace KryptPadCSApp.Models
 
             foreach (var entry in list.Entries.OrderByDescending((e) => DateTime.Parse(e.Metadata)))
             {
-                //get the file info
-                var file = await list.GetFileAsync(entry.Token);
-                //add to the recent documents list
-                RecentDocuments.Add(file);
+                if (list.ContainsItem(entry.Token)) {
+                    try
+                    {
+                        //get the file info
+                        var file = await list.GetFileAsync(entry.Token);
+                        //do we have access to the file in the list?
+                        if (list.CheckAccess(file))
+                        {
+                            //add to the recent documents list
+                            RecentDocuments.Add(file);
+                        }
+                        
+                    }
+                    catch (Exception)
+                    {
+                        //remove this item
+                        list.Remove(entry.Token);
+                    }
+                    
+                }
             }
 
             //get the most recent and set it
