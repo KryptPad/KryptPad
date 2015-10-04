@@ -98,10 +98,15 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\OAuthTokenErrorResponse.cs" />
+    <Compile Include="API\WebExceptionResponse.cs" />
+    <Compile Include="API\ApiResponse.cs" />
+    <Compile Include="API\ModelState.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\Enumerators.cs" />
+    <Compile Include="API\KryptPadApi.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />
     <Compile Include="Classes\DialogHelper.cs" />
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">
@@ -114,9 +119,11 @@
     <Compile Include="Models\AddItem.cs" />
     <Compile Include="Models\AuthenticateUserControlViewModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\BasePageModel.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryCollection.cs" />
     <Compile Include="Models\Command.cs" />
+    <Compile Include="Models\CreateAccountPageViewModel.cs" />
     <Compile Include="Models\CreatePasswordUserControlViewModel.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\EditItemPageParams.cs" />
@@ -126,6 +133,7 @@
     <Compile Include="Models\ItemBase.cs" />
     <Compile Include="Models\ItemCollection.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
+    <Compile Include="Models\LoginPageViewModel.cs" />
     <Compile Include="Models\LoginUserControlViewModel.cs" />
     <Compile Include="Models\MainPageViewModel.cs" />
     <Compile Include="Models\NewCategoryPageViewModel.cs" />
@@ -143,8 +151,14 @@
     <Compile Include="UserControls\LoginUserControl.xaml.cs">
       <DependentUpon>LoginUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CreateAccountPage.xaml.cs">
+      <DependentUpon>CreateAccountPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ItemsPage.xaml.cs">
       <DependentUpon>ItemsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewCategoryPage.xaml.cs">
       <DependentUpon>NewCategoryPage.xaml</DependentUpon>
@@ -196,7 +210,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CreateAccountPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ItemsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -5,9 +5,11 @@ using KryptPadCSApp.UserControls;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -74,7 +76,7 @@ namespace KryptPadCSApp
             this.Resuming += OnResuming;
         }
 
-        
+
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -83,13 +85,14 @@ namespace KryptPadCSApp
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-
+            
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (Window.Current.Content == null)
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 _rootFrame = new Frame();
+
                 _rootFrame.NavigationFailed += OnNavigationFailed;
                 _rootFrame.Navigated += OnNavigated;
 
@@ -99,7 +102,11 @@ namespace KryptPadCSApp
                 }
 
                 // Place the frame in the current Window
-                Window.Current.Content = new MainPage(_rootFrame);
+                Window.Current.Content = _rootFrame;
+                //var page = new LogInPage(); //new MainPage(_rootFrame);
+
+
+
 
                 // Register a handler for BackRequested events and set the
                 // visibility of the Back button
@@ -116,13 +123,13 @@ namespace KryptPadCSApp
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                _rootFrame.Navigate(typeof(ItemsPage), e.Arguments);
+                _rootFrame.Navigate(typeof(LogInPage), e.Arguments);
             }
             // Ensure the current window is active
             Window.Current.Activate();
 
             //prompt to login
-            DialogHelper.LoginDialog();
+            //DialogHelper.LoginDialog();
         }
 
         protected override void OnActivated(IActivatedEventArgs args)
@@ -135,8 +142,8 @@ namespace KryptPadCSApp
             base.OnFileActivated(args);
         }
 
-        
-        
+
+
 
         #region Events
         /// <summary>
@@ -174,7 +181,7 @@ namespace KryptPadCSApp
 
         private void OnResuming(object sender, object e)
         {
-            
+
         }
 
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
@@ -210,12 +217,12 @@ namespace KryptPadCSApp
         {
             //get the most recently used file list
             var list = StorageApplicationPermissions.MostRecentlyUsedList;
-            
+
             //add file to list with date it was added
             var token = list.Add(selectedFile, DateTime.Now.ToString());
-                        
+
         }
-        
+
         #endregion
     }
 }

@@ -29,6 +29,13 @@
         <x:Double x:Key="SplitViewLargeNavFontSize">20</x:Double>
         <x:Double x:Key="SplitViewBackButtonHeight">32</x:Double>
 
+
+
+        <LinearGradientBrush x:Key="WhiteToBlueBrush" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="White"/>
+            <GradientStop Color="#FF3297D1" Offset="1"/>
+        </LinearGradientBrush>
+
         <Style TargetType="TextBlock" x:Key="SplitViewTextBlockStyle">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -309,7 +316,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
     </Application.Resources>
 
 
