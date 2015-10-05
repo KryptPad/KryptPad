@@ -101,6 +101,32 @@ namespace KryptPadCSApp.API
             }
         }
 
+        public static async Task<ApiResponse> GetProfilesAsync(string token)
+        {
+            try
+            {
+                //create a request
+                var request = CreateGetRequest("api/profiles", token);
+
+                //execute the request
+                var response = await request.GetResponseAsync();
+
+                //get the returned response
+                var data = await GetStringDataAsync(response);
+
+                return await ApiResponse.Ok();
+            }
+            catch (WebException ex)
+            {
+                return await ApiResponse.CreateWebExceptionResponse(ex);
+            }
+            catch(Exception)
+            {
+                return ApiResponse.CreateGenericErrorResponse();
+            }
+            
+        }
+
         #region Helper methods
 
         /// <summary>
@@ -112,6 +138,26 @@ namespace KryptPadCSApp.API
             var request = WebRequest.CreateHttp($"{ServiceHost}{uri}");
             //set method to POST
             request.Method = "POST";
+
+            return request;
+        }
+
+        /// <summary>
+        /// Creates a GET request
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        private static HttpWebRequest CreateGetRequest(string uri, string token = null)
+        {
+            var request = WebRequest.CreateHttp($"{ServiceHost}{uri}");
+            //set method to GET
+            request.Method = "GET";
+
+            //add the token as an authorization header
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                request.Headers["Authorization"] = $"Bearer {token}";
+            }
 
             return request;
         }
@@ -192,7 +238,22 @@ namespace KryptPadCSApp.API
             return string.Join("&", list);
         }
 
+        ///// <summary>
+        ///// Takes an object and creates a query string from the public properties
+        ///// </summary>
+        ///// <param name="values"></param>
+        ///// <returns></returns>
+        //private static string CreateQueryString(object values)
+        //{
+        //    var list = new List<string>();
 
+        //    foreach (var k in values.AllKeys)
+        //    {
+        //        list.Add($"{k}={WebUtility.UrlEncode(values[k])}");
+        //    }
+
+        //    return string.Join("&", list);
+        //}
         #endregion
 
 

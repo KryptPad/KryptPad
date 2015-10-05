@@ -21,9 +21,8 @@ namespace KryptPadCSApp.API.Responses
         {
             return await Task.Factory.StartNew(() =>
             {
-                return new WebExceptionResponse()
+                return new ApiResponse()
                 {
-                    Message = "Ok",
                     StatusCode = HttpStatusCode.OK
                 };
             });

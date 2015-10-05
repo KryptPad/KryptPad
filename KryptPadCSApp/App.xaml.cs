@@ -59,6 +59,11 @@ namespace KryptPadCSApp
         /// Gets or sets the file to load
         /// </summary>
         internal StorageFile SelectedFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API OAuth access token to authorize API calls
+        /// </summary>
+        internal string AccessToken { get; set; }
         #endregion
 
 

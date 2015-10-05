@@ -1,4 +1,5 @@
 ﻿using KryptPadCSApp.API;
+using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -105,8 +106,18 @@ namespace KryptPadCSApp.Models
             {
                 IsBusy = true;
                 //log in and get access token
-                var data = await KryptPadApi.AuthenticateAsync(Email, Password);
+                var response = await KryptPadApi.AuthenticateAsync(Email, Password);
 
+                //check the response. if it is an  then store the token and navigate user
+                //to select profile page
+                if (response is OAuthTokenResponse)
+                {
+                    //store the access token
+                    (App.Current as App).AccessToken = (response as OAuthTokenResponse).AccessToken;
+
+                    //TEST CODE: test access token
+                    response = await KryptPadApi.GetProfilesAsync((App.Current as App).AccessToken);
+                }
 
                 IsBusy = false;
             });
