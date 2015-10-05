@@ -61,8 +61,8 @@
 
                 <!--Login email address-->
                 <TextBox Grid.Row="0" PlaceholderText="Email Address" Margin="0,0,0,10"
-                     InputScope="EmailNameOrAddress"
-                     Text="{Binding Email, Mode=TwoWay}"/>
+                         InputScope="EmailNameOrAddress"
+                         Text="{Binding Email, Mode=TwoWay}" />
 
                 <!--Password-->
                 <PasswordBox Grid.Row="1" PlaceholderText="Password" Margin="0,0,0,10" 

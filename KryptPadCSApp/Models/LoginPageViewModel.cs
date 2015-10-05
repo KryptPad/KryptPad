@@ -80,6 +80,7 @@ namespace KryptPadCSApp.Models
                 _loginVisibility = value;
                 //notify change
                 OnPropertyChanged(nameof(LoginVisibility));
+                
             }
         }
 
