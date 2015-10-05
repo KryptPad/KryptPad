@@ -29,27 +29,24 @@ namespace KryptPadCSApp.API
         /// <param name="password"></param>
         public static async Task<ApiResponse> AuthenticateAsync(string username, string password)
         {
-            //create a request
-            var request = CreatePostRequest("token");
-            //create the values to send
-            var values = new NameValueCollection();
-            values.Add("grant_type", "password");
-            values.Add("username", username);
-            values.Add("password", password);
 
             try
             {
+                //create a request
+                var request = CreatePostRequest("token");
+                //create the values to send
+                var values = new NameValueCollection();
+                values.Add("grant_type", "password");
+                values.Add("username", username);
+                values.Add("password", password);
+                
                 //write these values to the request
                 await WritePostValues(request, values);
                 //execute the request
-                var response = await request.GetResponseAsync();
-                //read the response
-                var data = await GetStringDataAsync(response);
-
-                //deserialze response and get the bearer token, or handle any errors
-                JObject tokenResponse = (JObject)await Task.Factory.StartNew(() => { return JsonConvert.DeserializeObject(data); });
-
-                return null;// (string)tokenResponse["access_token"];
+                var response = await request.GetResponseAsync() as HttpWebResponse;
+                
+                //create OAuth token response
+                return await ApiResponse.CreateOAuthTokenResponse(response);
             }
             catch (WebException ex)
             {
@@ -57,7 +54,7 @@ namespace KryptPadCSApp.API
             }
             catch (Exception)
             {
-                return GenericError();
+                return ApiResponse.CreateGenericErrorResponse();
             }
 
         }
@@ -99,7 +96,7 @@ namespace KryptPadCSApp.API
             }
             catch (Exception)
             {
-                return GenericError();
+                return ApiResponse.CreateGenericErrorResponse();
             }
         }
 
@@ -194,13 +191,7 @@ namespace KryptPadCSApp.API
             return string.Join("&", list);
         }
 
-        private static ApiResponse GenericError()
-        {
-            return new ApiResponse()
-            {
-                Message = "Unable to perform the requested operation"
-            };
-        }
+
         #endregion
 
 

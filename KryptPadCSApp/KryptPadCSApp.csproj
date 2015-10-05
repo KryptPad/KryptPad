@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\OAuthTokenErrorResponse.cs" />
+    <Compile Include="API\OAuthTokenResponse.cs" />
     <Compile Include="API\WebExceptionResponse.cs" />
     <Compile Include="API\ApiResponse.cs" />
     <Compile Include="API\ModelState.cs" />

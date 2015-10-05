@@ -10,14 +10,17 @@ namespace KryptPadCSApp.API
 {
     class ApiResponse
     {
-        public string Message { get; set; }
+
+        #region Properties
         public HttpStatusCode StatusCode { get; set; }
+        #endregion
+
 
         public static async Task<ApiResponse> Ok()
         {
             return await Task.Factory.StartNew(() =>
             {
-                return new ApiResponse()
+                return new WebExceptionResponse()
                 {
                     Message = "Ok",
                     StatusCode = HttpStatusCode.OK
@@ -26,22 +29,54 @@ namespace KryptPadCSApp.API
         }
 
 
-        public static async Task<WebExceptionResponse> CreateWebExceptionResponse(WebException exception)
+        public static async Task<ApiResponse> CreateWebExceptionResponse(WebException exception)
         {
-            var response = exception.Response as HttpWebResponse;
-            var data = await KryptPadApi.GetStringDataAsync(response);
-            var resp = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-            resp.StatusCode = response.StatusCode;
-            return resp;
+            return await CreateApiWebResponse<WebExceptionResponse>(exception.Response as HttpWebResponse);
         }
 
-        public static async Task<OAuthTokenErrorResponse> CreateOAuthTokenErrorResponse(WebException exception)
+        public static async Task<ApiResponse> CreateOAuthTokenErrorResponse(WebException exception)
         {
-            var response = exception.Response as HttpWebResponse;
-            var data = await KryptPadApi.GetStringDataAsync(response);
-            var resp = JsonConvert.DeserializeObject<OAuthTokenErrorResponse>(data);
-            resp.StatusCode = response.StatusCode;
-            return resp;
+            return await CreateApiWebResponse<OAuthTokenErrorResponse>(exception.Response as HttpWebResponse);   
+        }
+
+        public static async Task<ApiResponse> CreateOAuthTokenResponse(HttpWebResponse response)
+        {
+            return await CreateApiWebResponse<OAuthTokenResponse>(response);
+
+        }
+
+        public static ApiResponse CreateGenericErrorResponse()
+        {
+            return new WebExceptionResponse()
+            {
+                Message = "Unable to connect to the server."
+            };
+        }
+
+
+        /// <summary>
+        /// Creates an ApiResponse object from an HttpWebResponse
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        private static async Task<ApiResponse> CreateApiWebResponse<T>(HttpWebResponse response) where T : ApiResponse
+        {
+            if (response != null)
+            {
+                //get the data from the response
+                var data = await KryptPadApi.GetStringDataAsync(response);
+                //deserialize data
+                var apiResponse = JsonConvert.DeserializeObject<T>(data);
+                //set status code
+                apiResponse.StatusCode = response.StatusCode;
+                //return the re
+                return apiResponse;
+            }
+            else
+            {
+                return CreateGenericErrorResponse();
+            }
         }
 
     }

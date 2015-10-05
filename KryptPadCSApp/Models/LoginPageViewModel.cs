@@ -104,7 +104,7 @@ namespace KryptPadCSApp.Models
                 IsBusy = true;
                 //log in and get access token
                 var data = await KryptPadApi.AuthenticateAsync(Email, Password);
-                var t = data;
+
 
                 IsBusy = false;
             });
