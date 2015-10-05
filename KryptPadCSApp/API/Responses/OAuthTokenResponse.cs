@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API
+namespace KryptPadCSApp.API.Responses
 {
     class OAuthTokenResponse : ApiResponse
     {

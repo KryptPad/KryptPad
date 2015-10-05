@@ -98,11 +98,11 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\OAuthTokenErrorResponse.cs" />
-    <Compile Include="API\OAuthTokenResponse.cs" />
-    <Compile Include="API\WebExceptionResponse.cs" />
-    <Compile Include="API\ApiResponse.cs" />
-    <Compile Include="API\ModelState.cs" />
+    <Compile Include="API\Responses\OAuthTokenErrorResponse.cs" />
+    <Compile Include="API\Responses\OAuthTokenResponse.cs" />
+    <Compile Include="API\Responses\WebExceptionResponse.cs" />
+    <Compile Include="API\Responses\ApiResponse.cs" />
+    <Compile Include="API\Responses\ModelState.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>

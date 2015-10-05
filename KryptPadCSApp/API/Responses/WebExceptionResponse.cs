@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API
+namespace KryptPadCSApp.API.Responses
 {
     class WebExceptionResponse : ApiResponse
     {

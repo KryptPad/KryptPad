@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using KryptPadCSApp.API.Responses;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

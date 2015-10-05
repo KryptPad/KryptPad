@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API
+namespace KryptPadCSApp.API.Responses
 {
     class ApiResponse
     {
@@ -15,7 +15,8 @@ namespace KryptPadCSApp.API
         public HttpStatusCode StatusCode { get; set; }
         #endregion
 
-
+        #region Helper Methods
+        
         public static async Task<ApiResponse> Ok()
         {
             return await Task.Factory.StartNew(() =>
@@ -28,23 +29,41 @@ namespace KryptPadCSApp.API
             });
         }
 
-
+        /// <summary>
+        /// Creates a WebException response from a WebException
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
         public static async Task<ApiResponse> CreateWebExceptionResponse(WebException exception)
         {
             return await CreateApiWebResponse<WebExceptionResponse>(exception.Response as HttpWebResponse);
         }
 
+        /// <summary>
+        /// Creates an OAuthTokenErrorResponse from a WebException
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
         public static async Task<ApiResponse> CreateOAuthTokenErrorResponse(WebException exception)
         {
             return await CreateApiWebResponse<OAuthTokenErrorResponse>(exception.Response as HttpWebResponse);   
         }
 
+        /// <summary>
+        /// Creates an OAuthTokenResponse from a HttpWebResponse
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
         public static async Task<ApiResponse> CreateOAuthTokenResponse(HttpWebResponse response)
         {
             return await CreateApiWebResponse<OAuthTokenResponse>(response);
 
         }
 
+        /// <summary>
+        /// Creates a generic error response
+        /// </summary>
+        /// <returns></returns>
         public static ApiResponse CreateGenericErrorResponse()
         {
             return new WebExceptionResponse()
@@ -52,8 +71,7 @@ namespace KryptPadCSApp.API
                 Message = "Unable to connect to the server."
             };
         }
-
-
+        
         /// <summary>
         /// Creates an ApiResponse object from an HttpWebResponse
         /// </summary>
@@ -78,6 +96,7 @@ namespace KryptPadCSApp.API
                 return CreateGenericErrorResponse();
             }
         }
+        #endregion
 
     }
 }
