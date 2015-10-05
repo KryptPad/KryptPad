@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
@@ -112,8 +113,12 @@ namespace KryptPadCSApp.Models
             CreateAccountCommand = new Command((p) =>
             {
                 //navigate to the create account page
-                //Navigate(typeof(CreateAccountPage));
-                
+                var frame = Window.Current.Content as Frame;
+
+                if (frame != null)
+                {
+                    frame.Navigate(typeof(CreateAccountPage));
+                }
             });
         }
 

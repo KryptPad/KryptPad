@@ -79,11 +79,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Content="Log In" Grid.Column="0" Margin="0,0,10,0"
-                        Command="{Binding LogInCommand}"/>
+                        Command="{Binding LogInCommand}" />
 
                     <Button Content="Create Account" Grid.Column="1" 
-                            
-                            Click="Button_Click"/>
+                            Command="{Binding CreateAccountCommand}" />
 
                 </Grid>
 
