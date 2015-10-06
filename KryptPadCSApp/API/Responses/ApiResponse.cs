@@ -12,21 +12,21 @@ namespace KryptPadCSApp.API.Responses
     {
 
         #region Properties
-        public HttpStatusCode StatusCode { get; set; }
+        //public HttpStatusCode StatusCode { get; set; }
         #endregion
 
         #region Helper Methods
         
-        public static async Task<ApiResponse> Ok()
-        {
-            return await Task.Factory.StartNew(() =>
-            {
-                return new ApiResponse()
-                {
-                    StatusCode = HttpStatusCode.OK
-                };
-            });
-        }
+        //public static async Task<ApiResponse> Ok()
+        //{
+        //    return await Task.Factory.StartNew(() =>
+        //    {
+        //        return new ApiResponse()
+        //        {
+        //            StatusCode = HttpStatusCode.OK
+        //        };
+        //    });
+        //}
 
         /// <summary>
         /// Creates a WebException response from a WebException
@@ -86,7 +86,7 @@ namespace KryptPadCSApp.API.Responses
                 //deserialize data
                 var apiResponse = JsonConvert.DeserializeObject<T>(data);
                 //set status code
-                apiResponse.StatusCode = response.StatusCode;
+                //apiResponse.StatusCode = response.StatusCode;
                 //return the re
                 return apiResponse;
             }

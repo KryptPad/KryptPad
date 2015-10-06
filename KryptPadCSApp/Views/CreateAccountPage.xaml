@@ -51,7 +51,7 @@
             </Grid>
 
             <Grid Grid.Row="1"
-				Visibility="{Binding LoginVisibility}">
+				Visibility="{Binding AccountInfoVisibility}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />

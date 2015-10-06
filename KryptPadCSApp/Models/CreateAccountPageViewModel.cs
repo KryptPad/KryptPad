@@ -1,4 +1,6 @@
 ﻿using KryptPadCSApp.API;
+using KryptPadCSApp.API.Responses;
+using KryptPadCSApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +54,38 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private bool _isBusy;
+
+        /// <summary>
+        /// Gets or sets that the page is busy doing something
+        /// </summary>
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                _isBusy = value;
+                //notify change
+                OnPropertyChanged(nameof(IsBusy));
+                //set visibility
+                AccountInfoVisibility = _isBusy ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
+        private Visibility _accountInfoVisibility;
+
+        public Visibility AccountInfoVisibility
+        {
+            get { return _accountInfoVisibility; }
+            set
+            {
+                _accountInfoVisibility = value;
+                //notify change
+                OnPropertyChanged(nameof(AccountInfoVisibility));
+
+            }
+        }
+
         public Command CreateAccountCommand { get; protected set; }
 
         #endregion
@@ -71,8 +105,29 @@ namespace KryptPadCSApp.Models
             CreateAccountCommand = new Command(async (p) =>
             {
                 IsBusy = true;
-                //log in and get access token
-                var data = await KryptPadApi.CreateAccountAsync(Email, Password);
+                try
+                {
+                    //log in and get access token
+                    var response = await KryptPadApi.CreateAccountAsync(Email, Password);
+
+                    //if the response is ok, then go to login page
+                    if (response is SuccessResponse)
+                    {
+                        await DialogHelper.ShowMessageDialog("Your account has been successfully created.");
+                    }
+                    else
+                    {
+                        //get the response
+                        var error = (response as WebExceptionResponse).ModelState.Errors.FirstOrDefault();
+
+                        await DialogHelper.ShowMessageDialog(error);
+                    }
+                }
+                catch (Exception)
+                {
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                }
+                
 
                 IsBusy = false;
 

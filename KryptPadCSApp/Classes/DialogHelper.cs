@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -23,6 +24,32 @@ namespace KryptPadCSApp.Classes
         /// Gets or sets the result object
         /// </summary>
         private static object _result;
+
+        /// <summary>
+        /// Shows a message box with custom content
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public static async Task<IUICommand> ShowMessageDialog(string content)
+        {
+            var msgBox = new MessageDialog(content);
+            //show
+            return await msgBox.ShowAsync();
+            
+        }
+
+        /// <summary>
+        /// Shows a generic connection error dialog
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IUICommand> ShowConnectionErrorMessageDialog()
+        {
+            var msgBox = new MessageDialog(
+                "An error occurred while trying to process your request. Make sure you are connected to the internet.");
+            //show
+            return await msgBox.ShowAsync();
+
+        }
 
         /// <summary>
         /// Displays the login dialog

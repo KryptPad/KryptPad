@@ -7,6 +7,8 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,34 +32,37 @@ namespace KryptPadCSApp.API
         /// <param name="password"></param>
         public static async Task<ApiResponse> AuthenticateAsync(string username, string password)
         {
-
-            try
+            using (var client = new HttpClient())
             {
-                //create a request
-                var request = CreatePostRequest("token");
-                //create the values to send
-                var values = new NameValueCollection();
-                values.Add("grant_type", "password");
-                values.Add("username", username);
-                values.Add("password", password);
+                //prepare form values
+                var values = new Dictionary<string, string>
+                {
+                    { "grant_type", "password" },
+                    { "username", username },
+                    { "password", password }
+                };
                 
-                //write these values to the request
-                await WritePostValues(request, values);
-                //execute the request
-                var response = await request.GetResponseAsync() as HttpWebResponse;
-                
-                //create OAuth token response
-                return await ApiResponse.CreateOAuthTokenResponse(response);
-            }
-            catch (WebException ex)
-            {
-                return await ApiResponse.CreateOAuthTokenErrorResponse(ex);
-            }
-            catch (Exception)
-            {
-                return ApiResponse.CreateGenericErrorResponse();
-            }
+                //create the content to send
+                var content = new FormUrlEncodedContent(values);
+                //send the post request
+                var response = await client.PostAsync(GetUrl("token"), content);
 
+                //get the response as a string
+                var data = await response.Content.ReadAsStringAsync();
+
+                //get the data if the response is what we want
+                if (response.IsSuccessStatusCode)
+                {
+                    //deserialize the data and get the access token
+                    return JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
+
+                }else
+                {
+                    //deserialize the data and get the access token
+                    return JsonConvert.DeserializeObject<OAuthTokenErrorResponse>(data);
+                }
+            }
+            
         }
 
         /// <summary>
@@ -68,66 +73,95 @@ namespace KryptPadCSApp.API
         /// <returns></returns>
         public static async Task<ApiResponse> CreateAccountAsync(string username, string password)
         {
-            try
+            using (var client = new HttpClient())
             {
-                //create a request
-                var request = CreatePostRequest("api/account/register");
-
+                //create object to pass
                 var values = new
                 {
                     email = username,
                     password = password
                 };
 
+                //create content
+                var content = JsonContent(values);
 
-                //write these values to the request
-                await WritePostValues(request, values);
+                //execute request
+                var response = await client.PostAsync(GetUrl("api/account/register"), content);
 
-                //execute the request
-                var response = await request.GetResponseAsync();
+                //get the response content
+                var data = await response.Content.ReadAsStringAsync();
 
-                //check the response. if OK then the operation succeeded
-                return await ApiResponse.Ok();
-
-            }
-            catch (WebException ex)
-            {
-                return await ApiResponse.CreateWebExceptionResponse(ex);
-
-            }
-            catch (Exception)
-            {
-                return ApiResponse.CreateGenericErrorResponse();
-            }
-        }
-
-        public static async Task<ApiResponse> GetProfilesAsync(string token)
-        {
-            try
-            {
-                //create a request
-                var request = CreateGetRequest("api/profiles", token);
-
-                //execute the request
-                var response = await request.GetResponseAsync();
-
-                //get the returned response
-                var data = await GetStringDataAsync(response);
-
-                return await ApiResponse.Ok();
-            }
-            catch (WebException ex)
-            {
-                return await ApiResponse.CreateWebExceptionResponse(ex);
-            }
-            catch(Exception)
-            {
-                return ApiResponse.CreateGenericErrorResponse();
+                //check if the response is a success code
+                if (response.IsSuccessStatusCode)
+                {
+                    return new SuccessResponse();
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                }
             }
             
         }
 
+        public static async Task<HttpResponseMessage> GetProfilesAsync(string token)
+        {
+            using (var client = new HttpClient())
+            {
+                //authorize the request
+                AuthorizeRequest(client, token);
+                //send request and get a response
+                return await client.GetAsync(GetUrl("api/profiles"));
+            }
+
+        }
+
+        public static async Task<HttpResponseMessage> GetProfile(int id, string token)
+        {
+            using (var client = new HttpClient())
+            {
+                //authorize the request
+                AuthorizeRequest(client, token);
+                //send request and get a response
+                return await client.GetAsync(GetUrl($"api/profiles/{id}"));
+            }
+
+        }
+
         #region Helper methods
+
+        /// <summary>
+        /// Authorizes an http client request
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="token"></param>
+        private static void AuthorizeRequest(HttpClient client, string token)
+        {
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                //add the authorize header to the request
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+        }
+
+        /// <summary>
+        /// Creates a StringContent object from an object serialized to JSON
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        private static HttpContent JsonContent(object values)
+        {
+            var data = JsonConvert.SerializeObject(values);
+
+            return new StringContent(data, Encoding.UTF8, "application/json");
+        }
+
+        /// <summary>
+        /// Gets the url for the api request
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        private static string GetUrl(string uri) => $"{ServiceHost}{uri}";
 
         /// <summary>
         /// Creates a POST request

@@ -4,14 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.Models
+namespace KryptPadCSApp.API.Responses
 {
-    class BasePageModel : BaseModel
+    class SuccessResponse : ApiResponse
     {
-
-        #region Properties
-        
-        #endregion
-
     }
 }

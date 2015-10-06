@@ -1,11 +1,13 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Responses;
+using KryptPadCSApp.Classes;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -81,7 +83,7 @@ namespace KryptPadCSApp.Models
                 _loginVisibility = value;
                 //notify change
                 OnPropertyChanged(nameof(LoginVisibility));
-                
+
             }
         }
 
@@ -105,19 +107,34 @@ namespace KryptPadCSApp.Models
             LogInCommand = new Command(async (p) =>
             {
                 IsBusy = true;
-                //log in and get access token
-                var response = await KryptPadApi.AuthenticateAsync(Email, Password);
 
-                //check the response. if it is an  then store the token and navigate user
-                //to select profile page
-                if (response is OAuthTokenResponse)
+                try
                 {
-                    //store the access token
-                    (App.Current as App).AccessToken = (response as OAuthTokenResponse).AccessToken;
+                    //log in and get access token
+                    var response = await KryptPadApi.AuthenticateAsync(Email, Password);
 
-                    //TEST CODE: test access token
-                    response = await KryptPadApi.GetProfilesAsync((App.Current as App).AccessToken);
+                    //check the response. if it is an OAuthTokenResponse then store the token and navigate user
+                    //to select profile page
+                    if (response is OAuthTokenResponse)
+                    {
+                        //store the access token
+                        (App.Current as App).AccessToken = (response as OAuthTokenResponse).AccessToken;
+
+                        //TEST CODE: test access token
+                        var res = await KryptPadApi.GetProfile(1, (App.Current as App).AccessToken);
+
+                    }
+                    else
+                    {
+                        await DialogHelper.ShowMessageDialog(
+                            "Your username or password is incorrect.");
+                    }
                 }
+                catch (Exception)
+                {
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                }
+                
 
                 IsBusy = false;
             });
