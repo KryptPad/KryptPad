@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
-    x:Class="KryptPadCSApp.Views.LogInPage"
+    x:Class="KryptPadCSApp.Views.LoginPage"
     mc:Ignorable="d">
 
     <Page.DataContext>
@@ -14,7 +14,7 @@
 
     <Grid Background="{StaticResource WhiteToBlueBrush}" >
 
-        <!--Main grid for page-->   
+        <!--Main grid for page-->
         <Grid VerticalAlignment="Center"
               HorizontalAlignment="Stretch"
               MaxWidth="400"
@@ -33,22 +33,21 @@
                        Margin="0,0,0,10">
                 &#xE1F6;
             </TextBlock>-->
-            <Grid Grid.Row="0">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Grid.Row="0"
+                           FontSize="64"
+                           Margin="0,0,0,10"
+                           Foreground="#FF15497C"
+                           Text="Krypt Pad">
 
-                <TextBlock Grid.Column="0"
-                           FontSize="76"
-                           Margin="0,0,0,10" Foreground="#FF15497C">
-                    KryptPad
                 </TextBlock>
-                
                 <!--Progress indicator for login-->
-                <ProgressRing Grid.Column="1" IsActive="{Binding IsBusy}" Width="50" Height="50" />
-            </Grid>
+                <ProgressRing Grid.Column="1" IsActive="{Binding IsBusy}" Width="50" Height="50"
+                              Foreground="#FF15497C"
+                              HorizontalAlignment="Center"/>
+            </StackPanel>
+
 
             <Grid Grid.Row="1"
                   Visibility="{Binding LoginVisibility}">
@@ -88,12 +87,12 @@
 
 
             </Grid>
-            
-            
-            
-            
+
+
+
+
         </Grid>
-        
-       
+
+
     </Grid>
 </Page>

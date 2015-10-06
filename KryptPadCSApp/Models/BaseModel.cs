@@ -26,7 +26,7 @@ namespace KryptPadCSApp.Models
 
         }
 
-        protected void Navigate(Type pageType, object parameter)
+        protected virtual void Navigate(Type pageType, object parameter)
         {
             var mainPage = Window.Current.Content as MainPage;
 

@@ -1,6 +1,7 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,6 +115,9 @@ namespace KryptPadCSApp.Models
                     if (response is SuccessResponse)
                     {
                         await DialogHelper.ShowMessageDialog("Your account has been successfully created.");
+
+                        //go to login page
+                        Navigate(typeof(LoginPage));
                     }
                     else
                     {

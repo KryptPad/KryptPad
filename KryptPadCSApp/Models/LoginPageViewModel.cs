@@ -142,12 +142,7 @@ namespace KryptPadCSApp.Models
             CreateAccountCommand = new Command((p) =>
             {
                 //navigate to the create account page
-                var frame = Window.Current.Content as Frame;
-
-                if (frame != null)
-                {
-                    frame.Navigate(typeof(CreateAccountPage));
-                }
+                Navigate(typeof(CreateAccountPage));
             });
         }
 
