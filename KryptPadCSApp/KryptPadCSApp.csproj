@@ -147,6 +147,9 @@
     <Compile Include="UserControls\AuthenticateUserControl.xaml.cs">
       <DependentUpon>AuthenticateUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\BusyIndicator.xaml.cs">
+      <DependentUpon>BusyIndicator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CreatePasswordUserControl.xaml.cs">
       <DependentUpon>CreatePasswordUserControl.xaml</DependentUpon>
     </Compile>
@@ -201,6 +204,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\AuthenticateUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\BusyIndicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

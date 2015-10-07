@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
+    xmlns:UserControls="using:KryptPadCSApp.UserControls"
     x:Class="KryptPadCSApp.Views.LoginPage"
     mc:Ignorable="d">
 
@@ -16,9 +17,9 @@
 
         <!--Main grid for page-->
         <Grid VerticalAlignment="Center"
-              HorizontalAlignment="Stretch"
-              MaxWidth="400"
-              Padding="10">
+			HorizontalAlignment="Stretch"
+			MaxWidth="400"
+			Padding="10">
 
             <!--Main grid for input-->
             <Grid Visibility="{Binding LoginVisibility}">
@@ -31,21 +32,19 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"
-                           FontSize="64"
-                           Margin="0,0,0,10"
-                           Foreground="{StaticResource BlueTextForegroundBrush}"
-                           Text="Krypt Pad">
-
-                </TextBlock>
+					FontSize="64"
+					Margin="0,0,0,10"
+					Foreground="{StaticResource BlueTextForegroundBrush}"
+					Text="Krypt Pad"/>
 
                 <!--Login email address-->
                 <TextBox Grid.Row="1" PlaceholderText="Email Address" Margin="0,0,0,10"
-                         InputScope="EmailNameOrAddress"
-                         Text="{Binding Email, Mode=TwoWay}" />
+					InputScope="EmailNameOrAddress"
+					Text="{Binding Email, Mode=TwoWay}" />
 
                 <!--Password-->
                 <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,10" 
-                         Password="{Binding Password, Mode=TwoWay}"/>
+					Password="{Binding Password, Mode=TwoWay}"/>
 
                 <!--Remember me-->
                 <CheckBox Grid.Row="3" Content="Sign me in automatically"  Margin="0,0,0,10" />
@@ -58,10 +57,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Content="Log In" Grid.Column="0" Margin="0,0,10,0"
-                        Command="{Binding LogInCommand}" />
+						Command="{Binding LogInCommand}" />
 
                     <Button Content="Create Account" Grid.Column="1" 
-                            Command="{Binding CreateAccountCommand}" />
+						Command="{Binding CreateAccountCommand}" />
 
                 </Grid>
 
@@ -69,28 +68,12 @@
             </Grid>
 
             <!--Progress indicator-->
-            <Grid Visibility="{Binding BusyIndicatorVisibility}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <!--Indicator {Binding IsBusy}-->
-                <ProgressRing Grid.Column="0" IsActive="true" 
-                              Foreground="{StaticResource BlueTextForegroundBrush}"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Margin="0,0,10,0"/>
-
-                <!--Text-->
-                <TextBlock Text="Signing you in" Grid.Column="1"
-                           Foreground="{StaticResource BlueTextForegroundBrush}"/>
-            </Grid>
+            <UserControls:BusyIndicator Visibility="{Binding BusyIndicatorVisibility}"/>
 
 
         </Grid>
 
-        
+
 
     </Grid>
 </Page>
