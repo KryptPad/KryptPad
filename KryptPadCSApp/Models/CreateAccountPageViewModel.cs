@@ -54,25 +54,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(ConfirmPassword));
             }
         }
-
-        private bool _isBusy;
-
-        /// <summary>
-        /// Gets or sets that the page is busy doing something
-        /// </summary>
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set
-            {
-                _isBusy = value;
-                //notify change
-                OnPropertyChanged(nameof(IsBusy));
-                //set visibility
-                AccountInfoVisibility = _isBusy ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
+        
         private Visibility _accountInfoVisibility;
 
         public Visibility AccountInfoVisibility
@@ -138,7 +120,13 @@ namespace KryptPadCSApp.Models
             });
         }
 
+        protected override void OnIsBusyChanged()
+        {
+            base.OnIsBusyChanged();
 
+            //set visibility
+            AccountInfoVisibility = IsBusy ? Visibility.Collapsed : Visibility.Visible;
+        }
 
     }
 }

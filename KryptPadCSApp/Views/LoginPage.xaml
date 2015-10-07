@@ -19,59 +19,39 @@
               HorizontalAlignment="Stretch"
               MaxWidth="400"
               Padding="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
 
-            <!--<TextBlock FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                       FontSize="120"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,10">
-                &#xE1F6;
-            </TextBlock>-->
-
-            <StackPanel>
-                <TextBlock Grid.Row="0"
-                           FontSize="64"
-                           Margin="0,0,0,10"
-                           Foreground="#FF15497C"
-                           Text="Krypt Pad">
-
-                </TextBlock>
-                <!--Progress indicator for login-->
-                <ProgressRing Grid.Column="1" IsActive="{Binding IsBusy}" Width="50" Height="50"
-                              Foreground="#FF15497C"
-                              HorizontalAlignment="Center"/>
-            </StackPanel>
-
-
-            <Grid Grid.Row="1"
-                  Visibility="{Binding LoginVisibility}">
+            <!--Main grid for input-->
+            <Grid Visibility="{Binding LoginVisibility}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
+                <TextBlock Grid.Row="0"
+                           FontSize="64"
+                           Margin="0,0,0,10"
+                           Foreground="{StaticResource BlueTextForegroundBrush}"
+                           Text="Krypt Pad">
+
+                </TextBlock>
+
                 <!--Login email address-->
-                <TextBox Grid.Row="0" PlaceholderText="Email Address" Margin="0,0,0,10"
+                <TextBox Grid.Row="1" PlaceholderText="Email Address" Margin="0,0,0,10"
                          InputScope="EmailNameOrAddress"
                          Text="{Binding Email, Mode=TwoWay}" />
 
                 <!--Password-->
-                <PasswordBox Grid.Row="1" PlaceholderText="Password" Margin="0,0,0,10" 
+                <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,10" 
                          Password="{Binding Password, Mode=TwoWay}"/>
 
                 <!--Remember me-->
-                <CheckBox Grid.Row="2" Content="Sign me in automatically"  Margin="0,0,0,10" />
+                <CheckBox Grid.Row="3" Content="Sign me in automatically"  Margin="0,0,0,10" />
 
                 <!--Login / Sign up buttons-->
-                <Grid Grid.Row="3" Margin="0,0,0,10">
+                <Grid Grid.Row="4" Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
@@ -88,11 +68,29 @@
 
             </Grid>
 
+            <!--Progress indicator-->
+            <Grid Visibility="{Binding BusyIndicatorVisibility}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
+                <!--Indicator {Binding IsBusy}-->
+                <ProgressRing Grid.Column="0" IsActive="true" 
+                              Foreground="{StaticResource BlueTextForegroundBrush}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Margin="0,0,10,0"/>
+
+                <!--Text-->
+                <TextBlock Text="Signing you in" Grid.Column="1"
+                           Foreground="{StaticResource BlueTextForegroundBrush}"/>
+            </Grid>
 
 
         </Grid>
 
+        
 
     </Grid>
 </Page>

@@ -13,12 +13,15 @@ using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
-    class LoginPageViewModel : BaseModel
+    class LoginPageViewModel : BasePageModel
     {
 
         #region Properties
         private string _email;
 
+        /// <summary>
+        /// Gets or sets the email address
+        /// </summary>
         public string Email
         {
             get { return _email; }
@@ -32,7 +35,9 @@ namespace KryptPadCSApp.Models
         }
 
         private string _password;
-
+        /// <summary>
+        /// Gets or sets the password
+        /// </summary>
         public string Password
         {
             get { return _password; }
@@ -45,7 +50,9 @@ namespace KryptPadCSApp.Models
         }
 
         private bool _autoSignIn;
-
+        /// <summary>
+        /// Gets or sets the auto login value
+        /// </summary>
         public bool AutoSignIn
         {
             get { return _autoSignIn; }
@@ -57,24 +64,11 @@ namespace KryptPadCSApp.Models
 
             }
         }
-
-        private bool _isBusy;
-
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set
-            {
-                _isBusy = value;
-                //notify change
-                OnPropertyChanged(nameof(IsBusy));
-                //set the visibility of the login panel
-                LoginVisibility = _isBusy ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
+        
         private Visibility _loginVisibility;
-
+        /// <summary>
+        /// Gets or sets whether the ui element is visible
+        /// </summary>
         public Visibility LoginVisibility
         {
             get { return _loginVisibility; }
@@ -86,8 +80,7 @@ namespace KryptPadCSApp.Models
 
             }
         }
-
-
+        
         public Command LogInCommand { get; protected set; }
 
         public Command CreateAccountCommand { get; protected set; }
@@ -146,6 +139,11 @@ namespace KryptPadCSApp.Models
             });
         }
 
+        protected override void OnIsBusyChanged()
+        {
+            base.OnIsBusyChanged();
 
+            LoginVisibility = IsBusy ? Visibility.Collapsed : Visibility.Visible;
+        }
     }
 }
