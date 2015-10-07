@@ -19,6 +19,28 @@ namespace KryptPadCSApp.UserControls
 {
     public sealed partial class BusyIndicator : UserControl
     {
+
+        #region Dependency Properties
+        public static readonly DependencyProperty IsActiveProperty =
+                DependencyProperty.Register("IsActive", typeof(bool), typeof(BusyIndicator), new PropertyMetadata(false, (dp, e)=> {
+                    var c = dp as BusyIndicator;
+
+                    c.BusyProgressRing.IsActive = (bool)e.NewValue;
+                }));
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the active status of the progress ring
+        /// </summary>
+        public bool IsActive
+        {
+            get { return (bool)GetValue(IsActiveProperty); }
+            set { SetValue(IsActiveProperty, value); }
+        }
+        #endregion
+
+
         public BusyIndicator()
         {
             this.InitializeComponent();

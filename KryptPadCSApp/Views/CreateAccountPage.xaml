@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
+    xmlns:UserControls="using:KryptPadCSApp.UserControls"
     x:Class="KryptPadCSApp.Views.CreateAccountPage"
     mc:Ignorable="d">
 
@@ -19,40 +20,12 @@
 			HorizontalAlignment="Stretch"
 			MaxWidth="400"
 			Padding="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+            
+            
 
-            <!--<TextBlock FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                       FontSize="120"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,10">
-                &#xE1F6;
-            </TextBlock>-->
-            <Grid Grid.Row="0">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0"
-					FontSize="76"
-					Margin="0,0,0,10" Foreground="#FF15497C">
-					<Run Text="KryptPad"/>
-                </TextBlock>
-
-                <!--Progress indicator for login-->
-                <ProgressRing Grid.Column="1" IsActive="{Binding IsBusy}" Width="50" Height="50" />
-            </Grid>
-
-            <Grid Grid.Row="1"
-				Visibility="{Binding AccountInfoVisibility}">
+            <Grid Visibility="{Binding AccountInfoVisibility}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
@@ -61,26 +34,32 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"
+					FontSize="64"
+					Margin="0,0,0,10" Foreground="#FF15497C">
+					<Run Text="KryptPad"/>
+                </TextBlock>
+                
+                <TextBlock Grid.Row="1"
 					Margin="0,0,0,10"
 					TextWrapping="WrapWholeWords">
 					<Run Text="Before you can use KryptPad, you must create an account with kryptpad.com."/>
                 </TextBlock>
 
                 <!--Login email address-->
-                <TextBox Grid.Row="1" PlaceholderText="Email Address" Margin="0,0,0,10"
+                <TextBox Grid.Row="2" PlaceholderText="Email Address" Margin="0,0,0,10"
 					InputScope="EmailNameOrAddress"
 					Text="{Binding Email, Mode=TwoWay}"/>
 
                 <!--Password-->
-                <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,10" 
+                <PasswordBox Grid.Row="3" PlaceholderText="Password" Margin="0,0,0,10" 
 					Password="{Binding Password, Mode=TwoWay}"/>
 
                 <!--Password-->
-                <PasswordBox Grid.Row="3" PlaceholderText="Confirm Password" Margin="0,0,0,10" 
+                <PasswordBox Grid.Row="4" PlaceholderText="Confirm Password" Margin="0,0,0,10" 
 					Password="{Binding ConfirmPassword, Mode=TwoWay}"/>
 
 
-                <Grid Grid.Row="4" Margin="0,0,0,10">
+                <Grid Grid.Row="5" Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
@@ -94,7 +73,9 @@
 
             </Grid>
 
-
+            <!--Progress indicator-->
+            <UserControls:BusyIndicator Visibility="{Binding BusyIndicatorVisibility}"
+                                        IsActive="{Binding IsBusy}"/>
 
 
         </Grid>

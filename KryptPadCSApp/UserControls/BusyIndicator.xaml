@@ -16,14 +16,15 @@
         </Grid.ColumnDefinitions>
 
         <!--Indicator {Binding IsBusy}-->
-        <ProgressRing Grid.Column="0" IsActive="true" 
-                              Foreground="{StaticResource BlueTextForegroundBrush}"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Margin="0,0,10,0"/>
+        <ProgressRing x:Name="BusyProgressRing" 
+                      Grid.Column="0" 
+                      Foreground="{StaticResource BlueTextForegroundBrush}"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Margin="0,0,10,0"/>
 
         <!--Text-->
         <TextBlock Text="Signing you in" Grid.Column="1"
-                           Foreground="{StaticResource BlueTextForegroundBrush}"/>
+                   Foreground="{StaticResource BlueTextForegroundBrush}"/>
     </Grid>
 </UserControl>
