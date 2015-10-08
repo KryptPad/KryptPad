@@ -33,11 +33,7 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0"
-					FontSize="64"
-					Margin="0,0,0,10" Foreground="#FF15497C">
-					<Run Text="KryptPad"/>
-                </TextBlock>
+                <TextBlock Grid.Row="0" Text="Create Account" Style="{StaticResource LargeBlueTextBlock}" />
                 
                 <TextBlock Grid.Row="1"
 					Margin="0,0,0,10"

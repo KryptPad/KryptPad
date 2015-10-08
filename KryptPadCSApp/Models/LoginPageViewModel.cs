@@ -113,8 +113,8 @@ namespace KryptPadCSApp.Models
                         //store the access token
                         (App.Current as App).AccessToken = (response as OAuthTokenResponse).AccessToken;
 
-                        //TEST CODE: test access token
-                        var res = await KryptPadApi.GetProfile(1, (App.Current as App).AccessToken);
+                        //navigate to the select profile page
+                        Navigate(typeof(SelectProfilePage));
 
                     }
                     else

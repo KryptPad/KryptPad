@@ -3,7 +3,7 @@
   <Identity Name="ae01f0aa-aab0-417d-8a0d-7538c7021122" Publisher="CN=Neptune Century Studios" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="ae01f0aa-aab0-417d-8a0d-7538c7021122" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>KryptPad</DisplayName>
+    <DisplayName>Krypt Pad</DisplayName>
     <PublisherDisplayName>Neptune Century Studios</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -32,4 +32,7 @@
       </Extensions>
     </Application>
   </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
 </Package>
