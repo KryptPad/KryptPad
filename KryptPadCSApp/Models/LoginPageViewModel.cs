@@ -111,7 +111,7 @@ namespace KryptPadCSApp.Models
                     if (response is OAuthTokenResponse)
                     {
                         //store the access token
-                        (App.Current as App).AccessToken = (response as OAuthTokenResponse).AccessToken;
+                        AccessToken = (response as OAuthTokenResponse).AccessToken;
 
                         //navigate to the select profile page
                         Navigate(typeof(SelectProfilePage));

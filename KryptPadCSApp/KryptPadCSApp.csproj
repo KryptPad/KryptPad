@@ -98,6 +98,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Models\ApiProfile.cs" />
+    <Compile Include="API\Responses\ProfileResponse.cs" />
     <Compile Include="API\Responses\OAuthTokenErrorResponse.cs" />
     <Compile Include="API\Responses\OAuthTokenResponse.cs" />
     <Compile Include="API\Responses\SuccessResponse.cs" />
@@ -143,6 +145,7 @@
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\PageNavigationParamsBase.cs" />
     <Compile Include="Models\Profile.cs" />
+    <Compile Include="Models\SelectProfilePageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\AuthenticateUserControl.xaml.cs">
       <DependentUpon>AuthenticateUserControl.xaml</DependentUpon>

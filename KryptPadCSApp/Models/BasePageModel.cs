@@ -12,8 +12,20 @@ namespace KryptPadCSApp.Models
     {
 
         #region Properties
-        private bool _isBusy;
 
+        /// <summary>
+        /// Gets or sets the access token for API authentication
+        /// </summary>
+        protected string AccessToken
+        {
+            get { return (App.Current as App).AccessToken; }
+            set { (App.Current as App).AccessToken = value; }
+        }
+
+        private bool _isBusy;
+        /// <summary>
+        /// Gets or sets the IsBusy status, indicating that the page is doing something that blocks user interaction
+        /// </summary>
         public bool IsBusy
         {
             get { return _isBusy; }

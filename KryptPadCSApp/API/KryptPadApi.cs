@@ -104,26 +104,64 @@ namespace KryptPadCSApp.API
             
         }
 
-        public static async Task<HttpResponseMessage> GetProfilesAsync(string token)
+        /// <summary>
+        /// Gets all profiles for the authenticated user
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<ApiResponse> GetProfilesAsync(string token)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
                 //send request and get a response
-                return await client.GetAsync(GetUrl("api/profiles"));
+                var response = await client.GetAsync(GetUrl("api/profiles"));
+                //read the data
+                var data = await response.Content.ReadAsStringAsync();
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    //deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<ProfileResponse>(data);
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                }
             }
 
         }
 
-        public static async Task<HttpResponseMessage> GetProfile(int id, string token)
+        /// <summary>
+        /// Gets a specific profile for the authenticated user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<ApiResponse> GetProfile(int id, string token)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
                 //send request and get a response
-                return await client.GetAsync(GetUrl($"api/profiles/{id}"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{id}"));
+
+                //read the data
+                var data = await response.Content.ReadAsStringAsync();
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    //deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<ProfileResponse>(data);
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                }
             }
 
         }
