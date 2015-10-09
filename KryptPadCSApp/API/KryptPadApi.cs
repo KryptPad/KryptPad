@@ -168,6 +168,34 @@ namespace KryptPadCSApp.API
 
         }
 
+        public static async Task<ApiResponse> CreateProfile(ApiProfile profile, string token)
+        {
+            using (var client = new HttpClient())
+            {
+                // Authorize the request.
+                AuthorizeRequest(client, token);
+                // Create JSON content.
+                var content = JsonContent(profile);
+                // Send request and get a response
+                var response = await client.PostAsync(GetUrl($"api/profiles"), content);
+
+                // Read the data
+                var data = await response.Content.ReadAsStringAsync();
+
+                // Deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    // Deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<ProfileResponse>(data);
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                }
+            }
+
+        }
+
         #region Helper methods
 
         /// <summary>

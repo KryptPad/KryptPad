@@ -29,7 +29,9 @@
                 <StackPanel Grid.Row="0">
                     <TextBlock Grid.Row="0" Text="Profiles" Style="{StaticResource LargeBlueTextBlock}" />
                     <TextBlock Text="Choose a profile or create a new one" TextWrapping="WrapWholeWords" Margin="0,0,0,10" />
-
+                    <Button Content="Create Profile"
+                            Margin="0,0,0,10"
+                            Command="{Binding CreateProfileCommand}"/>
                 </StackPanel>
 
                 <ListBox Grid.Row="1" ItemsSource="{Binding Profiles}">

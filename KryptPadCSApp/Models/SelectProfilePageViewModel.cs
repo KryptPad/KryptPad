@@ -21,11 +21,13 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public ObservableCollection<ApiProfile> Profiles { get; protected set; } = new ObservableCollection<ApiProfile>();
 
-
+        public Command CreateProfileCommand { get; protected set; }
         #endregion
 
         public SelectProfilePageViewModel()
         {
+            RegisterCommands();
+
             var t = Getprofiles();
         }
 
@@ -33,7 +35,7 @@ namespace KryptPadCSApp.Models
         /// Gets the profiles for the user
         /// </summary>
         /// <returns></returns>
-        public async Task Getprofiles()
+        private async Task Getprofiles()
         {
             //call the api and get some data!
             try
@@ -64,5 +66,20 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private void RegisterCommands()
+        {
+            CreateProfileCommand = new Command(async (p)=> {
+
+                // Create a new profile.
+                var profile = new ApiProfile()
+                {
+                    Name = "New Profile"
+                };
+
+                // Call api to create the profile.
+                var response = await KryptPadApi.CreateProfile(profile, AccessToken);
+
+            });
+        }
     }
 }

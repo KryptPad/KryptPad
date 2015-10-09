@@ -22,6 +22,15 @@ namespace KryptPadCSApp.Models
             set { (App.Current as App).AccessToken = value; }
         }
 
+        /// <summary>
+        /// Gets or sets whether the auto login is temporarily disabled
+        /// </summary>
+        protected bool DisableAutoLogin
+        {
+            get { return (App.Current as App).DisableAutoLogin; }
+            set { (App.Current as App).DisableAutoLogin = value; }
+        }
+
         private bool _isBusy;
         /// <summary>
         /// Gets or sets the IsBusy status, indicating that the page is doing something that blocks user interaction

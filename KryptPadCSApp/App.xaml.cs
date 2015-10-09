@@ -64,6 +64,11 @@ namespace KryptPadCSApp
         /// Gets or sets the API OAuth access token to authorize API calls
         /// </summary>
         internal string AccessToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the auto login is temporarily disabled
+        /// </summary>
+        internal bool DisableAutoLogin { get; set; }
         #endregion
 
 
@@ -90,7 +95,7 @@ namespace KryptPadCSApp
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            
+
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (Window.Current.Content == null)
