@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.API.Responses;
+﻿using KryptPadCSApp.API.Models;
+using KryptPadCSApp.API.Responses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -124,7 +125,8 @@ namespace KryptPadCSApp.API
                 if (response.IsSuccessStatusCode)
                 {
                     //deserialize the response as an ApiResponse object
-                    return JsonConvert.DeserializeObject<ProfileResponse>(data);
+                    var profiles = JsonConvert.DeserializeObject<ApiProfile[]>(data);
+                    return new ProfileResponse() { Profiles = profiles };
                 }
                 else
                 {
@@ -201,114 +203,34 @@ namespace KryptPadCSApp.API
         /// <returns></returns>
         private static string GetUrl(string uri) => $"{ServiceHost}{uri}";
 
-        /// <summary>
-        /// Creates a POST request
-        /// </summary>
-        /// <returns></returns>
-        private static HttpWebRequest CreatePostRequest(string uri)
-        {
-            var request = WebRequest.CreateHttp($"{ServiceHost}{uri}");
-            //set method to POST
-            request.Method = "POST";
+        //public static bool TestResponse<T>(ApiResponse response)
+        //{
+        //    if (response is T)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
-            return request;
-        }
+        ///// <summary>
+        ///// Takes a NameValueCollection and creates a query string
+        ///// </summary>
+        ///// <param name="values"></param>
+        ///// <returns></returns>
+        //private static string CreateQueryString(NameValueCollection values)
+        //{
+        //    var list = new List<string>();
 
-        /// <summary>
-        /// Creates a GET request
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <returns></returns>
-        private static HttpWebRequest CreateGetRequest(string uri, string token = null)
-        {
-            var request = WebRequest.CreateHttp($"{ServiceHost}{uri}");
-            //set method to GET
-            request.Method = "GET";
+        //    foreach (var k in values.AllKeys)
+        //    {
+        //        list.Add($"{k}={WebUtility.UrlEncode(values[k])}");
+        //    }
 
-            //add the token as an authorization header
-            if (!string.IsNullOrWhiteSpace(token))
-            {
-                request.Headers["Authorization"] = $"Bearer {token}";
-            }
-
-            return request;
-        }
-
-        /// <summary>
-        /// Writes the values in a NameValueCollection to the request stream
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="values"></param>
-        private static async Task WritePostValues(HttpWebRequest request, NameValueCollection values)
-        {
-            //write the values to the request
-            var stream = await request.GetRequestStreamAsync();
-            //write the values to the stream
-            using (var sw = new StreamWriter(stream))
-            {
-                sw.Write(CreateQueryString(values));
-            }
-        }
-
-        /// <summary>
-        /// Writes the serialized values of an object
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="values"></param>
-        private static async Task WritePostValues(HttpWebRequest request, object values)
-        {
-            request.ContentType = "application/json";
-            //write the values to the request
-            var stream = await request.GetRequestStreamAsync();
-            //write the values to the stream
-            using (var sw = new StreamWriter(stream))
-            {
-
-                //serialize object
-                var data = JsonConvert.SerializeObject(values);
-
-                sw.Write(data);
-            }
-        }
-
-        private static async Task<string> GetStringData(WebException exception)
-        {
-            var response = exception.Response;
-
-            return await GetStringDataAsync(response);
-        }
-
-        /// <summary>
-        /// Executes the webrequest
-        /// </summary>
-        /// <param name="request"></param>
-        public static async Task<string> GetStringDataAsync(WebResponse response)
-        {
-            //get the data from the response
-            using (var sr = new StreamReader(response.GetResponseStream()))
-            {
-                var data = await sr.ReadToEndAsync();
-                //return the data
-                return data;
-            }
-        }
-
-        /// <summary>
-        /// Takes a NameValueCollection and creates a query string
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        private static string CreateQueryString(NameValueCollection values)
-        {
-            var list = new List<string>();
-
-            foreach (var k in values.AllKeys)
-            {
-                list.Add($"{k}={WebUtility.UrlEncode(values[k])}");
-            }
-
-            return string.Join("&", list);
-        }
+        //    return string.Join("&", list);
+        //}
 
         ///// <summary>
         ///// Takes an object and creates a query string from the public properties

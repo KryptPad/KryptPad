@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Security.Credentials;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -64,7 +65,7 @@ namespace KryptPadCSApp.Models
 
             }
         }
-        
+
         private Visibility _loginVisibility;
         /// <summary>
         /// Gets or sets whether the ui element is visible
@@ -80,7 +81,7 @@ namespace KryptPadCSApp.Models
 
             }
         }
-        
+
         public Command LogInCommand { get; protected set; }
 
         public Command CreateAccountCommand { get; protected set; }
@@ -90,7 +91,24 @@ namespace KryptPadCSApp.Models
         public LoginPageViewModel()
         {
             RegisterCommands();
+
+            //do not auto login if we already have an access token
+            if (string.IsNullOrWhiteSpace(AccessToken))
+            {
+                //check the password vault for any saved credentials
+                LoginFromSavedCredentials();
+            }
+            else
+            {
+                //clear the access token - logout
+                AccessToken = null;
+                //TODO: Decide whether to clear out saved credentials here
+            }
+
         }
+
+
+        #region Helper Methods
 
         /// <summary>
         /// Register commands
@@ -99,37 +117,7 @@ namespace KryptPadCSApp.Models
         {
             LogInCommand = new Command(async (p) =>
             {
-                IsBusy = true;
-
-                try
-                {
-                    //log in and get access token
-                    var response = await KryptPadApi.AuthenticateAsync(Email, Password);
-
-                    //check the response. if it is an OAuthTokenResponse then store the token and navigate user
-                    //to select profile page
-                    if (response is OAuthTokenResponse)
-                    {
-                        //store the access token
-                        AccessToken = (response as OAuthTokenResponse).AccessToken;
-
-                        //navigate to the select profile page
-                        Navigate(typeof(SelectProfilePage));
-
-                    }
-                    else
-                    {
-                        await DialogHelper.ShowMessageDialog(
-                            "Your username or password is incorrect.");
-                    }
-                }
-                catch (Exception)
-                {
-                    await DialogHelper.ShowConnectionErrorMessageDialog();
-                }
-                
-
-                IsBusy = false;
+                await LoginAsync();
             });
 
             CreateAccountCommand = new Command((p) =>
@@ -138,6 +126,103 @@ namespace KryptPadCSApp.Models
                 Navigate(typeof(CreateAccountPage));
             });
         }
+
+        /// <summary>
+        /// Checks to see if there are any saved credentials. If there are, the app is auto-logged in.
+        /// Only logs in if there is no access token already
+        /// </summary>
+        private void LoginFromSavedCredentials()
+        {
+
+
+            //create instance to credential locker
+            var locker = new PasswordVault();
+            try
+            {
+                //find the saved credentials
+                var login = locker.FindAllByResource("KryptPad").FirstOrDefault();
+
+                if (login != null)
+                {
+                    //get the users password
+                    login.RetrievePassword();
+                    //set properties
+                    Email = login.UserName;
+                    Password = login.Password;
+                    //do login
+                    var t = LoginAsync();
+                    //Task.Factory.StartNew(async () => { await LoginAsync(); });
+                }
+            }
+            catch (Exception)
+            {
+                //no saved credentials, ignore
+            }
+
+        }
+
+        private void SaveCredentialsIfAutoSignIn()
+        {
+            if (AutoSignIn)
+            {
+                //create instance to credential locker
+                var locker = new PasswordVault();
+
+                //clear out any saved credentials
+                locker.RetrieveAll().ToList().ForEach((l) => locker.Remove(l));
+
+                //create new credential
+                var credential = new PasswordCredential()
+                {
+                    Resource = "KryptPad",
+                    UserName = Email,
+                    Password = Password
+                };
+
+                //store the credentials
+                locker.Add(credential);
+            }
+        }
+
+        private async Task LoginAsync()
+        {
+            IsBusy = true;
+
+            try
+            {
+                //log in and get access token
+                var response = await KryptPadApi.AuthenticateAsync(Email, Password);
+
+                //check the response. if it is an OAuthTokenResponse then store the token and navigate user
+                //to select profile page
+                if (response is OAuthTokenResponse)
+                {
+                    //store the access token
+                    AccessToken = (response as OAuthTokenResponse).AccessToken;
+
+                    //save credentials
+                    SaveCredentialsIfAutoSignIn();
+
+                    //navigate to the select profile page
+                    Navigate(typeof(SelectProfilePage));
+
+                }
+                else
+                {
+                    await DialogHelper.ShowMessageDialog(
+                        "Your username or password is incorrect.");
+                }
+            }
+            catch (Exception)
+            {
+                await DialogHelper.ShowConnectionErrorMessageDialog();
+            }
+
+
+            IsBusy = false;
+        }
+
+        #endregion
 
         protected override void OnIsBusyChanged()
         {

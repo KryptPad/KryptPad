@@ -26,6 +26,6 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
         }
-        
+
     }
 }

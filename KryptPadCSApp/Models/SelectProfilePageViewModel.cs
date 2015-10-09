@@ -1,5 +1,6 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
+using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Classes;
 using System;
 using System.Collections.Generic;
@@ -25,22 +26,42 @@ namespace KryptPadCSApp.Models
 
         public SelectProfilePageViewModel()
         {
-            //call the api and get some data!
-            Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    var profiles = await KryptPadApi.GetProfilesAsync(AccessToken);
-                    //update the collection using the dispatcher
-                    await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { });
-                }
-                catch (Exception)
-                {
-                    var t = DialogHelper.ShowConnectionErrorMessageDialog();
-                }
-            });
-            
+            var t = Getprofiles();
+        }
 
+        /// <summary>
+        /// Gets the profiles for the user
+        /// </summary>
+        /// <returns></returns>
+        public async Task Getprofiles()
+        {
+            //call the api and get some data!
+            try
+            {
+                var response = await KryptPadApi.GetProfilesAsync(AccessToken);
+                
+                //check response
+                if (response is ProfileResponse)
+                {
+                    var profiles = (response as ProfileResponse).Profiles;
+
+                    foreach (var profile in profiles)
+                    {
+                        //add profile to list
+                        Profiles.Add(profile);
+                    }
+                }
+                else
+                {
+                    throw new Exception();
+                }
+                
+            }
+            catch (Exception)
+            {
+                await DialogHelper.ShowConnectionErrorMessageDialog();
+
+            }
         }
 
     }

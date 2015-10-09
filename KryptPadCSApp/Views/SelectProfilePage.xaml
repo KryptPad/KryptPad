@@ -1,11 +1,16 @@
 ﻿<Page
-    x:Class="KryptPadCSApp.Views.SelectProfilePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Models="using:KryptPadCSApp.Models"
+    x:Class="KryptPadCSApp.Views.SelectProfilePage"
     mc:Ignorable="d">
+
+    <Page.DataContext>
+        <Models:SelectProfilePageViewModel/>
+    </Page.DataContext>
 
     <Grid Background="{StaticResource WhiteToBlueBrush}">
         <!--Main grid for page-->
@@ -27,23 +32,17 @@
 
                 </StackPanel>
 
-                <ListBox Grid.Row="1">
+                <ListBox Grid.Row="1" ItemsSource="{Binding Profiles}">
                     <ListBox.Background>
                         <SolidColorBrush Color="#FFDFEEF7" Opacity="0.5"/>
                     </ListBox.Background>
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
-                    <TextBlock Text="Dummy Profile" />
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    
                 </ListBox>
             </Grid>
 
