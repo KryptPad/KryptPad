@@ -156,7 +156,7 @@ namespace KryptPadCSApp.Models
                     Password = login.Password;
                     //do login
                     var t = LoginAsync();
-                    //Task.Factory.StartNew(async () => { await LoginAsync(); });
+
                 }
             }
             catch (Exception)

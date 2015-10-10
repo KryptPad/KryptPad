@@ -125,8 +125,7 @@ namespace KryptPadCSApp.API
                 if (response.IsSuccessStatusCode)
                 {
                     //deserialize the response as an ApiResponse object
-                    var profiles = JsonConvert.DeserializeObject<ApiProfile[]>(data);
-                    return new ProfileResponse() { Profiles = profiles };
+                    return JsonConvert.DeserializeObject<ProfileResponse>(data);
                 }
                 else
                 {

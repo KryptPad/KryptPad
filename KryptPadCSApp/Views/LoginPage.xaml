@@ -9,6 +9,13 @@
     x:Class="KryptPadCSApp.Views.LoginPage"
     mc:Ignorable="d">
 
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Accept" Label="Log In"
+                          Command="{Binding LogInCommand}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+    
     <Page.DataContext>
         <Models:LoginPageViewModel/>
     </Page.DataContext>
