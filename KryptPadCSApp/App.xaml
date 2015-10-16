@@ -25,7 +25,7 @@
         <SolidColorBrush x:Key="NavButtonCheckedPressedBackgroundBrush" Color="#ffcb4040" />
         <SolidColorBrush x:Key="NavButtonCheckedHoverBackgroundBrush" Color="#ffab2020" />
 
-        <SolidColorBrush x:Key="BlueTextForegroundBrush" Color="#FF15497C" />
+        <SolidColorBrush x:Key="BlueTextForegroundBrush" Color="White" />
         
         <x:Double x:Key="SplitViewNormalNavFontSize">16</x:Double>
         <x:Double x:Key="SplitViewLargeNavFontSize">20</x:Double>
@@ -38,7 +38,7 @@
         </Style>
 					
         <LinearGradientBrush x:Key="WhiteToBlueBrush" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="White"/>
+            <GradientStop Color="#FF3297D1"/>
             <GradientStop Color="#FF3297D1" Offset="1"/>
         </LinearGradientBrush>
 
