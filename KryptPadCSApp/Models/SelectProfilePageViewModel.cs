@@ -2,6 +2,7 @@
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -47,10 +48,18 @@ namespace KryptPadCSApp.Models
                 {
                     var profiles = (response as ProfileResponse).Profiles;
 
-                    foreach (var profile in profiles)
+                    if (profiles.Length > 0)
                     {
-                        //add profile to list
-                        Profiles.Add(profile);
+                        foreach (var profile in profiles)
+                        {
+                            //add profile to list
+                            Profiles.Add(profile);
+                        }
+                    }
+                    else
+                    {
+                        //prompt the user for profile info
+                        await PromptForProfileInfo();
                     }
                 }
                 else
@@ -69,17 +78,18 @@ namespace KryptPadCSApp.Models
         private void RegisterCommands()
         {
             CreateProfileCommand = new Command(async (p)=> {
-
-                // Create a new profile.
-                var profile = new ApiProfile()
-                {
-                    Name = "New Profile"
-                };
-
-                // Call api to create the profile.
-                var response = await KryptPadApi.CreateProfile(profile, AccessToken);
-
+                //prompt the user for profile info
+                await PromptForProfileInfo();
+                
             });
         }
+
+        private async Task PromptForProfileInfo()
+        {
+            var dialog = new ProfileDetailsDialog();
+
+            await dialog.ShowAsync();
+        }
+
     }
 }
