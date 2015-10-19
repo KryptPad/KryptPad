@@ -20,7 +20,7 @@
         <Models:LoginPageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource WhiteToBlueBrush}" >
+    <Grid Background="{StaticResource AppBackgroundBrush}" >
 
         <!--Main grid for page-->
         <Grid VerticalAlignment="Center"

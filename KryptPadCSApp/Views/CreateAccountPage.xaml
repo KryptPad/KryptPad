@@ -9,7 +9,7 @@
     x:Class="KryptPadCSApp.Views.CreateAccountPage"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource WhiteToBlueBrush}">
+    <Grid Background="{StaticResource AppBackgroundBrush}">
 
         <Grid.DataContext>
             <Models:CreateAccountPageViewModel/>

@@ -29,14 +29,14 @@ namespace KryptPadCSApp.Models
         {
             RegisterCommands();
 
-            var t = Getprofiles();
+            var t = GetProfiles();
         }
 
         /// <summary>
         /// Gets the profiles for the user
         /// </summary>
         /// <returns></returns>
-        private async Task Getprofiles()
+        private async Task GetProfiles(bool prompt = true)
         {
             //call the api and get some data!
             try
@@ -56,10 +56,12 @@ namespace KryptPadCSApp.Models
                             Profiles.Add(profile);
                         }
                     }
-                    else
+                    else if (prompt)
                     {
                         //prompt the user for profile info
                         await PromptForProfileInfo();
+                        // Get profile, but don't prompt this time
+                        await GetProfiles(false);
                     }
                 }
                 else
