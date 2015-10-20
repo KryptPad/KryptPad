@@ -25,7 +25,7 @@
         <SolidColorBrush x:Key="NavButtonCheckedPressedBackgroundBrush" Color="#ffcb4040" />
         <SolidColorBrush x:Key="NavButtonCheckedHoverBackgroundBrush" Color="#ffab2020" />
 
-        <SolidColorBrush x:Key="TextForegroundBrush" Color="White" />
+        <SolidColorBrush x:Key="TextForegroundBrush" Color="Black" />
         
         <x:Double x:Key="SplitViewNormalNavFontSize">16</x:Double>
         <x:Double x:Key="SplitViewLargeNavFontSize">20</x:Double>
@@ -36,8 +36,8 @@
             <Setter Property="Margin" Value="0,0,0,10" />
             <Setter Property="Foreground" Value="{StaticResource TextForegroundBrush}" />
         </Style>
-
-        <SolidColorBrush x:Key="AppBackgroundBrush" Color="#FF3297D1" />
+        <!--FF3297D1-->
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="#FFA0CCD3" />
         
 
         <Style TargetType="TextBlock" x:Key="SplitViewTextBlockStyle">

@@ -109,7 +109,7 @@ namespace KryptPadCSApp.Models
                         await DialogHelper.ShowMessageDialog(error);
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     await DialogHelper.ShowConnectionErrorMessageDialog();
                 }
