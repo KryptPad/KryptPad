@@ -6,7 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.SelectProfilePage"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    x:Name="SelectProfileXamlPage">
 
     <Page.DataContext>
         <Models:SelectProfilePageViewModel/>
@@ -34,14 +35,39 @@
                             Command="{Binding CreateProfileCommand}"/>
                 </StackPanel>
 
-                <ListBox Grid.Row="1" ItemsSource="{Binding Profiles}">
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding Profiles}"
+                         SelectedItem="{Binding SelectedProfile, Mode=TwoWay}">
+                    
                     <ListBox.Background>
                         <SolidColorBrush Color="#FFDFEEF7" Opacity="0.5"/>
                     </ListBox.Background>
 
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding Name}"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"/>
+
+                                <Button Grid.Column="1"
+                                        Command="{Binding DataContext.DeleteProfileCommand, ElementName=SelectProfileXamlPage}"
+                                        CommandParameter="{Binding}">
+                                    <SymbolIcon Symbol="Delete" />
+                                </Button>
+                            </Grid>
+                            
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     

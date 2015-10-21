@@ -195,6 +195,28 @@ namespace KryptPadCSApp.API
 
         }
 
+        /// <summary>
+        /// Deletes the profile
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<bool> DeleteProfile(int id, string token)
+        {
+            using (var client = new HttpClient())
+            {
+                // Authorize the request.
+                AuthorizeRequest(client, token);
+                
+                // Send request and get a response
+                var response = await client.DeleteAsync(GetUrl($"api/profiles/{id}"));
+
+                // Deserialize the object based on the result
+                return response.IsSuccessStatusCode;
+            }
+
+        }
+
         #region Helper methods
 
         /// <summary>

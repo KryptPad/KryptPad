@@ -35,8 +35,9 @@ namespace KryptPadCSApp.Views
         /// <param name="e"></param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            
             base.OnNavigatedTo(e);
-
+                            
             //if we are coming from the add new category page, then the
             //parameter is the new category that was added. set the selected
             //item to the category, and when binding occurs, the pivot control
@@ -52,5 +53,6 @@ namespace KryptPadCSApp.Views
         }
 
         
+
     }
 }

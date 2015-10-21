@@ -7,23 +7,24 @@
     RequestedTheme="Light">
 
     <Application.Resources>
+        <!--FF3297D1-->
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="#FF9CD7FF" />
 
+        <SolidColorBrush x:Key="SplitViewBackgroundBrush" Color="#FF80CBFF" />
+        <SolidColorBrush x:Key="SplitViewForegroundBrush" Color="Black" />
 
-        <SolidColorBrush x:Key="SplitViewBackgroundBrush" Color="Black" />
-        <SolidColorBrush x:Key="SplitViewForegroundBrush" Color="White" />
-
-        <SolidColorBrush x:Key="MenuButtonBackgroundBrush" Color="#ff4b0082" />
+        <SolidColorBrush x:Key="MenuButtonBackgroundBrush" Color="#FF5FBDFF" />
         <SolidColorBrush x:Key="MenuButtonPressedBackgroundBrush" Color="#ff8b40c2" />
-        <SolidColorBrush x:Key="MenuButtonHoverBackgroundBrush" Color="#ff6b20a2" />
+        <SolidColorBrush x:Key="MenuButtonHoverBackgroundBrush" Color="#FF5FBDFF" />
         <SolidColorBrush x:Key="MenuButtonCheckedBackgroundBrush" Color="#ff4b0082" />
         <SolidColorBrush x:Key="MenuButtonCheckedPressedBackgroundBrush" Color="#ff4b0082" />
         <SolidColorBrush x:Key="MenuButtonCheckedHoverBackgroundBrush" Color="#ff4b0082" />
 
-        <SolidColorBrush x:Key="NavButtonPressedBackgroundBrush" Color="#ff606060" />
-        <SolidColorBrush x:Key="NavButtonHoverBackgroundBrush" Color="#ff404040" />
-        <SolidColorBrush x:Key="NavButtonCheckedBackgroundBrush" Color="#ff8b0000" />
-        <SolidColorBrush x:Key="NavButtonCheckedPressedBackgroundBrush" Color="#ffcb4040" />
-        <SolidColorBrush x:Key="NavButtonCheckedHoverBackgroundBrush" Color="#ffab2020" />
+        <SolidColorBrush x:Key="NavButtonPressedBackgroundBrush" Color="#FF4FB6FF" />
+        <SolidColorBrush x:Key="NavButtonHoverBackgroundBrush" Color="#FF5FBDFF" />
+        <SolidColorBrush x:Key="NavButtonCheckedBackgroundBrush" Color="#FF4FB6FF" />
+        <SolidColorBrush x:Key="NavButtonCheckedPressedBackgroundBrush" Color="#FF40B0FF" />
+        <SolidColorBrush x:Key="NavButtonCheckedHoverBackgroundBrush" Color="#FF6EC3FF" />
 
         <SolidColorBrush x:Key="TextForegroundBrush" Color="Black" />
         
@@ -36,8 +37,7 @@
             <Setter Property="Margin" Value="0,0,0,10" />
             <Setter Property="Foreground" Value="{StaticResource TextForegroundBrush}" />
         </Style>
-        <!--FF3297D1-->
-        <SolidColorBrush x:Key="AppBackgroundBrush" Color="#FFA0CCD3" />
+        
         
 
         <Style TargetType="TextBlock" x:Key="SplitViewTextBlockStyle">
