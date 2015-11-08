@@ -98,7 +98,9 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Models\ApiCategory.cs" />
     <Compile Include="API\Models\ApiProfile.cs" />
+    <Compile Include="API\Responses\CategoryResponse.cs" />
     <Compile Include="API\Responses\ProfileResponse.cs" />
     <Compile Include="API\Responses\OAuthTokenErrorResponse.cs" />
     <Compile Include="API\Responses\OAuthTokenResponse.cs" />

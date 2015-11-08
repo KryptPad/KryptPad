@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.API.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,15 @@ namespace KryptPadCSApp.Models
         {
             get { return (App.Current as App).AccessToken; }
             set { (App.Current as App).AccessToken = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the selected profile
+        /// </summary>
+        protected ApiProfile CurrentProfile
+        {
+            get { return (App.Current as App).CurrentProfile; }
+            set { (App.Current as App).CurrentProfile = value; }
         }
 
         /// <summary>

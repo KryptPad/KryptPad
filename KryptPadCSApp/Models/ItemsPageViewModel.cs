@@ -15,8 +15,10 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets the collection of categories
         /// </summary>
-        public CategoryCollection Categories {
-            get {
+        public CategoryCollection Categories
+        {
+            get
+            {
 
                 // Call api to get categories list
                 return new CategoryCollection();
@@ -67,7 +69,7 @@ namespace KryptPadCSApp.Models
             {
                 //navigate
                 Navigate(typeof(NewCategoryPage));
-            }, (App.Current as App).Document != null);
+            });
 
         }
 

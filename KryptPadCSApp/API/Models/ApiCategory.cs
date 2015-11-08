@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.API.Models
 {
-    class ApiProfile
+    class ApiCategory
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool HasPassword { get; set; }
+
+        public ApiProfile Profile { get; set; }
     }
 }

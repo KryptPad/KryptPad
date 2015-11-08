@@ -1,4 +1,6 @@
-﻿using KryptPadCSApp.Views;
+﻿using KryptPadCSApp.API;
+using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Windows.Input;
 
 namespace KryptPadCSApp.Models
 {
-    class NewCategoryPageViewModel : BaseModel
+    class NewCategoryPageViewModel : BasePageModel
     {
         #region Properties
 
@@ -59,16 +61,17 @@ namespace KryptPadCSApp.Models
         private void RegisterCommands()
         {
             //add the category
-            AddCategoryCommand = new Command((p) =>
+            AddCategoryCommand = new Command(async (p) =>
             {
                 //create new category
-                var category = new Category()
+                var category = new ApiCategory()
                 {
                     Name = CategoryName
                 };
 
-                //add to the list
-                (App.Current as App).Document.Categories.Add(category);
+                // Send the category to the api
+                var resp = await KryptPadApi.CreateCategoryAsync(CurrentProfile, category, AccessToken);
+                
 
                 //navigate
                 Navigate(typeof(ItemsPage), category);

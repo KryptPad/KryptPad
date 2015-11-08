@@ -34,6 +34,10 @@ namespace KryptPadCSApp.Models
             set
             {
                 _selectedProfile = value;
+
+                // Set the selected profile
+                CurrentProfile = _selectedProfile;
+
                 //// Notify changes
                 //OnPropertyChanged(nameof(SelectedProfile));
                 var frame = Window.Current.Content as Frame;

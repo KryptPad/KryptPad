@@ -42,7 +42,7 @@ namespace KryptPadCSApp.API
                     { "username", username },
                     { "password", password }
                 };
-                
+
                 //create the content to send
                 var content = new FormUrlEncodedContent(values);
                 //send the post request
@@ -57,13 +57,14 @@ namespace KryptPadCSApp.API
                     //deserialize the data and get the access token
                     return JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
 
-                }else
+                }
+                else
                 {
                     //deserialize the data and get the access token
                     return JsonConvert.DeserializeObject<OAuthTokenErrorResponse>(data);
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace KryptPadCSApp.API
                     return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -207,7 +208,7 @@ namespace KryptPadCSApp.API
             {
                 // Authorize the request.
                 AuthorizeRequest(client, token);
-                
+
                 // Send request and get a response
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{id}"));
 
@@ -238,7 +239,35 @@ namespace KryptPadCSApp.API
                 if (response.IsSuccessStatusCode)
                 {
                     //deserialize the response as an ApiResponse object
-                    return null;// JsonConvert.DeserializeObject<ProfileResponse>(data);
+                    return JsonConvert.DeserializeObject<CategoryResponse>(data);
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                }
+            }
+
+        }
+
+        public static async Task<ApiResponse> CreateCategoryAsync(ApiProfile profile, ApiCategory category, string token)
+        {
+            using (var client = new HttpClient())
+            {
+                // Authorize the request.
+                AuthorizeRequest(client, token);
+                // Create JSON content.
+                var content = JsonContent(category);
+                // Send request and get a response
+                var response = await client.PostAsync(GetUrl($"api/profiles/{profile.Id}/categories"), content);
+
+                // Read the data
+                var data = await response.Content.ReadAsStringAsync();
+
+                // Deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    // Deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<CategoryResponse>(data);
                 }
                 else
                 {

@@ -1,4 +1,5 @@
 ﻿using KryptPad.Security;
+using KryptPadCSApp.API.Models;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Models;
 using KryptPadCSApp.UserControls;
@@ -64,6 +65,11 @@ namespace KryptPadCSApp
         /// Gets or sets the API OAuth access token to authorize API calls
         /// </summary>
         internal string AccessToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current profile Id
+        /// </summary>
+        internal ApiProfile CurrentProfile { get; set; }
 
         /// <summary>
         /// Gets or sets whether the auto login is temporarily disabled
