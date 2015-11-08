@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Views;
+﻿using KryptPadCSApp.API;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,11 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets the collection of categories
         /// </summary>
-        public CategoryCollection Categories
-        {
+        public CategoryCollection Categories {
             get {
-                //return list of categories
-                return (App.Current as App).Document?.Categories;
+
+                // Call api to get categories list
+                return new CategoryCollection();
             }
         }
 
@@ -50,25 +51,11 @@ namespace KryptPadCSApp.Models
 
         public ItemsPageViewModel()
         {
-            //register commands
+            // Register commands
             RegisterCommands();
 
-            //listen for changes to document. this occurs mainly when a new document
-            //is created. we have to let the model know so we can notify changes to the
-            //categories property
-            (App.Current as App).PropertyChanged += (sender, e) =>
-            {
-                
-                //raise property changed event for categories
-                OnPropertyChanged(nameof(Categories));
-
-                //enable controls?
-                var enabled = (App.Current as App).Document != null;
-
-                //set the command CanExecute
-                AddCategoryCommand.CommandCanExecute = enabled;
-            };
-
+            // Get list of categories
+            var t = RefreshCategories();
         }
 
         /// <summary>
@@ -84,5 +71,9 @@ namespace KryptPadCSApp.Models
 
         }
 
+        private async Task RefreshCategories()
+        {
+            var resp = await KryptPadApi.GetCategoriesAsync(1, (App.Current as App).AccessToken);
+        }
     }
 }

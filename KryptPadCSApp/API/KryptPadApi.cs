@@ -24,7 +24,7 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets the host address of the API service. Must be changed before going live
         /// </summary>
-        private static string ServiceHost { get; } = "http://localhost:50821/";
+        private static string ServiceHost { get; } = "http://localhost:50821/"; // "https://www.kryptpad.com/"; //
 
         /// <summary>
         /// Creates an authorization request
@@ -141,7 +141,7 @@ namespace KryptPadCSApp.API
         /// <param name="id"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> GetProfile(int id, string token)
+        public static async Task<ApiResponse> GetProfileAsync(int id, string token)
         {
             using (var client = new HttpClient())
             {
@@ -216,6 +216,38 @@ namespace KryptPadCSApp.API
             }
 
         }
+
+        #region Categories
+        /// <summary>
+        /// Gets all profiles for the authenticated user
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<ApiResponse> GetCategoriesAsync(int profileId, string token)
+        {
+            using (var client = new HttpClient())
+            {
+                //authorize the request
+                AuthorizeRequest(client, token);
+                //send request and get a response
+                var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories"));
+                //read the data
+                var data = await response.Content.ReadAsStringAsync();
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    //deserialize the response as an ApiResponse object
+                    return null;// JsonConvert.DeserializeObject<ProfileResponse>(data);
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                }
+            }
+
+        }
+        #endregion
 
         #region Helper methods
 
