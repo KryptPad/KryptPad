@@ -1,4 +1,5 @@
 ﻿using KryptPadCSApp.API;
+using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,19 @@ namespace KryptPadCSApp.Models
         private async Task RefreshCategories()
         {
             var resp = await KryptPadApi.GetCategoriesAsync(1, (App.Current as App).AccessToken);
+
+            // Check to see if the response is success
+            if (resp is CategoryResponse)
+            {
+                // Get categories
+                var categories = (resp as CategoryResponse).Categories;
+                // Create list of categories
+                foreach (var category in categories)
+                {
+                    // Add to observable
+                    Categories.Add(category);
+                }
+            }
         }
     }
 }

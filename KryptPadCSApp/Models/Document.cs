@@ -71,18 +71,18 @@ namespace KryptPadCSApp.Models
 
             InitializeCategoryCollectionChangeTracking();
 
-            //for existing categories, listen to the items collection and properties
-            foreach (var category in Categories)
-            {
-                InitializeItemCollectionChangeTracking(category);
+            ////for existing categories, listen to the items collection and properties
+            //foreach (var category in Categories)
+            //{
+            //    InitializeItemCollectionChangeTracking(category);
 
-                //listen to items
-                foreach (var item in category.Items)
-                {
-                    InitializeFieldCollectionChangeTracking(item);
+            //    //listen to items
+            //    foreach (var item in category.Items)
+            //    {
+            //        InitializeFieldCollectionChangeTracking(item);
 
-                }
-            }
+            //    }
+            //}
 
         }
 
