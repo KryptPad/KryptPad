@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.API.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace KryptPadCSApp.Models
 {
     class EditItemPageParams : PageNavigationParamsBase
     {
-        public Category Category { get; set; }
+        public ApiCategory Category { get; set; }
         public ItemBase Item { get; set; }
     }
 }

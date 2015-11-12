@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Classes;
+﻿using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Classes;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets or sets the category for the new item
         /// </summary>
-        public Category Category { get; set; }
+        public ApiCategory Category { get; set; }
 
         private ItemBase _item;
         /// <summary>
@@ -193,7 +194,7 @@ namespace KryptPadCSApp.Models
                     (item as Note).Notes = Notes;
                 }
 
-                //check if the item is in the category
+                // Check if the item is in the category
                 if (!Category.Items.Contains(item))
                 {
                     //add the item to the current category

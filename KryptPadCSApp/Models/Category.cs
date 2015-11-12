@@ -74,23 +74,23 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            //handle item click
-            ItemClickCommand = new Command((p) =>
-            {
-                var item = p as ItemBase;
+            ////handle item click
+            //ItemClickCommand = new Command((p) =>
+            //{
+            //    var item = p as ItemBase;
 
-                if (item is AddItem)
-                {
-                    //navigate to add new
-                    Navigate(typeof(NewItemPage), this);
-                }
-                else 
-                {
-                    //navigate to edit
-                    Navigate(typeof(EditItemPage), new EditItemPageParams() { Category = this, Item = item });
-                }
+            //    if (item is AddItem)
+            //    {
+            //        //navigate to add new
+            //        Navigate(typeof(NewItemPage), this);
+            //    }
+            //    else 
+            //    {
+            //        //navigate to edit
+            //        Navigate(typeof(EditItemPage), new EditItemPageParams() { Category = this, Item = item });
+            //    }
 
-            }, false);
+            //}, false);
         }
     }
 }

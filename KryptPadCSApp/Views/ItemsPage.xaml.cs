@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Models;
+﻿using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,12 +43,12 @@ namespace KryptPadCSApp.Views
             //parameter is the new category that was added. set the selected
             //item to the category, and when binding occurs, the pivot control
             //will select the new category
-            if (e.Parameter != null && e.Parameter is Category)
+            if (e.Parameter != null && e.Parameter is ApiCategory)
             {
                 var model = DataContext as ItemsPageViewModel;
                 if (model != null)
                 {
-                    model.SelectedCategory = e.Parameter as Category;
+                    model.SelectedCategory = e.Parameter as ApiCategory;
                 }
             }
         }

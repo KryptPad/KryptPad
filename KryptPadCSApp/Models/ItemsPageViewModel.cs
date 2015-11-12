@@ -1,4 +1,5 @@
 ﻿using KryptPadCSApp.API;
+using KryptPadCSApp.API.Models;
 using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Views;
 using System;
@@ -10,27 +11,19 @@ using System.Windows.Input;
 
 namespace KryptPadCSApp.Models
 {
-    class ItemsPageViewModel : BaseModel
+    class ItemsPageViewModel : BasePageModel
     {
         #region Properties
         /// <summary>
         /// Gets the collection of categories
         /// </summary>
-        public CategoryCollection Categories
-        {
-            get
-            {
+        public CategoryCollection Categories { get; protected set; } = new CategoryCollection();
 
-                // Call api to get categories list
-                return new CategoryCollection();
-            }
-        }
-
-        private Category _selectedCategory;
+        private ApiCategory _selectedCategory;
         /// <summary>
         /// Gets or sets the selected category
         /// </summary>
-        public Category SelectedCategory
+        public ApiCategory SelectedCategory
         {
             get { return _selectedCategory; }
             set
@@ -47,6 +40,10 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public Command AddCategoryCommand { get; private set; }
 
+        /// <summary>
+        /// Opens the add item page
+        /// </summary>
+        public Command AddItemCommand { get; private set; }
 
 
         #endregion
@@ -68,15 +65,19 @@ namespace KryptPadCSApp.Models
         {
             AddCategoryCommand = new Command((p) =>
             {
-                //navigate
+                // Navigate
                 Navigate(typeof(NewCategoryPage));
             });
 
+            AddItemCommand = new Command((p) => {
+                // Navigate
+                Navigate(typeof(NewItemPage), SelectedCategory);
+            });
         }
 
         private async Task RefreshCategories()
         {
-            var resp = await KryptPadApi.GetCategoriesAsync(1, (App.Current as App).AccessToken);
+            var resp = await KryptPadApi.GetCategoriesAsync(CurrentProfile.Id, AccessToken);
 
             // Check to see if the response is success
             if (resp is CategoryResponse)

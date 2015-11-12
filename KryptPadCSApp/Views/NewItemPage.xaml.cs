@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Models;
+﻿using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,12 +38,12 @@ namespace KryptPadCSApp.Views
             base.OnNavigatedTo(e);
 
             //set the category of the NewItemPageViewModel
-            if (e.Parameter != null && e.Parameter is Category)
+            if (e.Parameter != null && e.Parameter is ApiCategory)
             {
                 var model = DataContext as NewItemPageViewModel;
                 if (model != null)
                 {
-                    model.Category = e.Parameter as Category;
+                    model.Category = e.Parameter as ApiCategory;
                 }
             }
         }
