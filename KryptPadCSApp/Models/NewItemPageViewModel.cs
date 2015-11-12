@@ -195,11 +195,11 @@ namespace KryptPadCSApp.Models
                 }
 
                 // Check if the item is in the category
-                if (!Category.Items.Contains(item))
-                {
-                    //add the item to the current category
-                    Category.Items.Add(item);
-                }
+                //if (!Category.Items.Contains(item))
+                //{
+                //    //add the item to the current category
+                //    Category.Items.Add(item);
+                //}
 
 
                 //navigate back to items and make sure category is selected

@@ -18,7 +18,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>KryptPadCSApp_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>B18C4352948EB8986BB9DA6EDE4BCA3E8DFAD3FD</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>4B4A6CD71FAC42089B85827DE77F64475109458D</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -99,8 +99,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Models\ApiCategory.cs" />
+    <Compile Include="API\Models\ApiItem.cs" />
     <Compile Include="API\Models\ApiProfile.cs" />
     <Compile Include="API\Responses\CategoryResponse.cs" />
+    <Compile Include="API\Responses\ItemResponse.cs" />
     <Compile Include="API\Responses\ProfileResponse.cs" />
     <Compile Include="API\Responses\OAuthTokenErrorResponse.cs" />
     <Compile Include="API\Responses\OAuthTokenResponse.cs" />

@@ -220,7 +220,7 @@ namespace KryptPadCSApp.API
 
         #region Categories
         /// <summary>
-        /// Gets all profiles for the authenticated user
+        /// Gets all categories for the authenticated user
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
@@ -278,6 +278,38 @@ namespace KryptPadCSApp.API
         }
         #endregion
 
+
+        #region Items
+        /// <summary>
+        /// Gets all categories for the authenticated user
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<ApiResponse> GetItemsAsync(int profileId, int categoryId, string token)
+        {
+            using (var client = new HttpClient())
+            {
+                //authorize the request
+                AuthorizeRequest(client, token);
+                //send request and get a response
+                var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items"));
+                //read the data
+                var data = await response.Content.ReadAsStringAsync();
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    //deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<ItemResponse>(data);
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                }
+            }
+
+        }
+        #endregion
         #region Helper methods
 
         /// <summary>
