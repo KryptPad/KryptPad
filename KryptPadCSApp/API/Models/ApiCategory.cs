@@ -12,7 +12,7 @@ namespace KryptPadCSApp.API.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public List<ApiItem> Items { get; set; } = new List<ApiItem>();
+        public ApiItem[] Items { get; set; }
 
         public ApiProfile Profile { get; set; }
     }

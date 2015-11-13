@@ -64,7 +64,7 @@ namespace KryptPadCSApp.Models
         public Category()
         {
             //initialize collection with an add item as the first item
-            Items.Add(ItemBase.CreateAddItem());
+            //Items.Add(ItemBase.CreateAddItem());
 
             RegisterCommands();
         }

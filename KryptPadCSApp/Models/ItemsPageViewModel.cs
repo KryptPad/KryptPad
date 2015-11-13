@@ -87,14 +87,6 @@ namespace KryptPadCSApp.Models
                 // Create list of categories
                 foreach (var category in categories)
                 {
-                    // TODO: perhaps would be better to get the items with the categories
-                    var itemresp = await KryptPadApi.GetItemsAsync(CurrentProfile.Id, category.Id, AccessToken) as  ItemResponse;
-                    if (itemresp != null)
-                    {
-                        category.Items = itemresp.Items.ToList();
-                        
-                    }
-
                     // Add to observable
                     Categories.Add(category);
                 }
