@@ -36,14 +36,14 @@
                      HorizontalAlignment="Left"
                      Width="250"/>
 
-            <TextBlock Text="Item type" />
+            <!--<TextBlock Text="Item type" />
             <ComboBox ItemsSource="{Binding ItemTypes}"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
 
         </StackPanel>
 
         <!--Visibility="{Binding FieldsVisibility}"-->
-        <Grid Visibility="{Binding FieldsVisibility}"
+        <Grid
               Grid.Row="1"
               Width="250"
               
@@ -118,12 +118,12 @@
         </Grid>
 
 
-        <Grid Visibility="{Binding NotesVisibility}"
+        <!--<Grid Visibility="{Binding NotesVisibility}"
               Grid.Row="1">
 
             <TextBox Text="{Binding Notes, Mode=TwoWay}"
                      AcceptsReturn="True"/>
-        </Grid>
+        </Grid>-->
         
     </Grid>
 </Page>

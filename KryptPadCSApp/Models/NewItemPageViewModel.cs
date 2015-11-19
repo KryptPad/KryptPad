@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.API.Models;
+﻿using KryptPadCSApp.API;
+using KryptPadCSApp.API.Models;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Views;
 using System;
@@ -11,7 +12,7 @@ using Windows.UI.Xaml;
 
 namespace KryptPadCSApp.Models
 {
-    class NewItemPageViewModel : BaseModel
+    class NewItemPageViewModel : BasePageModel
     {
         #region Properties
 
@@ -20,11 +21,11 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public ApiCategory Category { get; set; }
 
-        private ItemBase _item;
+        private ApiItem _item;
         /// <summary>
         /// Gets or sets the current item for editing
         /// </summary>
-        public ItemBase Item
+        public ApiItem Item
         {
             get { return _item; }
             set
@@ -61,26 +62,26 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        public string[] ItemTypes { get; protected set; }
+        //public string[] ItemTypes { get; protected set; }
 
-        private string _selectedItem;
-        /// <summary>
-        /// Gets or sets the selected item
-        /// </summary>
-        public string SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                _selectedItem = value;
-                //notify change
-                OnPropertyChanged(nameof(SelectedItem));
-                OnPropertyChanged(nameof(FieldsVisibility));
-                OnPropertyChanged(nameof(NotesVisibility));
-                //if there is some text, then we can execute
-                AddItemCommand.CommandCanExecute = CanAddItem();
-            }
-        }
+        //private string _selectedItem;
+        ///// <summary>
+        ///// Gets or sets the selected item
+        ///// </summary>
+        //public string SelectedItem
+        //{
+        //    get { return _selectedItem; }
+        //    set
+        //    {
+        //        _selectedItem = value;
+        //        //notify change
+        //        OnPropertyChanged(nameof(SelectedItem));
+        //        OnPropertyChanged(nameof(FieldsVisibility));
+        //        OnPropertyChanged(nameof(NotesVisibility));
+        //        //if there is some text, then we can execute
+        //        AddItemCommand.CommandCanExecute = CanAddItem();
+        //    }
+        //}
 
         /// <summary>
         /// Gets a collection of fields
@@ -103,27 +104,27 @@ namespace KryptPadCSApp.Models
         }
 
 
-        /// <summary>
-        /// Gets whether or not to display the fields list
-        /// </summary>
-        public Visibility FieldsVisibility
-        {
-            get
-            {
-                return SelectedItem == "Profile" ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
+        ///// <summary>
+        ///// Gets whether or not to display the fields list
+        ///// </summary>
+        //public Visibility FieldsVisibility
+        //{
+        //    get
+        //    {
+        //        return SelectedItem == "Profile" ? Visibility.Visible : Visibility.Collapsed;
+        //    }
+        //}
 
-        /// <summary>
-        /// Gets whether or not to display the fields list
-        /// </summary>
-        public Visibility NotesVisibility
-        {
-            get
-            {
-                return SelectedItem == "Note" ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
+        ///// <summary>
+        ///// Gets whether or not to display the fields list
+        ///// </summary>
+        //public Visibility NotesVisibility
+        //{
+        //    get
+        //    {
+        //        return SelectedItem == "Note" ? Visibility.Visible : Visibility.Collapsed;
+        //    }
+        //}
 
         public Command AddItemCommand { get; protected set; }
 
@@ -138,7 +139,7 @@ namespace KryptPadCSApp.Models
         public NewItemPageViewModel()
         {
             RegisterCommands();
-            ItemTypes = new string[] { "Profile", "Note" };
+            //ItemTypes = new string[] { "Profile", "Note" };
         }
 
         /// <summary>
@@ -147,65 +148,7 @@ namespace KryptPadCSApp.Models
         private void RegisterCommands()
         {
             //add the category
-            AddItemCommand = new Command((p) =>
-            {
-                ItemBase item = Item;
-
-                //if we do not have an item for editing, then create the instance now
-                if (item == null)
-                {
-                    //create new item and add it to the category
-                    if (SelectedItem == "Profile")
-                    {
-                        item = new Profile();
-                    }
-                    else
-                    {
-                        item = new Note();
-                    }
-
-                }
-
-
-                //set the properties of the item. If this was loaded from an existing item
-                //then the properties will contain the name and category
-                item.Name = ItemName;
-
-                //if the item is a profile, add the fields that do not exist
-                if (item is Profile)
-                {
-                    //we need reference to profile
-                    var profileItem = item as Profile;
-
-                    //compare to the fields already in the item
-                    var itemsNotInProfile = (from f in Fields
-                                             where !profileItem.Fields.Contains(f)
-                                             select f);
-
-                    //add the fields that are not already in the list
-                    foreach (var field in itemsNotInProfile)
-                    {
-                        profileItem.Fields.Add(field);
-                    }
-                }
-                else
-                {
-                    //set notes property
-                    (item as Note).Notes = Notes;
-                }
-
-                // Check if the item is in the category
-                //if (!Category.Items.Contains(item))
-                //{
-                //    //add the item to the current category
-                //    Category.Items.Add(item);
-                //}
-
-
-                //navigate back to items and make sure category is selected
-                Navigate(typeof(ItemsPage), Category);
-
-            }, false);
+            AddItemCommand = new Command(AddItem, false);
 
             AddFieldCommand = new Command(async (p) =>
             {
@@ -244,38 +187,78 @@ namespace KryptPadCSApp.Models
         /// Loads an IItem into the view model
         /// </summary>
         /// <param name="item"></param>
-        private void LoadItem(ItemBase item)
+        private void LoadItem(ApiItem item)
         {
             ItemName = item.Name;
 
-            //if this is a profile, then we have fields
-            if (item is Profile)
+            ////if this is a profile, then we have fields
+            //if (item is Profile)
+            //{
+            //    //copy the fields to the fields property
+            //    foreach (var field in (item as Profile).Fields)
+            //    {
+            //        Fields.Add(field);
+            //    }
+
+            //    SelectedItem = "Profile";
+            //}
+            //else
+            //{
+            //    Notes = (item as Note).Notes;
+
+            //    SelectedItem = "Note";
+            //}
+
+
+        }
+
+        /// <summary>
+        /// Creates / edits item
+        /// </summary>
+        /// <param name="p"></param>
+        private async void AddItem(object p)
+        {
+            ApiItem item = Item;
+
+            // If we do not have an item for editing, then create the instance now
+            if (item == null)
             {
-                //copy the fields to the fields property
-                foreach (var field in (item as Profile).Fields)
-                {
-                    Fields.Add(field);
-                }
-
-                SelectedItem = "Profile";
+                item = new ApiItem();
             }
-            else
-            {
-                Notes = (item as Note).Notes;
+            
+            // Set the properties of the item. If this was loaded from an existing item
+            // then the properties will contain the name and category.
+            item.Name = ItemName;
 
-                SelectedItem = "Note";
-            }
+            // Add the fields that do not exist
 
 
+            ////compare to the fields already in the item
+            //var itemsNotInProfile = (from f in Fields
+            //                         where !item.Fields.Contains(f)
+            //                         select f);
+
+            ////add the fields that are not already in the list
+            //foreach (var field in itemsNotInProfile)
+            //{
+            //    item.Fields.Add(field);
+            //}
+
+
+
+            // Create or update the item
+            var resp = await KryptPadApi.CreateItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken);
+
+
+            //navigate back to items and make sure category is selected
+            Navigate(typeof(ItemsPage), Category);
         }
 
         /// <summary>
         /// Determines if the user can add an item
         /// </summary>
         /// <returns></returns>
-        private bool CanAddItem() => SelectedItem != null
-            && !string.IsNullOrWhiteSpace(_itemName);
-        //&& (Fields.Count == 0 || (Fields.Count > 0 && Fields.All(f => !string.IsNullOrWhiteSpace(f.Name))));
+        private bool CanAddItem() => !string.IsNullOrWhiteSpace(_itemName);
 
 
 

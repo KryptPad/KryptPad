@@ -309,6 +309,45 @@ namespace KryptPadCSApp.API
             }
 
         }
+
+        /// <summary>
+        /// Creates a new item in the specified category
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="item"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<ApiResponse> CreateItemAsync(int profileId, int categoryId, ApiItem item, string token)
+        {
+            using (var client = new HttpClient())
+            {
+
+                // Authorize the request.
+                AuthorizeRequest(client, token);
+
+                // Create content to send
+                var content = JsonContent(item);
+
+                // Execute request
+                var response = await client.PostAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items"), content);
+
+                // Get the response content
+                var data = await response.Content.ReadAsStringAsync();
+
+                // Check if the response is a success code
+                if (response.IsSuccessStatusCode)
+                {
+                    return new SuccessResponse();
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                }
+            }
+
+        }
+
         #endregion
         #region Helper methods
 

@@ -10,7 +10,7 @@ namespace KryptPadCSApp.API.Models
     {
         public int Id { get; set; }
         public int ItemType { get; set; }
-        public string ItemName { get; set; }
+        public string Name { get; set; }
 
         public ApiCategory Category { get; set; }
     }
