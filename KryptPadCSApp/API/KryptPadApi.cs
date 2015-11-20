@@ -344,6 +344,8 @@ namespace KryptPadCSApp.API
                 {
                     return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
                 }
+
+
             }
 
         }

@@ -11,6 +11,6 @@ namespace KryptPadCSApp.API.Responses
     {
         public string Message { get; set; }
         
-        public ModelState ModelState { get; set; }
+        public IDictionary<string, string[]> ModelState { get; set; }
     }
 }

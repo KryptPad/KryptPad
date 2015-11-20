@@ -104,9 +104,9 @@ namespace KryptPadCSApp.Models
                     else
                     {
                         //get the response
-                        var error = (response as WebExceptionResponse).ModelState.Errors.FirstOrDefault();
+                        var error = (response as WebExceptionResponse).ModelState;//.Errors.FirstOrDefault();
 
-                        await DialogHelper.ShowMessageDialog(error);
+                        await DialogHelper.ShowMessageDialog(error.ToString());
                     }
                 }
                 catch (Exception ex)
