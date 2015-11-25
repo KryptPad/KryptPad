@@ -68,15 +68,14 @@
             
             <!--<ScrollViewer Grid.Row="1" Margin="0,10,0,0" 
                           Padding="0,0,50,0">-->
-                
+            
                 <!--Display a list of fields-->
                 <GridView ItemsSource="{Binding Fields}"
                               
-                          
                           Grid.Row="1">
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <VariableSizedWrapGrid Orientation="Vertical" />
+                            <ItemsWrapGrid Orientation="Vertical" />
 
                         </ItemsPanelTemplate>
                     </GridView.ItemsPanel>
