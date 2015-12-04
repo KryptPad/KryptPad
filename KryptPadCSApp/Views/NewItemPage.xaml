@@ -45,9 +45,8 @@
         <!--Visibility="{Binding FieldsVisibility}"-->
         <Grid
               Grid.Row="1"
-              
-            HorizontalAlignment="Stretch"
-            >
+              HorizontalAlignment="Stretch"
+              >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*" />
@@ -63,16 +62,23 @@
             </StackPanel>
 
 
-            
-            
-            
-            <!--<ScrollViewer Grid.Row="1" Margin="0,10,0,0" 
-                          Padding="0,0,50,0">-->
-            
-                <!--Display a list of fields-->
+            <!--Split this row into two columns with a grid, the right side will be for notes, and the left side for custom user fields-->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <!--Custom fields-->
                 <GridView ItemsSource="{Binding Fields}"
-                              
-                          Grid.Row="1">
+                          HorizontalAlignment="Stretch"
+                          ScrollViewer.HorizontalScrollMode="Auto"
+                          Grid.Column="0"
+                          Grid.Row="0">
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <ItemsWrapGrid Orientation="Vertical" />
@@ -80,15 +86,21 @@
                         </ItemsPanelTemplate>
                     </GridView.ItemsPanel>
 
-                    <x:String>One</x:String>
-                    <x:String>Two</x:String>
-                    <x:String>Three</x:String>
-                    <x:String>Four</x:String>
-
-
                 </GridView>
-            <!--</ScrollViewer>-->
 
+                <!--Notes-->
+                
+                <TextBox Grid.Column="1"
+                         Grid.Row="0"
+                         x:Name="NotesTextBox"
+                         
+                         Text="{Binding Notes, Mode=TwoWay}"
+                         AcceptsReturn="True"/>
+
+                
+                
+            </Grid>
+            
 
         </Grid>
 
@@ -99,6 +111,32 @@
             <TextBox Text="{Binding Notes, Mode=TwoWay}"
                      AcceptsReturn="True"/>
         </Grid>-->
-        
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualStatePhone">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="NotesTextBox.Width" Value="100" />
+                        <Setter Target="NotesTextBox.Grid.Row" Value="1" />
+                        <Setter Target="NotesTextBox.Grid.Column" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="VisualStateTablet">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="600"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="NotesTextBox.Width" Value="600" />
+                        <Setter Target="NotesTextBox.Grid.Row" Value="0" />
+                        <Setter Target="NotesTextBox.Grid.Column" Value="1" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>
