@@ -43,10 +43,7 @@
         </StackPanel>
 
         <!--Visibility="{Binding FieldsVisibility}"-->
-        <Grid
-              Grid.Row="1"
-              HorizontalAlignment="Stretch"
-              >
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*" />
@@ -63,44 +60,51 @@
 
 
             <!--Split this row into two columns with a grid, the right side will be for notes, and the left side for custom user fields-->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="1">
+                <Grid x:Name="MainGrid" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
 
-                <!--Custom fields-->
-                <GridView ItemsSource="{Binding Fields}"
-                          HorizontalAlignment="Stretch"
-                          ScrollViewer.HorizontalScrollMode="Auto"
-                          Grid.Column="0"
-                          Grid.Row="0">
-                    <GridView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <ItemsWrapGrid Orientation="Vertical" />
+                    <Grid x:Name="FirstGrid" Grid.Column="0" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
+                                   Grid.Row="0">Fields</TextBlock>
+                        <!--Custom fields-->
+                        <ListBox ItemsSource="{Binding Fields}"
+                              
+                              Grid.Row="1">
 
-                        </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>
+                        </ListBox>
 
-                </GridView>
+                    </Grid>
+                    
+                    <Grid x:Name="SecondGrid" Grid.Column="1" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
+                               Grid.Row="0">Notes</TextBlock>
+                        <!--Notes-->
+                        <TextBox x:Name="NotesTextBox"
+                                 Text="{Binding Notes, Mode=TwoWay}"
+                                 AcceptsReturn="True"
+                                 Grid.Row="1"/>
 
-                <!--Notes-->
-                
-                <TextBox Grid.Column="1"
-                         Grid.Row="0"
-                         x:Name="NotesTextBox"
-                         
-                         Text="{Binding Notes, Mode=TwoWay}"
-                         AcceptsReturn="True"/>
 
-                
-                
-            </Grid>
-            
+                    </Grid>
+
+                </Grid>
+            </ScrollViewer>
 
         </Grid>
 
@@ -119,21 +123,30 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="NotesTextBox.Width" Value="100" />
-                        <Setter Target="NotesTextBox.Grid.Row" Value="1" />
-                        <Setter Target="NotesTextBox.Grid.Column" Value="0" />
+                        <Setter Target="MainGrid.Margin" Value="12"/>
+                        <Setter Target="FirstGrid.Margin" Value="0 0 0 6"/>
+                        <Setter Target="SecondGrid.Margin" Value="0 6 0 0"/>
+                        <Setter Target="MainGrid.RowDefinitions[1].Height" Value="*"/>
+                        <Setter Target="MainGrid.ColumnDefinitions[1].Width" Value="auto"/>
+                        <Setter Target="SecondGrid.(Grid.Column)" Value="0"/>
+                        <Setter Target="SecondGrid.(Grid.Row)" Value="1"/>
                     </VisualState.Setters>
                 </VisualState>
 
                 <VisualState x:Name="VisualStateTablet">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="600"/>
+                        <AdaptiveTrigger MinWindowWidth="720"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="NotesTextBox.Width" Value="600" />
-                        <Setter Target="NotesTextBox.Grid.Row" Value="0" />
-                        <Setter Target="NotesTextBox.Grid.Column" Value="1" />
+                        <Setter Target="MainGrid.Margin" Value="24"/>
+                        <Setter Target="MainGrid.RowDefinitions[1].Height" Value="auto"/>
+                        <Setter Target="MainGrid.ColumnDefinitions[1].Width" Value="*"/>
+                        <Setter Target="FirstGrid.Margin" Value="0 0 6 0"/>
+                        <Setter Target="SecondGrid.Margin" Value="6 0 0 0"/>
+                        <Setter Target="SecondGrid.(Grid.Column)" Value="1"/>
+                        <Setter Target="SecondGrid.(Grid.Row)" Value="0"/>
+
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

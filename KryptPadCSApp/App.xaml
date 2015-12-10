@@ -10,8 +10,8 @@
         <!--FF3297D1-->
         <SolidColorBrush x:Key="AppBackgroundBrush" Color="#FF9CD7FF" />
 
-        <SolidColorBrush x:Key="SplitViewBackgroundBrush" Color="#FF80CBFF" />
-        <SolidColorBrush x:Key="SplitViewForegroundBrush" Color="Black" />
+        <SolidColorBrush x:Key="SplitViewBackgroundBrush" Color="#FF333333" />
+        <SolidColorBrush x:Key="SplitViewForegroundBrush" Color="White" />
 
         <SolidColorBrush x:Key="MenuButtonBackgroundBrush" Color="#FF5FBDFF" />
         <SolidColorBrush x:Key="MenuButtonPressedBackgroundBrush" Color="#ff8b40c2" />
@@ -20,11 +20,11 @@
         <SolidColorBrush x:Key="MenuButtonCheckedPressedBackgroundBrush" Color="#ff4b0082" />
         <SolidColorBrush x:Key="MenuButtonCheckedHoverBackgroundBrush" Color="#ff4b0082" />
 
-        <SolidColorBrush x:Key="NavButtonPressedBackgroundBrush" Color="#FF4FB6FF" />
-        <SolidColorBrush x:Key="NavButtonHoverBackgroundBrush" Color="#FF5FBDFF" />
-        <SolidColorBrush x:Key="NavButtonCheckedBackgroundBrush" Color="#FF4FB6FF" />
-        <SolidColorBrush x:Key="NavButtonCheckedPressedBackgroundBrush" Color="#FF40B0FF" />
-        <SolidColorBrush x:Key="NavButtonCheckedHoverBackgroundBrush" Color="#FF6EC3FF" />
+        <SolidColorBrush x:Key="NavButtonPressedBackgroundBrush" Color="#FF505050" />
+        <SolidColorBrush x:Key="NavButtonHoverBackgroundBrush" Color="#FF555555" />
+        <SolidColorBrush x:Key="NavButtonCheckedBackgroundBrush" Color="#FF505050" />
+        <SolidColorBrush x:Key="NavButtonCheckedPressedBackgroundBrush" Color="#FF606060" />
+        <SolidColorBrush x:Key="NavButtonCheckedHoverBackgroundBrush" Color="#FF656565" />
 
         <SolidColorBrush x:Key="TextForegroundBrush" Color="Black" />
         
@@ -37,8 +37,12 @@
             <Setter Property="Margin" Value="0,0,0,10" />
             <Setter Property="Foreground" Value="{StaticResource TextForegroundBrush}" />
         </Style>
-        
-        
+
+        <Style x:Key="MediumHeaderTextBlock" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="26" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="Foreground" Value="#FFCCCCCC" />
+        </Style>
 
         <Style TargetType="TextBlock" x:Key="SplitViewTextBlockStyle">
             <Setter Property="VerticalAlignment" Value="Center" />
