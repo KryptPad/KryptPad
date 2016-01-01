@@ -98,7 +98,8 @@
                         <TextBox x:Name="NotesTextBox"
                                  Text="{Binding Notes, Mode=TwoWay}"
                                  AcceptsReturn="True"
-                                 Grid.Row="1"/>
+                                 Grid.Row="1"
+                                 MinHeight="300"/>
 
 
                     </Grid>

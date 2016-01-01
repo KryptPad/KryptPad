@@ -4,11 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp"
     xmlns:Models="using:KryptPadCSApp.Models"
-    RequestedTheme="Light">
+    RequestedTheme="Dark">
 
     <Application.Resources>
         <!--FF3297D1-->
-        <SolidColorBrush x:Key="AppBackgroundBrush" Color="#FF9CD7FF" />
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="#FF333333" />
 
         <SolidColorBrush x:Key="SplitViewBackgroundBrush" Color="#FF333333" />
         <SolidColorBrush x:Key="SplitViewForegroundBrush" Color="White" />
