@@ -20,14 +20,14 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="10">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="10">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+        <StackPanel Grid.Row="0" Margin="0" Padding="0,0,0,10">
 
             <TextBlock Text="{Binding Category.Name}" FontSize="{ThemeResource SplitViewLargeNavFontSize }" />
 
@@ -61,6 +61,7 @@
 
             <!--Split this row into two columns with a grid, the right side will be for notes, and the left side for custom user fields-->
             <ScrollViewer Grid.Row="1">
+                <!--MainGrid is responsive-->
                 <Grid x:Name="MainGrid" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -74,19 +75,23 @@
                     <Grid x:Name="FirstGrid" Grid.Column="0" Grid.Row="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                        
                         <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
                                    Grid.Row="0">Fields</TextBlock>
-                        <!--Custom fields-->
-                        <ListBox ItemsSource="{Binding Fields}"
-                              
-                              Grid.Row="1">
 
-                        </ListBox>
+                        <!--Custom fields-->
+                        <ScrollViewer Grid.Row="1">
+                            <ListBox ItemsSource="{Binding Fields}"
+                              
+                              >
+
+                            </ListBox>
+                        </ScrollViewer>
 
                     </Grid>
-                    
+
                     <Grid x:Name="SecondGrid" Grid.Column="1" Grid.Row="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
@@ -99,7 +104,7 @@
                                  Text="{Binding Notes, Mode=TwoWay}"
                                  AcceptsReturn="True"
                                  Grid.Row="1"
-                                 MinHeight="300"/>
+                                 />
 
 
                     </Grid>
@@ -131,6 +136,7 @@
                         <Setter Target="MainGrid.ColumnDefinitions[1].Width" Value="auto"/>
                         <Setter Target="SecondGrid.(Grid.Column)" Value="0"/>
                         <Setter Target="SecondGrid.(Grid.Row)" Value="1"/>
+                        <Setter Target="NotesTextBox.MinHeight" Value="300" />
                     </VisualState.Setters>
                 </VisualState>
 
@@ -140,7 +146,7 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MainGrid.Margin" Value="24"/>
+                        <Setter Target="MainGrid.Margin" Value="0"/>
                         <Setter Target="MainGrid.RowDefinitions[1].Height" Value="auto"/>
                         <Setter Target="MainGrid.ColumnDefinitions[1].Width" Value="*"/>
                         <Setter Target="FirstGrid.Margin" Value="0 0 6 0"/>
