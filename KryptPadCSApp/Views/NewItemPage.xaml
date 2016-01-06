@@ -29,7 +29,7 @@
 
         <StackPanel Grid.Row="0" Margin="0" Padding="0,0,0,10">
 
-            <TextBlock Text="{Binding Category.Name}" FontSize="{ThemeResource SplitViewLargeNavFontSize }" />
+            <TextBlock Text="{Binding Category.Name}" Style="{StaticResource MediumHeaderTextBlock}" />
 
             <TextBlock Text="Item name" />
             <TextBox Text="{Binding ItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
@@ -59,58 +59,70 @@
             </StackPanel>
 
 
-            <!--Split this row into two columns with a grid, the right side will be for notes, and the left side for custom user fields-->
-            <!--<ScrollViewer >-->
-                <!--MainGrid is responsive-->
-                <Grid x:Name="MainGrid" Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
+            <!--This grid is for desktop view-->
+            <!--MainGrid is responsive-->
+            <Grid x:Name="MainGrid" Grid.Row="1" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="FirstGrid" Grid.Column="0" Grid.Row="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
                         <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Grid x:Name="FirstGrid" Grid.Column="0" Grid.Row="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        
-                        <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
+                    <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
                                    Grid.Row="0">Fields</TextBlock>
 
-                        <!--Custom fields-->
-                        <ScrollViewer Grid.Row="1">
-                            <ListBox ItemsSource="{Binding Fields}"
+                    <!--Custom fields-->
+                    <ScrollViewer Grid.Row="1">
+                        <ListBox ItemsSource="{Binding Fields}"
                               
                               >
 
-                            </ListBox>
-                        </ScrollViewer>
+                        </ListBox>
+                    </ScrollViewer>
 
-                    </Grid>
+                </Grid>
 
-                    <Grid x:Name="SecondGrid" Grid.Column="1" Grid.Row="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
+                <Grid x:Name="SecondGrid" Grid.Column="1" Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
                                Grid.Row="0">Notes</TextBlock>
-                        <!--Notes-->
-                        <TextBox x:Name="NotesTextBox"
+                    <!--Notes-->
+                    <TextBox x:Name="NotesTextBox"
                                  Text="{Binding Notes, Mode=TwoWay}"
                                  AcceptsReturn="True"
                                  Grid.Row="1"
                                  />
 
 
-                    </Grid>
-
                 </Grid>
-            <!--</ScrollViewer>-->
+
+            </Grid>
+
+
+            <!--This grid is for mobile view-->
+            <Grid x:Name="MobileGrid" Grid.Row="1">
+                <Pivot>
+                    <PivotItem Header="Fields">
+                        
+                    </PivotItem>
+                    <PivotItem Header="Notes">
+
+                    </PivotItem>
+                </Pivot>
+            </Grid>
+            
 
         </Grid>
 
@@ -127,7 +139,7 @@
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0"/>
                     </VisualState.StateTriggers>
-                    
+
                     <VisualState.Setters>
                         <Setter Target="MainGrid.Margin" Value="0"/>
                         <Setter Target="FirstGrid.Margin" Value="0 0 0 6"/>
