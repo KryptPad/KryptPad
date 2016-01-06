@@ -18,13 +18,13 @@
         <!--Indicator {Binding IsBusy}-->
         <ProgressRing x:Name="BusyProgressRing" 
                       Grid.Column="0" 
-                      Foreground="{StaticResource TextForegroundBrush}"
+                      
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
                       Margin="0,0,10,0"/>
 
         <!--Text-->
         <TextBlock Text="Signing you in" Grid.Column="1"
-                   Foreground="{StaticResource TextForegroundBrush}"/>
+                   />
     </Grid>
 </UserControl>

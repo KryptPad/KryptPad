@@ -26,7 +26,7 @@
         <SolidColorBrush x:Key="NavButtonCheckedPressedBackgroundBrush" Color="#FF606060" />
         <SolidColorBrush x:Key="NavButtonCheckedHoverBackgroundBrush" Color="#FF656565" />
 
-        <SolidColorBrush x:Key="TextForegroundBrush" Color="Black" />
+        <!--<SolidColorBrush x:Key="TextForegroundBrush" Color="Black" />-->
         
         <x:Double x:Key="SplitViewNormalNavFontSize">16</x:Double>
         <x:Double x:Key="SplitViewLargeNavFontSize">20</x:Double>
@@ -35,12 +35,14 @@
         <Style x:Key="LargeBlueTextBlock" TargetType="TextBlock">
             <Setter Property="FontSize" Value="48" />
             <Setter Property="Margin" Value="0,0,0,10" />
-            <Setter Property="Foreground" Value="{StaticResource TextForegroundBrush}" />
+            
         </Style>
 
         <Style x:Key="MediumHeaderTextBlock" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="26" />
-            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="FontFamily" Value="Segoe UI Light" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="Margin" Value="0,0,0,8" />
             <Setter Property="Foreground" Value="#FFCCCCCC" />
         </Style>
 
