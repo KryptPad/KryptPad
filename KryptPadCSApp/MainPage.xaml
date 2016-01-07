@@ -14,8 +14,8 @@
     </Page.DataContext>
 
     <Grid>
-        <SplitView x:Name="ShellSplitView" DisplayMode="CompactOverlay"
-		IsPaneOpen="{Binding IsPaneOpen}" CompactPaneLength="48" OpenPaneLength="250"
+        <SplitView x:Name="ShellSplitView" DisplayMode="Inline"
+		 IsPaneOpen="{Binding IsPaneOpen}" CompactPaneLength="48" OpenPaneLength="300"
 		PaneBackground="{ThemeResource SplitViewBackgroundBrush}">
             <SplitView.Pane>
                 <Grid>
@@ -53,7 +53,31 @@
             </SplitView.Pane>
         </SplitView>
 
-        
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualStatePhone">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="ShellSplitView.DisplayMode" Value="CompactOverlay" />
+                        <!--<Setter Target="ShellSplitView.DisplayMode" Value="{Binding IsPaneOpen}"/>-->
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="VisualStateTablet">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="ShellSplitView.DisplayMode" Value="Inline" />
+                        <Setter Target="ShellSplitView.IsPaneOpen" Value="True" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
     
     

@@ -10,7 +10,7 @@
         <!--FF3297D1-->
         <SolidColorBrush x:Key="AppBackgroundBrush" Color="#FF333333" />
 
-        <SolidColorBrush x:Key="SplitViewBackgroundBrush" Color="#FF333333" />
+        <SolidColorBrush x:Key="SplitViewBackgroundBrush" Color="#FF0078d7" />
         <SolidColorBrush x:Key="SplitViewForegroundBrush" Color="White" />
 
         <SolidColorBrush x:Key="MenuButtonBackgroundBrush" Color="#FF5FBDFF" />
