@@ -78,7 +78,7 @@ namespace KryptPadCSApp.Models
             // Call the api and get some data!
             try
             {
-                var response = await KryptPadApi.GetProfilesAsync(AccessToken);
+                var response = await KryptPadApi.GetProfilesAsync(AccessToken, "12345678");
 
                 // Check response
                 if (response is ProfileResponse)

@@ -111,12 +111,16 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> GetProfilesAsync(string token)
+        public static async Task<ApiResponse> GetProfilesAsync(string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
+                
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl("api/profiles"));
                 //read the data
@@ -142,12 +146,16 @@ namespace KryptPadCSApp.API
         /// <param name="id"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> GetProfileAsync(int id, string token)
+        public static async Task<ApiResponse> GetProfileAsync(int id, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
+
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{id}"));
 
@@ -168,7 +176,7 @@ namespace KryptPadCSApp.API
 
         }
 
-        public static async Task<ApiResponse> CreateProfile(ApiProfile profile, string token)
+        public static async Task<ApiResponse> CreateProfile(ApiProfile profile, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -176,6 +184,10 @@ namespace KryptPadCSApp.API
                 AuthorizeRequest(client, token);
                 // Create JSON content.
                 var content = JsonContent(profile);
+
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+
                 // Send request and get a response
                 var response = await client.PostAsync(GetUrl($"api/profiles"), content);
 
