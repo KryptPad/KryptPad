@@ -266,12 +266,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\KryptPad.Security\KryptPad.Security.csproj">
-      <Project>{69ff1dec-f323-4f35-b5e1-b696b8e2318a}</Project>
-      <Name>KryptPad.Security</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

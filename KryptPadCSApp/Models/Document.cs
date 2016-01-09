@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using KryptPad.Security;
 using System.IO;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -181,27 +180,27 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private async void Save()
         {
-            //create settings
-            var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
-            //now that those checks are out of the way, we can serialize the data into a JSON string and encrypt it.
-            var jsonData = JsonConvert.SerializeObject(this, settings);
+            ////create settings
+            //var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
+            ////now that those checks are out of the way, we can serialize the data into a JSON string and encrypt it.
+            //var jsonData = JsonConvert.SerializeObject(this, settings);
 
-            //encrypt the data
-            var encryptedData = Encryption.Encrypt(jsonData, SessionPassword);
+            ////encrypt the data
+            ////var encryptedData = Encryption.Encrypt(jsonData, SessionPassword);
 
-            try
-            {
+            //try
+            //{
                
-                //write the changes to disk
-                await FileIO.WriteBytesAsync(SelectedFile, encryptedData);
-            }
-            catch (Exception)
-            {
+            //    //write the changes to disk
+            //    await FileIO.WriteBytesAsync(SelectedFile, encryptedData);
+            //}
+            //catch (Exception)
+            //{
 
-                var msg = new MessageDialog("An error occurred while trying to save your document. Your changes have not been saved.", "Error");
+            //    var msg = new MessageDialog("An error occurred while trying to save your document. Your changes have not been saved.", "Error");
 
-                await msg.ShowAsync();
-            }
+            //    await msg.ShowAsync();
+            //}
 
 
         }
@@ -241,23 +240,23 @@ namespace KryptPadCSApp.Models
             //try to decrypt the data
             try
             {
-                //attempt to decrypt. failure here is likely a password error
-                var jsonData = Encryption.Decrypt(encryptedData, password);
+                ////attempt to decrypt. failure here is likely a password error
+                //var jsonData = Encryption.Decrypt(encryptedData, password);
 
-                //create settings
-                var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
-                //deserialize
-                var document = JsonConvert.DeserializeObject<Document>(jsonData, settings);
+                ////create settings
+                //var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
+                ////deserialize
+                //var document = JsonConvert.DeserializeObject<Document>(jsonData, settings);
 
-                //now that the document is loaded, we can wire up change listeners
-                document.InitializeDocument();
-                //set session password
-                document.SessionPassword = password;
-                //set current file
-                document.SelectedFile = selectedFile;
+                ////now that the document is loaded, we can wire up change listeners
+                //document.InitializeDocument();
+                ////set session password
+                //document.SessionPassword = password;
+                ////set current file
+                //document.SelectedFile = selectedFile;
 
                 //return the document
-                return document;
+                return null;
             }
             catch (Exception ex)
             {

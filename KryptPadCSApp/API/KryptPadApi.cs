@@ -21,10 +21,19 @@ namespace KryptPadCSApp.API
     /// </summary>
     class KryptPadApi
     {
+#if DEBUG
         /// <summary>
-        /// Gets the host address of the API service. Must be changed before going live
+        /// Gets the host address of the API service.
         /// </summary>
-        private static string ServiceHost { get; } = "http://localhost:50821/"; // "https://www.kryptpad.com/"; //
+        private static string ServiceHost { get; } =  "http://test.kryptpad.com/"; // "http://localhost:50821/"; //
+#else
+        /// <summary>
+        /// Gets the host address of the API service.
+        /// </summary>
+        private static string ServiceHost { get; } = "https://www.kryptpad.com/";
+#endif
+
+
 
         /// <summary>
         /// Creates an authorization request

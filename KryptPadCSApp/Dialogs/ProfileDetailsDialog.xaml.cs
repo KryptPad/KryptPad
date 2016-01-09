@@ -28,7 +28,7 @@ namespace KryptPadCSApp.Dialogs
         
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            //close this dialog without doing anything
+            // Close this dialog without doing anything
             Hide();
         }
     }
