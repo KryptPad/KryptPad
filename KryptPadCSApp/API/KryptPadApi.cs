@@ -127,9 +127,6 @@ namespace KryptPadCSApp.API
                 //authorize the request
                 AuthorizeRequest(client, token);
                 
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
-
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl("api/profiles"));
                 //read the data
@@ -161,10 +158,7 @@ namespace KryptPadCSApp.API
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
-
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
-
+                
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{id}"));
 
@@ -193,10 +187,7 @@ namespace KryptPadCSApp.API
                 AuthorizeRequest(client, token);
                 // Create JSON content.
                 var content = JsonContent(profile);
-
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
-
+                
                 // Send request and get a response
                 var response = await client.PostAsync(GetUrl($"api/profiles"), content);
 
@@ -245,12 +236,14 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> GetCategoriesAsync(int profileId, string token)
+        public static async Task<ApiResponse> GetCategoriesAsync(int profileId, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories"));
                 //read the data
@@ -270,12 +263,14 @@ namespace KryptPadCSApp.API
 
         }
 
-        public static async Task<ApiResponse> CreateCategoryAsync(ApiProfile profile, ApiCategory category, string token)
+        public static async Task<ApiResponse> CreateCategoryAsync(ApiProfile profile, ApiCategory category, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
                 AuthorizeRequest(client, token);
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
                 // Create JSON content.
                 var content = JsonContent(category);
                 // Send request and get a response

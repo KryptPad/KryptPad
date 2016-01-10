@@ -37,13 +37,13 @@ namespace KryptPadCSApp.Models
 
                 // Set the selected profile
                 CurrentProfile = _selectedProfile;
-
+                Passphrase = "12345678";
                 //// Notify changes
                 //OnPropertyChanged(nameof(SelectedProfile));
                 var frame = Window.Current.Content as Frame;
-                
+
                 Window.Current.Content = new MainPage(frame);
-                
+
                 // When a profile is selected, navigate to main page
                 Navigate(typeof(ItemsPage));
                 //clear stack
@@ -78,7 +78,7 @@ namespace KryptPadCSApp.Models
             // Call the api and get some data!
             try
             {
-                var response = await KryptPadApi.GetProfilesAsync(AccessToken, "12345678");
+                var response = await KryptPadApi.GetProfilesAsync(AccessToken, Passphrase);
 
                 // Check response
                 if (response is ProfileResponse)

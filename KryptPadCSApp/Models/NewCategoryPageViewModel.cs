@@ -70,7 +70,7 @@ namespace KryptPadCSApp.Models
                 };
 
                 // Send the category to the api
-                var resp = await KryptPadApi.CreateCategoryAsync(CurrentProfile, category, AccessToken);
+                var resp = await KryptPadApi.CreateCategoryAsync(CurrentProfile, category, AccessToken, Passphrase);
                 
 
                 //navigate

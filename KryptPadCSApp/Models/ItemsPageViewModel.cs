@@ -77,7 +77,7 @@ namespace KryptPadCSApp.Models
 
         private async Task RefreshCategories()
         {
-            var resp = await KryptPadApi.GetCategoriesAsync(CurrentProfile.Id, AccessToken);
+            var resp = await KryptPadApi.GetCategoriesAsync(CurrentProfile.Id, AccessToken, Passphrase);
 
             // Check to see if the response is success
             if (resp is CategoryResponse)

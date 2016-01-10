@@ -24,6 +24,15 @@ namespace KryptPadCSApp.Models
         }
 
         /// <summary>
+        /// Gets or sets the access token for API authentication
+        /// </summary>
+        protected string Passphrase
+        {
+            get { return (App.Current as App).Passphrase; }
+            set { (App.Current as App).Passphrase = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the selected profile
         /// </summary>
         protected ApiProfile CurrentProfile
