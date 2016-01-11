@@ -18,7 +18,7 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"  Margin="10">
+    <Grid Background="{ThemeResource AppBackgroundBrush}"  Padding="10">
 
         <StackPanel HorizontalAlignment="Left" Width="250">
             <TextBlock Text="Category name" />
