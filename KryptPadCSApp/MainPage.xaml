@@ -18,7 +18,8 @@
                    DisplayMode="{Binding DisplayMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		           IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    CompactPaneLength="48" OpenPaneLength="300"
-		PaneBackground="{ThemeResource SplitViewBackgroundBrush}">
+		           PaneBackground="{ThemeResource SplitViewBackgroundBrush}">
+            
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -47,7 +48,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="1">
-                        <!-- Search button -->
+                        <!-- Logout button -->
                         <RadioButton Tag="&#xE19C;" Content="Close Document" Style="{StaticResource SplitViewNavButtonStyle}" Command="{Binding LogoutNavButtonCommand}" />
                     </StackPanel>
                 </Grid>
@@ -57,13 +58,7 @@
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup" >
-                <VisualState x:Name="Normal">
-                    <VisualState.Setters>
-                        <Setter Target="ShellSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="ShellSplitView.IsPaneOpen" Value="False"/>
-                    </VisualState.Setters>
-                </VisualState>
-                
+                                
                 <VisualState x:Name="VisualStatePhone">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0"/>
