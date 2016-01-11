@@ -37,11 +37,9 @@ namespace KryptPadCSApp
             
             RootFrame = frame;
             ShellSplitView.Content = RootFrame;
-
-           
+            
         }
 
         
-
     }
 }

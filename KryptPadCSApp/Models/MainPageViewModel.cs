@@ -24,7 +24,9 @@ namespace KryptPadCSApp.Models
         public Command MenuButtonCommand { get; private set; }
 
         private bool _isPaneOpen;
-
+        /// <summary>
+        /// Gets or sets the open state of the splitview
+        /// </summary>
         public bool IsPaneOpen
         {
             get { return _isPaneOpen; }
@@ -35,6 +37,18 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(IsPaneOpen));
             }
         }
+
+        private SplitViewDisplayMode _displayMode;
+        /// <summary>
+        /// Gets or sets the pane's display mode
+        /// </summary>
+        public SplitViewDisplayMode DisplayMode
+        {
+            get { return _displayMode; }
+            set { _displayMode = value; }
+        }
+
+
 
         private bool _isMenuButtonChecked;
         /// <summary>
@@ -65,17 +79,16 @@ namespace KryptPadCSApp.Models
         {
             HomeNavButtonCommand = new Command((p) =>
             {
-                IsPaneOpen = false;
-                //navigate
+                ClosePane();
+
+                // Navigate
                 Navigate(typeof(ItemsPage));
             });
 
             LogoutNavButtonCommand = new Command((p) =>
             {
-                IsPaneOpen = false;
+                ClosePane();
                 
-                //navigate
-                DialogHelper.LoginDialog();
             });
 
             MenuButtonCommand = new Command((p) =>
@@ -85,6 +98,15 @@ namespace KryptPadCSApp.Models
             });
         }
 
+        private void ClosePane()
+        {
+            
+            if (DisplayMode == SplitViewDisplayMode.CompactOverlay)
+            {
+                // Only force closed when in CompactOverlay mode
+                IsPaneOpen = false;
+            }
+        }
         
     }
 }
