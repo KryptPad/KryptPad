@@ -40,6 +40,63 @@ namespace KryptPadCSApp
             
         }
 
-        
+        private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            // This button should not be checked
+            MenuRadioButton.IsChecked = false;
+            // Command the split view to be closed or opened
+            ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
+            
+        }
+
+        private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            //navigate
+            Navigate(typeof(ItemsPage), null);
+
+            // Close the pane
+            ClosePane();
+        }
+
+        #region Helper Methods
+
+        /// <summary>
+        /// Closes the pane if in CompactOverlay mode
+        /// </summary>
+        private void ClosePane()
+        {
+            // Check to see if the pane is in overlay mode, if it is, then we close it,
+            // otherwise, we do not close it
+            if (ShellSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
+            {
+                // Only force closed when in CompactOverlay mode
+                ShellSplitView.IsPaneOpen = false;
+            }
+        }
+
+        // TODO: Move this to a static class somewhere
+        /// <summary>
+        /// Navigates to a page using the MainPage frame
+        /// </summary>
+        /// <param name="pageType"></param>
+        /// <param name="parameter"></param>
+        private void Navigate(Type pageType, object parameter)
+        {
+            var mainPage = Window.Current.Content as MainPage;
+
+            if (mainPage != null)
+            {
+                var frame = mainPage.RootFrame;
+                if (frame != null)
+                {
+                    frame.Navigate(pageType, parameter);
+                }
+            }
+
+        }
+        #endregion
+
     }
 }

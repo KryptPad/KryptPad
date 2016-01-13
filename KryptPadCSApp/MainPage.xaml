@@ -15,8 +15,6 @@
 
     <Grid>
         <SplitView x:Name="ShellSplitView" 
-                   DisplayMode="{Binding DisplayMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-		           IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    CompactPaneLength="48" OpenPaneLength="300"
 		           PaneBackground="{ThemeResource SplitViewBackgroundBrush}">
             
@@ -29,10 +27,10 @@
                     
                     <StackPanel Grid.Row="0">
                         <!-- Menu (hamburger) button -->
-                        <RadioButton Style="{StaticResource SplitViewMenuButtonStyle}" Command="{Binding MenuButtonCommand}" IsChecked="{Binding IsMenuButtonChecked}" />
+                        <RadioButton x:Name="MenuRadioButton" Style="{StaticResource SplitViewMenuButtonStyle}" Click="MenuRadioButton_Click" />
 
                         <!-- Home button -->
-                        <RadioButton Tag="&#xE10F;" Content="Home" Style="{StaticResource SplitViewNavButtonStyle}" IsChecked="True" Command="{Binding HomeNavButtonCommand}" />
+                        <RadioButton x:Name="HomeRadioButton" Tag="&#xE10F;" Content="Home" Style="{StaticResource SplitViewNavButtonStyle}" IsChecked="True" Click="HomeRadioButton_Click" />
 
                         <!-- Search button -->
                         <RadioButton Tag="&#xE11A;" Content="Search" Style="{StaticResource SplitViewNavButtonStyle}" />
