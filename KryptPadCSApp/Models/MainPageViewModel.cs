@@ -23,11 +23,11 @@ namespace KryptPadCSApp.Models
 
         public Command MenuButtonCommand { get; private set; }
 
-        private bool _isPaneOpen;
+        private bool? _isPaneOpen;
         /// <summary>
         /// Gets or sets the open state of the splitview
         /// </summary>
-        public bool IsPaneOpen
+        public bool? IsPaneOpen
         {
             get { return _isPaneOpen; }
             set
@@ -44,7 +44,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public SplitViewDisplayMode DisplayMode
         {
-            get { return _displayMode; }
+            private get { return _displayMode; }
             set { _displayMode = value; }
         }
 
@@ -93,6 +93,11 @@ namespace KryptPadCSApp.Models
 
             MenuButtonCommand = new Command((p) =>
             {
+                if (IsPaneOpen == null)
+                {
+                    IsPaneOpen = false;
+                }
+
                 IsPaneOpen = !IsPaneOpen;
                 IsMenuButtonChecked = false;
             });
