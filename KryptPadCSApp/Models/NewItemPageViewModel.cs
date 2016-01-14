@@ -229,7 +229,7 @@ namespace KryptPadCSApp.Models
             // Set the properties of the item. If this was loaded from an existing item
             // then the properties will contain the name and category.
             item.Name = ItemName;
-            item.Category = Category;
+            
             
             ////compare to the fields already in the item
             //var itemsNotInProfile = (from f in Fields
@@ -243,7 +243,7 @@ namespace KryptPadCSApp.Models
             //}
             
             // Create or update the item
-            var resp = await KryptPadApi.CreateItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken);
+            var resp = await KryptPadApi.CreateItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken, Passphrase);
 
             // Add the fields that do not exist
 

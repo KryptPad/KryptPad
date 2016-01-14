@@ -21,11 +21,16 @@ namespace KryptPadCSApp.API
     /// </summary>
     class KryptPadApi
     {
-#if DEBUG
+#if LOCAL
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        private static string ServiceHost { get; } =  "http://test.kryptpad.com/"; // "http://localhost:50821/"; //
+        private static string ServiceHost { get; } = "http://localhost:50821/"; //
+#elif DEBUG
+        /// <summary>
+        /// Gets the host address of the API service.
+        /// </summary>
+        private static string ServiceHost { get; } =  "http://test.kryptpad.com/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
@@ -301,12 +306,14 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> GetItemsAsync(int profileId, int categoryId, string token)
+        public static async Task<ApiResponse> GetItemsAsync(int profileId, int categoryId, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items"));
                 //read the data
@@ -334,14 +341,15 @@ namespace KryptPadCSApp.API
         /// <param name="item"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> CreateItemAsync(int profileId, int categoryId, ApiItem item, string token)
+        public static async Task<ApiResponse> CreateItemAsync(int profileId, int categoryId, ApiItem item, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
 
                 // Authorize the request.
                 AuthorizeRequest(client, token);
-
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
                 // Create content to send
                 var content = JsonContent(item);
 
