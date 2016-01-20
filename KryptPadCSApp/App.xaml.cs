@@ -39,22 +39,6 @@ namespace KryptPadCSApp
         public event PropertyChangedEventHandler PropertyChanged;
 
         #region Properties
-        private Document _document = null;// = new Document(true);
-
-        /// <summary>
-        /// Gets or sets the current document instance
-        /// </summary>
-        internal Document Document
-        {
-            get { return _document; }
-            set
-            {
-                _document = value;
-                //notify change
-                OnPropertyChanged(nameof(Document));
-
-            }
-        }
 
         /// <summary>
         /// Gets or sets the file to load

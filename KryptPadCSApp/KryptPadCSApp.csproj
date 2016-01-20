@@ -69,7 +69,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;;CODE_ANALYSIS</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Models\ApiCategory.cs" />
+    <Compile Include="API\Models\ApiField.cs" />
     <Compile Include="API\Models\ApiItem.cs" />
     <Compile Include="API\Models\ApiProfile.cs" />
     <Compile Include="API\Responses\CategoryResponse.cs" />
@@ -128,15 +129,12 @@
     </Compile>
     <Compile Include="Models\AddFieldDialogViewModel.cs" />
     <Compile Include="Models\AddItem.cs" />
-    <Compile Include="Models\AuthenticateUserControlViewModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BasePageModel.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryCollection.cs" />
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\CreateAccountPageViewModel.cs" />
-    <Compile Include="Models\CreatePasswordUserControlViewModel.cs" />
-    <Compile Include="Models\Document.cs" />
     <Compile Include="Models\EditItemPageParams.cs" />
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\FieldCollection.cs" />
@@ -145,7 +143,6 @@
     <Compile Include="Models\ItemCollection.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
-    <Compile Include="Models\LoginUserControlViewModel.cs" />
     <Compile Include="Models\MainPageViewModel.cs" />
     <Compile Include="Models\NewCategoryPageViewModel.cs" />
     <Compile Include="Models\NewItemPageViewModel.cs" />
@@ -155,17 +152,8 @@
     <Compile Include="Models\ProfileDetailsDialogViewModel.cs" />
     <Compile Include="Models\SelectProfilePageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserControls\AuthenticateUserControl.xaml.cs">
-      <DependentUpon>AuthenticateUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\BusyIndicator.xaml.cs">
       <DependentUpon>BusyIndicator.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\CreatePasswordUserControl.xaml.cs">
-      <DependentUpon>CreatePasswordUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\LoginUserControl.xaml.cs">
-      <DependentUpon>LoginUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CreateAccountPage.xaml.cs">
       <DependentUpon>CreateAccountPage.xaml</DependentUpon>
@@ -221,19 +209,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\AuthenticateUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\BusyIndicator.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\CreatePasswordUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\LoginUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
