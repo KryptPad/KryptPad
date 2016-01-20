@@ -233,10 +233,10 @@ namespace KryptPadCSApp.Models
             
             try
             {
-                // Create or update the item
-                var resp = await KryptPadApi.CreateItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken);
-                
-                // Add the fields that do not exist
+            // Create or update the item
+            var resp = await KryptPadApi.CreateItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken, Passphrase);
+
+            // Add the fields that do not exist
                 foreach(var field in Fields)
                 {
                     // Send the field to the API to be stored under the item
@@ -249,7 +249,7 @@ namespace KryptPadCSApp.Models
             {
                 // Operation failed
             }
-            
+
 
             //navigate back to items and make sure category is selected
             Navigate(typeof(ItemsPage), Category);
