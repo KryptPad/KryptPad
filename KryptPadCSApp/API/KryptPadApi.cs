@@ -358,7 +358,9 @@ namespace KryptPadCSApp.API
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
                 }
 
 

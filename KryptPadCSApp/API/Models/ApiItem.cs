@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.API.Models
 {
-    class ApiItem
+    public class ApiItem
     {
+        /// <summary>
+        /// Gets or sets the ID of the item
+        /// </summary>
         public int Id { get; set; }
-        public int ItemType { get; set; }
-        public string Name { get; set; }
 
-        public ApiCategory Category { get; set; }
+        /// <summary>
+        /// Gets or sets the name of the item
+        /// </summary>
+        public string Name { get; set; }
     }
 }

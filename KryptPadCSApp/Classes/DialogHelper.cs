@@ -51,52 +51,8 @@ namespace KryptPadCSApp.Classes
 
         }
 
-        /// <summary>
-        /// Displays the login dialog
-        /// </summary>
-        public static async void LoginDialog()
-        {
 
-            _currentDialog = new ContentDialog()
-            {
-                Title = "KryptPad",
-                MaxWidth = Window.Current.Bounds.Width,
-                Content = new LoginUserControl()
-            };
-
-            var res = await _currentDialog.ShowAsync();
-        }
-
-        /// <summary>
-        /// Displays the authentication dialog
-        /// </summary>
-        public static async void AuthenticateDialog()
-        {
-            _currentDialog = new ContentDialog()
-            {
-                Title = "Authenticate",
-                MaxWidth = Window.Current.Bounds.Width,
-                Content = new AuthenticateUserControl()
-            };
-
-            var res = await _currentDialog.ShowAsync();
-        }
-
-        /// <summary>
-        /// Displays the create password dialog
-        /// </summary>
-        public static async void CreatePasswordDialog()
-        {
-            //prompt for a new password
-            _currentDialog = new ContentDialog()
-            {
-                Title = "Create Password",
-                MaxWidth = Window.Current.Bounds.Width,
-                Content = new CreatePasswordUserControl()
-            };
-
-            var res = await _currentDialog.ShowAsync();
-        }
+        
 
         /// <summary>
         /// Displays the create password dialog

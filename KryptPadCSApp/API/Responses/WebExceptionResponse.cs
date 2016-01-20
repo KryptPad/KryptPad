@@ -12,5 +12,14 @@ namespace KryptPadCSApp.API.Responses
         public string Message { get; set; }
         
         public IDictionary<string, string[]> ModelState { get; set; }
+
+        /// <summary>
+        /// Converts this WebExceptionResponse to an Exception object
+        /// </summary>
+        /// <returns></returns>
+        public Exception ToException()
+        {
+            return new Exception(Message);
+        }
     }
 }
