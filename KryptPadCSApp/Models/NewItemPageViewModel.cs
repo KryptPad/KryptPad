@@ -161,7 +161,7 @@ namespace KryptPadCSApp.Models
                 if (res != null)
                 {
                     //create new field
-                    var field = new Field()
+                    var field = new ApiField()
                     {
                         Name = (string)res
                     };
@@ -173,8 +173,11 @@ namespace KryptPadCSApp.Models
 
             DeleteFieldCommand = new Command((p) =>
             {
+                // Remove the field
+                Fields.Remove(p as ApiField);
 
-                Fields.Remove(p as Field);
+                // Add the field to the delete list. This will be sent to the API for deletion
+                //TODO: Add to deleted fields
             });
 
 
@@ -192,23 +195,7 @@ namespace KryptPadCSApp.Models
         {
             ItemName = item.Name;
 
-            ////if this is a profile, then we have fields
-            //if (item is Profile)
-            //{
-            //    //copy the fields to the fields property
-            //    foreach (var field in (item as Profile).Fields)
-            //    {
-            //        Fields.Add(field);
-            //    }
-
-            //    SelectedItem = "Profile";
-            //}
-            //else
-            //{
-            //    Notes = (item as Note).Notes;
-
-            //    SelectedItem = "Note";
-            //}
+            //TODO: Get the fields from the API
 
 
         }
@@ -236,12 +223,14 @@ namespace KryptPadCSApp.Models
                 // Create or update the item
                 var resp = await KryptPadApi.CreateItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken, Passphrase);
 
+                // Set the item id
+                item.Id = resp.Id;
+
                 // Add the fields that do not exist
                 foreach (var field in Fields)
                 {
                     // Send the field to the API to be stored under the item
-
-                    // If the field already exists, update it
+                    resp = await KryptPadApi.SaveFieldAsync(CurrentProfile.Id, Category.Id, item.Id, field, AccessToken, Passphrase);
                 }
 
             }

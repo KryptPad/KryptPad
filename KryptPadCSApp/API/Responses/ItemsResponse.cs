@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.API.Responses
 {
-    class ItemResponse : ApiResponse
+    class ItemsResponse : ApiResponse
     {
         public ApiItem[] Items { get; set; }
     }

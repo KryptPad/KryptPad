@@ -184,6 +184,13 @@ namespace KryptPadCSApp.API
 
         }
 
+        /// <summary>
+        /// Creates a new profile
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <param name="token"></param>
+        /// <param name="passphrase"></param>
+        /// <returns></returns>
         public static async Task<ApiResponse> CreateProfile(ApiProfile profile, string token, string passphrase)
         {
             using (var client = new HttpClient())
@@ -298,8 +305,7 @@ namespace KryptPadCSApp.API
 
         }
         #endregion
-
-
+        
         #region Items
         /// <summary>
         /// Gets all categories for the authenticated user
@@ -323,7 +329,7 @@ namespace KryptPadCSApp.API
                 if (response.IsSuccessStatusCode)
                 {
                     //deserialize the response as an ApiResponse object
-                    return JsonConvert.DeserializeObject<ItemResponse>(data);
+                    return JsonConvert.DeserializeObject<ItemsResponse>(data);
                 }
                 else
                 {
@@ -341,7 +347,7 @@ namespace KryptPadCSApp.API
         /// <param name="item"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> CreateItemAsync(int profileId, int categoryId, ApiItem item, string token, string passphrase)
+        public static async Task<SuccessResponse> CreateItemAsync(int profileId, int categoryId, ApiItem item, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -362,7 +368,7 @@ namespace KryptPadCSApp.API
                 // Check if the response is a success code
                 if (response.IsSuccessStatusCode)
                 {
-                    return new SuccessResponse();
+                    return new SuccessResponse(Convert.ToInt32(data));
                 }
                 else
                 {
@@ -377,6 +383,65 @@ namespace KryptPadCSApp.API
         }
 
         #endregion
+
+        #region Fields
+        /// <summary>
+        /// Creates a new field
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="itemId"></param>
+        /// <param name="field"></param>
+        /// <param name="token"></param>
+        /// <param name="passphrase"></param>
+        /// <returns></returns>
+        public static async Task<SuccessResponse> SaveFieldAsync(int profileId, int categoryId, int itemId, ApiField field, string token, string passphrase)
+        {
+            using (var client = new HttpClient())
+            {
+
+                // Authorize the request.
+                AuthorizeRequest(client, token);
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                // Create content to send
+                var content = JsonContent(field);
+
+                // Execute request
+                HttpResponseMessage response;
+
+                if (field.Id == 0)
+                {
+                    // Create
+                    response = await client.PostAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields"), content);
+                }
+                else
+                {
+                    // Update
+                    response = await client.PostAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields/{field.Id}"), content);
+                }
+
+                // Get the response content
+                var data = await response.Content.ReadAsStringAsync();
+
+                // Check if the response is a success code
+                if (response.IsSuccessStatusCode)
+                {
+                    return new SuccessResponse(Convert.ToInt32(data));
+                }
+                else
+                {
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
+                }
+
+
+            }
+
+        }
+        #endregion
+
         #region Helper methods
 
         /// <summary>
