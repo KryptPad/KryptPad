@@ -226,18 +226,18 @@ namespace KryptPadCSApp.Models
             {
                 item = new ApiItem();
             }
-            
+
             // Set the properties of the item. If this was loaded from an existing item
             // then the properties will contain the name and category.
             item.Name = ItemName;
-            
+
             try
             {
-            // Create or update the item
-            var resp = await KryptPadApi.CreateItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken, Passphrase);
+                // Create or update the item
+                var resp = await KryptPadApi.CreateItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken, Passphrase);
 
-            // Add the fields that do not exist
-                foreach(var field in Fields)
+                // Add the fields that do not exist
+                foreach (var field in Fields)
                 {
                     // Send the field to the API to be stored under the item
 
