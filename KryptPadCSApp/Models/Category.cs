@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Views;
+﻿using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Views;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -74,23 +75,17 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            ////handle item click
-            //ItemClickCommand = new Command((p) =>
-            //{
-            //    var item = p as ItemBase;
+            //handle item click
+            ItemClickCommand = new Command((p) =>
+            {
+                var item = p as ApiItem;
 
-            //    if (item is AddItem)
-            //    {
-            //        //navigate to add new
-            //        Navigate(typeof(NewItemPage), this);
-            //    }
-            //    else 
-            //    {
-            //        //navigate to edit
-            //        Navigate(typeof(EditItemPage), new EditItemPageParams() { Category = this, Item = item });
-            //    }
+                
+                    //navigate to edit
+                    //Navigate(typeof(EditItemPage), new EditItemPageParams() { Category = this, Item = item });
+                
 
-            //}, false);
+            }, false);
         }
     }
 }

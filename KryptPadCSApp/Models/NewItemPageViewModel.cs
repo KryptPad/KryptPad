@@ -135,6 +135,8 @@ namespace KryptPadCSApp.Models
 
         public Command DeleteFieldCommand { get; protected set; }
 
+        
+
         #endregion
 
         public NewItemPageViewModel()
@@ -191,11 +193,22 @@ namespace KryptPadCSApp.Models
         /// Loads an IItem into the view model
         /// </summary>
         /// <param name="item"></param>
-        private void LoadItem(ApiItem item)
+        private async void LoadItem(ApiItem item)
         {
+
+            // Get the fields from the API
+            try
+            {
+                var resp = await KryptPadApi.GetItemAsync(CurrentProfile.Id, Category.Id, item.Id, AccessToken, Passphrase);
+            }
+            catch (Exception )
+            {
+
+            }
+
             ItemName = item.Name;
 
-            //TODO: Get the fields from the API
+            
 
 
         }

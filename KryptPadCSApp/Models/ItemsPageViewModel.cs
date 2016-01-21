@@ -45,7 +45,10 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public Command AddItemCommand { get; private set; }
 
-
+        /// <summary>
+        /// Gets or sets the command that is fired when an item is clicked
+        /// </summary>
+        public Command ItemClickCommand { get; set; }
         #endregion
 
 
@@ -73,6 +76,18 @@ namespace KryptPadCSApp.Models
                 // Navigate
                 Navigate(typeof(NewItemPage), SelectedCategory);
             });
+
+            //handle item click
+            ItemClickCommand = new Command((p) =>
+            {
+                var item = p as ApiItem;
+
+
+                // Navigate to edit
+                Navigate(typeof(EditItemPage), new EditItemPageParams() { Category = SelectedCategory, Item = item });
+
+
+            }, false);
         }
 
         private async Task RefreshCategories()
