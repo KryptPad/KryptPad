@@ -313,7 +313,7 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> GetItemsAsync(int profileId, int categoryId, string token, string passphrase)
+        public static async Task<ItemsResponse> GetItemsAsync(int profileId, int categoryId, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -342,7 +342,7 @@ namespace KryptPadCSApp.API
 
         }
 
-        public static async Task<ApiResponse> GetItemAsync(int profileId, int categoryId, int itemId, string token, string passphrase)
+        public static async Task<ItemsResponse> GetItemAsync(int profileId, int categoryId, int itemId, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {

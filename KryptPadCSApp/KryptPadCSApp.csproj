@@ -131,7 +131,6 @@
     <Compile Include="Models\AddItem.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BasePageModel.cs" />
-    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryCollection.cs" />
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\CreateAccountPageViewModel.cs" />

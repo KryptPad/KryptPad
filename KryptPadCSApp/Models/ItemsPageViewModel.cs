@@ -84,7 +84,7 @@ namespace KryptPadCSApp.Models
 
 
                 // Navigate to edit
-                Navigate(typeof(EditItemPage), new EditItemPageParams() { Category = SelectedCategory, Item = item });
+                Navigate(typeof(NewItemPage), new EditItemPageParams() { Category = SelectedCategory, Item = item });
 
 
             }, false);
