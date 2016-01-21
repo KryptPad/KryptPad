@@ -128,7 +128,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AddFieldDialogViewModel.cs" />
-    <Compile Include="Models\AddItem.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BasePageModel.cs" />
     <Compile Include="Models\CategoryCollection.cs" />
@@ -137,17 +136,12 @@
     <Compile Include="Models\EditItemPageParams.cs" />
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\FieldCollection.cs" />
-    <Compile Include="Models\IItem.cs" />
-    <Compile Include="Models\ItemBase.cs" />
-    <Compile Include="Models\ItemCollection.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
     <Compile Include="Models\MainPageViewModel.cs" />
     <Compile Include="Models\NewCategoryPageViewModel.cs" />
     <Compile Include="Models\NewItemPageViewModel.cs" />
-    <Compile Include="Models\Note.cs" />
     <Compile Include="Models\PageNavigationParamsBase.cs" />
-    <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\ProfileDetailsDialogViewModel.cs" />
     <Compile Include="Models\SelectProfilePageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
