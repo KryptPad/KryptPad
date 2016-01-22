@@ -193,24 +193,19 @@ namespace KryptPadCSApp.Models
         /// Loads an IItem into the view model
         /// </summary>
         /// <param name="item"></param>
-        private async void LoadItem(ApiItem tempItem)
+        private async void LoadItem(ApiItem item)
         {
 
             // Get the fields from the API
             try
             {
-                var resp = await KryptPadApi.GetItemAsync(CurrentProfile.Id, Category.Id, tempItem.Id, AccessToken, Passphrase);
-
-                // Get the item
-                var item = resp.Items.FirstOrDefault();
-
-                // Set properties
-                ItemName = Item.Name;
-
+                var resp = await KryptPadApi.GetFieldsAsync(CurrentProfile.Id, Category.Id, item.Id, AccessToken, Passphrase);
                 
-
+                // Set properties
+                ItemName = item.Name;
+                
                 // Set fields
-                foreach(var field in item.Fields)
+                foreach(var field in resp.Fields)
                 {
                     Fields.Add(field);
                 }

@@ -471,7 +471,49 @@ namespace KryptPadCSApp.API
 
             }
 
+
+
+
         }
+
+        /// <summary>
+        /// Gets the fields from an item
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="itemId"></param>
+        /// <param name="token"></param>
+        /// <param name="passphrase"></param>
+        /// <returns></returns>
+        public static async Task<FieldsResponse> GetFieldsAsync(int profileId, int categoryId, int itemId, string token, string passphrase)
+        {
+            using (var client = new HttpClient())
+            {
+                //authorize the request
+                AuthorizeRequest(client, token);
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                //send request and get a response
+                var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields"));
+                //read the data
+                var data = await response.Content.ReadAsStringAsync();
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    //deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<FieldsResponse>(data);
+                }
+                else
+                {
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
+                }
+            }
+
+        }
+
         #endregion
 
         #region Helper methods

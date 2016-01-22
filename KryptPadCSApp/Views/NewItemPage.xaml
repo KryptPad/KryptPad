@@ -88,7 +88,48 @@
 
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" />
+
+                                    <Grid Margin="0,0,0,20">
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+
+
+
+                                        
+                                        <!--<TextBlock Text="Field name (e.g. Password)" />-->
+                                        
+                                <TextBlock Text="{Binding Name}" 
+                                               Grid.Row="0"
+                                               Grid.Column="0" />
+
+                                
+                                        <!--<TextBlock Text="Value (e.g. MyP@$$w0rd!)" />-->
+                                
+                                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                             PlaceholderText="Value" 
+                                             Grid.Row="1"
+                                             Grid.Column="0"/>
+
+
+                                <Button Grid.Row="1"
+                                        Grid.Column="1"
+                                        Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage}"
+                                        CommandParameter="{Binding}">
+                                    <SymbolIcon Symbol="Delete" />
+                                </Button>
+
+                            </Grid>
+                                    
+                                    
+                                    <!--<TextBlock Text="{Binding Name}" />-->
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             

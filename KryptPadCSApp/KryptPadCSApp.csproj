@@ -103,6 +103,7 @@
     <Compile Include="API\Models\ApiItem.cs" />
     <Compile Include="API\Models\ApiProfile.cs" />
     <Compile Include="API\Responses\CategoryResponse.cs" />
+    <Compile Include="API\Responses\FieldsResponse.cs" />
     <Compile Include="API\Responses\ItemsResponse.cs" />
     <Compile Include="API\Responses\ProfileResponse.cs" />
     <Compile Include="API\Responses\OAuthTokenErrorResponse.cs" />
