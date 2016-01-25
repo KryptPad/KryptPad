@@ -379,7 +379,7 @@ namespace KryptPadCSApp.API
         /// <param name="item"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> CreateItemAsync(int profileId, int categoryId, ApiItem item, string token, string passphrase)
+        public static async Task<SuccessResponse> SaveItemAsync(int profileId, int categoryId, ApiItem item, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -392,7 +392,16 @@ namespace KryptPadCSApp.API
                 var content = JsonContent(item);
 
                 // Execute request
-                var response = await client.PostAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items"), content);
+                HttpResponseMessage response;
+
+                if (item.Id == 0)
+                {
+                    response = await client.PostAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items"), content);
+                }
+                else
+                {
+                    response = await client.PutAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{item.Id}"), content);
+                }
 
                 // Get the response content
                 var data = await response.Content.ReadAsStringAsync();
@@ -450,7 +459,7 @@ namespace KryptPadCSApp.API
                 else
                 {
                     // Update
-                    response = await client.PostAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields/{field.Id}"), content);
+                    response = await client.PutAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields/{field.Id}"), content);
                 }
 
                 // Get the response content

@@ -62,32 +62,16 @@ namespace KryptPadCSApp.Models
                 AddItemCommand.CommandCanExecute = CanAddItem();
             }
         }
-
-        //public string[] ItemTypes { get; protected set; }
-
-        //private string _selectedItem;
-        ///// <summary>
-        ///// Gets or sets the selected item
-        ///// </summary>
-        //public string SelectedItem
-        //{
-        //    get { return _selectedItem; }
-        //    set
-        //    {
-        //        _selectedItem = value;
-        //        //notify change
-        //        OnPropertyChanged(nameof(SelectedItem));
-        //        OnPropertyChanged(nameof(FieldsVisibility));
-        //        OnPropertyChanged(nameof(NotesVisibility));
-        //        //if there is some text, then we can execute
-        //        AddItemCommand.CommandCanExecute = CanAddItem();
-        //    }
-        //}
-
+        
         /// <summary>
         /// Gets a collection of fields
         /// </summary>
         public FieldCollection Fields { get; protected set; } = new FieldCollection();
+
+        /// <summary>
+        /// Gets a collection of delete fields
+        /// </summary>
+        public FieldCollection DeletedFields { get; protected set; } = new FieldCollection();
 
         private string _notes;
         /// <summary>
@@ -103,29 +87,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Notes));
             }
         }
-
-
-        ///// <summary>
-        ///// Gets whether or not to display the fields list
-        ///// </summary>
-        //public Visibility FieldsVisibility
-        //{
-        //    get
-        //    {
-        //        return SelectedItem == "Profile" ? Visibility.Visible : Visibility.Collapsed;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Gets whether or not to display the fields list
-        ///// </summary>
-        //public Visibility NotesVisibility
-        //{
-        //    get
-        //    {
-        //        return SelectedItem == "Note" ? Visibility.Visible : Visibility.Collapsed;
-        //    }
-        //}
+        
 
         public Command AddItemCommand { get; protected set; }
 
@@ -151,7 +113,7 @@ namespace KryptPadCSApp.Models
         private void RegisterCommands()
         {
             //add the category
-            AddItemCommand = new Command(AddItem, false);
+            AddItemCommand = new Command(SaveItem, false);
 
             AddFieldCommand = new Command(async (p) =>
             {
@@ -175,11 +137,16 @@ namespace KryptPadCSApp.Models
 
             DeleteFieldCommand = new Command((p) =>
             {
+                var f = p as ApiField;
                 // Remove the field
-                Fields.Remove(p as ApiField);
+                Fields.Remove(f);
 
                 // Add the field to the delete list. This will be sent to the API for deletion
-                //TODO: Add to deleted fields
+                // Add to deleted fields
+                if (f.Id > 0)
+                {
+                    DeletedFields.Add(f);
+                }
             });
 
 
@@ -224,7 +191,7 @@ namespace KryptPadCSApp.Models
         /// Creates / edits item
         /// </summary>
         /// <param name="p"></param>
-        private async void AddItem(object p)
+        private async void SaveItem(object p)
         {
             ApiItem item = Item;
 
@@ -241,7 +208,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Create or update the item
-                var resp = await KryptPadApi.CreateItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken, Passphrase);
+                var resp = await KryptPadApi.SaveItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken, Passphrase);
 
                 // Set the item id
                 item.Id = resp.Id;
@@ -252,6 +219,13 @@ namespace KryptPadCSApp.Models
                     // Send the field to the API to be stored under the item
                     resp = await KryptPadApi.SaveFieldAsync(CurrentProfile.Id, Category.Id, item.Id, field, AccessToken, Passphrase);
                 }
+
+                // TODO: Delete the items in our deleted list
+                foreach (var field in DeletedFields)
+                {
+                    // Call api to delete the field from the item
+                }
+
 
             }
             catch (Exception)

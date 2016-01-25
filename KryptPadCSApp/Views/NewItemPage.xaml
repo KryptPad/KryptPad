@@ -82,14 +82,18 @@
 
                     <!--Custom fields-->
                     <ScrollViewer Grid.Row="1">
-                        <ListBox ItemsSource="{Binding Fields}"
-                              
-                              >
-
+                        <ListBox ItemsSource="{Binding Fields}">
+                            
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
 
-                                    <Grid Margin="0,0,0,20">
+                                    <Grid Margin="0,0,0,20" HorizontalAlignment="Stretch">
 
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="auto" />
@@ -101,38 +105,29 @@
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
 
-
-
-                                        
-                                        <!--<TextBlock Text="Field name (e.g. Password)" />-->
-                                        
-                                <TextBlock Text="{Binding Name}" 
+                                        <TextBlock Text="{Binding Name}" 
                                                Grid.Row="0"
                                                Grid.Column="0" />
 
-                                
-                                        <!--<TextBlock Text="Value (e.g. MyP@$$w0rd!)" />-->
-                                
-                                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                              PlaceholderText="Value" 
                                              Grid.Row="1"
                                              Grid.Column="0"/>
 
+                                        <Button Grid.Row="1"
+                                                Grid.Column="1"
+                                                Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage}"
+                                                CommandParameter="{Binding}">
+                                            <SymbolIcon Symbol="Delete" />
+                                        </Button>
 
-                                <Button Grid.Row="1"
-                                        Grid.Column="1"
-                                        Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage}"
-                                        CommandParameter="{Binding}">
-                                    <SymbolIcon Symbol="Delete" />
-                                </Button>
+                                    </Grid>
 
-                            </Grid>
-                                    
-                                    
+
                                     <!--<TextBlock Text="{Binding Name}" />-->
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
-                            
+
                         </ListBox>
                     </ScrollViewer>
 
@@ -196,7 +191,7 @@
 
                 <VisualState x:Name="VisualStateTablet">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="720"/>
+                        <AdaptiveTrigger MinWindowWidth="1024"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
