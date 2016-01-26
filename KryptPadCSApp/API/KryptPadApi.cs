@@ -127,7 +127,7 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> GetProfilesAsync(string token, string passphrase)
+        public static async Task<ProfileResponse> GetProfilesAsync(string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -197,7 +197,7 @@ namespace KryptPadCSApp.API
         /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> SaveProfile(ApiProfile profile, string token, string passphrase)
+        public static async Task<SuccessResponse> SaveProfile(ApiProfile profile, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {

@@ -57,7 +57,7 @@ namespace KryptPadCSApp.Models
                     // Call api to create the profile.
                     var response = await KryptPadApi.SaveProfile(profile, AccessToken, Passphrase);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }

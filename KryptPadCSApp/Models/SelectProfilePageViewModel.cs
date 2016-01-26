@@ -78,26 +78,17 @@ namespace KryptPadCSApp.Models
             // Call the api and get some data!
             try
             {
-                var response = await KryptPadApi.GetProfilesAsync(AccessToken, Passphrase);
+                var resp = await KryptPadApi.GetProfilesAsync(AccessToken, Passphrase);
 
-                // Check response
-                if (response is ProfileResponse)
+                // Clear the profiles list
+                Profiles.Clear();
+                // Add the profiles to the list
+                foreach (var profile in resp.Profiles)
                 {
-                    var profiles = (response as ProfileResponse).Profiles;
+                    // Add profile to list
+                    Profiles.Add(profile);
+                }
 
-                    // Clear the profiles list
-                    Profiles.Clear();
-                    // Add the profiles to the list
-                    foreach (var profile in profiles)
-                    {
-                        // Add profile to list
-                        Profiles.Add(profile);
-                    }
-                }
-                else
-                {
-                    throw new Exception();
-                }
 
             }
             catch (Exception)
