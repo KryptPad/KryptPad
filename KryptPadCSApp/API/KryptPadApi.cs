@@ -114,7 +114,9 @@ namespace KryptPadCSApp.API
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
                 }
             }
 
@@ -131,7 +133,7 @@ namespace KryptPadCSApp.API
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
-                
+
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl("api/profiles"));
                 //read the data
@@ -145,7 +147,9 @@ namespace KryptPadCSApp.API
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
                 }
             }
 
@@ -163,7 +167,7 @@ namespace KryptPadCSApp.API
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
-                
+
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{id}"));
 
@@ -178,7 +182,9 @@ namespace KryptPadCSApp.API
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
                 }
             }
 
@@ -191,7 +197,7 @@ namespace KryptPadCSApp.API
         /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> CreateProfile(ApiProfile profile, string token, string passphrase)
+        public static async Task<ApiResponse> SaveProfile(ApiProfile profile, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -199,9 +205,20 @@ namespace KryptPadCSApp.API
                 AuthorizeRequest(client, token);
                 // Create JSON content.
                 var content = JsonContent(profile);
-                
+
                 // Send request and get a response
-                var response = await client.PostAsync(GetUrl($"api/profiles"), content);
+                HttpResponseMessage response;
+
+                if (profile.Id == 0)
+                {
+                    // Create
+                    response = await client.PostAsync(GetUrl($"api/profiles"), content);
+                }
+                else
+                {
+                    // Update
+                    response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}"), content);
+                }
 
                 // Read the data
                 var data = await response.Content.ReadAsStringAsync();
@@ -210,11 +227,13 @@ namespace KryptPadCSApp.API
                 if (response.IsSuccessStatusCode)
                 {
                     // Deserialize the response as an ApiResponse object
-                    return JsonConvert.DeserializeObject<ProfileResponse>(data);
+                    return new SuccessResponse(Convert.ToInt32(data));
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
                 }
             }
 
@@ -305,7 +324,7 @@ namespace KryptPadCSApp.API
 
         }
         #endregion
-        
+
         #region Items
 
         /// <summary>
