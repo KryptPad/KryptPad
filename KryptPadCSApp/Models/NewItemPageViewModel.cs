@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 
 namespace KryptPadCSApp.Models
@@ -226,16 +227,17 @@ namespace KryptPadCSApp.Models
                     // Call api to delete the field from the item
                 }
 
+                //navigate back to items and make sure category is selected
+                Navigate(typeof(ItemsPage), Category);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Operation failed
+                var dialog = new MessageDialog(ex.Message);
+                await dialog.ShowAsync();
             }
-
-
-            //navigate back to items and make sure category is selected
-            Navigate(typeof(ItemsPage), Category);
+            
         }
 
         /// <summary>
