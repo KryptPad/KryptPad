@@ -542,15 +542,53 @@ namespace KryptPadCSApp.API
 
         }
 
+        /// <summary>
+        /// Deletes a field
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="itemId"></param>
+        /// <param name="id"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<bool> DeleteFieldAsync(int profileId, int categoryId, int itemId, int id, string token)
+        {
+            using (var client = new HttpClient())
+            {
+
+                // Authorize the request.
+                AuthorizeRequest(client, token);
+
+                // Execute request
+                var response = await client.DeleteAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields/{id}"));
+
+                // Get the response content
+                var data = await response.Content.ReadAsStringAsync();
+
+                // Check if the response is a success code
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
+                }
+
+
+            }
+        }
         #endregion
 
-        #region Helper methods
+            #region Helper methods
 
-        /// <summary>
-        /// Authorizes an http client request
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="token"></param>
+            /// <summary>
+            /// Authorizes an http client request
+            /// </summary>
+            /// <param name="client"></param>
+            /// <param name="token"></param>
         private static void AuthorizeRequest(HttpClient client, string token)
         {
             if (!string.IsNullOrWhiteSpace(token))

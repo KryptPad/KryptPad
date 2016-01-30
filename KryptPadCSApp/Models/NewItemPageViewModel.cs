@@ -225,6 +225,7 @@ namespace KryptPadCSApp.Models
                 foreach (var field in DeletedFields)
                 {
                     // Call api to delete the field from the item
+                    await KryptPadApi.DeleteFieldAsync(CurrentProfile.Id, Category.Id, item.Id, field.Id, AccessToken);
                 }
 
                 //navigate back to items and make sure category is selected
