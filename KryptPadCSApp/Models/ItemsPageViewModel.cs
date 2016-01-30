@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml;
 
 namespace KryptPadCSApp.Models
 {
@@ -31,6 +32,22 @@ namespace KryptPadCSApp.Models
                 _selectedCategory = value;
                 //notify change
                 OnPropertyChanged(nameof(SelectedCategory));
+                
+            }
+        }
+
+
+        private Visibility _bottomAppBarVisible;
+        /// <summary>
+        /// Gets or sets the bottom app bar's visibility
+        /// </summary>
+        public Visibility BottomAppBarVisible
+        {
+            get { return _bottomAppBarVisible; }
+            set { _bottomAppBarVisible = value;
+
+                // Notify change
+                OnPropertyChanged(nameof(BottomAppBarVisible));
             }
         }
 
@@ -44,6 +61,11 @@ namespace KryptPadCSApp.Models
         /// Opens the add item page
         /// </summary>
         public Command AddItemCommand { get; private set; }
+
+        /// <summary>
+        /// Opens the add item page
+        /// </summary>
+        public Command DeleteItemCommand { get; private set; }
 
         /// <summary>
         /// Gets or sets the command that is fired when an item is clicked

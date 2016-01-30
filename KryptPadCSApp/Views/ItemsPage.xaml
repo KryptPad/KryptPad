@@ -14,9 +14,11 @@
         <Models:ItemsPageViewModel/>
     </Page.DataContext>
 
-    <!--<Page.TopAppBar>
-        
-    </Page.TopAppBar>-->
+    <Page.BottomAppBar>
+        <CommandBar Visibility="{Binding BottomAppBarVisible}">
+            <AppBarButton Icon="Delete" Label="Delete Item" Command="{Binding DeleteItemCommand}" />
+        </CommandBar>
+    </Page.BottomAppBar>
 
     <Grid Background="{StaticResource AppBackgroundBrush}">
 
