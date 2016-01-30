@@ -59,6 +59,7 @@
         <Pivot x:Name="CategoryPivot"
                ItemsSource="{Binding Categories}"
                SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+               Margin="12"
 			   Grid.Row="1">
 
 
@@ -97,7 +98,7 @@
                                                 <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
                                                    Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                                    Margin="0,0,0,10"/>
-                                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" />
+                                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="WrapWholeWords" />
                                             </StackPanel>
                                         </Grid>
                                     </Border>

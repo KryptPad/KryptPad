@@ -19,6 +19,11 @@ namespace KryptPadCSApp.API.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the notes of the item
+        /// </summary>
+        public string Notes { get; set; }
+
+        /// <summary>
         /// Gets or set the fields for the item
         /// </summary>
         public ApiField[] Fields { get; set; }

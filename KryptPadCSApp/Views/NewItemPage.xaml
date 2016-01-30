@@ -20,14 +20,14 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="10">
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="12">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0" Padding="0,0,0,10">
+        <StackPanel Grid.Row="0" Padding="12">
 
             <TextBlock Text="{Binding Category.Name}" Style="{StaticResource MediumHeaderTextBlock}" />
 
@@ -50,6 +50,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" 
+                        Padding="12"
                         HorizontalAlignment="Left">
                 <!--Field list-->
                 <TextBlock TextWrapping="WrapWholeWords">
@@ -143,10 +144,9 @@
                                Grid.Row="0">Notes</TextBlock>
 
                     <!--Notes-->
-                    <TextBox     Text="{Binding Notes, Mode=TwoWay}"
-                                 AcceptsReturn="True"
-                                 Grid.Row="1"
-                                 />
+                    <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             AcceptsReturn="True"
+                             Grid.Row="1" />
 
 
                 </Grid>

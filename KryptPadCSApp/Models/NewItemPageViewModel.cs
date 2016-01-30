@@ -63,7 +63,7 @@ namespace KryptPadCSApp.Models
                 AddItemCommand.CommandCanExecute = CanAddItem();
             }
         }
-        
+
         /// <summary>
         /// Gets a collection of fields
         /// </summary>
@@ -88,7 +88,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Notes));
             }
         }
-        
+
 
         public Command AddItemCommand { get; protected set; }
 
@@ -98,7 +98,7 @@ namespace KryptPadCSApp.Models
 
         public Command DeleteFieldCommand { get; protected set; }
 
-        
+
 
         #endregion
 
@@ -161,30 +161,44 @@ namespace KryptPadCSApp.Models
         /// Loads an IItem into the view model
         /// </summary>
         /// <param name="item"></param>
-        private async void LoadItem(ApiItem item)
+        private async void LoadItem(ApiItem selectedItem)
         {
 
-            // Get the fields from the API
+
             try
             {
-                var resp = await KryptPadApi.GetFieldsAsync(CurrentProfile.Id, Category.Id, item.Id, AccessToken, Passphrase);
-                
-                // Set properties
-                ItemName = item.Name;
-                
-                // Set fields
-                foreach(var field in resp.Fields)
+                // Get the item
+                var itemResp = await KryptPadApi.GetItemAsync(CurrentProfile.Id, Category.Id, selectedItem.Id, AccessToken, Passphrase);
+
+                // Get the item
+                var item = itemResp.Items.FirstOrDefault();
+
+                // Success?
+                if (item != null)
                 {
-                    Fields.Add(field);
+
+                    // Set properties
+                    ItemName = item.Name;
+                    Notes = item.Notes;
+                    
+                    // Get the fields from the API
+                    var fieldResp = await KryptPadApi.GetFieldsAsync(CurrentProfile.Id, Category.Id, item.Id, AccessToken, Passphrase);
+                    
+                    // Set fields
+                    foreach (var field in fieldResp.Fields)
+                    {
+                        Fields.Add(field);
+                    }
                 }
-                
 
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-
+                // Operation failed
+                var dialog = new MessageDialog(ex.Message);
+                await dialog.ShowAsync();
             }
-            
+
 
         }
 
@@ -205,6 +219,7 @@ namespace KryptPadCSApp.Models
             // Set the properties of the item. If this was loaded from an existing item
             // then the properties will contain the name and category.
             item.Name = ItemName;
+            item.Notes = Notes;
 
             try
             {
@@ -238,7 +253,7 @@ namespace KryptPadCSApp.Models
                 var dialog = new MessageDialog(ex.Message);
                 await dialog.ShowAsync();
             }
-            
+
         }
 
         /// <summary>
