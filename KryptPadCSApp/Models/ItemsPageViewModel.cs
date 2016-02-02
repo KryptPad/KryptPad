@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
@@ -32,7 +33,7 @@ namespace KryptPadCSApp.Models
                 _selectedCategory = value;
                 //notify change
                 OnPropertyChanged(nameof(SelectedCategory));
-                
+
             }
         }
 
@@ -44,12 +45,55 @@ namespace KryptPadCSApp.Models
         public Visibility BottomAppBarVisible
         {
             get { return _bottomAppBarVisible; }
-            set { _bottomAppBarVisible = value;
+            set
+            {
+                _bottomAppBarVisible = value;
 
                 // Notify change
                 OnPropertyChanged(nameof(BottomAppBarVisible));
             }
         }
+
+        private ListViewSelectionMode _selectionMode;
+        /// <summary>
+        /// Gets or sets the grid selection mode
+        /// </summary>
+        public ListViewSelectionMode SelectionMode
+        {
+            get { return _selectionMode; }
+            set
+            {
+                _selectionMode = value;
+
+                // Notify change
+                OnPropertyChanged(nameof(SelectionMode));
+
+                // Set item click enabled if selection mode is none
+                IsItemClickEnabled = value == ListViewSelectionMode.None;
+                
+            }
+        }
+
+        private bool _isItemClickEnabled;
+        /// <summary>
+        /// Gets or sets whether the grid has item click enabled
+        /// </summary>
+        public bool IsItemClickEnabled
+        {
+            get { return _isItemClickEnabled; }
+            set
+            {
+                _isItemClickEnabled = value;
+
+                // Notify change
+                OnPropertyChanged(nameof(IsItemClickEnabled));
+
+                // Hide the bottom app bar when the items are clickable
+                BottomAppBarVisible = value ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
+
 
 
         /// <summary>
@@ -63,7 +107,7 @@ namespace KryptPadCSApp.Models
         public Command AddItemCommand { get; private set; }
 
         /// <summary>
-        /// Opens the add item page
+        /// Deletes the selected item(s)
         /// </summary>
         public Command DeleteItemCommand { get; private set; }
 
@@ -71,6 +115,11 @@ namespace KryptPadCSApp.Models
         /// Gets or sets the command that is fired when an item is clicked
         /// </summary>
         public Command ItemClickCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets the command that is fired when toggle selection is clicked
+        /// </summary>
+        public Command ToggleSelectionMode { get; set; }
         #endregion
 
 
@@ -78,6 +127,9 @@ namespace KryptPadCSApp.Models
         {
             // Register commands
             RegisterCommands();
+
+            // Set some defaults
+            SelectionMode = ListViewSelectionMode.None;
 
             // Get list of categories
             var t = RefreshCategories();
@@ -94,7 +146,8 @@ namespace KryptPadCSApp.Models
                 Navigate(typeof(NewCategoryPage));
             });
 
-            AddItemCommand = new Command((p) => {
+            AddItemCommand = new Command((p) =>
+            {
                 // Navigate
                 Navigate(typeof(NewItemPage), SelectedCategory);
             });
@@ -110,6 +163,15 @@ namespace KryptPadCSApp.Models
 
 
             }, false);
+
+            ToggleSelectionMode = new Command((p) =>
+            {
+
+                // Toggle the grid's selection mode
+                SelectionMode = (SelectionMode == ListViewSelectionMode.Multiple ?
+                    ListViewSelectionMode.None : ListViewSelectionMode.Multiple);
+
+            });
         }
 
         private async Task RefreshCategories()
