@@ -214,7 +214,7 @@ namespace KryptPadCSApp.Models
                 }
                 else
                 {
-                    await DialogHelper.ShowMessageDialog(
+                    await DialogHelper.ShowMessageDialogAsync(
                         "Your username or password is incorrect.");
                 }
             }

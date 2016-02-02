@@ -89,7 +89,9 @@
                                   ItemsSource="{Binding Items}"
                                   SelectionMode="{Binding DataContext.SelectionMode, ElementName=ItemsPageElement}"
                                   IsItemClickEnabled="{Binding DataContext.IsItemClickEnabled, ElementName=ItemsPageElement}"
-                                  Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsPageElement}">
+                                  SelectedItem="{Binding DataContext.SelectedItem, ElementName=ItemsPageElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsPageElement}"
+                                  >
                             <GridView.ItemTemplate>
                                 <DataTemplate>
                                     <Border Background="{Binding Background}">

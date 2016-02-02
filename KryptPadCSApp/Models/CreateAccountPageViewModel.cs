@@ -96,7 +96,7 @@ namespace KryptPadCSApp.Models
                     //if the response is ok, then go to login page
                     if (response is SuccessResponse)
                     {
-                        await DialogHelper.ShowMessageDialog("Your account has been successfully created.");
+                        await DialogHelper.ShowMessageDialogAsync("Your account has been successfully created.");
 
                         //go to login page
                         Navigate(typeof(LoginPage));
@@ -106,7 +106,7 @@ namespace KryptPadCSApp.Models
                         //get the response
                         var error = (response as WebExceptionResponse).ModelState;//.Errors.FirstOrDefault();
 
-                        await DialogHelper.ShowMessageDialog(error.ToString());
+                        await DialogHelper.ShowMessageDialogAsync(error.ToString());
                     }
                 }
                 catch (Exception ex)

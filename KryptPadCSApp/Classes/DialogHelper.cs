@@ -30,7 +30,7 @@ namespace KryptPadCSApp.Classes
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static async Task<IUICommand> ShowMessageDialog(string content)
+        public static async Task<IUICommand> ShowMessageDialogAsync(string content)
         {
             var msgBox = new MessageDialog(content);
             //show

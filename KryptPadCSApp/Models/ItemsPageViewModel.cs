@@ -1,6 +1,7 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.API.Responses;
+using KryptPadCSApp.Classes;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -70,7 +72,7 @@ namespace KryptPadCSApp.Models
 
                 // Set item click enabled if selection mode is none
                 IsItemClickEnabled = value == ListViewSelectionMode.None;
-                
+
             }
         }
 
@@ -93,6 +95,19 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private ApiItem _selectedItem;
+        /// <summary>
+        /// Gets or sets the selected item
+        /// </summary>
+        public ApiItem SelectedItem
+        {
+            get { return _selectedItem; }
+            set { _selectedItem = value;
+
+                // Enable the delete command
+                DeleteItemCommand.CommandCanExecute = value != null;
+            }
+        }
 
 
 
@@ -164,12 +179,47 @@ namespace KryptPadCSApp.Models
 
             }, false);
 
+            // Handle item delete
+            DeleteItemCommand = new Command(async (p) =>
+            {
+
+                // Get the selected items and delete them
+                if (SelectedItem != null)
+                {
+                    try
+                    {
+                        // Delete the item
+                        var success = await KryptPadApi.DeleteItemAsync(CurrentProfile.Id, SelectedCategory.Id, SelectedItem.Id, AccessToken);
+
+                        // If sucessful, remove item from the list
+                        if (success)
+                        {
+                            var itemList = SelectedCategory.Items.ToList();
+
+                            itemList.Remove(SelectedItem);
+
+                            SelectedCategory.Items = itemList.ToArray();
+
+                            SelectedCategory = SelectedCategory;
+                        }
+
+                    }catch(Exception ex)
+                    {
+                        // Operation failed
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                        
+                    }
+                }
+
+            }, false);
+
+            // Handle toggle selection mode
             ToggleSelectionMode = new Command((p) =>
             {
 
                 // Toggle the grid's selection mode
-                SelectionMode = (SelectionMode == ListViewSelectionMode.Multiple ?
-                    ListViewSelectionMode.None : ListViewSelectionMode.Multiple);
+                SelectionMode = (SelectionMode == ListViewSelectionMode.Single ?
+                    ListViewSelectionMode.None : ListViewSelectionMode.Single);
 
             });
         }

@@ -195,8 +195,7 @@ namespace KryptPadCSApp.Models
             catch (Exception ex)
             {
                 // Operation failed
-                var dialog = new MessageDialog(ex.Message);
-                await dialog.ShowAsync();
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
 
 

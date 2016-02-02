@@ -122,6 +122,8 @@ namespace KryptPadCSApp.API
 
         }
 
+        #region Profiles
+
         /// <summary>
         /// Gets all profiles for the authenticated user
         /// </summary>
@@ -260,6 +262,9 @@ namespace KryptPadCSApp.API
             }
 
         }
+
+
+        #endregion
 
         #region Categories
         /// <summary>
@@ -442,6 +447,45 @@ namespace KryptPadCSApp.API
 
         }
 
+        /// <summary>
+        /// Deletes an item and all its fields from the database
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="itemId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<bool> DeleteItemAsync(int profileId, int categoryId, int itemId, string token)
+        {
+            using (var client = new HttpClient())
+            {
+
+                // Authorize the request.
+                AuthorizeRequest(client, token);
+
+                // Execute request
+                var response = await client.DeleteAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}"));
+
+                // Get the response content
+                var data = await response.Content.ReadAsStringAsync();
+
+                // Check if the response is a success code
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
+                }
+
+
+            }
+
+        }
+
         #endregion
 
         #region Fields
@@ -582,13 +626,13 @@ namespace KryptPadCSApp.API
         }
         #endregion
 
-            #region Helper methods
+        #region Helper methods
 
-            /// <summary>
-            /// Authorizes an http client request
-            /// </summary>
-            /// <param name="client"></param>
-            /// <param name="token"></param>
+        /// <summary>
+        /// Authorizes an http client request
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="token"></param>
         private static void AuthorizeRequest(HttpClient client, string token)
         {
             if (!string.IsNullOrWhiteSpace(token))
@@ -663,7 +707,6 @@ namespace KryptPadCSApp.API
         //    return string.Join("&", list);
         //}
         #endregion
-
-
+        
     }
 }
