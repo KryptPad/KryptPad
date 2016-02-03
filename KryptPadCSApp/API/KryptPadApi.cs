@@ -81,6 +81,8 @@ namespace KryptPadCSApp.API
 
         }
 
+
+
         /// <summary>
         /// Creates an account in the system
         /// </summary>
@@ -272,8 +274,14 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<CategoryResponse> GetCategoriesAsync(int profileId, string token, string passphrase)
+        public static async Task<CategoryResponse> GetCategoriesAsync(ApiProfile profile, string token, string passphrase)
         {
+
+            if (profile == null)
+            {
+                throw new ArgumentNullException(nameof(profile));
+            }
+
             using (var client = new HttpClient())
             {
                 //authorize the request
@@ -281,7 +289,7 @@ namespace KryptPadCSApp.API
                 // TODO: TEST
                 client.DefaultRequestHeaders.Add("Passphrase", passphrase);
                 //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories"));
                 //read the data
                 var data = await response.Content.ReadAsStringAsync();
 
@@ -329,6 +337,46 @@ namespace KryptPadCSApp.API
                 }
             }
 
+        }
+
+        /// <summary>
+        /// Deletes a category from the database
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<bool> DeleteCategoryAsync(ApiProfile profile, int categoryId, string token)
+        {
+            if (profile == null)
+            {
+                throw new ArgumentNullException(nameof(profile));
+            }
+
+            using (var client = new HttpClient())
+            {
+                // Authorize the request.
+                AuthorizeRequest(client, token);
+
+                // Send request and get a response
+                var response = await client.DeleteAsync(GetUrl($"api/profiles/{profile.Id}/categories/{categoryId}"));
+
+                // Deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    // Deserialize the response as an ApiResponse object
+                    return true;
+                }
+                else
+                {
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
+                }
+            }
         }
         #endregion
 
@@ -709,6 +757,6 @@ namespace KryptPadCSApp.API
         //    return string.Join("&", list);
         //}
         #endregion
-        
+
     }
 }

@@ -139,6 +139,7 @@
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
     <Compile Include="Models\MainPageViewModel.cs" />
+    <Compile Include="Models\ManageCategoriesViewModel.cs" />
     <Compile Include="Models\NewCategoryPageViewModel.cs" />
     <Compile Include="Models\NewItemPageViewModel.cs" />
     <Compile Include="Models\PageNavigationParamsBase.cs" />
@@ -157,11 +158,11 @@
     <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ManageCategoriesPage.xaml.cs">
+      <DependentUpon>ManageCategoriesPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NewCategoryPage.xaml.cs">
       <DependentUpon>NewCategoryPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditItemPage.xaml.cs">
-      <DependentUpon>EditItemPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewItemPage.xaml.cs">
       <DependentUpon>NewItemPage.xaml</DependentUpon>
@@ -218,13 +219,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NewCategoryPage.xaml">
+    <Page Include="Views\ManageCategoriesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditItemPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Views\NewCategoryPage.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewItemPage.xaml">
       <SubType>Designer</SubType>

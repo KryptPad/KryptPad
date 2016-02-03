@@ -60,6 +60,15 @@ namespace KryptPadCSApp
             ClosePane();
         }
 
+        private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            //navigate
+            Navigate(typeof(ManageCategoriesPage), null);
+
+            // Close the pane
+            ClosePane();
+        }
+
         #region Helper Methods
 
         /// <summary>
@@ -98,5 +107,6 @@ namespace KryptPadCSApp
         }
         #endregion
 
+        
     }
 }
