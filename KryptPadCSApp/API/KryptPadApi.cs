@@ -272,7 +272,7 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> GetCategoriesAsync(int profileId, string token, string passphrase)
+        public static async Task<CategoryResponse> GetCategoriesAsync(int profileId, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -293,7 +293,9 @@ namespace KryptPadCSApp.API
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
                 }
             }
 

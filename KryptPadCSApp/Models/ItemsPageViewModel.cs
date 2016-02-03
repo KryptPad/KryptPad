@@ -33,7 +33,8 @@ namespace KryptPadCSApp.Models
             set
             {
                 _selectedCategory = value;
-                //notify change
+
+                // Notify change
                 OnPropertyChanged(nameof(SelectedCategory));
 
             }
@@ -194,13 +195,7 @@ namespace KryptPadCSApp.Models
                         // If sucessful, remove item from the list
                         if (success)
                         {
-                            var itemList = SelectedCategory.Items.ToList();
-
-                            itemList.Remove(SelectedItem);
-
-                            SelectedCategory.Items = itemList.ToArray();
-
-                            SelectedCategory = SelectedCategory;
+                            await RefreshCategories();
                         }
 
                     }catch(Exception ex)
@@ -224,22 +219,35 @@ namespace KryptPadCSApp.Models
             });
         }
 
+        /// <summary>
+        /// Get the list of categories from the database
+        /// </summary>
+        /// <returns></returns>
         private async Task RefreshCategories()
         {
-            var resp = await KryptPadApi.GetCategoriesAsync(CurrentProfile.Id, AccessToken, Passphrase);
 
-            // Check to see if the response is success
-            if (resp is CategoryResponse)
+            // Clear the list
+            Categories.Clear();
+
+            try
             {
                 // Get categories
-                var categories = (resp as CategoryResponse).Categories;
+                var resp = await KryptPadApi.GetCategoriesAsync(CurrentProfile.Id, AccessToken, Passphrase);
+                
                 // Create list of categories
-                foreach (var category in categories)
+                foreach (var category in resp.Categories)
                 {
                     // Add to observable
                     Categories.Add(category);
                 }
             }
+            catch (Exception ex)
+            {
+                // Operation failed
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            
+            
         }
     }
 }
