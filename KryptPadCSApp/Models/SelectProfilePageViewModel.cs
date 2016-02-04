@@ -109,28 +109,27 @@ namespace KryptPadCSApp.Models
             DeleteProfileCommand = new Command(async (p) =>
             {
 
-                var msg = new MessageDialog("All of your data in this profile will be deleted permanently. This action CANNOT be undone. Are you sure you want to delete this profile?", "CONFIRM DELETE");
-                msg.Commands.Add(new UICommand("Yes", async (ap) =>
-                {
-
-                    var profile = p as ApiProfile;
-                    if (profile != null)
-                    {
-                        // Delete the selected profile
-                        var response = await KryptPadApi.DeleteProfile(profile.Id, AccessToken);
-
-                        if (response)
+                var res = await DialogHelper.Confirm(
+                    "All of your data in this profile will be deleted permanently. This action CANNOT be undone. Are you sure you want to delete this profile?",
+                    async (ap) =>
                         {
-                            // Remove the deleted profile from the list
-                            Profiles.Remove(profile);
+
+                            var profile = p as ApiProfile;
+                            if (profile != null)
+                            {
+                                // Delete the selected profile
+                                var response = await KryptPadApi.DeleteProfile(profile.Id, AccessToken);
+
+                                if (response)
+                                {
+                                    // Remove the deleted profile from the list
+                                    Profiles.Remove(profile);
+                                }
+                            }
+
                         }
-                    }
+                );
 
-                }));
-                msg.Commands.Add(new UICommand("No"));
-                msg.DefaultCommandIndex = 1;
-
-                await msg.ShowAsync();
 
             });
         }

@@ -19,7 +19,9 @@ namespace KryptPadCSApp.API.Responses
         /// <returns></returns>
         public Exception ToException()
         {
-            return new Exception(Message);
+            var msg = Message + ModelState.ToString();
+
+            return new Exception(msg);
         }
     }
 }

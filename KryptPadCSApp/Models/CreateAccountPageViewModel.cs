@@ -54,7 +54,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(ConfirmPassword));
             }
         }
-        
+
         private Visibility _accountInfoVisibility;
 
         public Visibility AccountInfoVisibility
@@ -83,7 +83,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            
+
 
             CreateAccountCommand = new Command(async (p) =>
             {
@@ -93,27 +93,18 @@ namespace KryptPadCSApp.Models
                     //log in and get access token
                     var response = await KryptPadApi.CreateAccountAsync(Email, Password);
 
-                    //if the response is ok, then go to login page
-                    if (response is SuccessResponse)
-                    {
-                        await DialogHelper.ShowMessageDialogAsync("Your account has been successfully created.");
+                    // The account was created
+                    await DialogHelper.ShowMessageDialogAsync("Your account has been successfully created.");
 
-                        //go to login page
-                        Navigate(typeof(LoginPage));
-                    }
-                    else
-                    {
-                        //get the response
-                        var error = (response as WebExceptionResponse).ModelState;//.Errors.FirstOrDefault();
+                    //go to login page
+                    Navigate(typeof(LoginPage));
 
-                        await DialogHelper.ShowMessageDialogAsync(error.ToString());
-                    }
                 }
                 catch (Exception ex)
                 {
-                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
-                
+
 
                 IsBusy = false;
 

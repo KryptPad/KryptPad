@@ -35,7 +35,7 @@ namespace KryptPadCSApp.Classes
             var msgBox = new MessageDialog(content);
             //show
             return await msgBox.ShowAsync();
-            
+
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace KryptPadCSApp.Classes
         }
 
 
-        
+
 
         /// <summary>
         /// Displays the create password dialog
@@ -71,23 +71,63 @@ namespace KryptPadCSApp.Classes
             return _result;
 
             //return await Task.Factory.StartNew(async () => {
-                
+
             //    //return result
             //    return _result;
             //});
- 
+
         }
 
-        public static async Task<ContentDialogResult> Confirm(string prompt)
+        /// <summary>
+        /// Creates a confirm prompt for the user
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <param name="yes"></param>
+        /// <returns></returns>
+        public static async Task<IUICommand> Confirm(string prompt)
         {
-            var dialog = new ContentDialog()
-            {
-                Content = prompt,
-                PrimaryButtonText = "Yes",
-                SecondaryButtonText = "No"
-            };
+            return await Confirm(prompt, "CONFIRM", null);
+        }
 
-            return await dialog.ShowAsync();
+        /// <summary>
+        /// Creates a confirm prompt for the user
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <param name="yes"></param>
+        /// <returns></returns>
+        public static async Task<IUICommand> Confirm(string prompt, UICommandInvokedHandler yes)
+        {
+            return await Confirm(prompt, "CONFIRM", yes);
+        }
+
+        /// <summary>
+        /// Creates a confirm prompt for the user
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public static async Task<IUICommand> Confirm(string prompt, string title)
+        {
+            return await Confirm(prompt, title, null);
+        }
+
+        /// <summary>
+        /// Creates a confirm prompt for the user
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <param name="title"></param>
+        /// <param name="yes"></param>
+        /// <returns></returns>
+        public static async Task<IUICommand> Confirm(string prompt, string title, UICommandInvokedHandler yes)
+        {
+            var msg = new MessageDialog(prompt, title);
+            //, async (ap) => { })
+            msg.Commands.Add(new UICommand("Yes", yes, 1));
+            msg.Commands.Add(new UICommand("No", null, 2));
+
+            msg.DefaultCommandIndex = 1;
+
+            return await msg.ShowAsync();
         }
 
         /// <summary>

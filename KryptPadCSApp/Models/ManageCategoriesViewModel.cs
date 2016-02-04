@@ -59,35 +59,35 @@ namespace KryptPadCSApp.Models
             DeleteCategoryCommand = new Command(async (p) =>
             {
                 // Confirm delete
-                var res = await DialogHelper.Confirm("Are you sure you want to delete this category?");
-
-                if (res == ContentDialogResult.Primary)
-                {
-
-                    var category = p as ApiCategory;
-                    // Get the selected items and delete them
-                    if (category != null)
+                var res = await DialogHelper.Confirm("Are you sure you want to delete this category?",
+                    async (ap) =>
                     {
-                        try
+                        var category = p as ApiCategory;
+                        // Get the selected items and delete them
+                        if (category != null)
                         {
-                            // Delete the item
-                            var success = await KryptPadApi.DeleteCategoryAsync(CurrentProfile, category.Id, AccessToken);
-
-                            // If sucessful, remove item from the list
-                            if (success)
+                            try
                             {
-                                Categories.Remove(category);
+                                // Delete the item
+                                var success = await KryptPadApi.DeleteCategoryAsync(CurrentProfile, category.Id, AccessToken);
+
+                                // If sucessful, remove item from the list
+                                if (success)
+                                {
+                                    Categories.Remove(category);
+                                }
+
                             }
+                            catch (Exception ex)
+                            {
+                                // Operation failed
+                                await DialogHelper.ShowMessageDialogAsync(ex.Message);
 
-                        }
-                        catch (Exception ex)
-                        {
-                            // Operation failed
-                            await DialogHelper.ShowMessageDialogAsync(ex.Message);
-
+                            }
                         }
                     }
-                }
+                );
+
 
             });
 

@@ -89,7 +89,7 @@ namespace KryptPadCSApp.API
         /// <param name="username"></param>
         /// <param name="email"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> CreateAccountAsync(string username, string password)
+        public static async Task<SuccessResponse> CreateAccountAsync(string username, string password)
         {
             using (var client = new HttpClient())
             {
