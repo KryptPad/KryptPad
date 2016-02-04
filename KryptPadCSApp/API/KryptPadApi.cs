@@ -277,11 +277,6 @@ namespace KryptPadCSApp.API
         public static async Task<CategoryResponse> GetCategoriesAsync(ApiProfile profile, string token, string passphrase)
         {
 
-            if (profile == null)
-            {
-                throw new ArgumentNullException(nameof(profile));
-            }
-
             using (var client = new HttpClient())
             {
                 //authorize the request
@@ -348,11 +343,7 @@ namespace KryptPadCSApp.API
         /// <returns></returns>
         public static async Task<bool> DeleteCategoryAsync(ApiProfile profile, int categoryId, string token)
         {
-            if (profile == null)
-            {
-                throw new ArgumentNullException(nameof(profile));
-            }
-
+            
             using (var client = new HttpClient())
             {
                 // Authorize the request.

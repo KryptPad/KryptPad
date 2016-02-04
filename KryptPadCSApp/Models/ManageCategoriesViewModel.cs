@@ -35,6 +35,9 @@ namespace KryptPadCSApp.Models
             // Register commands
             RegisterCommands();
 
+#if DEBUG
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
+#endif
             // Get list of categories
             var t = RefreshCategories();
         }

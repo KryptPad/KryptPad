@@ -19,7 +19,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         protected string AccessToken
         {
-            get { return (App.Current as App).AccessToken; }
+            get { return (App.Current as App)?.AccessToken; }
             set { (App.Current as App).AccessToken = value; }
         }
 
@@ -28,7 +28,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         protected string Passphrase
         {
-            get { return (App.Current as App).Passphrase; }
+            get { return (App.Current as App)?.Passphrase; }
             set { (App.Current as App).Passphrase = value; }
         }
 
@@ -37,7 +37,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         protected ApiProfile CurrentProfile
         {
-            get { return (App.Current as App).CurrentProfile; }
+            get { return (App.Current as App)?.CurrentProfile; }
             set { (App.Current as App).CurrentProfile = value; }
         }
 
