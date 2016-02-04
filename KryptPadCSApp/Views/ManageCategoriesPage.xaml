@@ -47,19 +47,27 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding Name}" 
-							Grid.Row="0"
-							Grid.Column="0" />
+                        <TextBlock Text="{Binding Name}"
+                                   VerticalAlignment="Center"
+							       Grid.Row="0"
+							       Grid.Column="0" />
 
                         <Button Grid.Row="0"
 							    Grid.Column="1"
+							    Command="{Binding DataContext.RenameCategoryCommand, ElementName=ManageCategoriesViewPage}"
+							    CommandParameter="{Binding}">
+                            <SymbolIcon Symbol="Rename" />
+                        </Button>
+                        
+                        <Button Grid.Row="0"
+							    Grid.Column="2"
 							    Command="{Binding DataContext.DeleteCategoryCommand, ElementName=ManageCategoriesViewPage}"
 							    CommandParameter="{Binding}">
                             <SymbolIcon Symbol="Delete" />
                         </Button>
-
                     </Grid>
 
                 </DataTemplate>

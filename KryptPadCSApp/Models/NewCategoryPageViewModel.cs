@@ -1,5 +1,6 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Classes;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -69,12 +70,21 @@ namespace KryptPadCSApp.Models
                     Name = CategoryName
                 };
 
-                // Send the category to the api
-                var resp = await KryptPadApi.CreateCategoryAsync(CurrentProfile, category, AccessToken, Passphrase);
+                try
+                {
+                    // Send the category to the api
+                    var resp = await KryptPadApi.SaveCategoryAsync(CurrentProfile, category, AccessToken, Passphrase);
+                }
+                catch (Exception ex)
+                {
+                    // Operation failed
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
                 
 
-                //navigate
-                Navigate(typeof(ItemsPage), category);
+                ////navigate
+                //Navigate(typeof(ItemsPage), category);
+                GoBack();
             }, false);
 
             //cancel command

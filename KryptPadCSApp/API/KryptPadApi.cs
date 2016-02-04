@@ -269,6 +269,42 @@ namespace KryptPadCSApp.API
         #endregion
 
         #region Categories
+
+        /// <summary>
+        /// Gets all categories for the authenticated user
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<CategoryResponse> GetCategoriesWithItemsAsync(ApiProfile profile, string token, string passphrase)
+        {
+
+            using (var client = new HttpClient())
+            {
+                //authorize the request
+                AuthorizeRequest(client, token);
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                //send request and get a response
+                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories/with-items"));
+                //read the data
+                var data = await response.Content.ReadAsStringAsync();
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    //deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<CategoryResponse>(data);
+                }
+                else
+                {
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
+                }
+            }
+
+        }
+
         /// <summary>
         /// Gets all categories for the authenticated user
         /// </summary>
@@ -304,7 +340,15 @@ namespace KryptPadCSApp.API
 
         }
 
-        public static async Task<ApiResponse> CreateCategoryAsync(ApiProfile profile, ApiCategory category, string token, string passphrase)
+        /// <summary>
+        /// Saves a category to the database
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <param name="category"></param>
+        /// <param name="token"></param>
+        /// <param name="passphrase"></param>
+        /// <returns></returns>
+        public static async Task<SuccessResponse> SaveCategoryAsync(ApiProfile profile, ApiCategory category, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -324,11 +368,13 @@ namespace KryptPadCSApp.API
                 if (response.IsSuccessStatusCode)
                 {
                     // Deserialize the response as an ApiResponse object
-                    return JsonConvert.DeserializeObject<CategoryResponse>(data);
+                    return new SuccessResponse(Convert.ToInt32(data));
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    // Throw exception with the WebExceptionResponse
+                    throw wer.ToException();
                 }
             }
 

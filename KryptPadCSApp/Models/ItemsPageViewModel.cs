@@ -232,7 +232,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Get categories
-                var resp = await KryptPadApi.GetCategoriesAsync(CurrentProfile, AccessToken, Passphrase);
+                var resp = await KryptPadApi.GetCategoriesWithItemsAsync(CurrentProfile, AccessToken, Passphrase);
                 
                 // Create list of categories
                 foreach (var category in resp.Categories)

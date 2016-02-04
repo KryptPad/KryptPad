@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
@@ -56,27 +58,34 @@ namespace KryptPadCSApp.Models
             // Handle item delete
             DeleteCategoryCommand = new Command(async (p) =>
             {
-                var category = p as ApiCategory;
-                // Get the selected items and delete them
-                if (category != null)
+                // Confirm delete
+                var res = await DialogHelper.Confirm("Are you sure you want to delete this category?");
+
+                if (res == ContentDialogResult.Primary)
                 {
-                    try
-                    {
-                        // Delete the item
-                        var success = await KryptPadApi.DeleteCategoryAsync(CurrentProfile, category.Id, AccessToken);
 
-                        // If sucessful, remove item from the list
-                        if (success)
+                    var category = p as ApiCategory;
+                    // Get the selected items and delete them
+                    if (category != null)
+                    {
+                        try
                         {
-                            Categories.Remove(category);
+                            // Delete the item
+                            var success = await KryptPadApi.DeleteCategoryAsync(CurrentProfile, category.Id, AccessToken);
+
+                            // If sucessful, remove item from the list
+                            if (success)
+                            {
+                                Categories.Remove(category);
+                            }
+
                         }
+                        catch (Exception ex)
+                        {
+                            // Operation failed
+                            await DialogHelper.ShowMessageDialogAsync(ex.Message);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        // Operation failed
-                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
-
+                        }
                     }
                 }
 

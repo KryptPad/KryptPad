@@ -78,6 +78,18 @@ namespace KryptPadCSApp.Classes
  
         }
 
+        public static async Task<ContentDialogResult> Confirm(string prompt)
+        {
+            var dialog = new ContentDialog()
+            {
+                Content = prompt,
+                PrimaryButtonText = "Yes",
+                SecondaryButtonText = "No"
+            };
+
+            return await dialog.ShowAsync();
+        }
+
         /// <summary>
         /// Closes the dialog window
         /// </summary>
