@@ -19,7 +19,25 @@ namespace KryptPadCSApp.API.Responses
         /// <returns></returns>
         public Exception ToException()
         {
-            var msg = Message + ModelState.ToString();
+            var msg = Message;
+
+            // Check for model state errors
+            if (ModelState != null)
+            {
+                var modelErrors = new List<string>();
+                // Build string of model state errors
+                foreach(var ms in ModelState)
+                {
+                    // Each model state error can have multiple errors
+                    foreach (var error in ms.Value)
+                    {
+                        modelErrors.Add(error);
+                    }
+                }
+
+                // Set errors to msg
+                msg = string.Join("\n", modelErrors);
+            }
 
             return new Exception(msg);
         }
