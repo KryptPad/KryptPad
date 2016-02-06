@@ -29,9 +29,10 @@ namespace KryptPadCSApp.Models
             set
             {
                 _email = value;
-                //notify change
+                // Notify change
                 OnPropertyChanged(nameof(Email));
-
+                // Is login enabled?
+                LogInCommand.CommandCanExecute = IsLoginEnabled();
             }
         }
 
@@ -45,8 +46,10 @@ namespace KryptPadCSApp.Models
             set
             {
                 _password = value;
-                //notify change
+                // Notify change
                 OnPropertyChanged(nameof(Password));
+                // Is login enabled?
+                LogInCommand.CommandCanExecute = IsLoginEnabled();
             }
         }
 
@@ -60,7 +63,7 @@ namespace KryptPadCSApp.Models
             set
             {
                 _autoSignIn = value;
-                //notify change
+                // Notify change
                 OnPropertyChanged(nameof(AutoSignIn));
 
             }
@@ -123,7 +126,7 @@ namespace KryptPadCSApp.Models
             LogInCommand = new Command(async (p) =>
             {
                 await LoginAsync();
-            });
+            }, false);
 
             CreateAccountCommand = new Command((p) =>
             {
@@ -227,6 +230,11 @@ namespace KryptPadCSApp.Models
             IsBusy = false;
         }
 
+        /// <summary>
+        /// Gets whether the login command is enabled
+        /// </summary>
+        /// <returns></returns>
+        private bool IsLoginEnabled() => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
         #endregion
 
         protected override void OnIsBusyChanged()

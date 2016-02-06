@@ -37,7 +37,7 @@
                 <!--Login email address-->
                 <TextBox Grid.Row="1" PlaceholderText="Email Address" Margin="0,0,0,10"
 					InputScope="EmailNameOrAddress"
-					Text="{Binding Email, Mode=TwoWay}" />
+					Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!--Password-->
                 <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,10" 
