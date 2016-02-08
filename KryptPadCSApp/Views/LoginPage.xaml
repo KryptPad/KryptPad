@@ -53,10 +53,10 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Content="Log In" Grid.Column="0" Margin="0,0,10,0"
+                    <Button Content="Sign In" Grid.Column="0" Margin="0,0,10,0"
 						Command="{Binding LogInCommand}" />
 
-                    <Button Content="Create Account" Grid.Column="1" 
+                    <Button Content="Sign Up for Free" Grid.Column="1" 
 						Command="{Binding CreateAccountCommand}" />
 
                 </Grid>

@@ -44,15 +44,15 @@
                 <!--Login email address-->
                 <TextBox Grid.Row="2" PlaceholderText="Email Address" Margin="0,0,0,10"
 					InputScope="EmailNameOrAddress"
-					Text="{Binding Email, Mode=TwoWay}"/>
+					Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <!--Password-->
                 <PasswordBox Grid.Row="3" PlaceholderText="Password" Margin="0,0,0,10" 
-					Password="{Binding Password, Mode=TwoWay}"/>
+					Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <!--Password-->
                 <PasswordBox Grid.Row="4" PlaceholderText="Confirm Password" Margin="0,0,0,10" 
-					Password="{Binding ConfirmPassword, Mode=TwoWay}"/>
+					Password="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 
                 <Grid Grid.Row="5" Margin="0,0,0,10">

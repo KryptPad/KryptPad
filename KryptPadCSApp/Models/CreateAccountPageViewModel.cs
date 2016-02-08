@@ -25,6 +25,8 @@ namespace KryptPadCSApp.Models
                 _email = value;
                 //notify change
                 OnPropertyChanged(nameof(Email));
+                // Can user sign up?
+                CreateAccountCommand.CommandCanExecute = CanSignUp();
 
             }
         }
@@ -39,6 +41,8 @@ namespace KryptPadCSApp.Models
                 _password = value;
                 //notify change
                 OnPropertyChanged(nameof(Password));
+                // Can user sign up?
+                CreateAccountCommand.CommandCanExecute = CanSignUp();
             }
         }
 
@@ -52,6 +56,8 @@ namespace KryptPadCSApp.Models
                 _confirmPassword = value;
                 //notify change
                 OnPropertyChanged(nameof(ConfirmPassword));
+                // Can user sign up?
+                CreateAccountCommand.CommandCanExecute = CanSignUp();
             }
         }
 
@@ -108,7 +114,7 @@ namespace KryptPadCSApp.Models
 
                 IsBusy = false;
 
-            });
+            }, false);
         }
 
         protected override void OnIsBusyChanged()
@@ -118,6 +124,8 @@ namespace KryptPadCSApp.Models
             //set visibility
             AccountInfoVisibility = IsBusy ? Visibility.Collapsed : Visibility.Visible;
         }
+
+        protected bool CanSignUp() => !string.IsNullOrEmpty(Email) && !string.IsNullOrWhiteSpace(Password) && Password.Equals(ConfirmPassword);
 
     }
 }
