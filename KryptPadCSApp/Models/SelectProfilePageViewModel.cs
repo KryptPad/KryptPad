@@ -37,9 +37,23 @@ namespace KryptPadCSApp.Models
 
                 // Set the selected profile
                 CurrentProfile = _selectedProfile;
+
+                // Prompt for passphrase
+                //var t = DialogHelper.ShowDialog<PassphrasePrompt>((d) => {
+
+                //    // Set the passphrase
+                //    Passphrase = d.Passphrase;
+
+                    
+
+                //});
+
+                // Wait for async dialog
+                //t.Wait();
                 Passphrase = "12345678";
                 //// Notify changes
                 //OnPropertyChanged(nameof(SelectedProfile));
+
                 var frame = Window.Current.Content as Frame;
 
                 Window.Current.Content = new MainPage(frame);

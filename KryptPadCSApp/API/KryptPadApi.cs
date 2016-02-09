@@ -201,7 +201,7 @@ namespace KryptPadCSApp.API
         /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveProfile(ApiProfile profile, string token, string passphrase)
+        public static async Task<SuccessResponse> SaveProfile(ApiProfile profile, string token)
         {
             using (var client = new HttpClient())
             {

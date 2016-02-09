@@ -122,6 +122,9 @@
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">
       <DependentUpon>AddFieldDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\PassphrasePrompt.xaml.cs">
+      <DependentUpon>PassphrasePrompt.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ProfileDetailsDialog.xaml.cs">
       <DependentUpon>ProfileDetailsDialog.xaml</DependentUpon>
     </Compile>
@@ -192,6 +195,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Dialogs\AddFieldDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\PassphrasePrompt.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

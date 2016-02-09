@@ -51,8 +51,51 @@ namespace KryptPadCSApp.Classes
 
         }
 
+        /// <summary>
+        /// Displays the specified content dialog type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="primaryAction"></param>
+        /// <returns></returns>
+        public static async Task<ContentDialogResult> ShowDialog<T>(Action<T> primaryAction) where T : ContentDialog, new()
+        {
+            // Create instance of content dialog
+            var d = new T();
 
+            // Show the dialog
+            var res = await d.ShowAsync();
 
+            // Determine which button was fired, and decide if we need to execute the primary action
+            if (res == ContentDialogResult.Primary && primaryAction != null)
+            {
+                primaryAction(d);
+            }
+
+            return res;
+        }
+
+        ///// <summary>
+        ///// Displays the specified content dialog type
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="primaryAction"></param>
+        ///// <returns></returns>
+        //public static async Task<ContentDialogResult> ShowDialog<T>(Func<T, Task> primaryAction) where T : ContentDialog, new()
+        //{
+        //    // Create instance of content dialog
+        //    var d = new T();
+
+        //    // Show the dialog
+        //    var res = await d.ShowAsync();
+
+        //    // Determine which button was fired, and decide if we need to execute the primary action
+        //    if (res == ContentDialogResult.Primary && primaryAction != null)
+        //    {
+        //        await primaryAction(d);
+        //    }
+
+        //    return res;
+        //}
 
         /// <summary>
         /// Displays the create password dialog

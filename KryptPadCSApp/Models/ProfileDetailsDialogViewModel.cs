@@ -1,5 +1,6 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,11 +56,12 @@ namespace KryptPadCSApp.Models
                     };
 
                     // Call api to create the profile.
-                    var response = await KryptPadApi.SaveProfile(profile, AccessToken, Passphrase);
+                    var response = await KryptPadApi.SaveProfile(profile, AccessToken);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    // Operation failed
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
 
             }, false);
