@@ -7,13 +7,14 @@
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.SelectProfilePage"
     mc:Ignorable="d"
-    x:Name="SelectProfileXamlPage">
+    x:Name="SelectProfileViewPage">
 
     <Page.DataContext>
         <Models:SelectProfilePageViewModel/>
     </Page.DataContext>
 
     <Grid Background="{StaticResource AppBackgroundBrush}">
+
         <!--Main grid for page-->
         <Grid VerticalAlignment="Center"
 			HorizontalAlignment="Stretch"
@@ -38,22 +39,63 @@
                 <ListBox Grid.Row="1"
                          ItemsSource="{Binding Profiles}"
                          SelectedItem="{Binding SelectedProfile, Mode=TwoWay}">
-                    
+
                     <ListBox.Background>
                         <SolidColorBrush Color="#FFDFEEF7" Opacity="0.5"/>
                     </ListBox.Background>
 
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate >
+                                        <Button x:Name="button" HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Stretch"
+                                                Command="{Binding DataContext.SelectProfileCommand, ElementName=SelectProfileViewPage}"
+                                                CommandParameter="{Binding}">
+                                            <ContentPresenter />
+
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="BorderThickness" Value="0" />
+                                                    <Setter Property="Padding" Value="8" />
+                                                </Style>
+                                            </Button.Style>
+
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal" />
+                                                    <VisualState x:Name="PointerOver">
+                                                        <VisualState.Setters>
+                                                            <Setter Target="button.(Control.Background)" Value="{ThemeResource SystemControlHighlightListAccentHighBrush}"/>
+                                                        </VisualState.Setters>
+
+                                                    </VisualState>
+                                                    <VisualState x:Name="Pressed">
+                                                        <VisualState.Setters>
+                                                            <Setter Target="button.(Control.Background)" Value="{ThemeResource SystemControlHighlightListMediumBrush}"/>
+
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+
+                                        </Button>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
                         </Style>
                     </ListBox.ItemContainerStyle>
 
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid >
+
+                            <Grid x:Name="ProfileGrid" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
 
@@ -62,18 +104,28 @@
                                            VerticalAlignment="Center"/>
 
                                 <Button Grid.Column="1"
-                                        Command="{Binding DataContext.DeleteProfileCommand, ElementName=SelectProfileXamlPage}"
+                                        Command="{Binding DataContext.RenameProfileCommand, ElementName=SelectProfileViewPage}"
+                                        CommandParameter="{Binding}">
+                                    <SymbolIcon Symbol="Rename" />
+                                </Button>
+
+                                <Button Grid.Column="2"
+                                        Command="{Binding DataContext.DeleteProfileCommand, ElementName=SelectProfileViewPage}"
                                         CommandParameter="{Binding}">
                                     <SymbolIcon Symbol="Delete" />
                                 </Button>
                             </Grid>
-                            
+
                         </DataTemplate>
                     </ListBox.ItemTemplate>
-                    
+
                 </ListBox>
+
+
             </Grid>
 
         </Grid>
+
+
     </Grid>
 </Page>

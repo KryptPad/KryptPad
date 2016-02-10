@@ -38,15 +38,7 @@ namespace KryptPadCSApp.Models
                 // Set the selected profile
                 CurrentProfile = _selectedProfile;
 
-                // Prompt for passphrase
-                //var t = DialogHelper.ShowDialog<PassphrasePrompt>((d) => {
-
-                //    // Set the passphrase
-                //    Passphrase = d.Passphrase;
-
-                    
-
-                //});
+                
 
                 // Wait for async dialog
                 //t.Wait();
@@ -54,16 +46,7 @@ namespace KryptPadCSApp.Models
                 //// Notify changes
                 //OnPropertyChanged(nameof(SelectedProfile));
 
-                var frame = Window.Current.Content as Frame;
-
-                Window.Current.Content = new MainPage(frame);
-
-                // When a profile is selected, navigate to main page
-                Navigate(typeof(ItemsPage));
-                //clear stack
-                //frame.SetNavigationState("1,0");
-                frame.BackStack.Clear();
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+                
             }
         }
 
@@ -72,15 +55,21 @@ namespace KryptPadCSApp.Models
 
         public Command DeleteProfileCommand { get; protected set; }
 
+        public Command SelectProfileCommand { get; protected set; }
+
         #endregion
 
         public SelectProfilePageViewModel()
         {
             RegisterCommands();
 
+#if DEBUG
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
+#endif
+
+            // Get the list of profiles
             var t = GetProfiles();
-
-
+            
         }
 
         /// <summary>
@@ -105,10 +94,10 @@ namespace KryptPadCSApp.Models
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                await DialogHelper.ShowConnectionErrorMessageDialog();
-
+                // Operation failed
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
         }
 
@@ -118,6 +107,30 @@ namespace KryptPadCSApp.Models
             {
                 // Prompt the user for profile info
                 await PromptForProfileInfo();
+            });
+
+            SelectProfileCommand = new Command(async (p) => {
+                // Prompt for passphrase
+                await DialogHelper.ShowDialog<PassphrasePrompt>((d) =>
+                {
+                    // Set the selected profile
+                    CurrentProfile = p as ApiProfile;
+                    // Set the passphrase
+                    Passphrase = d.Passphrase;
+
+                    var frame = Window.Current.Content as Frame;
+
+                    Window.Current.Content = new MainPage(frame);
+
+                    // When a profile is selected, navigate to main page
+                    Navigate(typeof(ItemsPage));
+                    //clear stack
+                    //frame.SetNavigationState("1,0");
+                    frame.BackStack.Clear();
+                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+
+                });
+
             });
 
             DeleteProfileCommand = new Command(async (p) =>

@@ -36,13 +36,11 @@ namespace KryptPadCSApp.Dialogs
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             // If the user entered a passphrase, return it and hide the dialog
-            if (!string.IsNullOrWhiteSpace(PasswordTextBox.Password))
+            if (string.IsNullOrWhiteSpace(PasswordTextBox.Password))
             {
-                Hide();
-            }
-            else
-            {
+                args.Cancel = true;
                 await DialogHelper.ShowMessageDialogAsync("Please enter your passphrase for this profile.");
+
             }
         }
 
