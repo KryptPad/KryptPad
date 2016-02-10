@@ -10,9 +10,10 @@
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    >
 
     <Grid>
-        <PasswordBox x:Name="PasswordTextBox" />
+        <PasswordBox x:Name="PasswordTextBox" KeyUp="PasswordTextBox_KeyUp"/>
     </Grid>
 </ContentDialog>

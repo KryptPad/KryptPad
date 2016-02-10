@@ -17,7 +17,7 @@ namespace KryptPadCSApp.API.Responses
         /// Converts this WebExceptionResponse to an Exception object
         /// </summary>
         /// <returns></returns>
-        public Exception ToException()
+        public WebException ToException()
         {
             var msg = Message;
 
@@ -39,7 +39,7 @@ namespace KryptPadCSApp.API.Responses
                 msg = string.Join("\n", modelErrors);
             }
 
-            return new Exception(msg);
+            return new WebException(msg);
         }
     }
 }

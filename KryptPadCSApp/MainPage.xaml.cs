@@ -53,7 +53,7 @@ namespace KryptPadCSApp
         private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
         {
 
-            //navigate
+            // Navigate
             Navigate(typeof(ItemsPage), null);
 
             // Close the pane
@@ -62,11 +62,30 @@ namespace KryptPadCSApp
 
         private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            //navigate
+            // Navigate
             Navigate(typeof(ManageCategoriesPage), null);
 
             // Close the pane
             ClosePane();
+        }
+
+        private void BackToProfilesRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Go back to profiles
+            (App.Current as App).Passphrase = null;
+
+            // Navigate
+            Navigate(typeof(SelectProfilePage), null);
+        }
+
+        private void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Completely sign out
+            (App.Current as App).Passphrase = null;
+            (App.Current as App).AccessToken = null;
+
+            // Navigate
+            Navigate(typeof(LoginPage), null);
         }
 
         #region Helper Methods
@@ -105,6 +124,7 @@ namespace KryptPadCSApp
             }
 
         }
+
         #endregion
 
         

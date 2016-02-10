@@ -27,6 +27,9 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        public string ProfilePassphrase { get; set; }
+        public string ConfirmProfilePassphrase { get; set; }
+
         public Command SaveCommand { get; protected set; }
 
         #endregion
@@ -56,7 +59,7 @@ namespace KryptPadCSApp.Models
                     };
 
                     // Call api to create the profile.
-                    var response = await KryptPadApi.SaveProfile(profile, AccessToken);
+                    var response = await KryptPadApi.SaveProfile(profile, AccessToken, ProfilePassphrase);
                 }
                 catch (Exception ex)
                 {

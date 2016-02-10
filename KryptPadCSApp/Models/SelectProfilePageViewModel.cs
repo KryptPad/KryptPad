@@ -111,24 +111,43 @@ namespace KryptPadCSApp.Models
 
             SelectProfileCommand = new Command(async (p) => {
                 // Prompt for passphrase
-                await DialogHelper.ShowDialog<PassphrasePrompt>((d) =>
+                await DialogHelper.ShowDialog<PassphrasePrompt>(async (d) =>
                 {
-                    // Set the selected profile
-                    CurrentProfile = p as ApiProfile;
-                    // Set the passphrase
-                    Passphrase = d.Passphrase;
 
-                    var frame = Window.Current.Content as Frame;
+                    try
+                    {
+                        // Check the profile and determine if the passphrase is correct
+                        var profile = await KryptPadApi.GetProfileAsync(p as ApiProfile, AccessToken, d.Passphrase);
 
-                    Window.Current.Content = new MainPage(frame);
+                        if (profile != null)
+                        {
+                            // Set the passphrase
+                            Passphrase = d.Passphrase;
+                            // Set the selected profile
+                            CurrentProfile = profile;
 
-                    // When a profile is selected, navigate to main page
-                    Navigate(typeof(ItemsPage));
-                    //clear stack
-                    //frame.SetNavigationState("1,0");
-                    frame.BackStack.Clear();
-                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
 
+                            var frame = Window.Current.Content as Frame;
+
+                            Window.Current.Content = new MainPage(frame);
+
+                            // When a profile is selected, navigate to main page
+                            Navigate(typeof(ItemsPage));
+                            //clear stack
+                            //frame.SetNavigationState("1,0");
+                            frame.BackStack.Clear();
+                            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+
+
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        // Operation failed
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                    
+                    
                 });
 
             });

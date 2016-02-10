@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -33,20 +34,44 @@ namespace KryptPadCSApp.Dialogs
             this.InitializeComponent();
         }
 
-        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        #region Methods
+        private async Task<bool> ValidateInput()
         {
             // If the user entered a passphrase, return it and hide the dialog
             if (string.IsNullOrWhiteSpace(PasswordTextBox.Password))
+            {   
+                await DialogHelper.ShowMessageDialogAsync("Please enter your passphrase for this profile.");
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+
+        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            // If the user entered a passphrase, return it and hide the dialog
+            if (!await ValidateInput())
             {
                 args.Cancel = true;
-                await DialogHelper.ShowMessageDialogAsync("Please enter your passphrase for this profile.");
-
             }
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             Hide();
+        }
+
+        private async void PasswordTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                // If the user entered a passphrase, return it and hide the dialog
+                if (await ValidateInput())
+                {
+                   
+                }
+            }
         }
     }
 }

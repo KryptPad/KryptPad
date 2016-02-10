@@ -52,8 +52,10 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="1">
-                        <!-- Logout button -->
-                        <RadioButton Tag="&#xE19C;" Content="Close Document" Style="{StaticResource SplitViewNavButtonStyle}" Command="{Binding LogoutNavButtonCommand}" />
+                        <!-- Back to profiles button -->
+                        <RadioButton x:Name="BackToProfilesRadioButton" Tag="&#xE72B;" Content="Back to profiles" Style="{StaticResource SplitViewNavButtonStyle}" Click="BackToProfilesRadioButton_Click"/>
+                        <!-- Sign out button -->
+                        <RadioButton x:Name="SignOutRadioButton" Tag="&#xE19C;" Content="Sign out" Style="{StaticResource SplitViewNavButtonStyle}" Click="SignOutRadioButton_Click" />
                     </StackPanel>
                 </Grid>
                

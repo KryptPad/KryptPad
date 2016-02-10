@@ -23,10 +23,10 @@
             <StackPanel>
                 <TextBlock Text="Profile name" />
                 <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="e.g. My Passwords" />
-                <TextBlock Text="Create a password" />
-                <PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="" />
-                <TextBlock Text="Confirm password" />
-                <PasswordBox Password="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="" />
+                <TextBlock Text="Create a passphrase" />
+                <PasswordBox Password="{Binding ProfilePassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="" />
+                <TextBlock Text="Confirm passphrase" />
+                <PasswordBox Password="{Binding ConfirmProfilePassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="" />
             </StackPanel>
         </Grid>
         

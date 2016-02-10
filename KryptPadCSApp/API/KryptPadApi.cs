@@ -30,7 +30,7 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        private static string ServiceHost { get; } =  "http://test.kryptpad.com/";
+        private static string ServiceHost { get; } = "http://test.kryptpad.com/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
@@ -140,20 +140,18 @@ namespace KryptPadCSApp.API
 
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl("api/profiles"));
-                //read the data
-                var data = await response.Content.ReadAsStringAsync();
-
+                
                 //deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
-                    //deserialize the response as an ApiResponse object
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
                     return JsonConvert.DeserializeObject<ProfileResponse>(data);
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
 
@@ -165,30 +163,32 @@ namespace KryptPadCSApp.API
         /// <param name="id"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse> GetProfileAsync(int id, string token, string passphrase)
+        public static async Task<ApiProfile> GetProfileAsync(ApiProfile profile, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
 
-                //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{id}"));
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
 
-                //read the data
-                var data = await response.Content.ReadAsStringAsync();
+                //send request and get a response
+                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}"));
 
                 //deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
-                    //deserialize the response as an ApiResponse object
-                    return JsonConvert.DeserializeObject<ProfileResponse>(data);
+                    //read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
+                    var profileResp = JsonConvert.DeserializeObject<ProfileResponse>(data);
+                    // Return the profile
+                    return profileResp.Profiles.SingleOrDefault();
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
 
@@ -201,12 +201,16 @@ namespace KryptPadCSApp.API
         /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveProfile(ApiProfile profile, string token)
+        public static async Task<SuccessResponse> SaveProfile(ApiProfile profile, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
                 AuthorizeRequest(client, token);
+
+                // TODO: TEST
+                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+
                 // Create JSON content.
                 var content = JsonContent(profile);
 
@@ -223,21 +227,19 @@ namespace KryptPadCSApp.API
                     // Update
                     response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}"), content);
                 }
-
-                // Read the data
-                var data = await response.Content.ReadAsStringAsync();
+                               
 
                 // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
                     // Deserialize the response as an ApiResponse object
                     return new SuccessResponse(Convert.ToInt32(data));
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
 
@@ -389,7 +391,7 @@ namespace KryptPadCSApp.API
         /// <returns></returns>
         public static async Task<bool> DeleteCategoryAsync(ApiProfile profile, int categoryId, string token)
         {
-            
+
             using (var client = new HttpClient())
             {
                 // Authorize the request.
@@ -716,6 +718,47 @@ namespace KryptPadCSApp.API
         #region Helper methods
 
         /// <summary>
+        /// Process a failed request
+        /// </summary>
+        /// <param name="response"></param>
+        private static async Task<Exception> CreateException(HttpResponseMessage response)
+        {
+            Exception exception;
+            try
+            {
+                //read the data
+                var data = await response.Content.ReadAsStringAsync();
+                // Attempt to read the data
+                var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+
+                if (wer == null)
+                {
+                    throw new Exception("No exception details available");
+                }
+
+                // If we have a WebExceptionResponse object, then use that to create an exception
+                exception = wer.ToException();
+            }
+            catch (Exception)
+            {
+                // No web exception details, so let's tackle some basic responses
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    exception = new UnauthorizedAccessException("Access denied due to invalid credentials.");
+                }
+                else
+                {
+                    exception = new Exception("An error occurred while trying to process your request.");
+                }
+
+            }
+
+            // Return the exception
+            return exception;
+
+        }
+
+        /// <summary>
         /// Authorizes an http client request
         /// </summary>
         /// <param name="client"></param>
@@ -748,51 +791,6 @@ namespace KryptPadCSApp.API
         /// <returns></returns>
         private static string GetUrl(string uri) => $"{ServiceHost}{uri}";
 
-        //public static bool TestResponse<T>(ApiResponse response)
-        //{
-        //    if (response is T)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Takes a NameValueCollection and creates a query string
-        ///// </summary>
-        ///// <param name="values"></param>
-        ///// <returns></returns>
-        //private static string CreateQueryString(NameValueCollection values)
-        //{
-        //    var list = new List<string>();
-
-        //    foreach (var k in values.AllKeys)
-        //    {
-        //        list.Add($"{k}={WebUtility.UrlEncode(values[k])}");
-        //    }
-
-        //    return string.Join("&", list);
-        //}
-
-        ///// <summary>
-        ///// Takes an object and creates a query string from the public properties
-        ///// </summary>
-        ///// <param name="values"></param>
-        ///// <returns></returns>
-        //private static string CreateQueryString(object values)
-        //{
-        //    var list = new List<string>();
-
-        //    foreach (var k in values.AllKeys)
-        //    {
-        //        list.Add($"{k}={WebUtility.UrlEncode(values[k])}");
-        //    }
-
-        //    return string.Join("&", list);
-        //}
         #endregion
 
     }
