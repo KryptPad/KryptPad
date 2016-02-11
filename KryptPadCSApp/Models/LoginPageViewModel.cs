@@ -95,24 +95,12 @@ namespace KryptPadCSApp.Models
         {
             RegisterCommands();
 
-            // Do not auto login if we already have an access token.
-            if (string.IsNullOrWhiteSpace(AccessToken) && !DisableAutoLogin)
-            {
-                // Check the password vault for any saved credentials.
-                LoginFromSavedCredentials();
-            }
-            else
-            {
-                // Clear the access token - logout.
-                AccessToken = null;
+            // Ensure that the access token is cleared upon arrival
+            AccessToken = null;
 
-                // Set this flag, or when the user clicks back, auto login
-                // will be attempted. We dont want that.
-                DisableAutoLogin = true;
-
-                //TODO: Decide whether to clear out saved credentials here.
-            }
-
+            // Check the password vault for any saved credentials.
+            LoginFromSavedCredentials();
+            
         }
 
 
@@ -152,13 +140,21 @@ namespace KryptPadCSApp.Models
 
                 if (login != null)
                 {
-                    //get the users password
+                    // Get the users password
                     login.RetrievePassword();
-                    //set properties
+                    // Set properties
                     Email = login.UserName;
                     Password = login.Password;
-                    //do login
-                    var t = LoginAsync();
+
+                    // Make sure we can auto login in, and that we don't already have an access token
+                    if (!DisableAutoLogin && AccessToken == null)
+                    {
+                        // Do login
+                        var t = LoginAsync();
+
+                        // Disable the auto login
+                        DisableAutoLogin = true;
+                    }
 
                 }
             }

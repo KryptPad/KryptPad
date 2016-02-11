@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="Classes\Enumerators.cs" />
     <Compile Include="API\KryptPadApi.cs" />
+    <Compile Include="Classes\NavigationHelper.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />
     <Compile Include="Classes\DialogHelper.cs" />
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">

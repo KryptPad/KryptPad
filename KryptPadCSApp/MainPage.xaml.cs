@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Security.Authentication.OnlineId;
+using KryptPadCSApp.Classes;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -54,7 +55,7 @@ namespace KryptPadCSApp
         {
 
             // Navigate
-            Navigate(typeof(ItemsPage), null);
+            NavigationHelper.Navigate(typeof(ItemsPage), null);
 
             // Close the pane
             ClosePane();
@@ -63,7 +64,7 @@ namespace KryptPadCSApp
         private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate
-            Navigate(typeof(ManageCategoriesPage), null);
+            NavigationHelper.Navigate(typeof(ManageCategoriesPage), null);
 
             // Close the pane
             ClosePane();
@@ -71,21 +72,14 @@ namespace KryptPadCSApp
 
         private void BackToProfilesRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            // Go back to profiles
-            (App.Current as App).Passphrase = null;
-
             // Navigate
-            Navigate(typeof(SelectProfilePage), null);
+            NavigationHelper.Navigate(typeof(SelectProfilePage), null, true);
         }
 
         private void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            // Completely sign out
-            (App.Current as App).Passphrase = null;
-            (App.Current as App).AccessToken = null;
-
             // Navigate
-            Navigate(typeof(LoginPage), null);
+            NavigationHelper.Navigate(typeof(LoginPage), null, true);
         }
 
         #region Helper Methods
@@ -104,29 +98,10 @@ namespace KryptPadCSApp
             }
         }
 
-        // TODO: Move this to a static class somewhere
-        /// <summary>
-        /// Navigates to a page using the MainPage frame
-        /// </summary>
-        /// <param name="pageType"></param>
-        /// <param name="parameter"></param>
-        private void Navigate(Type pageType, object parameter)
-        {
-            var mainPage = Window.Current.Content as MainPage;
-
-            if (mainPage != null)
-            {
-                var frame = mainPage.RootFrame;
-                if (frame != null)
-                {
-                    frame.Navigate(pageType, parameter);
-                }
-            }
-
-        }
+        
 
         #endregion
 
-        
+
     }
 }

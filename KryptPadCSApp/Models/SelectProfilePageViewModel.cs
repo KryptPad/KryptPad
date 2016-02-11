@@ -25,43 +25,23 @@ namespace KryptPadCSApp.Models
         /// Gets the list of profiles for a user
         /// </summary>
         public ObservableCollection<ApiProfile> Profiles { get; protected set; } = new ObservableCollection<ApiProfile>();
-
-        private ApiProfile _selectedProfile;
-
-        public ApiProfile SelectedProfile
-        {
-            get { return _selectedProfile; }
-            set
-            {
-                _selectedProfile = value;
-
-                // Set the selected profile
-                CurrentProfile = _selectedProfile;
-
-                
-
-                // Wait for async dialog
-                //t.Wait();
-                Passphrase = "12345678";
-                //// Notify changes
-                //OnPropertyChanged(nameof(SelectedProfile));
-
-                
-            }
-        }
-
-
+        
         public Command CreateProfileCommand { get; protected set; }
 
         public Command DeleteProfileCommand { get; protected set; }
 
         public Command SelectProfileCommand { get; protected set; }
 
+        public Command SignOutCommand { get; protected set; }
+
         #endregion
 
         public SelectProfilePageViewModel()
         {
             RegisterCommands();
+
+            // Ensure the passphrase is cleared
+            Passphrase = null;
 
 #if DEBUG
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
@@ -177,6 +157,11 @@ namespace KryptPadCSApp.Models
                 );
 
 
+            });
+
+            SignOutCommand = new Command((p) => {
+                // Sign out
+                NavigationHelper.Navigate(typeof(LoginPage), null, true);
             });
         }
 

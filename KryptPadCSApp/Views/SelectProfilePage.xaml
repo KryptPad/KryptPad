@@ -25,16 +25,36 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
 
-                <StackPanel Grid.Row="0">
-                    <TextBlock Grid.Row="0" Text="Profiles" Style="{StaticResource LargeBlueTextBlock}" />
-                    <TextBlock Text="Choose a profile or create a new one" TextWrapping="WrapWholeWords" Margin="0,0,0,10" />
-                    <Button Content="Create Profile"
-                            Margin="0,0,0,10"
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Row="0"
+                            Grid.Column="0"
+                            Command="{Binding SignOutCommand}">
+                        <SymbolIcon Symbol="Back" />
+                    </Button>
+
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Profiles" Style="{StaticResource LargeBlueTextBlock}" />
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="Choose a profile or create a new one" TextWrapping="WrapWholeWords"  />
+                    <Button Grid.Row="2"
+                            Grid.ColumnSpan="2"
+                            Content="Create Profile"
                             Command="{Binding CreateProfileCommand}"/>
-                </StackPanel>
+                </Grid>
 
                 <ListBox Grid.Row="1"
                          ItemsSource="{Binding Profiles}"
@@ -121,6 +141,8 @@
 
                 </ListBox>
 
+
+                
 
             </Grid>
 
