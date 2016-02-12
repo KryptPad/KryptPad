@@ -21,11 +21,21 @@ namespace KryptPadCSApp.UserControls
     {
 
         #region Dependency Properties
+        /// <summary>
+        /// Dependency property for IsActive
+        /// </summary>
         public static readonly DependencyProperty IsActiveProperty =
                 DependencyProperty.Register("IsActive", typeof(bool), typeof(BusyIndicator), new PropertyMetadata(false, (dp, e)=> {
                     var c = dp as BusyIndicator;
 
                     c.BusyProgressRing.IsActive = (bool)e.NewValue;
+                }));
+
+        public static readonly DependencyProperty LabelProperty =
+                DependencyProperty.Register("Label", typeof(string), typeof(BusyIndicator), new PropertyMetadata(false, (dp, e) => {
+                    var c = dp as BusyIndicator;
+
+                    c.IndicatorLabel.Text = (string)e.NewValue;
                 }));
         #endregion
 
@@ -37,6 +47,15 @@ namespace KryptPadCSApp.UserControls
         {
             get { return (bool)GetValue(IsActiveProperty); }
             set { SetValue(IsActiveProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the active status of the progress ring
+        /// </summary>
+        public string Label
+        {
+            get { return (string)GetValue(LabelProperty); }
+            set { SetValue(LabelProperty, value); }
         }
         #endregion
 

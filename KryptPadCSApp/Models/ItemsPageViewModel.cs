@@ -136,6 +136,7 @@ namespace KryptPadCSApp.Models
         /// Gets or sets the command that is fired when toggle selection is clicked
         /// </summary>
         public Command ToggleSelectionMode { get; set; }
+        
         #endregion
 
 
@@ -147,6 +148,9 @@ namespace KryptPadCSApp.Models
             // Set some defaults
             SelectionMode = ListViewSelectionMode.None;
 
+#if DEBUG
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
+#endif
             // Get list of categories
             var t = RefreshCategories();
         }
@@ -229,6 +233,8 @@ namespace KryptPadCSApp.Models
             // Clear the list
             Categories.Clear();
 
+            IsBusy = true;
+            
             try
             {
                 // Get categories
@@ -246,7 +252,10 @@ namespace KryptPadCSApp.Models
                 // Operation failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            
+
+
+            // Not busy any more
+            IsBusy = false;
             
         }
     }

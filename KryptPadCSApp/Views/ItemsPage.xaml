@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page xmlns:UserControls="using:KryptPadCSApp.UserControls" 
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp.Views"
@@ -111,6 +111,14 @@
                 </DataTemplate>
             </Pivot.ItemTemplate>
         </Pivot>
+
+        <!--Progress indicator-->
+        <ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
+                      IsActive="{Binding IsBusy}"
+                      Width="50"
+                      Height="50"
+                      Grid.Row="1"
+                      Foreground="White"/>
 
     </Grid>
 </Page>

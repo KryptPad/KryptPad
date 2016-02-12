@@ -66,7 +66,8 @@
 
             <!--Progress indicator-->
             <UserControls:BusyIndicator Visibility="{Binding BusyIndicatorVisibility}"
-                                        IsActive="{Binding IsBusy}"/>
+                                        IsActive="{Binding IsBusy}"
+                                        Label="Signing you in"/>
 
 
         </Grid>
