@@ -48,18 +48,11 @@ namespace KryptPadCSApp.Models
         {
             AddCommand = new Command((p) =>
             {
-                //close the dialog
-                DialogHelper.CloseDialog(FieldName);
+                
 
             }, false);
 
-            CancelCommand = new Command((p) =>
-            {
-                //close this dialog and go back to login
-                DialogHelper.CloseDialog();
-                
-            });
-
+            
         }
 
     }

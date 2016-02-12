@@ -2,6 +2,7 @@
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Dialogs;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -97,15 +98,12 @@ namespace KryptPadCSApp.Models
         public Command CancelCommand { get; protected set; }
 
         public Command DeleteFieldCommand { get; protected set; }
-
-
-
+        
         #endregion
 
         public NewItemPageViewModel()
         {
             RegisterCommands();
-            //ItemTypes = new string[] { "Profile", "Note" };
         }
 
         /// <summary>
@@ -120,20 +118,20 @@ namespace KryptPadCSApp.Models
             {
 
                 //show the add field dialog
-                var res = await DialogHelper.ShowAddFieldDialog();
+                var res = await DialogHelper.ShowDialog<AddFieldDialog>((d)=> {
 
-                //get the result
-                if (res != null)
-                {
                     //create new field
                     var field = new ApiField()
                     {
-                        Name = (string)res
+                        Name = (d.DataContext as AddFieldDialogViewModel).FieldName
                     };
 
                     //add to list of fields
                     Fields.Add(field);
-                }
+
+                });
+
+               
             });
 
             DeleteFieldCommand = new Command((p) =>

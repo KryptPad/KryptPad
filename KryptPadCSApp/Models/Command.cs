@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace KryptPadCSApp.Models
 {
-    class Command : ICommand
+   class Command : ICommand
     {
         public event EventHandler CanExecuteChanged;
 

@@ -2,6 +2,7 @@
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Dialogs;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -103,7 +104,9 @@ namespace KryptPadCSApp.Models
         public ApiItem SelectedItem
         {
             get { return _selectedItem; }
-            set { _selectedItem = value;
+            set
+            {
+                _selectedItem = value;
 
                 // Enable the delete command
                 DeleteItemCommand.CommandCanExecute = value != null;
@@ -136,7 +139,7 @@ namespace KryptPadCSApp.Models
         /// Gets or sets the command that is fired when toggle selection is clicked
         /// </summary>
         public Command ToggleSelectionMode { get; set; }
-        
+
         #endregion
 
 
@@ -160,10 +163,37 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            AddCategoryCommand = new Command((p) =>
+            AddCategoryCommand = new Command(async (p) =>
             {
-                // Navigate
-                Navigate(typeof(NewCategoryPage));
+                // Prompt for name
+                await DialogHelper.ShowDialog<NamePromptDialog>(async (d) =>
+                {
+                    try
+                    {
+                        //create new category
+                        var category = new ApiCategory()
+                        {
+                            Name = d.NameValue
+                        };
+
+                        // Send the category to the api
+                        var resp = await KryptPadApi.SaveCategoryAsync(CurrentProfile, category, AccessToken, Passphrase);
+
+                        // Set the id of the newly created category
+                        category.Id = resp.Id;
+
+                        // Add the category to the collection
+                        Categories.Add(category);
+
+                        // Select the category
+                        SelectedCategory = category;
+                    }
+                    catch (Exception ex)
+                    {
+                        // Operation failed
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                });
             });
 
             AddItemCommand = new Command((p) =>
@@ -202,11 +232,12 @@ namespace KryptPadCSApp.Models
                             await RefreshCategories();
                         }
 
-                    }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         // Operation failed
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
-                        
+
                     }
                 }
 
@@ -234,12 +265,12 @@ namespace KryptPadCSApp.Models
             Categories.Clear();
 
             IsBusy = true;
-            
+
             try
             {
                 // Get categories
                 var resp = await KryptPadApi.GetCategoriesWithItemsAsync(CurrentProfile, AccessToken, Passphrase);
-                
+
                 // Create list of categories
                 foreach (var category in resp.Categories)
                 {
@@ -256,7 +287,7 @@ namespace KryptPadCSApp.Models
 
             // Not busy any more
             IsBusy = false;
-            
+
         }
     }
 }

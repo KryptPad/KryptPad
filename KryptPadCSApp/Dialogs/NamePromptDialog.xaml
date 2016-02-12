@@ -1,19 +1,22 @@
 ﻿<ContentDialog
-    x:Class="KryptPadCSApp.Dialogs.PassphrasePrompt"
+    x:Class="KryptPadCSApp.Dialogs.NamePromptDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="ENTER YOUR PASSPHRASE"
+    Title="TITLE"
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
-    
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
-    >
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
     <Grid>
-        <PasswordBox x:Name="PasswordTextBox" KeyUp="PasswordTextBox_KeyUp"/>
+        <StackPanel>
+            <TextBlock Text="Enter name" />
+            <TextBox x:Name="NameTextBox" KeyUp="NameTextBox_KeyUp" />
+        </StackPanel>
+        
     </Grid>
 </ContentDialog>

@@ -23,6 +23,5 @@ namespace KryptPadCSApp.Dialogs
         {
             this.InitializeComponent();
         }
-                
     }
 }

@@ -20,38 +20,39 @@ using Windows.UI.Xaml.Navigation;
 
 namespace KryptPadCSApp.Dialogs
 {
-    public sealed partial class PassphrasePrompt : ContentDialog
+    public sealed partial class NamePromptDialog : ContentDialog
     {
 
         #region Properties
-
-        private ContentDialogResult _result;
-
+        
         /// <summary>
-        /// Gets the passphrase the user entered
+        /// Gets or sets the name textbox field
         /// </summary>
-        public string Passphrase { get { return PasswordTextBox.Password; } }
+        public string NameValue
+        {
+            get
+            {
+                return NameTextBox.Text;
+            }
+            set
+            {
+                NameTextBox.Text = value;
+            }
+        }
         #endregion
 
-        public PassphrasePrompt()
+        public NamePromptDialog()
         {
             this.InitializeComponent();
-
-            Closing += PassphrasePrompt_Closing;
         }
-
-        private void PassphrasePrompt_Closing(ContentDialog sender, ContentDialogClosingEventArgs args)
-        {
-            
-        }
-
+        
         #region Methods
         private async Task<bool> ValidateInput()
         {
             // If the user entered a passphrase, return it and hide the dialog
-            if (string.IsNullOrWhiteSpace(PasswordTextBox.Password))
-            {   
-                await DialogHelper.ShowMessageDialogAsync("Please enter your passphrase for this profile.");
+            if (string.IsNullOrWhiteSpace(NameValue))
+            {
+                await DialogHelper.ShowMessageDialogAsync("Please enter a value.");
                 return false;
             }
 
@@ -61,7 +62,7 @@ namespace KryptPadCSApp.Dialogs
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            // If the user entered a passphrase, return it and hide the dialog
+            // Check if user entered a name
             if (!await ValidateInput())
             {
                 args.Cancel = true;
@@ -70,21 +71,15 @@ namespace KryptPadCSApp.Dialogs
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            Hide();
         }
 
-        private async void PasswordTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
+        private async void NameTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                // If the user entered a passphrase, return it and hide the dialog
-                if (await ValidateInput())
-                {
-        
-                }
-            }
+            //// Check if user entered a name
+            //if (await ValidateInput())
+            //{
+                
+            //}
         }
-
-        
     }
 }

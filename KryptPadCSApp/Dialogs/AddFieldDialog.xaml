@@ -8,6 +8,9 @@
     x:Class="KryptPadCSApp.Dialogs.AddFieldDialog"
     mc:Ignorable="d"
     Title="Add Field"
+    PrimaryButtonText="OK"
+    PrimaryButtonCommand="{Binding AddCommand}"
+    SecondaryButtonText="Cancel"
     >
 
     <ContentDialog.DataContext>
@@ -15,28 +18,9 @@
     </ContentDialog.DataContext>
 
     <Grid>
-
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>-->
-
         <StackPanel>
             <TextBlock Text="Enter a field name (e.g. Password)" />
             <TextBox Text="{Binding FieldName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-            <StackPanel Orientation="Horizontal"
-				Margin="0,10,0,0">
-                <Button Content="Add" Margin="0,0,10,0"
-					Command="{Binding AddCommand}" />
-
-                <!--user can cancel-->
-                <Button Content="Cancel"  
-					Command="{Binding CancelCommand}"/>
-            </StackPanel>
-
         </StackPanel>
-
-
     </Grid>
 </ContentDialog>
