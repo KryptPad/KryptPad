@@ -100,7 +100,7 @@ namespace KryptPadCSApp.Models
 
             // Check the password vault for any saved credentials.
             LoginFromSavedCredentials();
-            
+
         }
 
 
@@ -196,29 +196,22 @@ namespace KryptPadCSApp.Models
             {
                 //log in and get access token
                 var response = await KryptPadApi.AuthenticateAsync(Email, Password);
+                
+                //store the access token
+                AccessToken = (response as OAuthTokenResponse).AccessToken;
 
-                //check the response. if it is an OAuthTokenResponse then store the token and navigate user
-                //to select profile page
-                if (response is OAuthTokenResponse)
-                {
-                    //store the access token
-                    AccessToken = (response as OAuthTokenResponse).AccessToken;
+                //save credentials
+                SaveCredentialsIfAutoSignIn();
 
-                    //save credentials
-                    SaveCredentialsIfAutoSignIn();
+                //navigate to the select profile page
+                Navigate(typeof(SelectProfilePage));
 
-                    //navigate to the select profile page
-                    Navigate(typeof(SelectProfilePage));
 
-                }
-                else
-                {
-                    await DialogHelper.ShowMessageDialogAsync(
-                        "Your username or password is incorrect.");
-                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                //await DialogHelper.ShowMessageDialogAsync(
+                //"Your username or password is incorrect.");
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
 

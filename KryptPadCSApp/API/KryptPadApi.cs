@@ -45,7 +45,7 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        public static async Task<ApiResponse> AuthenticateAsync(string username, string password)
+        public static async Task<OAuthTokenResponse> AuthenticateAsync(string username, string password)
         {
             using (var client = new HttpClient())
             {
@@ -62,20 +62,21 @@ namespace KryptPadCSApp.API
                 //send the post request
                 var response = await client.PostAsync(GetUrl("token"), content);
 
-                //get the response as a string
-                var data = await response.Content.ReadAsStringAsync();
+
 
                 //get the data if the response is what we want
                 if (response.IsSuccessStatusCode)
                 {
+                    //get the response as a string
+                    var data = await response.Content.ReadAsStringAsync();
+
                     //deserialize the data and get the access token
                     return JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
 
                 }
                 else
                 {
-                    //deserialize the data and get the access token
-                    return JsonConvert.DeserializeObject<OAuthTokenErrorResponse>(data);
+                    throw await CreateException(response);
                 }
             }
 
@@ -140,7 +141,7 @@ namespace KryptPadCSApp.API
 
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl("api/profiles"));
-                
+
                 //deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
@@ -227,7 +228,7 @@ namespace KryptPadCSApp.API
                     // Update
                     response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}"), content);
                 }
-                               
+
 
                 // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
@@ -736,6 +737,9 @@ namespace KryptPadCSApp.API
                     throw new Exception("No exception details available");
                 }
 
+                //deserialize the data and get the access token
+                //return JsonConvert.DeserializeObject<OAuthTokenErrorResponse>(data);
+
                 // If we have a WebExceptionResponse object, then use that to create an exception
                 exception = wer.ToException();
             }
@@ -750,7 +754,7 @@ namespace KryptPadCSApp.API
                 {
                     exception = new Exception("An error occurred while trying to process your request.");
                 }
-
+                
             }
 
             // Return the exception
