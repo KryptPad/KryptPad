@@ -5,6 +5,7 @@ using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Credentials;
@@ -208,10 +209,13 @@ namespace KryptPadCSApp.Models
 
 
             }
+            catch (WebException ex)
+            {
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
             catch (Exception ex)
             {
-                //await DialogHelper.ShowMessageDialogAsync(
-                //"Your username or password is incorrect.");
+                
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
 

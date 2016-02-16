@@ -102,6 +102,7 @@
     <Compile Include="API\Models\ApiField.cs" />
     <Compile Include="API\Models\ApiItem.cs" />
     <Compile Include="API\Models\ApiProfile.cs" />
+    <Compile Include="API\Responses\ApiWebExceptionResponse.cs" />
     <Compile Include="API\Responses\CategoryResponse.cs" />
     <Compile Include="API\Responses\FieldsResponse.cs" />
     <Compile Include="API\Responses\ItemsResponse.cs" />

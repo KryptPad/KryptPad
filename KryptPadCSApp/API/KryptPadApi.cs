@@ -727,21 +727,35 @@ namespace KryptPadCSApp.API
             Exception exception;
             try
             {
-                //read the data
+                // Read the data
                 var data = await response.Content.ReadAsStringAsync();
-                // Attempt to read the data
-                var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
 
-                if (wer == null)
+                // Check is this is an oauth error
+                var msg = JsonConvert.DeserializeObject(data) as JObject;
+                ApiWebExceptionResponse r = null;
+                // Does this have what we want?
+                if (msg != null)
+                {
+                    if ((string)msg["error"] == "invalid_grant")
+                    {
+                        // Deserialize the data
+                        r = JsonConvert.DeserializeObject<OAuthTokenErrorResponse>(data);
+                    }
+                    else
+                    {
+                        // Deserialize the data
+                        r = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                    }
+                }
+
+                // If we don't have a response, throw an exception and handle it in the catch
+                if (r == null)
                 {
                     throw new Exception("No exception details available");
                 }
-
-                //deserialize the data and get the access token
-                //return JsonConvert.DeserializeObject<OAuthTokenErrorResponse>(data);
-
+                
                 // If we have a WebExceptionResponse object, then use that to create an exception
-                exception = wer.ToException();
+                exception = r.ToException();
             }
             catch (Exception)
             {

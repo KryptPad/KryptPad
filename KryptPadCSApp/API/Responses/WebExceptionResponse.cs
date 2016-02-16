@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,17 +8,16 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.API.Responses
 {
-    class WebExceptionResponse : ApiResponse
+    class WebExceptionResponse : ApiWebExceptionResponse
     {
         public string Message { get; set; }
-        
         public IDictionary<string, string[]> ModelState { get; set; }
 
         /// <summary>
         /// Converts this WebExceptionResponse to an Exception object
         /// </summary>
         /// <returns></returns>
-        public WebException ToException()
+        public override WebException ToException()
         {
             var msg = Message;
 
