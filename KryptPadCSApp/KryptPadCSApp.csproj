@@ -124,6 +124,7 @@
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">
       <DependentUpon>AddFieldDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ClosableContentDialog.cs" />
     <Compile Include="Dialogs\NamePromptDialog.xaml.cs">
       <DependentUpon>NamePromptDialog.xaml</DependentUpon>
     </Compile>
@@ -148,6 +149,7 @@
     <Compile Include="Models\LoginPageViewModel.cs" />
     <Compile Include="Models\MainPageViewModel.cs" />
     <Compile Include="Models\ManageCategoriesViewModel.cs" />
+    <Compile Include="Models\NamePromptDialogViewModel.cs" />
     <Compile Include="Models\NewCategoryPageViewModel.cs" />
     <Compile Include="Models\NewItemPageViewModel.cs" />
     <Compile Include="Models\PageNavigationParamsBase.cs" />

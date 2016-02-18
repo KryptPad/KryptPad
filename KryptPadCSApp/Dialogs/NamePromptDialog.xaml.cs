@@ -20,66 +20,38 @@ using Windows.UI.Xaml.Navigation;
 
 namespace KryptPadCSApp.Dialogs
 {
-    public sealed partial class NamePromptDialog : ContentDialog
+    public sealed partial class NamePromptDialog : ClosableContentDialog
     {
 
         #region Properties
-        
+
         /// <summary>
-        /// Gets or sets the name textbox field
+        /// Gets or sets the value
         /// </summary>
-        public string NameValue
+        public string Value
         {
-            get
-            {
-                return NameTextBox.Text;
-            }
-            set
-            {
-                NameTextBox.Text = value;
-            }
+            get { return (DataContext as NamePromptDialogViewModel).Value; }
+            set { (DataContext as NamePromptDialogViewModel).Value = value; }
         }
         #endregion
 
         public NamePromptDialog()
         {
             this.InitializeComponent();
+            
         }
         
-        #region Methods
-        private async Task<bool> ValidateInput()
+        private void NameTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-            // If the user entered a passphrase, return it and hide the dialog
-            if (string.IsNullOrWhiteSpace(NameValue))
+            // Trigger the primary action
+            if (e.Key== Windows.System.VirtualKey.Enter && PrimaryButtonCommand.CanExecute(null))
             {
-                await DialogHelper.ShowMessageDialogAsync("Please enter a value.");
-                return false;
+                // Yes, it can execute, call it
+                PrimaryButtonCommand.Execute(null);
+
+                // Close the dialog
+                Close(ContentDialogResult.Primary);
             }
-
-            return true;
-        }
-        #endregion
-
-        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            // Check if user entered a name
-            if (!await ValidateInput())
-            {
-                args.Cancel = true;
-            }
-        }
-
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-        }
-
-        private async void NameTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
-        {
-            //// Check if user entered a name
-            //if (await ValidateInput())
-            //{
-                
-            //}
         }
     }
 }

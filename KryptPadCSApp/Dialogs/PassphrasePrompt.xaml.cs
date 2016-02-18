@@ -20,12 +20,10 @@ using Windows.UI.Xaml.Navigation;
 
 namespace KryptPadCSApp.Dialogs
 {
-    public sealed partial class PassphrasePrompt : ContentDialog
+    public sealed partial class PassphrasePrompt : ClosableContentDialog
     {
 
         #region Properties
-
-        private ContentDialogResult _result;
 
         /// <summary>
         /// Gets the passphrase the user entered
@@ -36,13 +34,6 @@ namespace KryptPadCSApp.Dialogs
         public PassphrasePrompt()
         {
             this.InitializeComponent();
-
-            Closing += PassphrasePrompt_Closing;
-        }
-
-        private void PassphrasePrompt_Closing(ContentDialog sender, ContentDialogClosingEventArgs args)
-        {
-            
         }
 
         #region Methods
@@ -68,11 +59,7 @@ namespace KryptPadCSApp.Dialogs
             }
         }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            Hide();
-        }
-
+        
         private async void PasswordTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
@@ -80,7 +67,7 @@ namespace KryptPadCSApp.Dialogs
                 // If the user entered a passphrase, return it and hide the dialog
                 if (await ValidateInput())
                 {
-        
+                    Close(ContentDialogResult.Primary);
                 }
             }
         }

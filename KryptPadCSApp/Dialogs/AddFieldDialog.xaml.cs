@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace KryptPadCSApp.Dialogs
 {
-    public sealed partial class AddFieldDialog : ContentDialog
+    public sealed partial class AddFieldDialog : ClosableContentDialog
     {
         public AddFieldDialog()
         {

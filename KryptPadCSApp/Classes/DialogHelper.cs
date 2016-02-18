@@ -57,7 +57,7 @@ namespace KryptPadCSApp.Classes
         /// <typeparam name="T"></typeparam>
         /// <param name="primaryAction"></param>
         /// <returns></returns>
-        public static async Task<ContentDialogResult> ShowDialog<T>(Action<T> primaryAction) where T : ContentDialog, new()
+        public static async Task<ContentDialogResult> ShowDialog<T>(Action<T> primaryAction) where T : ClosableContentDialog, new()
         {
             // Create instance of content dialog
             var d = new T();
@@ -66,7 +66,7 @@ namespace KryptPadCSApp.Classes
             var res = await d.ShowAsync();
 
             // Determine which button was fired, and decide if we need to execute the primary action
-            if (res == ContentDialogResult.Primary && primaryAction != null)
+            if ((res == ContentDialogResult.Primary || d.Result == ContentDialogResult.Primary) && primaryAction != null)
             {
                 primaryAction(d);
             }

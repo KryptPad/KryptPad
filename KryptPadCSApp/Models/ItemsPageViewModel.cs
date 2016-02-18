@@ -173,7 +173,7 @@ namespace KryptPadCSApp.Models
                         //create new category
                         var category = new ApiCategory()
                         {
-                            Name = d.NameValue
+                            Name = d.Value
                         };
 
                         // Send the category to the api
