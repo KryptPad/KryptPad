@@ -93,20 +93,20 @@ namespace KryptPadCSApp.Models
                         // Operation failed
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
-                }, "Add Category");
+                }, "ADD CATEGORY");
             });
 
             // Handle rename category
             RenameCategoryCommand = new Command(async (p) =>
             {
+                //create new category
+                var category = p as ApiCategory;
+
                 // Prompt for name
-                await DialogHelper.ShowDialog<NamePromptDialog>(async (d) =>
+                await DialogHelper.ShowNameDialog(async (d) =>
                 {
                     try
                     {
-                        //create new category
-                        var category = p as ApiCategory;
-
                         // Set new name
                         category.Name = d.Value;
 
@@ -121,7 +121,7 @@ namespace KryptPadCSApp.Models
                         // Operation failed
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
-                }, "Rename Category");
+                }, "RENAME CATEGORY", category.Name);
             });
 
             // Handle item delete
