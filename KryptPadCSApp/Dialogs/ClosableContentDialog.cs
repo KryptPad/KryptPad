@@ -14,7 +14,24 @@ namespace KryptPadCSApp.Dialogs
 
         public ContentDialogResult Result { get; private set; }
 
+        public bool Cancel { get; set; }
         #endregion
+
+        public ClosableContentDialog()
+        {
+            Closing += (sender, e) =>
+            {
+                if (Cancel)
+                {
+                    e.Cancel = Cancel;
+                    // Reset
+                    Cancel = false;
+                    
+                }
+            };
+        }
+
+        
 
         #region Methods
         /// <summary>
@@ -29,6 +46,8 @@ namespace KryptPadCSApp.Dialogs
             Hide();
             
         }
+
+        
 
         #endregion
 

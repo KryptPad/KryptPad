@@ -1,6 +1,7 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +24,39 @@ namespace KryptPadCSApp.Models
                 // Notify change.
                 OnPropertyChanged(nameof(Name));
                 // Can we execute command?
-                SaveCommand.CommandCanExecute = !string.IsNullOrWhiteSpace(_name);
+                SaveCommand.CommandCanExecute = CanSaveProfile;
             }
         }
 
-        public string ProfilePassphrase { get; set; }
-        public string ConfirmProfilePassphrase { get; set; }
+        private string _profilePassphrase;
+
+        public string ProfilePassphrase
+        {
+            get { return _profilePassphrase; }
+            set
+            {
+                _profilePassphrase = value;
+                // Notify change
+                OnPropertyChanged(nameof(ProfilePassphrase));
+                // Can we execute command?
+                SaveCommand.CommandCanExecute = CanSaveProfile;
+            }
+        }
+        private string _confirmProfilePassphrase;
+
+        public string ConfirmProfilePassphrase
+        {
+            get { return _confirmProfilePassphrase; }
+            set
+            {
+                _confirmProfilePassphrase = value;
+                // Notify change
+                OnPropertyChanged(nameof(ConfirmProfilePassphrase));
+                // Can we execute command?
+                SaveCommand.CommandCanExecute = CanSaveProfile;
+
+            }
+        }
 
         public Command SaveCommand { get; protected set; }
 
@@ -51,6 +79,32 @@ namespace KryptPadCSApp.Models
             {
                 try
                 {
+                    var errors = new List<string>();
+                    // Check password
+                    if (ProfilePassphrase.Length < 8)
+                    {
+                        // Opps, passphrase doesn't meet criteria
+                        errors.Add("Passphrase must be at least eight characters long.");
+
+                    }
+                    else if (!ProfilePassphrase.Equals(ConfirmProfilePassphrase))
+                    {
+                        // Opps, passphrase doesn't meet criteria
+                        errors.Add("Passphrase and Confirm Passphrase must match.");
+                    }
+
+                    if (errors.Count > 0)
+                    {
+                        var dialog = p as ProfileDetailsDialog;
+
+                        dialog.Cancel = true;
+
+                        var errorMsg = string.Join("\n", errors);
+                        // Show message if we have any errors
+                        await DialogHelper.ShowMessageDialogAsync(errorMsg);
+
+                        return;
+                    }
 
                     //create a new profile
                     var profile = new ApiProfile()
@@ -72,6 +126,9 @@ namespace KryptPadCSApp.Models
 
         }
 
+        private bool CanSaveProfile => !string.IsNullOrWhiteSpace(Name)
+            && !string.IsNullOrWhiteSpace(ProfilePassphrase)
+            && !string.IsNullOrWhiteSpace(ConfirmProfilePassphrase);
 
         #endregion
 

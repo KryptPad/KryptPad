@@ -1,10 +1,12 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -19,17 +21,37 @@ using Windows.UI.Xaml.Navigation;
 
 namespace KryptPadCSApp.Dialogs
 {
-    public sealed partial class ProfileDetailsDialog : ContentDialog
+    public sealed partial class ProfileDetailsDialog : ClosableContentDialog
     {
         public ProfileDetailsDialog()
         {
             this.InitializeComponent();
+
+            // Determine the command's can execute state, and hook into the changed event
+            var m = DataContext as ProfileDetailsDialogViewModel;
+            if (m != null && m.SaveCommand != null)
+            {
+                m.SaveCommand.CanExecuteChanged += (sender, e) =>
+                {
+                    IsPrimaryButtonEnabled = (sender as ICommand).CanExecute(null);
+                };
+            }
+
         }
-        
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+
+        private void TriggerAction(object sender, KeyRoutedEventArgs e)
         {
-            // Close this dialog without doing anything
-            Hide();
+            // Trigger the primary action
+            if (e.Key == Windows.System.VirtualKey.Enter && PrimaryButtonCommand.CanExecute(null))
+            {
+                // Yes, it can execute, call it
+                PrimaryButtonCommand.Execute(null);
+
+                // Close the dialog
+                Close(ContentDialogResult.Primary);
+            }
         }
+
+       
     }
 }
