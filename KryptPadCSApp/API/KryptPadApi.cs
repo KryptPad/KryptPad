@@ -30,8 +30,8 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        //private static string ServiceHost { get; } = "http://test.kryptpad.com/";
-        private static string ServiceHost { get; } = "http://localhost:50821/";
+        private static string ServiceHost { get; } = "http://test.kryptpad.com/";
+        //private static string ServiceHost { get; } = "http://localhost:50821/";
 #else
         /// <summary>
         /// Gets the host address of the API service.

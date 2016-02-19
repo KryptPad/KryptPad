@@ -116,13 +116,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Enumerators.cs" />
+    <Compile Include="Classes\DialogHelper.cs" />
     <Compile Include="API\KryptPadApi.cs" />
+    <Compile Include="Classes\Enumerators.cs" />
     <Compile Include="Classes\NavigationHelper.cs" />
     <Compile Include="Collections\ProfileCollection.cs" />
     <Compile Include="Collections\RefreshableCollection.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />
-    <Compile Include="Classes\DialogHelper.cs" />
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">
       <DependentUpon>AddFieldDialog.xaml</DependentUpon>
     </Compile>
