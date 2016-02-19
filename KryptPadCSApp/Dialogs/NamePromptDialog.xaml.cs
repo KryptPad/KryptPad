@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -38,13 +39,23 @@ namespace KryptPadCSApp.Dialogs
         public NamePromptDialog()
         {
             this.InitializeComponent();
-            
+
+            // Determine the command's can execute state, and hook into the changed event
+            var m = DataContext as NamePromptDialogViewModel;
+            if (m != null && m.PrimaryCommand != null)
+            {
+                m.PrimaryCommand.CanExecuteChanged += (sender, e) =>
+                {
+                    IsPrimaryButtonEnabled = (sender as ICommand).CanExecute(null);
+                };
+            }
+
         }
-        
+
         private void NameTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
             // Trigger the primary action
-            if (e.Key== Windows.System.VirtualKey.Enter && PrimaryButtonCommand.CanExecute(null))
+            if (e.Key == Windows.System.VirtualKey.Enter && PrimaryButtonCommand.CanExecute(null))
             {
                 // Yes, it can execute, call it
                 PrimaryButtonCommand.Execute(null);

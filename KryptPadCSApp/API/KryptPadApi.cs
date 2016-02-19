@@ -30,7 +30,8 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        private static string ServiceHost { get; } = "http://test.kryptpad.com/";
+        //private static string ServiceHost { get; } = "http://test.kryptpad.com/";
+        private static string ServiceHost { get; } = "http://localhost:50821/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
@@ -202,7 +203,7 @@ namespace KryptPadCSApp.API
         /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveProfile(ApiProfile profile, string token, string passphrase)
+        public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -362,7 +363,18 @@ namespace KryptPadCSApp.API
                 // Create JSON content.
                 var content = JsonContent(category);
                 // Send request and get a response
-                var response = await client.PostAsync(GetUrl($"api/profiles/{profile.Id}/categories"), content);
+                HttpResponseMessage response;
+
+                if (category.Id == 0)
+                {
+                    // Create
+                    response = await client.PostAsync(GetUrl($"api/profiles/{profile.Id}/categories"), content);
+                }
+                else
+                {
+                    // Update
+                    response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}/categories/{category.Id}"), content);
+                }
 
                 // Read the data
                 var data = await response.Content.ReadAsStringAsync();

@@ -2,6 +2,7 @@
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Collections;
 using KryptPadCSApp.Dialogs;
 using KryptPadCSApp.Views;
 using System;
@@ -24,9 +25,11 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets the list of profiles for a user
         /// </summary>
-        public ObservableCollection<ApiProfile> Profiles { get; protected set; } = new ObservableCollection<ApiProfile>();
+        public ProfileCollection Profiles { get; protected set; } = new ProfileCollection();
         
         public Command CreateProfileCommand { get; protected set; }
+
+        public Command RenameProfileCommand { get; protected set; }
 
         public Command DeleteProfileCommand { get; protected set; }
 
@@ -130,6 +133,33 @@ namespace KryptPadCSApp.Models
                     
                 });
 
+            });
+
+            RenameProfileCommand = new Command(async (p) => {
+
+                // Prompt for name
+                await DialogHelper.ShowDialog<NamePromptDialog>(async (d) =>
+                {
+                    try
+                    {
+                        //create new category
+                        var profile = p as ApiProfile;
+
+                        // Set new name
+                        profile.Name = d.Value;
+
+                        // Send the category to the api
+                        var resp = await KryptPadApi.SaveProfileAsync(profile, AccessToken, Passphrase);
+
+                        // Refresh the view
+                        Profiles.RefreshItem(profile);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Operation failed
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                }, "Rename Profile");
             });
 
             DeleteProfileCommand = new Command(async (p) =>

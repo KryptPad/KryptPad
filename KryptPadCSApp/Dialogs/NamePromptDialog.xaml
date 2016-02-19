@@ -7,11 +7,11 @@
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Dialogs.NamePromptDialog"
     mc:Ignorable="d"
-    Title="TITLE"
+    Title=""
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
     PrimaryButtonCommand="{Binding PrimaryCommand}"
-    
+    IsPrimaryButtonEnabled="False"
     >
 
     <local:ClosableContentDialog.DataContext>

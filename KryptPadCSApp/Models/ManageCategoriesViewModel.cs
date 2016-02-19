@@ -1,6 +1,8 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Collections;
+using KryptPadCSApp.Dialogs;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -9,21 +11,33 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
 namespace KryptPadCSApp.Models
 {
     class ManageCategoriesViewModel : BasePageModel
     {
         #region Properties
+
+        ///// <summary>
+        ///// Gets the collection view
+        ///// </summary>
+        //public CollectionViewSource CategorySource { get; protected set; }
+
         /// <summary>
         /// Gets the collection of categories
         /// </summary>
         public CategoryCollection Categories { get; protected set; } = new CategoryCollection();
 
         /// <summary>
-        /// Opens new category page
+        /// Opens dialog to add a new category
         /// </summary>
         public Command AddCategoryCommand { get; private set; }
+
+        /// <summary>
+        /// Opens new category page
+        /// </summary>
+        public Command RenameCategoryCommand { get; private set; }
 
         /// <summary>
         /// Opens new category page
@@ -34,6 +48,9 @@ namespace KryptPadCSApp.Models
 
         public ManageCategoriesViewModel()
         {
+            // Set the categories list to the collection view
+            //CategorySource = new CollectionViewSource() { Source = Categories };
+
             // Register commands
             RegisterCommands();
 
@@ -49,10 +66,62 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            AddCategoryCommand = new Command((p) =>
+            AddCategoryCommand = new Command(async (p) =>
             {
-                // Navigate
-                Navigate(typeof(NewCategoryPage));
+                // Prompt for name
+                await DialogHelper.ShowDialog<NamePromptDialog>(async (d) =>
+                {
+                    try
+                    {
+                        //create new category
+                        var category = new ApiCategory()
+                        {
+                            Name = d.Value
+                        };
+
+                        // Send the category to the api
+                        var resp = await KryptPadApi.SaveCategoryAsync(CurrentProfile, category, AccessToken, Passphrase);
+
+                        // Set the id of the newly created category
+                        category.Id = resp.Id;
+
+                        // Add the category to the collection
+                        Categories.Add(category);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Operation failed
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                }, "Add Category");
+            });
+
+            // Handle rename category
+            RenameCategoryCommand = new Command(async (p) =>
+            {
+                // Prompt for name
+                await DialogHelper.ShowDialog<NamePromptDialog>(async (d) =>
+                {
+                    try
+                    {
+                        //create new category
+                        var category = p as ApiCategory;
+
+                        // Set new name
+                        category.Name = d.Value;
+
+                        // Send the category to the api
+                        var resp = await KryptPadApi.SaveCategoryAsync(CurrentProfile, category, AccessToken, Passphrase);
+
+                        // Refresh the view
+                        Categories.RefreshItem(category);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Operation failed
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                }, "Rename Category");
             });
 
             // Handle item delete

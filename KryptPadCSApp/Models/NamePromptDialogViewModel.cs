@@ -37,10 +37,7 @@ namespace KryptPadCSApp.Models
 
         #region Methods
         private void RegisterCommands() {
-            PrimaryCommand = new Command((p) => {
-                // 
-                var i = 0;
-            }, false);
+            PrimaryCommand = new Command(null, false);
         }
 
         private bool IsValid => !string.IsNullOrWhiteSpace(Value);

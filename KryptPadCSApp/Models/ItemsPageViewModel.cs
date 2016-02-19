@@ -2,6 +2,7 @@
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Collections;
 using KryptPadCSApp.Dialogs;
 using KryptPadCSApp.Views;
 using System;
@@ -193,7 +194,7 @@ namespace KryptPadCSApp.Models
                         // Operation failed
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
-                });
+                }, "Add Category");
             });
 
             AddItemCommand = new Command((p) =>
