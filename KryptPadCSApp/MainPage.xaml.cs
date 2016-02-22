@@ -61,6 +61,15 @@ namespace KryptPadCSApp
             ClosePane();
         }
 
+        private void SearchRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate
+            NavigationHelper.Navigate(typeof(SearchPage), null);
+
+            // Close the pane
+            ClosePane();
+        }
+
         private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate
@@ -82,6 +91,8 @@ namespace KryptPadCSApp
             NavigationHelper.Navigate(typeof(LoginPage), null, true);
         }
 
+        
+
         #region Helper Methods
 
         /// <summary>
@@ -98,10 +109,11 @@ namespace KryptPadCSApp
             }
         }
 
-        
+
+
 
         #endregion
 
-
+        
     }
 }
