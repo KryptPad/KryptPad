@@ -14,6 +14,11 @@ namespace KryptPadCSApp.API.Models
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the ID of the category
+        /// </summary>
+        public int CategoryId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the item
         /// </summary>
         public string Name { get; set; }

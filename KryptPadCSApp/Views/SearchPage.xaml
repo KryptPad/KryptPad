@@ -4,9 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Models="using:KryptPadCSApp.Models"
     xmlns:local="using:KryptPadCSApp.Views"
+    xmlns:Commanding="using:Commanding"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    x:Name="SearchViewPage" Loaded="SearchViewPage_Loaded">
 
     <Page.DataContext>
         <Models:SearchPageViewModel/>
@@ -20,17 +22,17 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Row="0" PlaceholderText="Search..." 
+            <TextBox x:Name="SearchTextBox" Grid.Row="0" PlaceholderText="Search..." 
                      Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <!--Items-->
-            <ListBox Grid.Row="1" ItemsSource="{Binding ItemsView.View}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <GridView Grid.Row="1"
+                      ItemsSource="{Binding ItemsView.View}"
+                      IsItemClickEnabled="True"
+                      ItemTemplate="{StaticResource GrivViewItemsTemplate}"
+                      Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=SearchViewPage}">
+
+            </GridView>
         </Grid>
     </Grid>
 </Page>

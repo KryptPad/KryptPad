@@ -207,8 +207,7 @@ namespace KryptPadCSApp.Models
             ItemClickCommand = new Command((p) =>
             {
                 var item = p as ApiItem;
-
-
+                
                 // Navigate to edit
                 Navigate(typeof(NewItemPage), new EditItemPageParams() { Category = SelectedCategory, Item = item });
 

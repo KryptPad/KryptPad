@@ -166,7 +166,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Get the item
-                var itemResp = await KryptPadApi.GetItemAsync(CurrentProfile.Id, Category.Id, selectedItem.Id, AccessToken, Passphrase);
+                var itemResp = await KryptPadApi.GetItemAsync(CurrentProfile, selectedItem.CategoryId, selectedItem.Id, AccessToken, Passphrase);
 
                 // Get the item
                 var item = itemResp.Items.FirstOrDefault();

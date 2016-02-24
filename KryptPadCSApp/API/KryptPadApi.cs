@@ -495,7 +495,7 @@ namespace KryptPadCSApp.API
 
         }
 
-        public static async Task<ItemsResponse> GetItemAsync(int profileId, int categoryId, int itemId, string token, string passphrase)
+        public static async Task<ItemsResponse> GetItemAsync(ApiProfile profile, int categoryId, int itemId, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -504,7 +504,7 @@ namespace KryptPadCSApp.API
                 // Add passphrase to message
                 AddPassphraseHeader(client, passphrase);
                 //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories/{categoryId}/items/{itemId}"));
                 //read the data
                 var data = await response.Content.ReadAsStringAsync();
 

@@ -26,5 +26,11 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
         }
+
+        private void SearchViewPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Focus search box
+            SearchTextBox.Focus(FocusState.Keyboard);
+        }
     }
 }

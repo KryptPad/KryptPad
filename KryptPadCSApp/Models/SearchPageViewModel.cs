@@ -1,6 +1,7 @@
 ﻿using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,17 +45,36 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        /// <summary>
+        /// Gets or sets the command that is fired when an item is clicked
+        /// </summary>
+        public Command ItemClickCommand { get; set; }
 
         #endregion
 
         #region Ctor
         public SearchPageViewModel()
         {
-
+            RegisterCommands();
         }
         #endregion
 
         #region Helper methods
+
+        private void RegisterCommands()
+        {
+            //handle item click
+            ItemClickCommand = new Command((p) =>
+            {
+                var item = p as ApiItem;
+
+                // Navigate to edit
+                Navigate(typeof(NewItemPage), new EditItemPageParams() { Item = item });
+
+
+            });
+        }
+        
         /// <summary>
         /// Searches for items using a search string
         /// </summary>

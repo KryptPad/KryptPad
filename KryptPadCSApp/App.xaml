@@ -27,7 +27,7 @@
         <SolidColorBrush x:Key="NavButtonCheckedHoverBackgroundBrush" Color="#FF656565" />
 
         <!--<SolidColorBrush x:Key="TextForegroundBrush" Color="Black" />-->
-        
+
         <x:Double x:Key="SplitViewNormalNavFontSize">16</x:Double>
         <x:Double x:Key="SplitViewLargeNavFontSize">20</x:Double>
         <x:Double x:Key="SplitViewBackButtonHeight">32</x:Double>
@@ -35,7 +35,7 @@
         <Style x:Key="LargeBlueTextBlock" TargetType="TextBlock">
             <Setter Property="FontSize" Value="48" />
             <Setter Property="Margin" Value="0,0,0,10" />
-            
+
         </Style>
 
         <Style x:Key="MediumHeaderTextBlock" TargetType="TextBlock">
@@ -326,6 +326,22 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+
+        <DataTemplate x:Key="GrivViewItemsTemplate">
+            <Border Background="{Binding Background}">
+                <Grid Width="116" Height="116" >
+                    <StackPanel Padding="10" VerticalAlignment="Center" >
+                        <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
+                                                   Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                                   Margin="0,0,0,10"/>
+                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="WrapWholeWords" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+
 
     </Application.Resources>
 
