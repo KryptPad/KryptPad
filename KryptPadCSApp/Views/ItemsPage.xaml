@@ -20,7 +20,7 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{StaticResource AppBackgroundBrush}">
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

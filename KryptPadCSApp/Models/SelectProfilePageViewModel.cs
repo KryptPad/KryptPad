@@ -174,7 +174,7 @@ namespace KryptPadCSApp.Models
                             if (profile != null)
                             {
                                 // Delete the selected profile
-                                var response = await KryptPadApi.DeleteProfile(profile.Id, AccessToken);
+                                var response = await KryptPadApi.DeleteProfileAsync(profile.Id, AccessToken);
 
                                 if (response)
                                 {

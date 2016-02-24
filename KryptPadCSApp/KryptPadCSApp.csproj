@@ -176,6 +176,9 @@
     <Compile Include="Views\NewItemPage.xaml.cs">
       <DependentUpon>NewItemPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SelectProfilePage.xaml.cs">
       <DependentUpon>SelectProfilePage.xaml</DependentUpon>
     </Compile>

@@ -30,8 +30,8 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        private static string ServiceHost { get; } = "http://test.kryptpad.com/";
-        //private static string ServiceHost { get; } = "http://localhost:50821/";
+        //private static string ServiceHost { get; } = "http://test.kryptpad.com/";
+        private static string ServiceHost { get; } = "http://localhost:50821/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
@@ -171,10 +171,8 @@ namespace KryptPadCSApp.API
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
-
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
-
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}"));
 
@@ -209,10 +207,8 @@ namespace KryptPadCSApp.API
             {
                 // Authorize the request.
                 AuthorizeRequest(client, token);
-
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
-
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 // Create JSON content.
                 var content = JsonContent(profile);
 
@@ -253,7 +249,7 @@ namespace KryptPadCSApp.API
         /// <param name="id"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteProfile(int id, string token)
+        public static async Task<bool> DeleteProfileAsync(int id, string token)
         {
             using (var client = new HttpClient())
             {
@@ -269,6 +265,37 @@ namespace KryptPadCSApp.API
 
         }
 
+        /// <summary>
+        /// Gets all items for the authenticated user
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task<ItemsResponse> GetAllItemsAsync(ApiProfile profile, string searchText, string token, string passphrase)
+        {
+            using (var client = new HttpClient())
+            {
+                //authorize the request
+                AuthorizeRequest(client, token);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
+                //send request and get a response
+                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/items/?q={searchText}"));
+                
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    //read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    //deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<ItemsResponse>(data);
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+
+        }
 
         #endregion
 
@@ -286,8 +313,8 @@ namespace KryptPadCSApp.API
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories/with-items"));
                 //read the data
@@ -321,8 +348,8 @@ namespace KryptPadCSApp.API
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories"));
                 //read the data
@@ -358,8 +385,8 @@ namespace KryptPadCSApp.API
             {
                 // Authorize the request.
                 AuthorizeRequest(client, token);
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 // Create JSON content.
                 var content = JsonContent(category);
                 // Send request and get a response
@@ -445,8 +472,8 @@ namespace KryptPadCSApp.API
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items"));
                 //read the data
@@ -474,8 +501,8 @@ namespace KryptPadCSApp.API
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}"));
                 //read the data
@@ -512,8 +539,8 @@ namespace KryptPadCSApp.API
 
                 // Authorize the request.
                 AuthorizeRequest(client, token);
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 // Create content to send
                 var content = JsonContent(item);
 
@@ -608,8 +635,8 @@ namespace KryptPadCSApp.API
 
                 // Authorize the request.
                 AuthorizeRequest(client, token);
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 // Create content to send
                 var content = JsonContent(field);
 
@@ -665,8 +692,8 @@ namespace KryptPadCSApp.API
             {
                 //authorize the request
                 AuthorizeRequest(client, token);
-                // TODO: TEST
-                client.DefaultRequestHeaders.Add("Passphrase", passphrase);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields"));
                 //read the data
@@ -800,6 +827,17 @@ namespace KryptPadCSApp.API
                 //add the authorize header to the request
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
+        }
+
+        /// <summary>
+        /// Adds a passphrase header to the outgoing message
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="passphrase"></param>
+        private static void AddPassphraseHeader(HttpClient client, string passphrase)
+        {
+            // TODO: TEST
+            client.DefaultRequestHeaders.Add("Passphrase", passphrase);
         }
 
         /// <summary>
