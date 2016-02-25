@@ -61,14 +61,14 @@ namespace KryptPadCSApp
             ClosePane();
         }
 
-        private void SearchRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate
-            NavigationHelper.Navigate(typeof(SearchPage), null);
+        //private void SearchRadioButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    // Navigate
+        //    NavigationHelper.Navigate(typeof(SearchPage), null);
 
-            // Close the pane
-            ClosePane();
-        }
+        //    // Close the pane
+        //    ClosePane();
+        //}
 
         private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
         {

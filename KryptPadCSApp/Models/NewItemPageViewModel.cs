@@ -166,7 +166,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Get the item
-                var itemResp = await KryptPadApi.GetItemAsync(CurrentProfile, selectedItem.CategoryId, selectedItem.Id, AccessToken, Passphrase);
+                var itemResp = await KryptPadApi.GetItemAsync(CurrentProfile, Category.Id, selectedItem.Id, AccessToken, Passphrase);
 
                 // Get the item
                 var item = itemResp.Items.FirstOrDefault();
@@ -180,7 +180,7 @@ namespace KryptPadCSApp.Models
                     Notes = item.Notes;
                     
                     // Get the fields from the API
-                    var fieldResp = await KryptPadApi.GetFieldsAsync(CurrentProfile.Id, Category.Id, item.Id, AccessToken, Passphrase);
+                    var fieldResp = await KryptPadApi.GetFieldsAsync(CurrentProfile, Category.Id, item.Id, AccessToken, Passphrase);
                     
                     // Set fields
                     foreach (var field in fieldResp.Fields)

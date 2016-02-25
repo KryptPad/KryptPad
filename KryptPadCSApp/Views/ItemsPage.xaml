@@ -8,7 +8,7 @@
     x:Class="KryptPadCSApp.Views.ItemsPage"
     mc:Ignorable="d"
     xmlns:Commanding="using:Commanding"
-    x:Name="ItemsPageElement">
+    x:Name="ItemsViewPage">
 
     <Page.DataContext>
         <Models:ItemsPageViewModel/>
@@ -27,6 +27,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!--Command bar-->
         <Grid Grid.Row="0" Background="{ThemeResource AppBarBackgroundThemeBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -46,8 +47,83 @@
 
         </Grid>
 
+        <!--Search and items-->
+        <Grid Grid.Row="1" Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+
+            <!--Search box-->
+            <TextBox x:Name="SearchTextBox" Grid.Row="0" PlaceholderText="Search..." 
+                     Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalAlignment="Left"
+                     Width="250"/>
+
+            <!--Items grid-->
+            <GridView Grid.Row="1"
+                  
+                  ItemsSource="{Binding ItemsView.View}"
+                  SelectionMode="{Binding DataContext.SelectionMode, ElementName=ItemsViewPage}"
+                  IsItemClickEnabled="{Binding DataContext.IsItemClickEnabled, ElementName=ItemsViewPage}"
+                  SelectedItem="{Binding DataContext.SelectedItem, ElementName=ItemsViewPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
+                  ItemTemplate="{StaticResource GrivViewItemsTemplate }">
+
+                <GridView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--Trigger add item with the category as the parameter-->
+                                    <Button Grid.Column="0" 
+                                        Command="{Binding DataContext.AddItemCommand, ElementName=ItemsViewPage }"
+                                        CommandParameter="{Binding}">
+                                        <SymbolIcon Symbol="Add" />
+                                    </Button>
+
+                                    <!--Name of category-->
+                                    <TextBlock Grid.Column="1" 
+                                           Text='{Binding Name}' 
+                                           Foreground="{StaticResource ApplicationForegroundThemeBrush}"
+                                           FontSize="25"
+                                           Margin="5" />
+
+
+                                </Grid>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+
+                        <!--<GroupStyle.Panel>
+                            <ItemsPanelTemplate>
+                                <VariableSizedWrapGrid Orientation="Vertical" Height="400" />
+                            </ItemsPanelTemplate>
+                        </GroupStyle.Panel>-->
+                    </GroupStyle>
+                </GridView.GroupStyle>
+
+            </GridView>
+
+        </Grid>
+
+        <!--Progress indicator-->
+        <ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
+                      IsActive="{Binding IsBusy}"
+                      Width="50"
+                      Height="50"
+                      Grid.Row="1"
+                      Foreground="White"/>
+
+
         <!--Here we define our layout for the items list.
         We need a way to switch categories, and bind the GridView to that category's items.-->
+        <!--
         <Pivot x:Name="CategoryPivot"
                ItemsSource="{Binding Categories}"
                SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
@@ -55,14 +131,18 @@
 			   Grid.Row="1">
 
 
-            <!--Define the header template-->
+            -->
+        <!--Define the header template-->
+        <!--
             <Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}"/>
                 </DataTemplate>
             </Pivot.HeaderTemplate>
 
-            <!--Define the item template. In this case, it is just a grid view.-->
+            -->
+        <!--Define the item template. In this case, it is just a grid view.-->
+        <!--
             <Pivot.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -73,31 +153,40 @@
                         </Grid.RowDefinitions>
 
                         <Button Grid.Row="0" 
-                                Command="{Binding DataContext.AddItemCommand, ElementName=ItemsPageElement }">
+                                Command="{Binding DataContext.AddItemCommand, ElementName=ItemsViewPage }">
                             <SymbolIcon Symbol="Add" />
                         </Button>
-                        <!--ItemClick="GridView_ItemClick"-->
-                        <GridView Grid.Row="1"
-                                  ItemsSource="{Binding Items}"
-                                  SelectionMode="{Binding DataContext.SelectionMode, ElementName=ItemsPageElement}"
-                                  IsItemClickEnabled="{Binding DataContext.IsItemClickEnabled, ElementName=ItemsPageElement}"
-                                  SelectedItem="{Binding DataContext.SelectedItem, ElementName=ItemsPageElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsPageElement}"
-                                  ItemTemplate="{StaticResource GrivViewItemsTemplate }">
-                           
-                        </GridView>
+                        
                     </Grid>
                 </DataTemplate>
             </Pivot.ItemTemplate>
-        </Pivot>
+        </Pivot>-->
 
-        <!--Progress indicator-->
-        <ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
-                      IsActive="{Binding IsBusy}"
-                      Width="50"
-                      Height="50"
-                      Grid.Row="1"
-                      Foreground="White"/>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualStatePhone">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
 
+                    <VisualState.Setters>
+
+                        <Setter Target="SearchTextBox.HorizontalAlignment" Value="Stretch" />
+                        <Setter Target="SearchTextBox.Width" Value="auto" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="VisualStateTablet">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1024"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                   
+
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

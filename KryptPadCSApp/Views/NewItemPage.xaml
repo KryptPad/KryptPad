@@ -20,7 +20,7 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="12">
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}" >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -32,7 +32,8 @@
             <TextBlock Text="{Binding Category.Name}" Style="{StaticResource MediumHeaderTextBlock}" />
 
             <TextBlock Text="Item name" />
-            <TextBox Text="{Binding ItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox x:Name="ItemNameTextBox"
+                     Text="{Binding ItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      HorizontalAlignment="Left"
                      Width="250"/>
 
@@ -186,6 +187,8 @@
 
                     <VisualState.Setters>
                         <Setter Target="MobileGrid.Visibility"  Value="Visible" />
+                        <Setter Target="ItemNameTextBox.HorizontalAlignment" Value="Stretch" />
+                        <Setter Target="ItemNameTextBox.Width" Value="auto" />
                     </VisualState.Setters>
                 </VisualState>
 

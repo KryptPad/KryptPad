@@ -30,8 +30,8 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        private static string ServiceHost { get; } = "http://test.kryptpad.com/";
-        //private static string ServiceHost { get; } = "http://localhost:50821/";
+        //private static string ServiceHost { get; } = "http://test.kryptpad.com/";
+        private static string ServiceHost { get; } = "http://localhost:50821/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
@@ -270,7 +270,7 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ItemsResponse> GetAllItemsAsync(ApiProfile profile, string searchText, string token, string passphrase)
+        public static async Task<CategoryResponse> GetAllItemsAsync(ApiProfile profile, string searchText, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -287,7 +287,7 @@ namespace KryptPadCSApp.API
                     //read the data
                     var data = await response.Content.ReadAsStringAsync();
                     //deserialize the response as an ApiResponse object
-                    return JsonConvert.DeserializeObject<ItemsResponse>(data);
+                    return JsonConvert.DeserializeObject<CategoryResponse>(data);
                 }
                 else
                 {
@@ -686,7 +686,7 @@ namespace KryptPadCSApp.API
         /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<FieldsResponse> GetFieldsAsync(int profileId, int categoryId, int itemId, string token, string passphrase)
+        public static async Task<FieldsResponse> GetFieldsAsync(ApiProfile profile, int categoryId, int itemId, string token, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -695,7 +695,7 @@ namespace KryptPadCSApp.API
                 // Add passphrase to message
                 AddPassphraseHeader(client, passphrase);
                 //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories/{categoryId}/items/{itemId}/fields"));
                 //read the data
                 var data = await response.Content.ReadAsStringAsync();
 

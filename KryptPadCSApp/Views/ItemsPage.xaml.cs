@@ -30,28 +30,28 @@ namespace KryptPadCSApp.Views
             
         }
 
-        /// <summary>
-        /// Handles navigation to this page
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
+        ///// <summary>
+        ///// Handles navigation to this page
+        ///// </summary>
+        ///// <param name="e"></param>
+        //protected override void OnNavigatedTo(NavigationEventArgs e)
+        //{
             
-            base.OnNavigatedTo(e);
+        //    base.OnNavigatedTo(e);
                             
-            //if we are coming from the add new category page, then the
-            //parameter is the new category that was added. set the selected
-            //item to the category, and when binding occurs, the pivot control
-            //will select the new category
-            if (e.Parameter != null && e.Parameter is ApiCategory)
-            {
-                var model = DataContext as ItemsPageViewModel;
-                if (model != null)
-                {
-                    model.SelectedCategory = e.Parameter as ApiCategory;
-                }
-            }
-        }
+        //    //if we are coming from the add new category page, then the
+        //    //parameter is the new category that was added. set the selected
+        //    //item to the category, and when binding occurs, the pivot control
+        //    //will select the new category
+        //    if (e.Parameter != null && e.Parameter is ApiCategory)
+        //    {
+        //        var model = DataContext as ItemsPageViewModel;
+        //        if (model != null)
+        //        {
+        //            model.SelectedCategory = e.Parameter as ApiCategory;
+        //        }
+        //    }
+        //}
 
         
 

@@ -14,6 +14,7 @@ using System.Windows.Input;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
 namespace KryptPadCSApp.Models
 {
@@ -23,24 +24,52 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets the collection of categories
         /// </summary>
-        public CategoryCollection Categories { get; protected set; } = new CategoryCollection();
+        public ApiCategory[] Categories { get; protected set; } = { };
+        //public CategoryCollection Categories { get; protected set; } = new CategoryCollection();
 
-        private ApiCategory _selectedCategory;
         /// <summary>
-        /// Gets or sets the selected category
+        /// Gets the filtered view of items
         /// </summary>
-        public ApiCategory SelectedCategory
+        public CollectionViewSource ItemsView { get; protected set; } = new CollectionViewSource()
         {
-            get { return _selectedCategory; }
+            IsSourceGrouped = true,
+            ItemsPath = new PropertyPath("Items")
+        };
+
+
+        private string _searchText;
+        /// <summary>
+        /// Gets or sets the search text
+        /// </summary>
+        public string SearchText
+        {
+            get { return _searchText; }
             set
             {
-                _selectedCategory = value;
-
+                _searchText = value;
                 // Notify change
-                OnPropertyChanged(nameof(SelectedCategory));
-
+                OnPropertyChanged(nameof(SearchText));
+                // Trigger search
+                var t = SearchForItems();
             }
         }
+
+        //private ApiCategory _selectedCategory;
+        ///// <summary>
+        ///// Gets or sets the selected category
+        ///// </summary>
+        //public ApiCategory SelectedCategory
+        //{
+        //    get { return _selectedCategory; }
+        //    set
+        //    {
+        //        _selectedCategory = value;
+
+        //        // Notify change
+        //        OnPropertyChanged(nameof(SelectedCategory));
+
+        //    }
+        //}
 
 
         private Visibility _bottomAppBarVisible;
@@ -155,8 +184,23 @@ namespace KryptPadCSApp.Models
 #if DEBUG
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
 #endif
+
+            
+
             // Get list of categories
-            var t = RefreshCategories();
+            var task = RefreshCategories();
+
+            // When task completes, turn off indicator
+            //task.ContinueWith(async (t) =>
+            //{
+            //    // This is weird
+            //    await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
+            //        () =>
+            //        {
+            //            // Turn off indicator
+            //            //IsBusy = false;
+            //        });
+            //});
         }
 
         /// <summary>
@@ -184,10 +228,10 @@ namespace KryptPadCSApp.Models
                         category.Id = resp.Id;
 
                         // Add the category to the collection
-                        Categories.Add(category);
+                        //Categories.Add(category);
 
                         // Select the category
-                        SelectedCategory = category;
+                        //SelectedCategory = category;
                     }
                     catch (Exception ex)
                     {
@@ -199,17 +243,22 @@ namespace KryptPadCSApp.Models
 
             AddItemCommand = new Command((p) =>
             {
+                var category = p as ApiCategory;
+
                 // Navigate
-                Navigate(typeof(NewItemPage), SelectedCategory);
+                Navigate(typeof(NewItemPage), category);
             });
 
             //handle item click
             ItemClickCommand = new Command((p) =>
             {
                 var item = p as ApiItem;
-                
+                var category = (from c in Categories
+                                where c.Items.Contains(item)
+                                select c).FirstOrDefault();
+
                 // Navigate to edit
-                Navigate(typeof(NewItemPage), new EditItemPageParams() { Category = SelectedCategory, Item = item });
+                Navigate(typeof(NewItemPage), new EditItemPageParams() { Category = category, Item = item });
 
 
             }, false);
@@ -223,14 +272,14 @@ namespace KryptPadCSApp.Models
                 {
                     try
                     {
-                        // Delete the item
-                        var success = await KryptPadApi.DeleteItemAsync(CurrentProfile.Id, SelectedCategory.Id, SelectedItem.Id, AccessToken);
+                        //// Delete the item
+                        //var success = await KryptPadApi.DeleteItemAsync(CurrentProfile.Id, SelectedCategory.Id, SelectedItem.Id, AccessToken);
 
-                        // If sucessful, remove item from the list
-                        if (success)
-                        {
-                            await RefreshCategories();
-                        }
+                        //// If sucessful, remove item from the list
+                        //if (success)
+                        //{
+                        //    await RefreshCategories();
+                        //}
 
                     }
                     catch (Exception ex)
@@ -260,23 +309,21 @@ namespace KryptPadCSApp.Models
         /// <returns></returns>
         private async Task RefreshCategories()
         {
-
-            // Clear the list
-            Categories.Clear();
-
+            // Set busy
             IsBusy = true;
-
+            
             try
             {
-                // Get categories
-                var resp = await KryptPadApi.GetCategoriesWithItemsAsync(CurrentProfile, AccessToken, Passphrase);
+                // Get the items if not already got
+                var resp = await KryptPadApi.GetAllItemsAsync(CurrentProfile, SearchText, AccessToken, Passphrase);
 
-                // Create list of categories
-                foreach (var category in resp.Categories)
-                {
-                    // Add to observable
-                    Categories.Add(category);
-                }
+                Categories = resp.Categories;
+
+                // Add view to the ItemsView object
+                ItemsView.Source = Categories;
+
+                // Refresh
+                OnPropertyChanged(nameof(ItemsView));
             }
             catch (Exception ex)
             {
@@ -284,10 +331,45 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
 
-
             // Not busy any more
-            IsBusy = false;
+           IsBusy = false;
 
         }
+
+        /// <summary>
+        /// Searches for items using a search string
+        /// </summary>
+        /// <param name="searchText"></param>
+        public async Task SearchForItems()
+        {
+
+            try
+            {
+
+                // Filter out the items that don't match the search text. Also, filter out empty
+                // categories. Only categories with items will show up
+                var categories = (from c in Categories
+                                  select new
+                                  {
+                                      Name = c.Name,
+                                      Items = (from i in c.Items
+                                               where i.Name.IndexOf(SearchText, StringComparison.CurrentCultureIgnoreCase) >= 0
+                                               select i)
+                                  }).Where(c => c.Items.Any());
+
+                // Add view to the ItemsView object
+                ItemsView.Source = categories;
+
+                // Refresh
+                OnPropertyChanged(nameof(ItemsView));
+            }
+            catch (Exception ex)
+            {
+                // Operation failed
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+
+        }
+
     }
 }
