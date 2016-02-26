@@ -43,10 +43,11 @@
                         
                         
                         <!-- Settings button -->
-                        <RadioButton Tag="&#xE115;" Content="Settings" Style="{StaticResource SplitViewNavButtonStyle}"  />
+                        <!--<RadioButton Tag="&#xE115;" Content="Settings" Style="{StaticResource SplitViewNavButtonStyle}"  />-->
 
                         <!-- About button -->
-                        <RadioButton Tag="&#xE783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" />
+                        <RadioButton x:Name="AboutRadioButton" Tag="&#xE783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" 
+                                     Click="AboutRadioButton_Click"/>
                         
                         
                         

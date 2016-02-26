@@ -16,9 +16,11 @@
         </Grid.DataContext>
 
         <!--Main grid for page-->
-        <Grid HorizontalAlignment="Stretch"
-			MaxWidth="400"
-			Padding="10">
+        <Grid x:Name="MainGrid"
+              VerticalAlignment="Top" 
+              HorizontalAlignment="Stretch"
+			  MaxWidth="400"
+			  Padding="10">
             
             
 
@@ -76,5 +78,34 @@
                       Width="50"
                       Height="50"
                       Foreground="White"/>
+
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="VisualStatePhone">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+
+                        <Setter Target="MainGrid.VerticalAlignment" Value="Top" />
+
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="VisualStateTablet">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1024"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="MainGrid.VerticalAlignment" Value="Center" />
+
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
     </Grid>
 </Page>

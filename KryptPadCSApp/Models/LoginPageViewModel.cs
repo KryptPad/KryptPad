@@ -146,6 +146,7 @@ namespace KryptPadCSApp.Models
                     // Set properties
                     Email = login.UserName;
                     Password = login.Password;
+                    AutoSignIn = true;
 
                     // Make sure we can auto login in, and that we don't already have an access token
                     if (!DisableAutoLogin && AccessToken == null)

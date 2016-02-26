@@ -79,6 +79,15 @@ namespace KryptPadCSApp
             ClosePane();
         }
 
+        private void AboutRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate
+            NavigationHelper.Navigate(typeof(AboutPage), null);
+
+            // Close the pane
+            ClosePane();
+        }
+
         private void BackToProfilesRadioButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate
@@ -108,6 +117,7 @@ namespace KryptPadCSApp
                 ShellSplitView.IsPaneOpen = false;
             }
         }
+
 
 
 
