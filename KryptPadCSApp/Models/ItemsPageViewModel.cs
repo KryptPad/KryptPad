@@ -54,97 +54,7 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        //private ApiCategory _selectedCategory;
-        ///// <summary>
-        ///// Gets or sets the selected category
-        ///// </summary>
-        //public ApiCategory SelectedCategory
-        //{
-        //    get { return _selectedCategory; }
-        //    set
-        //    {
-        //        _selectedCategory = value;
-
-        //        // Notify change
-        //        OnPropertyChanged(nameof(SelectedCategory));
-
-        //    }
-        //}
-
-
-        private Visibility _bottomAppBarVisible;
-        /// <summary>
-        /// Gets or sets the bottom app bar's visibility
-        /// </summary>
-        public Visibility BottomAppBarVisible
-        {
-            get { return _bottomAppBarVisible; }
-            set
-            {
-                _bottomAppBarVisible = value;
-
-                // Notify change
-                OnPropertyChanged(nameof(BottomAppBarVisible));
-            }
-        }
-
-        private ListViewSelectionMode _selectionMode;
-        /// <summary>
-        /// Gets or sets the grid selection mode
-        /// </summary>
-        public ListViewSelectionMode SelectionMode
-        {
-            get { return _selectionMode; }
-            set
-            {
-                _selectionMode = value;
-
-                // Notify change
-                OnPropertyChanged(nameof(SelectionMode));
-
-                // Set item click enabled if selection mode is none
-                IsItemClickEnabled = value == ListViewSelectionMode.None;
-
-            }
-        }
-
-        private bool _isItemClickEnabled;
-        /// <summary>
-        /// Gets or sets whether the grid has item click enabled
-        /// </summary>
-        public bool IsItemClickEnabled
-        {
-            get { return _isItemClickEnabled; }
-            set
-            {
-                _isItemClickEnabled = value;
-
-                // Notify change
-                OnPropertyChanged(nameof(IsItemClickEnabled));
-
-                // Hide the bottom app bar when the items are clickable
-                BottomAppBarVisible = value ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
-        private ApiItem _selectedItem;
-        /// <summary>
-        /// Gets or sets the selected item
-        /// </summary>
-        public ApiItem SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                _selectedItem = value;
-
-                // Enable the delete command
-                DeleteItemCommand.CommandCanExecute = value != null;
-            }
-        }
-
-
-
+        
         /// <summary>
         /// Opens new category page
         /// </summary>
@@ -154,22 +64,13 @@ namespace KryptPadCSApp.Models
         /// Opens the add item page
         /// </summary>
         public Command AddItemCommand { get; private set; }
-
-        /// <summary>
-        /// Deletes the selected item(s)
-        /// </summary>
-        public Command DeleteItemCommand { get; private set; }
-
+                
         /// <summary>
         /// Gets or sets the command that is fired when an item is clicked
         /// </summary>
         public Command ItemClickCommand { get; set; }
 
-        /// <summary>
-        /// Gets or sets the command that is fired when toggle selection is clicked
-        /// </summary>
-        public Command ToggleSelectionMode { get; set; }
-
+        
         #endregion
 
 
@@ -177,10 +78,7 @@ namespace KryptPadCSApp.Models
         {
             // Register commands
             RegisterCommands();
-
-            // Set some defaults
-            SelectionMode = ListViewSelectionMode.None;
-
+                        
 #if DEBUG
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
 #endif
@@ -250,44 +148,35 @@ namespace KryptPadCSApp.Models
 
             }, false);
 
-            // Handle item delete
-            DeleteItemCommand = new Command(async (p) =>
-            {
+            //// Handle item delete
+            //DeleteItemCommand = new Command(async (p) =>
+            //{
 
-                // Get the selected items and delete them
-                if (SelectedItem != null)
-                {
-                    try
-                    {
-                        //// Delete the item
-                        //var success = await KryptPadApi.DeleteItemAsync(CurrentProfile.Id, SelectedCategory.Id, SelectedItem.Id, AccessToken);
+            //    // Get the selected items and delete them
+            //    if (SelectedItem != null)
+            //    {
+            //        try
+            //        {
+            //            //// Delete the item
+            //            //var success = await KryptPadApi.DeleteItemAsync(CurrentProfile.Id, SelectedCategory.Id, SelectedItem.Id, AccessToken);
 
-                        //// If sucessful, remove item from the list
-                        //if (success)
-                        //{
-                        //    await RefreshCategories();
-                        //}
+            //            //// If sucessful, remove item from the list
+            //            //if (success)
+            //            //{
+            //            //    await RefreshCategories();
+            //            //}
 
-                    }
-                    catch (Exception ex)
-                    {
-                        // Operation failed
-                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            // Operation failed
+            //            await DialogHelper.ShowMessageDialogAsync(ex.Message);
 
-                    }
-                }
+            //        }
+            //    }
 
-            }, false);
-
-            // Handle toggle selection mode
-            ToggleSelectionMode = new Command((p) =>
-            {
-
-                // Toggle the grid's selection mode
-                SelectionMode = (SelectionMode == ListViewSelectionMode.Single ?
-                    ListViewSelectionMode.None : ListViewSelectionMode.Single);
-
-            });
+            //}, false);
+            
         }
 
         /// <summary>
