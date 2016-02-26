@@ -16,8 +16,7 @@
         </Grid.DataContext>
 
         <!--Main grid for page-->
-        <Grid VerticalAlignment="Center"
-			HorizontalAlignment="Stretch"
+        <Grid HorizontalAlignment="Stretch"
 			MaxWidth="400"
 			Padding="10">
             
@@ -69,12 +68,13 @@
 
             </Grid>
 
-            <!--Progress indicator-->
-            <UserControls:BusyIndicator Visibility="{Binding BusyIndicatorVisibility}"
-                                        IsActive="{Binding IsBusy}"/>
-
-
+            
         </Grid>
-
+        <!--Progress indicator-->
+        <ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
+                      IsActive="{Binding IsBusy}"
+                      Width="50"
+                      Height="50"
+                      Foreground="White"/>
     </Grid>
 </Page>

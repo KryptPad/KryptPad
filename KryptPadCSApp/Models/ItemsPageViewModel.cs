@@ -185,22 +185,9 @@ namespace KryptPadCSApp.Models
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
 #endif
 
-            
-
             // Get list of categories
             var task = RefreshCategories();
 
-            // When task completes, turn off indicator
-            //task.ContinueWith(async (t) =>
-            //{
-            //    // This is weird
-            //    await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
-            //        () =>
-            //        {
-            //            // Turn off indicator
-            //            //IsBusy = false;
-            //        });
-            //});
         }
 
         /// <summary>
@@ -315,7 +302,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Get the items if not already got
-                var resp = await KryptPadApi.GetAllItemsAsync(CurrentProfile, SearchText, AccessToken, Passphrase);
+                var resp = await KryptPadApi.GetCategoriesWithItemsAsync(CurrentProfile, AccessToken, Passphrase);
 
                 Categories = resp.Categories;
 

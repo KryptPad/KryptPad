@@ -17,7 +17,7 @@
     <Grid Background="{StaticResource AppBackgroundBrush}" >
 
         <!--Main grid for page-->
-        <Grid VerticalAlignment="Center"
+        <Grid VerticalAlignment="Top"
 			HorizontalAlignment="Stretch"
 			MaxWidth="400"
 			Padding="10">
@@ -64,15 +64,14 @@
 
             </Grid>
 
-            <!--Progress indicator-->
-            <UserControls:BusyIndicator Visibility="{Binding BusyIndicatorVisibility}"
-                                        IsActive="{Binding IsBusy}"
-                                        Label="Signing you in"/>
-
-
         </Grid>
 
-
+        <!--Progress indicator-->
+        <ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
+                      IsActive="{Binding IsBusy}"
+                      Width="50"
+                      Height="50"
+                      Foreground="White"/>
 
     </Grid>
 </Page>

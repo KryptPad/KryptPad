@@ -16,8 +16,7 @@
     <Grid Background="{StaticResource AppBackgroundBrush}">
 
         <!--Main grid for page-->
-        <Grid VerticalAlignment="Center"
-			HorizontalAlignment="Stretch"
+        <Grid HorizontalAlignment="Stretch"
 			MaxWidth="400"
 			Padding="10">
 
