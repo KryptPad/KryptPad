@@ -13,34 +13,7 @@ namespace KryptPadCSApp.Models
     {
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the access token for API authentication
-        /// </summary>
-        protected string AccessToken
-        {
-            get { return (App.Current as App)?.AccessToken; }
-            set { (App.Current as App).AccessToken = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the access token for API authentication
-        /// </summary>
-        protected string Passphrase
-        {
-            get { return (App.Current as App)?.Passphrase; }
-            set { (App.Current as App).Passphrase = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the selected profile
-        /// </summary>
-        protected ApiProfile CurrentProfile
-        {
-            get { return (App.Current as App)?.CurrentProfile; }
-            set { (App.Current as App).CurrentProfile = value; }
-        }
-
+               
         /// <summary>
         /// Gets or sets whether the auto login is temporarily disabled
         /// </summary>

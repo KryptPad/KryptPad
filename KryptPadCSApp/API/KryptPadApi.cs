@@ -40,13 +40,39 @@ namespace KryptPadCSApp.API
 #endif
 
 
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the API OAuth access token to authorize API calls
+        /// </summary>
+        private static string AccessToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API OAuth access token to authorize API calls
+        /// </summary>
+        private static string Passphrase { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current profile Id
+        /// </summary>
+        private static ApiProfile CurrentProfile { get; set; }
+
+        /// <summary>
+        /// Gets whether the user is signed in
+        /// </summary>
+        public static bool IsSignedIn
+        {
+            get { return !string.IsNullOrWhiteSpace(AccessToken); }
+        }
+        #endregion
+
 
         /// <summary>
         /// Creates an authorization request
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        public static async Task<OAuthTokenResponse> AuthenticateAsync(string username, string password)
+        public static async Task<bool> AuthenticateAsync(string username, string password)
         {
             using (var client = new HttpClient())
             {
@@ -71,9 +97,13 @@ namespace KryptPadCSApp.API
                     //get the response as a string
                     var data = await response.Content.ReadAsStringAsync();
 
-                    //deserialize the data and get the access token
-                    return JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
+                    // Deserialize the data and get the access token
+                    var tokenResp = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
 
+                    // Store the access token
+                    AccessToken = tokenResp.AccessToken;
+
+                    return true;
                 }
                 else
                 {
@@ -131,14 +161,13 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets all profiles for the authenticated user
         /// </summary>
-        /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ProfileResponse> GetProfilesAsync(string token, string passphrase)
+        public static async Task<ProfileResponse> GetProfilesAsync()
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
 
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl("api/profiles"));
@@ -162,15 +191,15 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets a specific profile for the authenticated user
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="token"></param>
+        /// <param name="profile"></param>
+        /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<ApiProfile> GetProfileAsync(ApiProfile profile, string token, string passphrase)
+        public static async Task<bool> LoadProfileAsync(ApiProfile profile, string passphrase)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client, passphrase);
                 //send request and get a response
@@ -183,8 +212,16 @@ namespace KryptPadCSApp.API
                     var data = await response.Content.ReadAsStringAsync();
                     // Deserialize the response as an ApiResponse object
                     var profileResp = JsonConvert.DeserializeObject<ProfileResponse>(data);
+
+                    // Set current profile and passphrase
+                    if (profileResp != null && profileResp.Profiles.Length > 0)
+                    {
+                        CurrentProfile = profileResp.Profiles.SingleOrDefault();
+                        Passphrase = passphrase;
+                    }
+                    
                     // Return the profile
-                    return profileResp.Profiles.SingleOrDefault();
+                    return true;
                 }
                 else
                 {
@@ -201,14 +238,14 @@ namespace KryptPadCSApp.API
         /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile, string token, string passphrase)
+        public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 // Create JSON content.
                 var content = JsonContent(profile);
 
@@ -249,15 +286,15 @@ namespace KryptPadCSApp.API
         /// <param name="id"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteProfileAsync(int id, string token)
+        public static async Task<bool> DeleteProfileAsync(ApiProfile profile)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
 
                 // Send request and get a response
-                var response = await client.DeleteAsync(GetUrl($"api/profiles/{id}"));
+                var response = await client.DeleteAsync(GetUrl($"api/profiles/{profile.Id}"));
 
                 // Deserialize the object based on the result
                 return response.IsSuccessStatusCode;
@@ -270,16 +307,16 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<CategoryResponse> GetAllItemsAsync(ApiProfile profile, string searchText, string token, string passphrase)
+        public static async Task<CategoryResponse> GetAllItemsAsync(string searchText)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/items/?q={searchText}"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/items/?q={searchText}"));
                 
                 //deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
@@ -304,19 +341,18 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets all categories for the authenticated user
         /// </summary>
-        /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<CategoryResponse> GetCategoriesWithItemsAsync(ApiProfile profile, string token, string passphrase)
+        public static async Task<CategoryResponse> GetCategoriesWithItemsAsync()
         {
 
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories/with-items"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/with-items"));
                 //read the data
                 var data = await response.Content.ReadAsStringAsync();
 
@@ -339,19 +375,18 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets all categories for the authenticated user
         /// </summary>
-        /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<CategoryResponse> GetCategoriesAsync(ApiProfile profile, string token, string passphrase)
+        public static async Task<CategoryResponse> GetCategoriesAsync()
         {
 
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories"));
                 //read the data
                 var data = await response.Content.ReadAsStringAsync();
 
@@ -376,17 +411,16 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="profile"></param>
         /// <param name="category"></param>
-        /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveCategoryAsync(ApiProfile profile, ApiCategory category, string token, string passphrase)
+        public static async Task<SuccessResponse> SaveCategoryAsync(ApiCategory category)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 // Create JSON content.
                 var content = JsonContent(category);
                 // Send request and get a response
@@ -395,12 +429,12 @@ namespace KryptPadCSApp.API
                 if (category.Id == 0)
                 {
                     // Create
-                    response = await client.PostAsync(GetUrl($"api/profiles/{profile.Id}/categories"), content);
+                    response = await client.PostAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories"), content);
                 }
                 else
                 {
                     // Update
-                    response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}/categories/{category.Id}"), content);
+                    response = await client.PutAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{category.Id}"), content);
                 }
 
                 // Read the data
@@ -427,18 +461,17 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="profileId"></param>
         /// <param name="categoryId"></param>
-        /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteCategoryAsync(ApiProfile profile, int categoryId, string token)
+        public static async Task<bool> DeleteCategoryAsync(int categoryId)
         {
 
             using (var client = new HttpClient())
             {
                 // Authorize the request.
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
 
                 // Send request and get a response
-                var response = await client.DeleteAsync(GetUrl($"api/profiles/{profile.Id}/categories/{categoryId}"));
+                var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}"));
 
                 // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
@@ -464,18 +497,17 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets all categories for the authenticated user
         /// </summary>
-        /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<ItemsResponse> GetItemsAsync(int profileId, int categoryId, string token, string passphrase)
+        public static async Task<ItemsResponse> GetItemsAsync(int categoryId)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items"));
                 //read the data
                 var data = await response.Content.ReadAsStringAsync();
 
@@ -495,16 +527,16 @@ namespace KryptPadCSApp.API
 
         }
 
-        public static async Task<ItemsResponse> GetItemAsync(ApiProfile profile, int categoryId, int itemId, string token, string passphrase)
+        public static async Task<ItemsResponse> GetItemAsync(int categoryId, int itemId)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories/{categoryId}/items/{itemId}"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}"));
                 //read the data
                 var data = await response.Content.ReadAsStringAsync();
 
@@ -530,17 +562,16 @@ namespace KryptPadCSApp.API
         /// <param name="profileId"></param>
         /// <param name="categoryId"></param>
         /// <param name="item"></param>
-        /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveItemAsync(int profileId, int categoryId, ApiItem item, string token, string passphrase)
+        public static async Task<SuccessResponse> SaveItemAsync(int categoryId, ApiItem item)
         {
             using (var client = new HttpClient())
             {
 
                 // Authorize the request.
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 // Create content to send
                 var content = JsonContent(item);
 
@@ -549,11 +580,11 @@ namespace KryptPadCSApp.API
 
                 if (item.Id == 0)
                 {
-                    response = await client.PostAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items"), content);
+                    response = await client.PostAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items"), content);
                 }
                 else
                 {
-                    response = await client.PutAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{item.Id}"), content);
+                    response = await client.PutAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{item.Id}"), content);
                 }
 
                 // Get the response content
@@ -582,18 +613,17 @@ namespace KryptPadCSApp.API
         /// <param name="profileId"></param>
         /// <param name="categoryId"></param>
         /// <param name="itemId"></param>
-        /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteItemAsync(int profileId, int categoryId, int itemId, string token)
+        public static async Task<bool> DeleteItemAsync(int categoryId, int itemId)
         {
             using (var client = new HttpClient())
             {
 
                 // Authorize the request.
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
 
                 // Execute request
-                var response = await client.DeleteAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}"));
+                var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}"));
 
                 // Get the response content
                 var data = await response.Content.ReadAsStringAsync();
@@ -625,18 +655,17 @@ namespace KryptPadCSApp.API
         /// <param name="categoryId"></param>
         /// <param name="itemId"></param>
         /// <param name="field"></param>
-        /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveFieldAsync(int profileId, int categoryId, int itemId, ApiField field, string token, string passphrase)
+        public static async Task<SuccessResponse> SaveFieldAsync(int categoryId, int itemId, ApiField field)
         {
             using (var client = new HttpClient())
             {
 
                 // Authorize the request.
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 // Create content to send
                 var content = JsonContent(field);
 
@@ -646,12 +675,12 @@ namespace KryptPadCSApp.API
                 if (field.Id == 0)
                 {
                     // Create
-                    response = await client.PostAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields"), content);
+                    response = await client.PostAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields"), content);
                 }
                 else
                 {
                     // Update
-                    response = await client.PutAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields/{field.Id}"), content);
+                    response = await client.PutAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields/{field.Id}"), content);
                 }
 
                 // Get the response content
@@ -683,19 +712,18 @@ namespace KryptPadCSApp.API
         /// <param name="profileId"></param>
         /// <param name="categoryId"></param>
         /// <param name="itemId"></param>
-        /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<FieldsResponse> GetFieldsAsync(ApiProfile profile, int categoryId, int itemId, string token, string passphrase)
+        public static async Task<FieldsResponse> GetFieldsAsync(int categoryId, int itemId)
         {
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                AddPassphraseHeader(client);
                 //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{profile.Id}/categories/{categoryId}/items/{itemId}/fields"));
+                var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields"));
                 //read the data
                 var data = await response.Content.ReadAsStringAsync();
 
@@ -722,18 +750,17 @@ namespace KryptPadCSApp.API
         /// <param name="categoryId"></param>
         /// <param name="itemId"></param>
         /// <param name="id"></param>
-        /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteFieldAsync(int profileId, int categoryId, int itemId, int id, string token)
+        public static async Task<bool> DeleteFieldAsync(int categoryId, int itemId, int id)
         {
             using (var client = new HttpClient())
             {
 
                 // Authorize the request.
-                AuthorizeRequest(client, token);
+                AuthorizeRequest(client);
 
                 // Execute request
-                var response = await client.DeleteAsync(GetUrl($"api/profiles/{profileId}/categories/{categoryId}/items/{itemId}/fields/{id}"));
+                var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields/{id}"));
 
                 // Get the response content
                 var data = await response.Content.ReadAsStringAsync();
@@ -819,13 +846,12 @@ namespace KryptPadCSApp.API
         /// Authorizes an http client request
         /// </summary>
         /// <param name="client"></param>
-        /// <param name="token"></param>
-        private static void AuthorizeRequest(HttpClient client, string token)
+        private static void AuthorizeRequest(HttpClient client)
         {
-            if (!string.IsNullOrWhiteSpace(token))
+            if (!string.IsNullOrWhiteSpace(AccessToken))
             {
                 //add the authorize header to the request
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
             }
         }
 
@@ -833,10 +859,12 @@ namespace KryptPadCSApp.API
         /// Adds a passphrase header to the outgoing message
         /// </summary>
         /// <param name="client"></param>
-        /// <param name="passphrase"></param>
-        private static void AddPassphraseHeader(HttpClient client, string passphrase)
+        private static void AddPassphraseHeader(HttpClient client, string passphrase = null)
         {
-            // TODO: TEST
+            // Get the current passphrase
+            passphrase = passphrase ?? Passphrase;
+
+            // Add passphrase to the header
             client.DefaultRequestHeaders.Add("Passphrase", passphrase);
         }
 
@@ -859,6 +887,29 @@ namespace KryptPadCSApp.API
         /// <returns></returns>
         private static string GetUrl(string uri) => $"{ServiceHost}{uri}";
 
+        /// <summary>
+        /// Closes the current profile
+        /// </summary>
+        public static void CloseProfile()
+        {
+            CurrentProfile = null;
+            Passphrase = null;
+
+            // TODO: Should we raise an event that the user can handle? Such as going to another page?
+        }
+
+        /// <summary>
+        /// Signs out of the api
+        /// </summary>
+        public static void SignOut()
+        {
+            AccessToken = null;
+            CurrentProfile = null;
+            Passphrase = null;
+
+            // TODO: Should we raise an event that the user can handle? Such as going to another page?
+            
+        }
         #endregion
 
     }

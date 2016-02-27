@@ -44,7 +44,7 @@ namespace KryptPadCSApp.Models
             RegisterCommands();
 
             // Ensure the passphrase is cleared
-            Passphrase = null;
+            KryptPadApi.CloseProfile();
 
 #if DEBUG
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
@@ -64,7 +64,7 @@ namespace KryptPadCSApp.Models
             // Call the api and get some data!
             try
             {
-                var resp = await KryptPadApi.GetProfilesAsync(AccessToken, Passphrase);
+                var resp = await KryptPadApi.GetProfilesAsync();
 
                 // Clear the profiles list
                 Profiles.Clear();
@@ -100,16 +100,11 @@ namespace KryptPadCSApp.Models
                     try
                     {
                         // Check the profile and determine if the passphrase is correct
-                        var profile = await KryptPadApi.GetProfileAsync(p as ApiProfile, AccessToken, d.Passphrase);
+                        var success = await KryptPadApi.LoadProfileAsync(p as ApiProfile, d.Passphrase);
 
-                        if (profile != null)
+                        if (success)
                         {
-                            // Set the passphrase
-                            Passphrase = d.Passphrase;
-                            // Set the selected profile
-                            CurrentProfile = profile;
-
-
+                            
                             var frame = Window.Current.Content as Frame;
 
                             Window.Current.Content = new MainPage(frame);
@@ -149,7 +144,7 @@ namespace KryptPadCSApp.Models
                         profile.Name = d.Value;
 
                         // Send the category to the api
-                        var resp = await KryptPadApi.SaveProfileAsync(profile, AccessToken, Passphrase);
+                        var resp = await KryptPadApi.SaveProfileAsync(profile);
 
                         // Refresh the view
                         Profiles.RefreshItem(profile);
@@ -174,7 +169,7 @@ namespace KryptPadCSApp.Models
                             if (profile != null)
                             {
                                 // Delete the selected profile
-                                var response = await KryptPadApi.DeleteProfileAsync(profile.Id, AccessToken);
+                                var response = await KryptPadApi.DeleteProfileAsync(profile);
 
                                 if (response)
                                 {

@@ -97,7 +97,7 @@ namespace KryptPadCSApp.Models
             RegisterCommands();
 
             // Ensure that the access token is cleared upon arrival
-            AccessToken = null;
+            KryptPadApi.SignOut();
 
             // Check the password vault for any saved credentials.
             LoginFromSavedCredentials();
@@ -149,7 +149,7 @@ namespace KryptPadCSApp.Models
                     AutoSignIn = true;
 
                     // Make sure we can auto login in, and that we don't already have an access token
-                    if (!DisableAutoLogin && AccessToken == null)
+                    if (!DisableAutoLogin && !KryptPadApi.IsSignedIn)
                     {
                         // Do login
                         var t = LoginAsync();
@@ -197,18 +197,17 @@ namespace KryptPadCSApp.Models
             try
             {
                 //log in and get access token
-                var response = await KryptPadApi.AuthenticateAsync(Email, Password);
-                
-                //store the access token
-                AccessToken = (response as OAuthTokenResponse).AccessToken;
+                var success = await KryptPadApi.AuthenticateAsync(Email, Password);
 
-                //save credentials
-                SaveCredentialsIfAutoSignIn();
+                if (success)
+                {
+                    //save credentials
+                    SaveCredentialsIfAutoSignIn();
 
-                //navigate to the select profile page
-                Navigate(typeof(SelectProfilePage));
+                    //navigate to the select profile page
+                    Navigate(typeof(SelectProfilePage));
 
-
+                }
             }
             catch (WebException ex)
             {

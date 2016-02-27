@@ -80,7 +80,7 @@ namespace KryptPadCSApp.Models
                         };
 
                         // Send the category to the api
-                        var resp = await KryptPadApi.SaveCategoryAsync(CurrentProfile, category, AccessToken, Passphrase);
+                        var resp = await KryptPadApi.SaveCategoryAsync(category);
 
                         // Set the id of the newly created category
                         category.Id = resp.Id;
@@ -111,7 +111,7 @@ namespace KryptPadCSApp.Models
                         category.Name = d.Value;
 
                         // Send the category to the api
-                        var resp = await KryptPadApi.SaveCategoryAsync(CurrentProfile, category, AccessToken, Passphrase);
+                        var resp = await KryptPadApi.SaveCategoryAsync(category);
 
                         // Refresh the view
                         Categories.RefreshItem(category);
@@ -138,7 +138,7 @@ namespace KryptPadCSApp.Models
                             try
                             {
                                 // Delete the item
-                                var success = await KryptPadApi.DeleteCategoryAsync(CurrentProfile, category.Id, AccessToken);
+                                var success = await KryptPadApi.DeleteCategoryAsync(category.Id);
 
                                 // If sucessful, remove item from the list
                                 if (success)
@@ -176,7 +176,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Get categories
-                var resp = await KryptPadApi.GetCategoriesAsync(CurrentProfile, AccessToken, Passphrase);
+                var resp = await KryptPadApi.GetCategoriesAsync();
 
                 // Create list of categories
                 foreach (var category in resp.Categories)

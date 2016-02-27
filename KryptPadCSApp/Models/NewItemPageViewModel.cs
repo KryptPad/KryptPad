@@ -98,7 +98,7 @@ namespace KryptPadCSApp.Models
         public Command CancelCommand { get; protected set; }
 
         public Command DeleteFieldCommand { get; protected set; }
-        
+
         #endregion
 
         public NewItemPageViewModel()
@@ -118,7 +118,8 @@ namespace KryptPadCSApp.Models
             {
 
                 //show the add field dialog
-                var res = await DialogHelper.ShowDialog<AddFieldDialog>((d)=> {
+                var res = await DialogHelper.ShowDialog<AddFieldDialog>((d) =>
+                {
 
                     //create new field
                     var field = new ApiField()
@@ -131,7 +132,7 @@ namespace KryptPadCSApp.Models
 
                 });
 
-               
+
             });
 
             DeleteFieldCommand = new Command((p) =>
@@ -166,7 +167,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Get the item
-                var itemResp = await KryptPadApi.GetItemAsync(CurrentProfile, Category.Id, selectedItem.Id, AccessToken, Passphrase);
+                var itemResp = await KryptPadApi.GetItemAsync(Category.Id, selectedItem.Id);
 
                 // Get the item
                 var item = itemResp.Items.FirstOrDefault();
@@ -178,10 +179,10 @@ namespace KryptPadCSApp.Models
                     // Set properties
                     ItemName = item.Name;
                     Notes = item.Notes;
-                    
+
                     // Get the fields from the API
-                    var fieldResp = await KryptPadApi.GetFieldsAsync(CurrentProfile, Category.Id, item.Id, AccessToken, Passphrase);
-                    
+                    var fieldResp = await KryptPadApi.GetFieldsAsync(Category.Id, item.Id);
+
                     // Set fields
                     foreach (var field in fieldResp.Fields)
                     {
@@ -221,7 +222,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Create or update the item
-                var resp = await KryptPadApi.SaveItemAsync(CurrentProfile.Id, Category.Id, item, AccessToken, Passphrase);
+                var resp = await KryptPadApi.SaveItemAsync(Category.Id, item);
 
                 // Set the item id
                 item.Id = resp.Id;
@@ -230,14 +231,14 @@ namespace KryptPadCSApp.Models
                 foreach (var field in Fields)
                 {
                     // Send the field to the API to be stored under the item
-                    resp = await KryptPadApi.SaveFieldAsync(CurrentProfile.Id, Category.Id, item.Id, field, AccessToken, Passphrase);
+                    resp = await KryptPadApi.SaveFieldAsync(Category.Id, item.Id, field);
                 }
 
                 // TODO: Delete the items in our deleted list
                 foreach (var field in DeletedFields)
                 {
                     // Call api to delete the field from the item
-                    await KryptPadApi.DeleteFieldAsync(CurrentProfile.Id, Category.Id, item.Id, field.Id, AccessToken);
+                    await KryptPadApi.DeleteFieldAsync(Category.Id, item.Id, field.Id);
                 }
 
                 //navigate back to items and make sure category is selected

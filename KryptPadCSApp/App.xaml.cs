@@ -39,27 +39,7 @@ namespace KryptPadCSApp
         public event PropertyChangedEventHandler PropertyChanged;
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the file to load
-        /// </summary>
-        internal StorageFile SelectedFile { get; set; }
-
-        /// <summary>
-        /// Gets or sets the API OAuth access token to authorize API calls
-        /// </summary>
-        internal string AccessToken { get; set; }
-
-        /// <summary>
-        /// Gets or sets the API OAuth access token to authorize API calls
-        /// </summary>
-        internal string Passphrase { get; set; }
-
-        /// <summary>
-        /// Gets or sets the current profile Id
-        /// </summary>
-        internal ApiProfile CurrentProfile { get; set; }
-
+        
         /// <summary>
         /// Gets or sets whether the auto login is temporarily disabled
         /// </summary>
