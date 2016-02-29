@@ -751,7 +751,7 @@ namespace KryptPadCSApp.API
         /// <param name="itemId"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteFieldAsync(int categoryId, int itemId, int id)
+        public static async Task DeleteFieldAsync(int categoryId, int itemId, int id)
         {
             using (var client = new HttpClient())
             {
@@ -766,11 +766,7 @@ namespace KryptPadCSApp.API
                 var data = await response.Content.ReadAsStringAsync();
 
                 // Check if the response is a success code
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-                else
+                if(!response.IsSuccessStatusCode)
                 {
                     var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
                     // Throw exception with the WebExceptionResponse

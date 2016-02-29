@@ -13,12 +13,12 @@
         <Models:NewItemPageViewModel/>
     </Page.DataContext>
 
-    <Page.BottomAppBar>
+    <!--<Page.BottomAppBar>
         <CommandBar>
             <AppBarButton Icon="Accept" Label="Done" Command="{Binding AddItemCommand}" />
             <AppBarButton Icon="Cancel" Label="Cancel" Command="{Binding CancelCommand}" />
         </CommandBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}" >
 
@@ -33,7 +33,7 @@
 
             <TextBlock Text="Item name" />
             <TextBox x:Name="ItemNameTextBox"
-                     Text="{Binding ItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Text="{Binding ItemName, Mode=TwoWay}" 
                      HorizontalAlignment="Left"
                      Width="250"/>
 
@@ -63,7 +63,7 @@
 
             <!--This grid is for desktop view-->
             <!--MainGrid is responsive-->
-            <Grid x:Name="MainGrid" Grid.Row="1" Margin="12,12,12,0" Visibility="Collapsed">
+            <Grid x:Name="MainGrid" Grid.Row="1" Margin="12" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -84,7 +84,7 @@
 
                     <!--Custom fields-->
                     <ScrollViewer Grid.Row="1">
-                        <ListBox ItemsSource="{Binding Fields}">
+                        <ListBox ItemsSource="{Binding Fields}" Margin="0,0,12,0">
                             
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -145,7 +145,7 @@
                                Grid.Row="0">Notes</TextBlock>
 
                     <!--Notes-->
-                    <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding Notes, Mode=TwoWay}"
                              AcceptsReturn="True"
                              Grid.Row="1" />
 
@@ -169,7 +169,6 @@
                         <!--Notes-->
                         <TextBox Text="{Binding Notes, Mode=TwoWay}"
                                  AcceptsReturn="True"
-                                 
                                  />
                     </PivotItem>
                 </Pivot>
@@ -194,7 +193,7 @@
 
                 <VisualState x:Name="VisualStateTablet">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1024"/>
+                        <AdaptiveTrigger MinWindowWidth="641"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>

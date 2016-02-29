@@ -24,8 +24,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets the collection of categories
         /// </summary>
-        public ApiCategory[] Categories { get; protected set; } = { };
-        //public CategoryCollection Categories { get; protected set; } = new CategoryCollection();
+        public List<ApiCategory> Categories { get; protected set; } = new List<ApiCategory>();
 
         /// <summary>
         /// Gets the filtered view of items
@@ -54,97 +53,6 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        //private ApiCategory _selectedCategory;
-        ///// <summary>
-        ///// Gets or sets the selected category
-        ///// </summary>
-        //public ApiCategory SelectedCategory
-        //{
-        //    get { return _selectedCategory; }
-        //    set
-        //    {
-        //        _selectedCategory = value;
-
-        //        // Notify change
-        //        OnPropertyChanged(nameof(SelectedCategory));
-
-        //    }
-        //}
-
-
-        private Visibility _bottomAppBarVisible;
-        /// <summary>
-        /// Gets or sets the bottom app bar's visibility
-        /// </summary>
-        public Visibility BottomAppBarVisible
-        {
-            get { return _bottomAppBarVisible; }
-            set
-            {
-                _bottomAppBarVisible = value;
-
-                // Notify change
-                OnPropertyChanged(nameof(BottomAppBarVisible));
-            }
-        }
-
-        private ListViewSelectionMode _selectionMode;
-        /// <summary>
-        /// Gets or sets the grid selection mode
-        /// </summary>
-        public ListViewSelectionMode SelectionMode
-        {
-            get { return _selectionMode; }
-            set
-            {
-                _selectionMode = value;
-
-                // Notify change
-                OnPropertyChanged(nameof(SelectionMode));
-
-                // Set item click enabled if selection mode is none
-                IsItemClickEnabled = value == ListViewSelectionMode.None;
-
-            }
-        }
-
-        private bool _isItemClickEnabled;
-        /// <summary>
-        /// Gets or sets whether the grid has item click enabled
-        /// </summary>
-        public bool IsItemClickEnabled
-        {
-            get { return _isItemClickEnabled; }
-            set
-            {
-                _isItemClickEnabled = value;
-
-                // Notify change
-                OnPropertyChanged(nameof(IsItemClickEnabled));
-
-                // Hide the bottom app bar when the items are clickable
-                BottomAppBarVisible = value ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
-        private ApiItem _selectedItem;
-        /// <summary>
-        /// Gets or sets the selected item
-        /// </summary>
-        public ApiItem SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                _selectedItem = value;
-
-                // Enable the delete command
-                DeleteItemCommand.CommandCanExecute = value != null;
-            }
-        }
-
-
-
         /// <summary>
         /// Opens new category page
         /// </summary>
@@ -156,19 +64,9 @@ namespace KryptPadCSApp.Models
         public Command AddItemCommand { get; private set; }
 
         /// <summary>
-        /// Deletes the selected item(s)
-        /// </summary>
-        public Command DeleteItemCommand { get; private set; }
-
-        /// <summary>
         /// Gets or sets the command that is fired when an item is clicked
         /// </summary>
         public Command ItemClickCommand { get; set; }
-
-        /// <summary>
-        /// Gets or sets the command that is fired when toggle selection is clicked
-        /// </summary>
-        public Command ToggleSelectionMode { get; set; }
 
         #endregion
 
@@ -177,9 +75,6 @@ namespace KryptPadCSApp.Models
         {
             // Register commands
             RegisterCommands();
-
-            // Set some defaults
-            SelectionMode = ListViewSelectionMode.None;
 
 #if DEBUG
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
@@ -214,11 +109,14 @@ namespace KryptPadCSApp.Models
                         // Set the id of the newly created category
                         category.Id = resp.Id;
 
-                        // Add the category to the collection
-                        //Categories.Add(category);
+                        // Add the category to the list
+                        Categories.Add(category);
 
-                        // Select the category
-                        //SelectedCategory = category;
+                        // Add view to the ItemsView object
+                        ItemsView.Source = Categories;
+
+                        // Refresh
+                        OnPropertyChanged(nameof(ItemsView));
                     }
                     catch (Exception ex)
                     {
@@ -228,12 +126,55 @@ namespace KryptPadCSApp.Models
                 }, "Add Category");
             });
 
-            AddItemCommand = new Command((p) =>
+            AddItemCommand = new Command(async (p) =>
             {
-                var category = p as ApiCategory;
+                
+                // Prompt to create the new item
+                var dialog = new AddItemDialog();
 
-                // Navigate
-                Navigate(typeof(NewItemPage), category);
+                // Show the dialog and wait for a response
+                var dialogResp = await dialog.ShowAsync();
+
+                if (dialogResp == ContentDialogResult.Primary)
+                {
+
+                    try
+                    {
+                        // Get the category
+                        var category = p as ApiCategory;
+
+                        // Create an item
+                        var item = new ApiItem()
+                        {
+                            Name = dialog.ItemName
+                        };
+
+                        // Save the item to the api
+                        var r = await KryptPadApi.SaveItemAsync(category.Id, item);
+
+                        // Set the item
+                        item.Id = r.Id;
+                        
+                        // Navigate to item edit page
+                        Navigate(typeof(NewItemPage), new EditItemPageParams()
+                        {
+                            Category = category,
+                            Item = item
+                        });
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // Failed
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+
+
+
+                    
+                }
+
+
             });
 
             //handle item click
@@ -250,44 +191,35 @@ namespace KryptPadCSApp.Models
 
             }, false);
 
-            // Handle item delete
-            DeleteItemCommand = new Command(async (p) =>
-            {
+            //// Handle item delete
+            //DeleteItemCommand = new Command(async (p) =>
+            //{
 
-                // Get the selected items and delete them
-                if (SelectedItem != null)
-                {
-                    try
-                    {
-                        //// Delete the item
-                        //var success = await KryptPadApi.DeleteItemAsync(CurrentProfile.Id, SelectedCategory.Id, SelectedItem.Id, AccessToken);
+            //    // Get the selected items and delete them
+            //    if (SelectedItem != null)
+            //    {
+            //        try
+            //        {
+            //            //// Delete the item
+            //            //var success = await KryptPadApi.DeleteItemAsync(CurrentProfile.Id, SelectedCategory.Id, SelectedItem.Id, AccessToken);
 
-                        //// If sucessful, remove item from the list
-                        //if (success)
-                        //{
-                        //    await RefreshCategories();
-                        //}
+            //            //// If sucessful, remove item from the list
+            //            //if (success)
+            //            //{
+            //            //    await RefreshCategories();
+            //            //}
 
-                    }
-                    catch (Exception ex)
-                    {
-                        // Operation failed
-                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            // Operation failed
+            //            await DialogHelper.ShowMessageDialogAsync(ex.Message);
 
-                    }
-                }
+            //        }
+            //    }
 
-            }, false);
-
-            // Handle toggle selection mode
-            ToggleSelectionMode = new Command((p) =>
-            {
-
-                // Toggle the grid's selection mode
-                SelectionMode = (SelectionMode == ListViewSelectionMode.Single ?
-                    ListViewSelectionMode.None : ListViewSelectionMode.Single);
-
-            });
+            //}, false);
+            
         }
 
         /// <summary>
@@ -298,13 +230,14 @@ namespace KryptPadCSApp.Models
         {
             // Set busy
             IsBusy = true;
-            
+
             try
             {
                 // Get the items if not already got
                 var resp = await KryptPadApi.GetCategoriesWithItemsAsync();
 
-                Categories = resp.Categories;
+                // Set the list to our list of categories
+                Categories = resp.Categories.ToList();
 
                 // Add view to the ItemsView object
                 ItemsView.Source = Categories;
@@ -319,7 +252,7 @@ namespace KryptPadCSApp.Models
             }
 
             // Not busy any more
-           IsBusy = false;
+            IsBusy = false;
 
         }
 

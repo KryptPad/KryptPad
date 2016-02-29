@@ -20,7 +20,8 @@
         </Grid.RowDefinitions>
         
         <!--Textbox for name-->
-        <TextBox x:Name="ItemNameTextBox" PlaceholderText="Enter name (e.g. My Website)" />
+        <TextBox x:Name="ItemNameTextBox" PlaceholderText="Enter name (e.g. My Website)"
+                 Text="{Binding ItemName, Mode=TwoWay}"/>
 
     </Grid>
 </ContentDialog>

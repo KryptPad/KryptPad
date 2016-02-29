@@ -1,4 +1,6 @@
 ﻿using KryptPadCSApp.API;
+using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,30 +22,23 @@ namespace KryptPadCSApp.Dialogs
 {
     public sealed partial class AddItemDialog : ContentDialog
     {
+        #region Properties
         /// <summary>
-        /// Gets or sets the category id
+        /// gets or sets the item name
         /// </summary>
-        private int CategoryId { get; set; }
+        public string ItemName { get; set; }
 
-        public AddItemDialog(int categoryId)
+        #endregion
+
+
+        public AddItemDialog()
         {
             this.InitializeComponent();
-
-            // Set category
-            CategoryId = categoryId;
+            this.DataContext = this;
         }
 
-        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-
-            try
-            {
-                // Save the item to the api
-                var resp = await KryptPadApi.SaveItemAsync(CategoryId, null);
-            }catch
-            {
-
-            }
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

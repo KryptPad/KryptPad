@@ -80,7 +80,7 @@
 
                 <VisualState x:Name="VisualStateTablet">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="961"/>
+                        <AdaptiveTrigger MinWindowWidth="1025"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>

@@ -2,6 +2,7 @@
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.API.Responses;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Collections;
 using KryptPadCSApp.Dialogs;
 using KryptPadCSApp.Views;
 using System;
@@ -18,6 +19,8 @@ namespace KryptPadCSApp.Models
     class NewItemPageViewModel : BasePageModel
     {
         #region Properties
+
+        private bool _isLoading;
 
         /// <summary>
         /// Gets or sets the category for the new item
@@ -60,20 +63,12 @@ namespace KryptPadCSApp.Models
                 _itemName = value.Trim();
                 //notify change
                 OnPropertyChanged(nameof(ItemName));
-                //if there is some text, then we can execute
-                AddItemCommand.CommandCanExecute = CanAddItem();
+
+                // Save the item (fire and forget)
+                var t = SaveItem();
+
             }
         }
-
-        /// <summary>
-        /// Gets a collection of fields
-        /// </summary>
-        public FieldCollection Fields { get; protected set; } = new FieldCollection();
-
-        /// <summary>
-        /// Gets a collection of delete fields
-        /// </summary>
-        public FieldCollection DeletedFields { get; protected set; } = new FieldCollection();
 
         private string _notes;
         /// <summary>
@@ -87,15 +82,23 @@ namespace KryptPadCSApp.Models
                 _notes = value;
                 //notify change
                 OnPropertyChanged(nameof(Notes));
+
+                // Save the item (fire and forget)
+                var t = SaveItem();
             }
         }
 
+        /// <summary>
+        /// Gets a collection of fields
+        /// </summary>
+        public FieldCollection Fields { get; protected set; } = new FieldCollection();
 
-        public Command AddItemCommand { get; protected set; }
-
+        /// <summary>
+        /// Gets a collection of delete fields
+        /// </summary>
+        public FieldCollection DeletedFields { get; protected set; } = new FieldCollection();
+        
         public Command AddFieldCommand { get; protected set; }
-
-        public Command CancelCommand { get; protected set; }
 
         public Command DeleteFieldCommand { get; protected set; }
 
@@ -111,14 +114,12 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            //add the category
-            AddItemCommand = new Command(SaveItem, false);
 
             AddFieldCommand = new Command(async (p) =>
             {
 
-                //show the add field dialog
-                var res = await DialogHelper.ShowDialog<AddFieldDialog>((d) =>
+                // Show the add field dialog
+                var res = await DialogHelper.ShowDialog<AddFieldDialog>(async (d) =>
                 {
 
                     //create new field
@@ -127,32 +128,55 @@ namespace KryptPadCSApp.Models
                         Name = (d.DataContext as AddFieldDialogViewModel).FieldName
                     };
 
-                    //add to list of fields
-                    Fields.Add(field);
+                    try
+                    {
+                        // Send the field to the API to be stored under the item
+                        await KryptPadApi.SaveFieldAsync(Category.Id, Item.Id, field);
+
+                        //add to list of fields
+                        Fields.Add(field);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Operation failed
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+
 
                 });
 
 
             });
 
-            DeleteFieldCommand = new Command((p) =>
+            // Handles field delete
+            DeleteFieldCommand = new Command(async (p) =>
             {
-                var f = p as ApiField;
-                // Remove the field
-                Fields.Remove(f);
+                // Prompt user to delete the field
+                var promptResp = await DialogHelper.Confirm(
+                    "This action cannot be undone. Are you sure you want to delete this field?",
+                    async (c) =>
+                    {
+                        // Get field
+                        var f = p as ApiField;
 
-                // Add the field to the delete list. This will be sent to the API for deletion
-                // Add to deleted fields
-                if (f.Id > 0)
-                {
-                    DeletedFields.Add(f);
-                }
+                        try
+                        {
+                            // Call api to delete the field from the item
+                            await KryptPadApi.DeleteFieldAsync(Category.Id, Item.Id, f.Id);
+
+                            // Remove the field
+                            Fields.Remove(f);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Operation failed
+                            await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                        }
+                    });
+
+
             });
 
-
-
-            //cancel command
-            CancelCommand = new Command((p) => { GoBack(); });
 
         }
 
@@ -162,7 +186,7 @@ namespace KryptPadCSApp.Models
         /// <param name="item"></param>
         private async void LoadItem(ApiItem selectedItem)
         {
-
+            _isLoading = true;
 
             try
             {
@@ -176,7 +200,7 @@ namespace KryptPadCSApp.Models
                 if (item != null)
                 {
 
-                    // Set properties
+                    // Set backing fields. Don't want to trigger the property's set methods
                     ItemName = item.Name;
                     Notes = item.Notes;
 
@@ -197,70 +221,33 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
 
-
+            _isLoading = false;
         }
 
         /// <summary>
-        /// Creates / edits item
+        /// Saves details about an item
         /// </summary>
-        /// <param name="p"></param>
-        private async void SaveItem(object p)
+        private async Task SaveItem()
         {
-            ApiItem item = Item;
+            // If we are loading, do not save the item
+            if (_isLoading) return;
 
-            // If we do not have an item for editing, then create the instance now
-            if (item == null)
-            {
-                item = new ApiItem();
-            }
-
-            // Set the properties of the item. If this was loaded from an existing item
-            // then the properties will contain the name and category.
-            item.Name = ItemName;
-            item.Notes = Notes;
 
             try
             {
-                // Create or update the item
-                var resp = await KryptPadApi.SaveItemAsync(Category.Id, item);
+                // Set item properties
+                Item.Name = ItemName;
+                Item.Notes = Notes;
 
-                // Set the item id
-                item.Id = resp.Id;
-
-                // Add the fields that do not exist
-                foreach (var field in Fields)
-                {
-                    // Send the field to the API to be stored under the item
-                    resp = await KryptPadApi.SaveFieldAsync(Category.Id, item.Id, field);
-                }
-
-                // TODO: Delete the items in our deleted list
-                foreach (var field in DeletedFields)
-                {
-                    // Call api to delete the field from the item
-                    await KryptPadApi.DeleteFieldAsync(Category.Id, item.Id, field.Id);
-                }
-
-                //navigate back to items and make sure category is selected
-                Navigate(typeof(ItemsPage), Category);
-
+                // Update the item
+                await KryptPadApi.SaveItemAsync(Category.Id, Item);
             }
             catch (Exception ex)
             {
-                // Operation failed
-                var dialog = new MessageDialog(ex.Message);
-                await dialog.ShowAsync();
+                // Failed
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-
         }
-
-        /// <summary>
-        /// Determines if the user can add an item
-        /// </summary>
-        /// <returns></returns>
-        private bool CanAddItem() => !string.IsNullOrWhiteSpace(_itemName);
-
-
 
     }
 }

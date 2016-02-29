@@ -37,16 +37,8 @@ namespace KryptPadCSApp.Views
         {
             base.OnNavigatedTo(e);
 
-            //set the category of the NewItemPageViewModel
-            if (e.Parameter is ApiCategory)
-            {
-                var model = DataContext as NewItemPageViewModel;
-                if (model != null)
-                {
-                    model.Category = e.Parameter as ApiCategory;
-                }
-            }
-            else if (e.Parameter is EditItemPageParams)
+            // Initialize the model with the item and the category
+            if (e.Parameter is EditItemPageParams)
             {
                 //get the page params
                 var pageParams = e.Parameter as EditItemPageParams;

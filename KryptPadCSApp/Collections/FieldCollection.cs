@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.Models
+namespace KryptPadCSApp.Collections
 {
     class FieldCollection : ObservableCollection<ApiField>
     {
