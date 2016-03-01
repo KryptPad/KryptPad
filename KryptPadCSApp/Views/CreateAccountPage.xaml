@@ -9,7 +9,7 @@
     x:Class="KryptPadCSApp.Views.CreateAccountPage"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource AppBackgroundBrush}">
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.DataContext>
             <Models:CreateAccountPageViewModel/>
@@ -77,7 +77,7 @@
                       IsActive="{Binding IsBusy}"
                       Width="50"
                       Height="50"
-                      Foreground="White"/>
+                      Foreground="{StaticResource ApplicationForegroundThemeBrush}"/>
 
 
         <VisualStateManager.VisualStateGroups>

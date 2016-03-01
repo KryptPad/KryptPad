@@ -13,7 +13,7 @@
         <Models:SelectProfilePageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource AppBackgroundBrush}">
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
 
         <!--Main grid for page-->
         <Grid HorizontalAlignment="Stretch"

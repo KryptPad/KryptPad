@@ -329,7 +329,7 @@
 
 
         <DataTemplate x:Key="GrivViewItemsTemplate">
-            <Border Background="{Binding Background}">
+            <!--<Border Background="{Binding Background}">-->
                 <Grid Width="116" Height="116" >
                     <StackPanel Padding="10" VerticalAlignment="Center" >
                         <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
@@ -338,7 +338,7 @@
                         <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="WrapWholeWords" />
                     </StackPanel>
                 </Grid>
-            </Border>
+            <!--</Border>-->
         </DataTemplate>
 
 

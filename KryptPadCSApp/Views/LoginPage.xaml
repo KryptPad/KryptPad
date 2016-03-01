@@ -14,7 +14,7 @@
         <Models:LoginPageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource AppBackgroundBrush}" >
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}" >
 
         <!--Main grid for page-->
         <Grid x:Name="MainGrid" VerticalAlignment="Top"
@@ -71,7 +71,7 @@
                       IsActive="{Binding IsBusy}"
                       Width="50"
                       Height="50"
-                      Foreground="White"/>
+                      Foreground="{StaticResource ApplicationForegroundThemeBrush}"/>
 
 
 

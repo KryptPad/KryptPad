@@ -614,7 +614,7 @@ namespace KryptPadCSApp.API
         /// <param name="categoryId"></param>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteItemAsync(int categoryId, int itemId)
+        public static async Task DeleteItemAsync(int categoryId, int itemId)
         {
             using (var client = new HttpClient())
             {
@@ -629,11 +629,7 @@ namespace KryptPadCSApp.API
                 var data = await response.Content.ReadAsStringAsync();
 
                 // Check if the response is a success code
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-                else
+                if (!response.IsSuccessStatusCode)
                 {
                     var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
                     // Throw exception with the WebExceptionResponse

@@ -90,6 +90,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
+            // Handle add category
             AddCategoryCommand = new Command(async (p) =>
             {
                 // Prompt for name
@@ -126,6 +127,7 @@ namespace KryptPadCSApp.Models
                 }, "Add Category");
             });
 
+            // Handle add new item
             AddItemCommand = new Command(async (p) =>
             {
                 
@@ -177,7 +179,7 @@ namespace KryptPadCSApp.Models
 
             });
 
-            //handle item click
+            // Handle item click
             ItemClickCommand = new Command((p) =>
             {
                 var item = p as ApiItem;
@@ -190,35 +192,6 @@ namespace KryptPadCSApp.Models
 
 
             }, false);
-
-            //// Handle item delete
-            //DeleteItemCommand = new Command(async (p) =>
-            //{
-
-            //    // Get the selected items and delete them
-            //    if (SelectedItem != null)
-            //    {
-            //        try
-            //        {
-            //            //// Delete the item
-            //            //var success = await KryptPadApi.DeleteItemAsync(CurrentProfile.Id, SelectedCategory.Id, SelectedItem.Id, AccessToken);
-
-            //            //// If sucessful, remove item from the list
-            //            //if (success)
-            //            //{
-            //            //    await RefreshCategories();
-            //            //}
-
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            // Operation failed
-            //            await DialogHelper.ShowMessageDialogAsync(ex.Message);
-
-            //        }
-            //    }
-
-            //}, false);
             
         }
 

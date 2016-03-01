@@ -102,6 +102,8 @@ namespace KryptPadCSApp.Models
 
         public Command DeleteFieldCommand { get; protected set; }
 
+        public Command DeleteItemCommand { get; protected set; }
+
         #endregion
 
         public NewItemPageViewModel()
@@ -177,7 +179,33 @@ namespace KryptPadCSApp.Models
 
             });
 
+            // Handle item delete
+            DeleteItemCommand = new Command(async (p) =>
+            {
 
+                // Prompt user to delete the item
+                var promptResp = await DialogHelper.Confirm(
+                    "This action cannot be undone. All data associated with this item will be deleted. Are you sure you want to delete this item?",
+                    async (c) =>
+                    {
+                        try
+                        {
+                            // Delete the item
+                            await KryptPadApi.DeleteItemAsync(Category.Id, Item.Id);
+
+                            // Navigate back to items page
+                            NavigationHelper.Navigate(typeof(ItemsPage), null);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            // Operation failed
+                            await DialogHelper.ShowMessageDialogAsync(ex.Message);
+
+                        }
+                    });
+                
+            });
         }
 
         /// <summary>

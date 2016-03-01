@@ -13,167 +13,192 @@
         <Models:NewItemPageViewModel/>
     </Page.DataContext>
 
-    <!--<Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Icon="Accept" Label="Done" Command="{Binding AddItemCommand}" />
-            <AppBarButton Icon="Cancel" Label="Cancel" Command="{Binding CancelCommand}" />
-        </CommandBar>
-    </Page.BottomAppBar>-->
-
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}" >
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Padding="12">
 
-            <TextBlock Text="{Binding Category.Name}" Style="{StaticResource MediumHeaderTextBlock}" />
+        <!--Command bar-->
+        <Grid Grid.Row="0" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
 
-            <TextBlock Text="Item name" />
-            <TextBox x:Name="ItemNameTextBox"
-                     Text="{Binding ItemName, Mode=TwoWay}" 
-                     HorizontalAlignment="Left"
-                     Width="250"/>
+            </Grid.ColumnDefinitions>
 
-            <!--<TextBlock Text="Item type" />
-            <ComboBox ItemsSource="{Binding ItemTypes}"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+            <!--Category-->
+            <Grid Grid.Column="0" Margin="12">
+                <TextBlock Text="{Binding Category.Name}" Style="{StaticResource MediumHeaderTextBlock}" />
+            </Grid>
+            
 
-        </StackPanel>
+            <!--Command items-->
+            <CommandBar Grid.Column="1">
+                <CommandBar.SecondaryCommands>
+                    <AppBarButton Icon="Delete" Label="Delete this item" Command="{Binding DeleteItemCommand}" />
+                </CommandBar.SecondaryCommands>
+            </CommandBar>
 
-        <!--Visibility="{Binding FieldsVisibility}"-->
-        <Grid Grid.Row="1">
+        </Grid>
+
+        <!--Main grid for the item details-->
+        <Grid Grid.Row="1"
+              Margin="12">
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" 
-                        Padding="12"
-                        HorizontalAlignment="Left">
-                <!--Field list-->
-                <TextBlock TextWrapping="WrapWholeWords">
-                        Add fields to this profile (e.g. Username, Password, etc...)
-                </TextBlock>
-                <Button Command="{Binding AddFieldCommand}">Add Field</Button>
+            <!--Item info-->
+            <StackPanel Grid.Row="0" >
+
+                <TextBlock Text="Item name" />
+                <TextBox x:Name="ItemNameTextBox"
+                     Text="{Binding ItemName, Mode=TwoWay}" 
+                     HorizontalAlignment="Left"
+                     Width="250"/>
+
+                <!--<TextBlock Text="Item type" />
+            <ComboBox ItemsSource="{Binding ItemTypes}"
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+
             </StackPanel>
 
-
-            <!--This grid is for desktop view-->
-            <!--MainGrid is responsive-->
-            <Grid x:Name="MainGrid" Grid.Row="1" Margin="12" Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <!--Visibility="{Binding FieldsVisibility}"-->
+            <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Column="0" Grid.Row="0">
+                <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Left">
+                    
+                    <TextBlock TextWrapping="WrapWholeWords">
+                        Add fields to this profile (e.g. Username, Password, etc...)
+                    </TextBlock>
+                    <Button Command="{Binding AddFieldCommand}">Add Field</Button>
+                </StackPanel>
+
+
+                <!--This grid is for desktop view-->
+                <Grid x:Name="MainGrid" Grid.Row="1" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
+                    <Grid Grid.Column="0" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
                                    Grid.Row="0">Fields</TextBlock>
 
-                    <!--Custom fields-->
-                    <ScrollViewer Grid.Row="1">
-                        <ListBox ItemsSource="{Binding Fields}" Margin="0,0,12,0">
-                            
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
+                        <!--Custom fields-->
+                        <ScrollViewer Grid.Row="1" Margin="0,0,12,0">
+                            <ListBox ItemsSource="{Binding Fields}" >
 
-                                    <Grid Margin="0,0,0,20" HorizontalAlignment="Stretch">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
 
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="auto" />
-                                        </Grid.RowDefinitions>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
 
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
+                                        <Grid Margin="0,0,0,20" HorizontalAlignment="Stretch">
 
-                                        <TextBlock Text="{Binding Name}" 
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Text="{Binding Name}" 
                                                Grid.Row="0"
                                                Grid.Column="0" />
 
-                                        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                            <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                              PlaceholderText="Value" 
                                              Grid.Row="1"
                                              Grid.Column="0"/>
 
-                                        <Button Grid.Row="1"
+                                            <Button Grid.Row="1"
                                                 Grid.Column="1"
                                                 Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage}"
                                                 CommandParameter="{Binding}">
-                                            <SymbolIcon Symbol="Delete" />
-                                        </Button>
+                                                <SymbolIcon Symbol="Delete" />
+                                            </Button>
 
-                                    </Grid>
+                                        </Grid>
 
 
-                                    <!--<TextBlock Text="{Binding Name}" />-->
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
+                                        <!--<TextBlock Text="{Binding Name}" />-->
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
 
-                        </ListBox>
-                    </ScrollViewer>
+                            </ListBox>
+                        </ScrollViewer>
 
-                </Grid>
+                    </Grid>
 
-                <Grid Grid.Column="1" Grid.Row="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                    <Grid Grid.Column="1" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                    <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
+                        <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
                                Grid.Row="0">Notes</TextBlock>
 
-                    <!--Notes-->
-                    <TextBox Text="{Binding Notes, Mode=TwoWay}"
+                        <!--Notes-->
+                        <TextBox Text="{Binding Notes, Mode=TwoWay}"
                              AcceptsReturn="True"
                              Grid.Row="1" />
 
 
+                    </Grid>
+
                 </Grid>
 
-            </Grid>
 
-
-            <!--This grid is for mobile view-->
-            <Grid x:Name="MobileGrid" Grid.Row="1" Visibility="Collapsed">
-                <Pivot>
-                    <PivotItem Header="Fields">
-                        <ListBox ItemsSource="{Binding Fields}"
+                <!--This grid is for mobile view-->
+                <Grid x:Name="MobileGrid" Grid.Row="1" Visibility="Collapsed">
+                    <Pivot>
+                        <PivotItem Header="Fields">
+                            <ListBox ItemsSource="{Binding Fields}"
                               
                               >
 
-                        </ListBox>
-                    </PivotItem>
-                    <PivotItem Header="Notes">
-                        <!--Notes-->
-                        <TextBox Text="{Binding Notes, Mode=TwoWay}"
+                            </ListBox>
+                        </PivotItem>
+                        <PivotItem Header="Notes">
+                            <!--Notes-->
+                            <TextBox Text="{Binding Notes, Mode=TwoWay}"
                                  AcceptsReturn="True"
                                  />
-                    </PivotItem>
-                </Pivot>
-            </Grid>
+                        </PivotItem>
+                    </Pivot>
+                </Grid>
 
+
+            </Grid>
 
         </Grid>
 
