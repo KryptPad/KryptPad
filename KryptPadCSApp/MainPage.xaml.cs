@@ -91,13 +91,13 @@ namespace KryptPadCSApp
         private void BackToProfilesRadioButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate
-            NavigationHelper.Navigate(typeof(SelectProfilePage), null, true);
+            NavigationHelper.Navigate(typeof(SelectProfilePage), null, NavigationHelper.NavigationType.Window);
         }
 
         private void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate
-            NavigationHelper.Navigate(typeof(LoginPage), null, true);
+            NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
         }
 
         

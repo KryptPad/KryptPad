@@ -28,11 +28,7 @@ namespace KryptPadCSApp.Models
         public ProfileCollection Profiles { get; protected set; } = new ProfileCollection();
         
         public Command CreateProfileCommand { get; protected set; }
-
-        public Command RenameProfileCommand { get; protected set; }
-
-        public Command DeleteProfileCommand { get; protected set; }
-
+        
         public Command SelectProfileCommand { get; protected set; }
 
         public Command SignOutCommand { get; protected set; }
@@ -104,19 +100,11 @@ namespace KryptPadCSApp.Models
 
                         if (success)
                         {
-                            
-                            var frame = Window.Current.Content as Frame;
-
-                            Window.Current.Content = new MainPage(frame);
-
                             // When a profile is selected, navigate to main page
-                            Navigate(typeof(ItemsPage));
-                            //clear stack
-                            //frame.SetNavigationState("1,0");
-                            frame.BackStack.Clear();
-                            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-
-
+                            NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Frame);
+                            // Clear the back stack
+                            NavigationHelper.ClearBackStack();
+                       
                         }
                     }
                     catch(Exception ex)
@@ -129,64 +117,10 @@ namespace KryptPadCSApp.Models
                 });
 
             });
-
-            RenameProfileCommand = new Command(async (p) => {
-
-                // Prompt for name
-                await DialogHelper.ShowDialog<NamePromptDialog>(async (d) =>
-                {
-                    try
-                    {
-                        //create new category
-                        var profile = p as ApiProfile;
-
-                        // Set new name
-                        profile.Name = d.Value;
-
-                        // Send the category to the api
-                        var resp = await KryptPadApi.SaveProfileAsync(profile);
-
-                        // Refresh the view
-                        Profiles.RefreshItem(profile);
-                    }
-                    catch (Exception ex)
-                    {
-                        // Operation failed
-                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
-                    }
-                }, "Rename Profile");
-            });
-
-            DeleteProfileCommand = new Command(async (p) =>
-            {
-
-                var res = await DialogHelper.Confirm(
-                    "All of your data in this profile will be deleted permanently. This action CANNOT be undone. Are you sure you want to delete this profile?",
-                    async (ap) =>
-                        {
-
-                            var profile = p as ApiProfile;
-                            if (profile != null)
-                            {
-                                // Delete the selected profile
-                                var response = await KryptPadApi.DeleteProfileAsync(profile);
-
-                                if (response)
-                                {
-                                    // Remove the deleted profile from the list
-                                    Profiles.Remove(profile);
-                                }
-                            }
-
-                        }
-                );
-
-
-            });
-
+            
             SignOutCommand = new Command((p) => {
                 // Sign out
-                NavigationHelper.Navigate(typeof(LoginPage), null, true);
+                NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
             });
         }
 

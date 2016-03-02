@@ -122,7 +122,7 @@
                                            Grid.Column="0"
                                            VerticalAlignment="Center"/>
 
-                                <Button Grid.Column="1"
+                                <!--<Button Grid.Column="1"
                                         Command="{Binding DataContext.RenameProfileCommand, ElementName=SelectProfileViewPage}"
                                         CommandParameter="{Binding}">
                                     <SymbolIcon Symbol="Rename" />
@@ -132,7 +132,7 @@
                                         Command="{Binding DataContext.DeleteProfileCommand, ElementName=SelectProfileViewPage}"
                                         CommandParameter="{Binding}">
                                     <SymbolIcon Symbol="Delete" />
-                                </Button>
+                                </Button>-->
                             </Grid>
 
                         </DataTemplate>

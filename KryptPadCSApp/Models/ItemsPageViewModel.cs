@@ -68,6 +68,10 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public Command ItemClickCommand { get; set; }
 
+        public Command RenameProfileCommand { get; protected set; }
+
+        public Command DeleteProfileCommand { get; protected set; }
+
         #endregion
 
 
@@ -130,7 +134,7 @@ namespace KryptPadCSApp.Models
             // Handle add new item
             AddItemCommand = new Command(async (p) =>
             {
-                
+
                 // Prompt to create the new item
                 var dialog = new AddItemDialog();
 
@@ -156,7 +160,7 @@ namespace KryptPadCSApp.Models
 
                         // Set the item
                         item.Id = r.Id;
-                        
+
                         // Navigate to item edit page
                         Navigate(typeof(NewItemPage), new EditItemPageParams()
                         {
@@ -171,9 +175,6 @@ namespace KryptPadCSApp.Models
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
 
-
-
-                    
                 }
 
 
@@ -192,7 +193,52 @@ namespace KryptPadCSApp.Models
 
 
             }, false);
-            
+
+            // Handle rename command
+            RenameProfileCommand = new Command(async (p) =>
+            {
+
+                // Prompt for name
+                await DialogHelper.ShowDialog<NamePromptDialog>(async (d) =>
+                {
+                    try
+                    {
+                        // Set new name
+                        var profile = KryptPadApi.CurrentProfile;
+                        profile.Name = d.Value;
+
+                        // Send the category to the api
+                        var resp = await KryptPadApi.SaveProfileAsync(profile);
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        // Operation failed
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                }, "RENAME PROFILE");
+            });
+
+            // Handle delete command
+            DeleteProfileCommand = new Command(async (p) =>
+            {
+
+                var res = await DialogHelper.Confirm(
+                    "All of your data in this profile will be deleted permanently. THIS ACTION CANNOT BE UNDONE. Are you sure you want to delete this entire profile?",
+                    "WARNING - COMFIRM DELETE",
+                    async (ap) =>
+                    {
+                        // Delete the selected profile
+                        await KryptPadApi.DeleteProfileAsync(KryptPadApi.CurrentProfile);
+
+                        // Navigate back to the profiles list
+                        NavigationHelper.Navigate(typeof(SelectProfilePage), null, NavigationHelper.NavigationType.Window);
+                    }
+                );
+
+
+            });
+
         }
 
         /// <summary>

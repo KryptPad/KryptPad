@@ -197,25 +197,22 @@ namespace KryptPadCSApp.Models
             try
             {
                 //log in and get access token
-                var success = await KryptPadApi.AuthenticateAsync(Email, Password);
+                await KryptPadApi.AuthenticateAsync(Email, Password);
 
-                if (success)
-                {
-                    //save credentials
-                    SaveCredentialsIfAutoSignIn();
+                //save credentials
+                SaveCredentialsIfAutoSignIn();
 
-                    //navigate to the select profile page
-                    Navigate(typeof(SelectProfilePage));
+                //navigate to the select profile page
+                Navigate(typeof(SelectProfilePage));
 
-                }
             }
             catch (WebException ex)
             {
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                
+                // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
 

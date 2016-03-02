@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp"
     xmlns:Models="using:KryptPadCSApp.Models"
-    RequestedTheme="Dark">
+    RequestedTheme="Light">
 
     <Application.Resources>
         <!--FF3297D1-->
@@ -42,8 +42,7 @@
             <Setter Property="FontFamily" Value="Segoe UI Light" />
             <Setter Property="FontWeight" Value="Normal" />
             <Setter Property="FontSize" Value="24" />
-            <Setter Property="Margin" Value="0,0,0,8" />
-            <Setter Property="Foreground" Value="#FFCCCCCC" />
+            <Setter Property="Foreground" Value="{StaticResource ApplicationForegroundThemeBrush}" />
         </Style>
 
         <Style TargetType="TextBlock" x:Key="SplitViewTextBlockStyle">

@@ -30,8 +30,11 @@
             </Grid.ColumnDefinitions>
 
             <!--Category-->
-            <Grid Grid.Column="0" Margin="12">
-                <TextBlock Text="{Binding Category.Name}" Style="{StaticResource MediumHeaderTextBlock}" />
+            <Grid Grid.Column="0" >
+                <TextBlock Margin="12,0"
+                           Text="{Binding Category.Name}" Style="{StaticResource MediumHeaderTextBlock}"
+                           
+                           VerticalAlignment="Center"/>
             </Grid>
             
 

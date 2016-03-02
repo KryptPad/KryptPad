@@ -12,8 +12,8 @@
     <Page.DataContext>
         <Models:ManageCategoriesViewModel/>
     </Page.DataContext>
-    
-    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="12">
+
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}" Padding="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>

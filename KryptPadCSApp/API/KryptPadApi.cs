@@ -55,7 +55,7 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets or sets the current profile Id
         /// </summary>
-        private static ApiProfile CurrentProfile { get; set; }
+        public static ApiProfile CurrentProfile { get; private set; }
 
         /// <summary>
         /// Gets whether the user is signed in
@@ -72,7 +72,7 @@ namespace KryptPadCSApp.API
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        public static async Task<bool> AuthenticateAsync(string username, string password)
+        public static async Task AuthenticateAsync(string username, string password)
         {
             using (var client = new HttpClient())
             {
@@ -102,8 +102,6 @@ namespace KryptPadCSApp.API
 
                     // Store the access token
                     AccessToken = tokenResp.AccessToken;
-
-                    return true;
                 }
                 else
                 {
@@ -219,7 +217,7 @@ namespace KryptPadCSApp.API
                         CurrentProfile = profileResp.Profiles.SingleOrDefault();
                         Passphrase = passphrase;
                     }
-                    
+
                     // Return the profile
                     return true;
                 }
@@ -286,7 +284,7 @@ namespace KryptPadCSApp.API
         /// <param name="id"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteProfileAsync(ApiProfile profile)
+        public static async Task DeleteProfileAsync(ApiProfile profile)
         {
             using (var client = new HttpClient())
             {
@@ -297,7 +295,10 @@ namespace KryptPadCSApp.API
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{profile.Id}"));
 
                 // Deserialize the object based on the result
-                return response.IsSuccessStatusCode;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await CreateException(response);
+                }
             }
 
         }
@@ -317,7 +318,7 @@ namespace KryptPadCSApp.API
                 AddPassphraseHeader(client);
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/items/?q={searchText}"));
-                
+
                 //deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
@@ -762,7 +763,7 @@ namespace KryptPadCSApp.API
                 var data = await response.Content.ReadAsStringAsync();
 
                 // Check if the response is a success code
-                if(!response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
                     var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
                     // Throw exception with the WebExceptionResponse
@@ -811,7 +812,7 @@ namespace KryptPadCSApp.API
                 {
                     throw new Exception("No exception details available");
                 }
-                
+
                 // If we have a WebExceptionResponse object, then use that to create an exception
                 exception = r.ToException();
             }
@@ -826,7 +827,7 @@ namespace KryptPadCSApp.API
                 {
                     exception = new Exception("An error occurred while trying to process your request.");
                 }
-                
+
             }
 
             // Return the exception
@@ -900,7 +901,7 @@ namespace KryptPadCSApp.API
             Passphrase = null;
 
             // TODO: Should we raise an event that the user can handle? Such as going to another page?
-            
+
         }
         #endregion
 

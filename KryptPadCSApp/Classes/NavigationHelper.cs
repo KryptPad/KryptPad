@@ -12,6 +12,12 @@ namespace KryptPadCSApp.Classes
     class NavigationHelper
     {
 
+        public enum NavigationType
+        {
+            Window,
+            Frame
+        }
+
         /// <summary>
         /// Gets the current frame
         /// </summary>
@@ -43,7 +49,7 @@ namespace KryptPadCSApp.Classes
         /// <param name="parameter"></param>
         public static void Navigate(Type pageType, object parameter)
         {
-            Navigate(pageType, parameter, false);
+            Navigate(pageType, parameter, NavigationType.Frame);
         }
 
         /// <summary>
@@ -51,13 +57,13 @@ namespace KryptPadCSApp.Classes
         /// </summary>
         /// <param name="pageType"></param>
         /// <param name="parameter"></param>
-        public static void Navigate(Type pageType, object parameter, bool forceRoot)
+        public static void Navigate(Type pageType, object parameter, NavigationType navigationType)
         {
             var frame = GetFrame();
 
             if (frame != null)
             {
-                if (forceRoot)
+                if (navigationType == NavigationType.Window)
                 {
                     // Set the frame on the window's main content
                     Window.Current.Content = frame;
@@ -70,6 +76,9 @@ namespace KryptPadCSApp.Classes
                 }
                 else
                 {
+                    // Move the frame back into the main page
+                    Window.Current.Content = new MainPage(frame);
+
                     // Navigate
                     frame.Navigate(pageType, parameter);
                 }
