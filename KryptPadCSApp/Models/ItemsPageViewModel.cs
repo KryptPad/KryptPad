@@ -68,6 +68,8 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public Command ItemClickCommand { get; set; }
 
+        public Command ChangePassphraseCommand { get; protected set; }
+
         public Command RenameProfileCommand { get; protected set; }
 
         public Command DeleteProfileCommand { get; protected set; }
@@ -193,6 +195,24 @@ namespace KryptPadCSApp.Models
 
 
             }, false);
+
+            // Handle change passphrase command
+            ChangePassphraseCommand = new Command(async (p) => {
+                IsBusy = true;
+                try
+                {
+                    // Change the passphrase
+                    await KryptPadApi.ChangePassphraseAsync("87654321");
+                }
+                catch (Exception ex)
+                {
+                    // Operation failed
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
+
+                IsBusy = false;
+
+            });
 
             // Handle rename command
             RenameProfileCommand = new Command(async (p) =>

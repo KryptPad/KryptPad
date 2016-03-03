@@ -279,6 +279,35 @@ namespace KryptPadCSApp.API
         }
 
         /// <summary>
+        /// Changes the profile passphrase
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <param name="newPassphrase"></param>
+        /// <returns></returns>
+        public static async Task ChangePassphraseAsync(string newPassphrase)
+        {
+            using (var client = new HttpClient())
+            {
+                // Authorize the request.
+                AuthorizeRequest(client);
+                // Add passphrase to message
+                AddPassphraseHeader(client);
+                // Create JSON content.
+                var content = JsonContent(newPassphrase);
+
+                // Create
+                var response = await client.PostAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/change-passphrase"), content);
+
+                // Deserialize the object based on the result
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await CreateException(response);
+                }
+            }
+
+        }
+
+        /// <summary>
         /// Deletes the profile
         /// </summary>
         /// <param name="id"></param>
