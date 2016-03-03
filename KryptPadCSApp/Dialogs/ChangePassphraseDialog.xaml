@@ -1,0 +1,46 @@
+﻿<ContentDialog
+    x:Class="KryptPadCSApp.Dialogs.ChangePassphraseDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KryptPadCSApp.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="TITLE"
+    PrimaryButtonText="OK"
+    SecondaryButtonText="CANCEL"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    IsPrimaryButtonEnabled="False"
+    >
+    
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        
+        <!--Old passphrase-->
+        <PasswordBox x:Name="OldPassphrasePasswordBox"
+                     Grid.Row="0"
+                     PlaceholderText="Enter current passphrase"
+                     Password="{Binding OldPassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,0,0,12"/>
+
+        <!--New passphrase-->
+        <PasswordBox x:Name="NewPassphrasePasswordBox"
+                     Grid.Row="1"
+                     PlaceholderText="Enter new passphrase"
+                     Password="{Binding NewPassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,0,0,4"/>
+        
+        <PasswordBox x:Name="ConfirmPassphrasePasswordBox"
+                     Grid.Row="2"
+                     PlaceholderText="Confirm new passphrase"
+                     Password="{Binding ConfirmPassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,0,0,4"/>
+        
+    </Grid>
+</ContentDialog>

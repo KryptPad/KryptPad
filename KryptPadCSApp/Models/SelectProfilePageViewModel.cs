@@ -26,9 +26,9 @@ namespace KryptPadCSApp.Models
         /// Gets the list of profiles for a user
         /// </summary>
         public ProfileCollection Profiles { get; protected set; } = new ProfileCollection();
-        
+
         public Command CreateProfileCommand { get; protected set; }
-        
+
         public Command SelectProfileCommand { get; protected set; }
 
         public Command SignOutCommand { get; protected set; }
@@ -48,7 +48,7 @@ namespace KryptPadCSApp.Models
 
             // Get the list of profiles
             var t = GetProfiles();
-            
+
         }
 
         /// <summary>
@@ -88,7 +88,8 @@ namespace KryptPadCSApp.Models
                 await PromptForProfileInfo();
             });
 
-            SelectProfileCommand = new Command(async (p) => {
+            SelectProfileCommand = new Command(async (p) =>
+            {
                 // Prompt for passphrase
                 await DialogHelper.ShowDialog<PassphrasePrompt>(async (d) =>
                 {
@@ -96,29 +97,27 @@ namespace KryptPadCSApp.Models
                     try
                     {
                         // Check the profile and determine if the passphrase is correct
-                        var success = await KryptPadApi.LoadProfileAsync(p as ApiProfile, d.Passphrase);
+                        await KryptPadApi.LoadProfileAsync(p as ApiProfile, d.Passphrase);
 
-                        if (success)
-                        {
-                            // When a profile is selected, navigate to main page
-                            NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Frame);
-                            // Clear the back stack
-                            NavigationHelper.ClearBackStack();
-                       
-                        }
+                        // When a profile is selected, navigate to main page
+                        NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Frame);
+                        // Clear the back stack
+                        NavigationHelper.ClearBackStack();
+
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         // Operation failed
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
-                    
-                    
+
+
                 });
 
             });
-            
-            SignOutCommand = new Command((p) => {
+
+            SignOutCommand = new Command((p) =>
+            {
                 // Sign out
                 NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
             });

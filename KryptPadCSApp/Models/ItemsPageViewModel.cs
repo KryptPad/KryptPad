@@ -198,19 +198,10 @@ namespace KryptPadCSApp.Models
 
             // Handle change passphrase command
             ChangePassphraseCommand = new Command(async (p) => {
-                IsBusy = true;
-                try
-                {
-                    // Change the passphrase
-                    await KryptPadApi.ChangePassphraseAsync("87654321");
-                }
-                catch (Exception ex)
-                {
-                    // Operation failed
-                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
-                }
 
-                IsBusy = false;
+                var dialog = new ChangePassphraseDialog();
+
+                await dialog.ShowAsync();
 
             });
 

@@ -129,6 +129,9 @@
     <Compile Include="Dialogs\AddItemDialog.xaml.cs">
       <DependentUpon>AddItemDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ChangePassphraseDialog.xaml.cs">
+      <DependentUpon>ChangePassphraseDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ClosableContentDialog.cs" />
     <Compile Include="Dialogs\NamePromptDialog.xaml.cs">
       <DependentUpon>NamePromptDialog.xaml</DependentUpon>
@@ -139,6 +142,7 @@
     <Compile Include="Dialogs\ProfileDetailsDialog.xaml.cs">
       <DependentUpon>ProfileDetailsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\WarningException.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -210,6 +214,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\AddItemDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ChangePassphraseDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

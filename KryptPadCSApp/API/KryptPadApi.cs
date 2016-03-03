@@ -192,7 +192,7 @@ namespace KryptPadCSApp.API
         /// <param name="profile"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<bool> LoadProfileAsync(ApiProfile profile, string passphrase)
+        public static async Task LoadProfileAsync(ApiProfile profile, string passphrase)
         {
             using (var client = new HttpClient())
             {
@@ -218,8 +218,6 @@ namespace KryptPadCSApp.API
                         Passphrase = passphrase;
                     }
 
-                    // Return the profile
-                    return true;
                 }
                 else
                 {
@@ -284,14 +282,14 @@ namespace KryptPadCSApp.API
         /// <param name="profile"></param>
         /// <param name="newPassphrase"></param>
         /// <returns></returns>
-        public static async Task ChangePassphraseAsync(string newPassphrase)
+        public static async Task ChangePassphraseAsync(string oldPassphrase, string newPassphrase)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
                 AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client);
+                AddPassphraseHeader(client, oldPassphrase);
                 // Create JSON content.
                 var content = JsonContent(newPassphrase);
 
@@ -299,7 +297,12 @@ namespace KryptPadCSApp.API
                 var response = await client.PostAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/change-passphrase"), content);
 
                 // Deserialize the object based on the result
-                if (!response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
+                {
+                    // Store the new passphrase
+                    Passphrase = newPassphrase;
+                }
+                else
                 {
                     throw await CreateException(response);
                 }
@@ -813,17 +816,23 @@ namespace KryptPadCSApp.API
         private static async Task<Exception> CreateException(HttpResponseMessage response)
         {
             Exception exception;
-            try
-            {
-                // Read the data
-                var data = await response.Content.ReadAsStringAsync();
 
-                // Check is this is an oauth error
-                var msg = JsonConvert.DeserializeObject(data) as JObject;
-                ApiWebExceptionResponse r = null;
-                // Does this have what we want?
-                if (msg != null)
+            // If a bad request is received, try and figure out why
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+
+                try
                 {
+                    ApiWebExceptionResponse r = null;
+
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+
+                    // Check is this is an oauth error
+                    var msg = JsonConvert.DeserializeObject(data) as JObject;
+
+                    // Does this have what we want?
+
                     if ((string)msg["error"] == "invalid_grant")
                     {
                         // Deserialize the data
@@ -834,30 +843,30 @@ namespace KryptPadCSApp.API
                         // Deserialize the data
                         r = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
                     }
-                }
 
-                // If we don't have a response, throw an exception and handle it in the catch
-                if (r == null)
+                    // If we have a WebExceptionResponse object, then use that to create an exception
+                    exception = r.ToException();
+
+
+                }
+                catch (Exception ex)
                 {
-                    throw new Exception("No exception details available");
+                    // Epic fail
+                    exception = new WebException("The server responded with a Bad Request status, but gave no reason.", ex);
                 }
 
-                // If we have a WebExceptionResponse object, then use that to create an exception
-                exception = r.ToException();
+
             }
-            catch (Exception)
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                // No web exception details, so let's tackle some basic responses
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    exception = new UnauthorizedAccessException("Access denied due to invalid credentials.");
-                }
-                else
-                {
-                    exception = new Exception("An error occurred while trying to process your request.");
-                }
-
+                exception = new UnauthorizedAccessException("Access denied due to invalid credentials.");
             }
+            else
+            {
+                exception = new WebException("An error occurred while trying to process your request.");
+            }
+
+
 
             // Return the exception
             return exception;
