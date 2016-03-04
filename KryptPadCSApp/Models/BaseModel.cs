@@ -41,22 +41,7 @@ namespace KryptPadCSApp.Models
 
         }
 
-        /// <summary>
-        /// Navigates back to the previous page in the stack
-        /// </summary>
-        protected void GoBack()
-        {
-            var mainPage = Window.Current.Content as MainPage;
-
-            if (mainPage != null)
-            {
-                var frame = mainPage.RootFrame;
-                if (frame != null)
-                {
-                    frame.GoBack();
-                }
-            }
-        }
+        
         #endregion
 
         #region Event Handlers

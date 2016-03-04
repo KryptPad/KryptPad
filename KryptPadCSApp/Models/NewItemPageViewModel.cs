@@ -93,11 +93,6 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public FieldCollection Fields { get; protected set; } = new FieldCollection();
 
-        /// <summary>
-        /// Gets a collection of delete fields
-        /// </summary>
-        public FieldCollection DeletedFields { get; protected set; } = new FieldCollection();
-        
         public Command AddFieldCommand { get; protected set; }
 
         public Command DeleteFieldCommand { get; protected set; }
@@ -123,17 +118,22 @@ namespace KryptPadCSApp.Models
                 // Show the add field dialog
                 var res = await DialogHelper.ShowDialog<AddFieldDialog>(async (d) =>
                 {
-
-                    //create new field
-                    var field = new ApiField()
+                    var field = new FieldModel()
                     {
                         Name = (d.DataContext as AddFieldDialogViewModel).FieldName
                     };
 
+
                     try
                     {
+
                         // Send the field to the API to be stored under the item
-                        await KryptPadApi.SaveFieldAsync(Category.Id, Item.Id, field);
+                        var resp = await KryptPadApi.SaveFieldAsync(Category.Id, Item.Id, new ApiField()
+                        {
+                            Name = field.Name
+                        });
+
+                        field.Id = resp.Id;
 
                         //add to list of fields
                         Fields.Add(field);
@@ -159,7 +159,7 @@ namespace KryptPadCSApp.Models
                     async (c) =>
                     {
                         // Get field
-                        var f = p as ApiField;
+                        var f = p as FieldModel;
 
                         try
                         {
@@ -204,7 +204,7 @@ namespace KryptPadCSApp.Models
 
                         }
                     });
-                
+
             });
         }
 
@@ -238,7 +238,13 @@ namespace KryptPadCSApp.Models
                     // Set fields
                     foreach (var field in fieldResp.Fields)
                     {
-                        Fields.Add(field);
+                        var f = new FieldModel()
+                        {
+                            Id = field.Id,
+                            Name = field.Name,
+                            Value = field.Value
+                        };
+                        Fields.Add(f);
                     }
                 }
 

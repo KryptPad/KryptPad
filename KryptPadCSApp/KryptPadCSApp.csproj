@@ -154,6 +154,7 @@
     <Compile Include="Models\CreateAccountPageViewModel.cs" />
     <Compile Include="Models\EditItemPageParams.cs" />
     <Compile Include="Collections\FieldCollection.cs" />
+    <Compile Include="Models\FieldModel.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
     <Compile Include="Models\MainPageViewModel.cs" />

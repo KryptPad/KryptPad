@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API.Models
+namespace KryptPadCSApp.Models
 {
-    public class ApiField
+    class FieldModel : BaseModel
     {
         /// <summary>
         /// Gets or sets the ID of the field
@@ -21,6 +21,18 @@ namespace KryptPadCSApp.API.Models
         /// <summary>
         /// Gets or sets the value
         /// </summary>
-        public string Value { get; set; }
+        private string _value;
+
+        public string Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                // Notify change
+                OnPropertyChanged(nameof(Value));
+            }
+        }
+
     }
 }

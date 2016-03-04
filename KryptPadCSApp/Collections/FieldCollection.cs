@@ -1,4 +1,5 @@
 ﻿using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.Collections
 {
-    class FieldCollection : ObservableCollection<ApiField>
+    class FieldCollection : ObservableCollection<FieldModel>
     {
     }
 }

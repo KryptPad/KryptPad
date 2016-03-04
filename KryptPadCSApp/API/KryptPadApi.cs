@@ -231,17 +231,16 @@ namespace KryptPadCSApp.API
         /// Creates a new profile
         /// </summary>
         /// <param name="profile"></param>
-        /// <param name="token"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile)
+        public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile, string passphrase = null)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
                 AuthorizeRequest(client);
                 // Add passphrase to message
-                AddPassphraseHeader(client);
+                AddPassphraseHeader(client, passphrase);
                 // Create JSON content.
                 var content = JsonContent(profile);
 
