@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -52,6 +53,42 @@ namespace KryptPadCSApp.Views
                     model.Category = pageParams.Category;
                     model.Item = pageParams.Item;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets the rect from an element
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        private static Rect GetElementRect(FrameworkElement element)
+        {
+            GeneralTransform buttonTransform = element.TransformToVisual(null);
+            Point point = buttonTransform.TransformPoint(new Point());
+            return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
+        }
+
+        private async void MenuButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            PopupMenu menu = new PopupMenu();
+            
+            menu.Commands.Add(new UICommand("Delete", (command) =>
+            {
+                var model = DataContext as NewItemPageViewModel;
+                var element = sender as FrameworkElement;
+                if (element != null)
+                {
+                    // Execute the command on the view model
+                    model.DeleteFieldCommand.Execute(element.DataContext);
+                }
+                
+            }));
+
+            
+            var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)sender));
+            if (chosenCommand == null)
+            {
+            
             }
         }
     }

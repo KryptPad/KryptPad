@@ -118,25 +118,22 @@ namespace KryptPadCSApp.Models
                 // Show the add field dialog
                 var res = await DialogHelper.ShowDialog<AddFieldDialog>(async (d) =>
                 {
-                    var field = new FieldModel()
-                    {
-                        Name = (d.DataContext as AddFieldDialogViewModel).FieldName
-                    };
-
-
+                    
                     try
                     {
 
-                        // Send the field to the API to be stored under the item
-                        var resp = await KryptPadApi.SaveFieldAsync(Category.Id, Item.Id, new ApiField()
+                        var field = new FieldModel(new ApiField()
                         {
-                            Name = field.Name
+                            Name = (d.DataContext as AddFieldDialogViewModel).FieldName
                         });
+
+                        // Send the field to the API to be stored under the item
+                        var resp = await KryptPadApi.SaveFieldAsync(Category.Id, Item.Id, field.Field );
 
                         field.Id = resp.Id;
 
-                        //add to list of fields
-                        Fields.Add(field);
+                        // Add field to the list
+                        AddFieldToCollection(field);
                     }
                     catch (Exception ex)
                     {
@@ -238,13 +235,8 @@ namespace KryptPadCSApp.Models
                     // Set fields
                     foreach (var field in fieldResp.Fields)
                     {
-                        var f = new FieldModel()
-                        {
-                            Id = field.Id,
-                            Name = field.Name,
-                            Value = field.Value
-                        };
-                        Fields.Add(f);
+                        // Add field to the list
+                        AddFieldToCollection(new FieldModel(field));
                     }
                 }
 
@@ -283,5 +275,41 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        /// <summary>
+        /// Adds a field to the collection and listens to changes to properties
+        /// </summary>
+        /// <param name="field"></param>
+        private void AddFieldToCollection(FieldModel field)
+        {
+            // Listen to changes to the Value property
+            field.PropertyChanged += (sender, e) => {
+                // If it is the value property, call update on our field
+                if (e.PropertyName == nameof(field.Value))
+                {
+                    UpdateField((FieldModel)sender);
+                }
+            };
+
+            // Add field model to the list
+            Fields.Add(field);
+        }
+
+        /// <summary>
+        /// Updates the field
+        /// </summary>
+        /// <param name="field"></param>
+        private async void UpdateField(FieldModel field)
+        {
+            try
+            {
+                // Send the field to the API to be stored under the item
+                await KryptPadApi.SaveFieldAsync(Category.Id, Item.Id, field.Field);
+            }
+            catch (Exception ex)
+            {
+                // Operation failed
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+        }
     }
 }

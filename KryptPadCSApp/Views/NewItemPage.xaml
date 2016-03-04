@@ -121,7 +121,7 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
 
-                                        <Grid Margin="0,0,0,20" HorizontalAlignment="Stretch">
+                                        <Grid HorizontalAlignment="Stretch">
 
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="auto" />
@@ -131,22 +131,41 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="auto"/>
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock Text="{Binding Name}" 
-                                               Grid.Row="0"
-                                               Grid.Column="0" />
+                                                       Grid.Row="0"
+                                                       Grid.Column="0" />      
 
-                                            <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                             PlaceholderText="Value" 
-                                             Grid.Row="1"
-                                             Grid.Column="0"/>
+                                            <PasswordBox Password="{Binding Value, Mode=TwoWay}" 
+                                                         PlaceholderText="Value"
+                                                         PasswordRevealMode="Visible"
+                                                         Grid.Row="1"
+                                                         Grid.Column="0"/>
 
                                             <Button Grid.Row="1"
                                                 Grid.Column="1"
-                                                Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage}"
+                                                Command="{Binding DataContext.CopyFieldValueCommand, ElementName=AddNewItemPage}"
                                                 CommandParameter="{Binding}">
-                                                <SymbolIcon Symbol="Delete" />
+                                                <SymbolIcon Symbol="Copy" />
+                                            </Button>
+                                            
+                                            <!--Command items-->
+                                            <!--<CommandBar Grid.Row="1"
+                                                        Grid.Column="2">
+                                                <CommandBar.SecondaryCommands>
+                                                    <AppBarButton Icon="Delete" Label="Delete"
+                                                                  Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage}"
+                                                                  CommandParameter="{Binding}"/>
+                                                </CommandBar.SecondaryCommands>
+                                            </CommandBar>-->
+
+                                            <Button x:Name="MenuButton"
+                                                    Grid.Row="1"
+                                                    Grid.Column="2"
+                                                    Tapped="MenuButton_Tapped">
+                                                ...
                                             </Button>
 
                                         </Grid>

@@ -94,7 +94,6 @@ namespace KryptPadCSApp.Dialogs
         {
             try
             {
-                
                 // Change the passphrase
                 await API.KryptPadApi.ChangePassphraseAsync(OldPassphrase, NewPassphrase);
             }
