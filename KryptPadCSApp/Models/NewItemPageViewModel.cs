@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 
@@ -98,6 +99,8 @@ namespace KryptPadCSApp.Models
         public Command DeleteFieldCommand { get; protected set; }
 
         public Command DeleteItemCommand { get; protected set; }
+
+        public Command CopyFieldValueCommand { get; protected set; }
 
         #endregion
 
@@ -202,6 +205,18 @@ namespace KryptPadCSApp.Models
                         }
                     });
 
+            });
+
+            CopyFieldValueCommand = new Command((p) => {
+
+                var field = p as FieldModel;
+
+                // Create a data package
+                var package = new DataPackage();
+                package.SetText(field.Value);
+
+                // Set the value of the field to the clipboard
+                Clipboard.SetContent(package);
             });
         }
 
