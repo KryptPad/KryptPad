@@ -31,12 +31,19 @@
 
             <!--Category-->
             <Grid Grid.Column="0" >
-                <TextBlock Margin="12,0"
-                           Text="{Binding Category.Name}" Style="{StaticResource MediumHeaderTextBlock}"
-                           
-                           VerticalAlignment="Center"/>
+                <ComboBox  Margin="12,0"
+                           ItemsSource="{Binding CategoriesView.View}"
+                           SelectedItem="{Binding Category, Mode=TwoWay}"
+                           VerticalAlignment="Center">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
             </Grid>
-            
+
 
             <!--Command items-->
             <CommandBar Grid.Column="1">
@@ -50,7 +57,7 @@
         <!--Main grid for the item details-->
         <Grid Grid.Row="1"
               Margin="12">
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*" />
@@ -80,7 +87,7 @@
 
                 <StackPanel Grid.Row="0"
                         HorizontalAlignment="Left">
-                    
+
                     <TextBlock TextWrapping="WrapWholeWords">
                         Add fields to this profile (e.g. Username, Password, etc...)
                     </TextBlock>
@@ -136,7 +143,7 @@
 
                                             <TextBlock Text="{Binding Name}" 
                                                        Grid.Row="0"
-                                                       Grid.Column="0" />      
+                                                       Grid.Column="0" />
 
                                             <PasswordBox Password="{Binding Value, Mode=TwoWay}" 
                                                          PlaceholderText="Value"
@@ -150,7 +157,7 @@
                                                 CommandParameter="{Binding}">
                                                 <SymbolIcon Symbol="Copy" />
                                             </Button>
-                                            
+
                                             <!--Command items-->
                                             <!--<CommandBar Grid.Row="1"
                                                         Grid.Column="2">

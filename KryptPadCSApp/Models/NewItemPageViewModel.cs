@@ -8,12 +8,14 @@ using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
 
 namespace KryptPadCSApp.Models
 {
@@ -24,9 +26,28 @@ namespace KryptPadCSApp.Models
         private bool _isLoading;
 
         /// <summary>
+        /// Gets the list of categories
+        /// </summary>
+        public CollectionViewSource CategoriesView { get; protected set; } = new CollectionViewSource();
+
+        private ApiCategory _category;
+        /// <summary>
         /// Gets or sets the category for the new item
         /// </summary>
-        public ApiCategory Category { get; set; }
+        public ApiCategory Category
+        {
+            get { return _category; }
+            set
+            {
+                _category = value;
+
+                // Notify change
+                OnPropertyChanged(nameof(Category));
+
+                // Save the item (fire and forget)
+                var t = SaveItem();
+            }
+        }
 
         private ApiItem _item;
         /// <summary>
@@ -40,8 +61,7 @@ namespace KryptPadCSApp.Models
                 _item = value;
                 //notify change
                 OnPropertyChanged(nameof(Item));
-                //load the item
-                LoadItem(_item);
+
             }
         }
 
@@ -138,7 +158,7 @@ namespace KryptPadCSApp.Models
                         // Add field to the list
                         AddFieldToCollection(field);
                     }
-                    catch (Exception ex)
+                    catch (WebException ex)
                     {
                         // Operation failed
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
@@ -169,7 +189,7 @@ namespace KryptPadCSApp.Models
                             // Remove the field
                             Fields.Remove(f);
                         }
-                        catch (Exception ex)
+                        catch (WebException ex)
                         {
                             // Operation failed
                             await DialogHelper.ShowMessageDialogAsync(ex.Message);
@@ -197,7 +217,7 @@ namespace KryptPadCSApp.Models
                             NavigationHelper.Navigate(typeof(ItemsPage), null);
 
                         }
-                        catch (Exception ex)
+                        catch (WebException ex)
                         {
                             // Operation failed
                             await DialogHelper.ShowMessageDialogAsync(ex.Message);
@@ -222,42 +242,55 @@ namespace KryptPadCSApp.Models
         }
 
         /// <summary>
-        /// Loads an IItem into the view model
+        /// Loads an item into the view model
         /// </summary>
         /// <param name="item"></param>
-        private async void LoadItem(ApiItem selectedItem)
+        public async Task LoadItem(ApiItem selectedItem, ApiCategory category)
         {
+            // Prevent change triggers
             _isLoading = true;
 
             try
             {
+                var categories = await KryptPadApi.GetCategoriesAsync();
+
+                // Get the categories
+                CategoriesView.Source = categories.Categories;
+
+                // Update view
+                OnPropertyChanged(nameof(CategoriesView));
+
+                // Set the selected category
+                Category = (from c in categories.Categories
+                            where c.Id == category.Id
+                            select c).SingleOrDefault();
+
                 // Get the item
                 var itemResp = await KryptPadApi.GetItemAsync(Category.Id, selectedItem.Id);
 
                 // Get the item
                 var item = itemResp.Items.FirstOrDefault();
 
-                // Success?
-                if (item != null)
+                // Set item
+                Item = item;
+
+                // Set properties
+                ItemName = item.Name;
+                Notes = item.Notes;
+
+                // Get the fields from the API
+                var fieldResp = await KryptPadApi.GetFieldsAsync(Category.Id, item.Id);
+
+                // Set fields
+                foreach (var field in fieldResp.Fields)
                 {
-
-                    // Set backing fields. Don't want to trigger the property's set methods
-                    ItemName = item.Name;
-                    Notes = item.Notes;
-
-                    // Get the fields from the API
-                    var fieldResp = await KryptPadApi.GetFieldsAsync(Category.Id, item.Id);
-
-                    // Set fields
-                    foreach (var field in fieldResp.Fields)
-                    {
-                        // Add field to the list
-                        AddFieldToCollection(new FieldModel(field));
-                    }
+                    // Add field to the list
+                    AddFieldToCollection(new FieldModel(field));
                 }
 
+
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
                 // Operation failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
@@ -281,10 +314,14 @@ namespace KryptPadCSApp.Models
                 Item.Name = ItemName;
                 Item.Notes = Notes;
 
+                var oldCategoryId = Item.CategoryId;
+
+                Item.CategoryId = Category.Id;
+
                 // Update the item
-                await KryptPadApi.SaveItemAsync(Category.Id, Item);
+                await KryptPadApi.SaveItemAsync(oldCategoryId, Item);
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
                 // Failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
@@ -317,12 +354,15 @@ namespace KryptPadCSApp.Models
         /// <param name="field"></param>
         private async void UpdateField(FieldModel field)
         {
+
+            if (_isLoading) return;
+
             try
             {
                 // Send the field to the API to be stored under the item
                 await KryptPadApi.SaveFieldAsync(Category.Id, Item.Id, field.Field);
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
                 // Operation failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);

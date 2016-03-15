@@ -34,7 +34,7 @@ namespace KryptPadCSApp.Views
         /// Handles navigation to this page
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
@@ -50,8 +50,8 @@ namespace KryptPadCSApp.Views
                 if (pageParams != null && model != null)
                 {
                     //set properties on the model
-                    model.Category = pageParams.Category;
-                    model.Item = pageParams.Item;
+                    await model.LoadItem(pageParams.Item, pageParams.Category);
+                        
                 }
             }
         }
