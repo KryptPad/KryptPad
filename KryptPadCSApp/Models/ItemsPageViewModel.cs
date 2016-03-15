@@ -236,7 +236,7 @@ namespace KryptPadCSApp.Models
 
                 var res = await DialogHelper.Confirm(
                     "All of your data in this profile will be deleted permanently. THIS ACTION CANNOT BE UNDONE. Are you sure you want to delete this entire profile?",
-                    "WARNING - COMFIRM DELETE",
+                    "WARNING - CONFIRM DELETE",
                     async (ap) =>
                     {
                         // Delete the selected profile
