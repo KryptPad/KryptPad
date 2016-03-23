@@ -7,11 +7,13 @@ using KryptPadCSApp.Dialogs;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -200,7 +202,8 @@ namespace KryptPadCSApp.Models
             }, false);
 
             // Handle change passphrase command
-            ChangePassphraseCommand = new Command(async (p) => {
+            ChangePassphraseCommand = new Command(async (p) =>
+            {
 
                 var dialog = new ChangePassphraseDialog();
 
@@ -223,7 +226,7 @@ namespace KryptPadCSApp.Models
 
                         // Send the category to the api
                         var resp = await KryptPadApi.SaveProfileAsync(profile);
-                        
+
                     }
                     catch (WebException ex)
                     {
@@ -254,15 +257,39 @@ namespace KryptPadCSApp.Models
             });
 
             // Download profile handler
-            DownloadProfileCommand = new Command(async (prop) => {
+            DownloadProfileCommand = new Command(async (prop) =>
+            {
                 try
                 {
                     // Prompt for a place to save the file
+                    var sfd = new FileSavePicker()
+                    {
+                        SuggestedFileName = KryptPadApi.CurrentProfile.Name,
 
-                    // Get profile
-                    var profileData = await KryptPadApi.DownloadCurrentProfileAsync();
+                    };
 
-                    // Save profile to file
+                    //sfd.FileTypeChoices.Add("KryptPad Document Format", new List<string>(new[] { ".kdf" }));
+                    sfd.FileTypeChoices.Add("KryptPad Document Format", new[] { ".kdf" });
+
+                    // Show the picker
+                    var file = await sfd.PickSaveFileAsync();
+
+                    if (file != null)
+                    {
+
+                        // Get profile
+                        var profileData = await KryptPadApi.DownloadCurrentProfileAsync();
+
+                        // Save profile to file
+                        using (var fs = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite))
+                        using (var sw = new StreamWriter(fs.AsStreamForWrite()))
+                        {
+                            // Write the data
+                            sw.Write(profileData);
+                        }
+
+                        await DialogHelper.ShowMessageDialogAsync("Profile downloaded successfully");
+                    }
                 }
                 catch (WebException ex)
                 {
@@ -270,8 +297,8 @@ namespace KryptPadCSApp.Models
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
 
-                
-                
+
+
             });
 
         }
