@@ -8,6 +8,7 @@ using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -73,6 +74,8 @@ namespace KryptPadCSApp.Models
         public Command RenameProfileCommand { get; protected set; }
 
         public Command DeleteProfileCommand { get; protected set; }
+
+        public Command DownloadProfileCommand { get; protected set; }
 
         #endregion
 
@@ -222,7 +225,7 @@ namespace KryptPadCSApp.Models
                         var resp = await KryptPadApi.SaveProfileAsync(profile);
                         
                     }
-                    catch (Exception ex)
+                    catch (WebException ex)
                     {
                         // Operation failed
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
@@ -248,6 +251,27 @@ namespace KryptPadCSApp.Models
                 );
 
 
+            });
+
+            // Download profile handler
+            DownloadProfileCommand = new Command(async (prop) => {
+                try
+                {
+                    // Prompt for a place to save the file
+
+                    // Get profile
+                    var profileData = await KryptPadApi.DownloadCurrentProfileAsync();
+
+                    // Save profile to file
+                }
+                catch (WebException ex)
+                {
+                    // Operation failed
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
+
+                
+                
             });
 
         }

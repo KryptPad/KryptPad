@@ -228,6 +228,40 @@ namespace KryptPadCSApp.API
         }
 
         /// <summary>
+        /// Gets a specific profile for the authenticated user
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <param name="passphrase"></param>
+        /// <returns></returns>
+        public static async Task<string> DownloadCurrentProfileAsync()
+        {
+            using (var client = new HttpClient())
+            {
+                //authorize the request
+                AuthorizeRequest(client);
+                // Add passphrase to message
+                AddPassphraseHeader(client);
+                //send request and get a response
+                var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/download"));
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    //read the data
+                    var data = await response.Content.ReadAsStringAsync();
+
+                    return data;
+
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+
+        }
+
+        /// <summary>
         /// Creates a new profile
         /// </summary>
         /// <param name="profile"></param>
@@ -858,7 +892,7 @@ namespace KryptPadCSApp.API
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                exception = new UnauthorizedAccessException("Access denied due to invalid credentials.");
+                exception = new WebException("Access denied due to invalid credentials.");
             }
             else
             {
