@@ -56,40 +56,40 @@ namespace KryptPadCSApp.Views
             }
         }
 
-        /// <summary>
-        /// Gets the rect from an element
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        private static Rect GetElementRect(FrameworkElement element)
-        {
-            GeneralTransform buttonTransform = element.TransformToVisual(null);
-            Point point = buttonTransform.TransformPoint(new Point());
-            return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
-        }
+        ///// <summary>
+        ///// Gets the rect from an element
+        ///// </summary>
+        ///// <param name="element"></param>
+        ///// <returns></returns>
+        //private static Rect GetElementRect(FrameworkElement element)
+        //{
+        //    GeneralTransform buttonTransform = element.TransformToVisual(null);
+        //    Point point = buttonTransform.TransformPoint(new Point());
+        //    return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
+        //}
 
-        private async void MenuButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            PopupMenu menu = new PopupMenu();
+        //private async void MenuButton_Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    PopupMenu menu = new PopupMenu();
             
-            menu.Commands.Add(new UICommand("Delete", (command) =>
-            {
-                var model = DataContext as NewItemPageViewModel;
-                var element = sender as FrameworkElement;
-                if (element != null)
-                {
-                    // Execute the command on the view model
-                    model.DeleteFieldCommand.Execute(element.DataContext);
-                }
+        //    menu.Commands.Add(new UICommand("Delete", (command) =>
+        //    {
+        //        var model = DataContext as NewItemPageViewModel;
+        //        var element = sender as FrameworkElement;
+        //        if (element != null)
+        //        {
+        //            // Execute the command on the view model
+        //            model.DeleteFieldCommand.Execute(element.DataContext);
+        //        }
                 
-            }));
+        //    }));
 
             
-            var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)sender));
-            if (chosenCommand == null)
-            {
+        //    var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)sender));
+        //    if (chosenCommand == null)
+        //    {
             
-            }
-        }
+        //    }
+        //}
     }
 }

@@ -71,7 +71,7 @@
                       ItemsSource="{Binding ItemsView.View}"
                       IsItemClickEnabled="true"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
-                      ItemTemplate="{StaticResource GrivViewItemsTemplate }">
+                      ItemTemplate="{StaticResource GridViewItemsTemplate }">
 
                 <GridView.GroupStyle>
                     <GroupStyle>

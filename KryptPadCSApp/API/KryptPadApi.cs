@@ -514,9 +514,7 @@ namespace KryptPadCSApp.API
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
 
@@ -865,16 +863,22 @@ namespace KryptPadCSApp.API
                     var msg = JsonConvert.DeserializeObject(data) as JObject;
 
                     // Does this have what we want?
-
+                    //if ((string)msg["Message"] != null)
+                    //{
+                    //    // Use the string directly
+                    //    exception = new WebException((string)msg["Message"]);
+                    //}
                     if ((string)msg["error"] == "invalid_grant")
                     {
                         // Deserialize the data
                         r = JsonConvert.DeserializeObject<OAuthTokenErrorResponse>(data);
+                        
                     }
                     else
                     {
                         // Deserialize the data
                         r = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+                        
                     }
 
                     // If we have a WebExceptionResponse object, then use that to create an exception

@@ -327,20 +327,65 @@
         </Style>
 
 
-        <DataTemplate x:Key="GrivViewItemsTemplate">
+        <DataTemplate x:Key="GridViewItemsTemplate">
             <!--<Border Background="{Binding Background}">-->
-                <Grid Width="116" Height="116" >
-                    <StackPanel Padding="10" VerticalAlignment="Center" >
-                        <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
+            <Grid Width="116" Height="116" >
+                <StackPanel Padding="10" VerticalAlignment="Center" >
+                    <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
                                                    Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                                    Margin="0,0,0,10"/>
-                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="WrapWholeWords" />
-                    </StackPanel>
-                </Grid>
+                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="WrapWholeWords" />
+                </StackPanel>
+            </Grid>
             <!--</Border>-->
         </DataTemplate>
 
+        <!--Template for field list-->
+        <DataTemplate x:Key="FieldListDataTemplate">
 
+            <Grid HorizontalAlignment="Stretch">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Name}" 
+                           Grid.Row="0"
+                           Grid.Column="0" />
+
+                <PasswordBox Password="{Binding Value, Mode=TwoWay}" 
+                             PlaceholderText="Value"
+                             PasswordRevealMode="Visible"
+                             Grid.Row="1"
+                             Grid.Column="0"/>
+
+                <Button Grid.Row="1"
+                        Grid.Column="1"
+                        Command="{Binding DataContext.CopyFieldValueCommand, ElementName=AddNewItemPage}"
+                        CommandParameter="{Binding}">
+                    <SymbolIcon Symbol="Copy" />
+                </Button>
+
+                <Button x:Name="MenuButton"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Command="{Binding DataContext.FieldMenuButtonCommand, ElementName=AddNewItemPage}"
+                        CommandParameter="{Binding ElementName=MenuButton}">
+                    ...
+                </Button>
+
+            </Grid>
+
+
+            <!--<TextBlock Text="{Binding Name}" />-->
+        </DataTemplate>
 
     </Application.Resources>
 

@@ -117,7 +117,8 @@
 
                         <!--Custom fields-->
                         <ScrollViewer Grid.Row="1" Margin="0,0,12,0">
-                            <ListBox ItemsSource="{Binding Fields}" >
+                            <ListBox ItemsSource="{Binding Fields}"
+                                     ItemTemplate="{StaticResource FieldListDataTemplate}">
 
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
@@ -125,62 +126,7 @@
                                     </Style>
                                 </ListBox.ItemContainerStyle>
 
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-
-                                        <Grid HorizontalAlignment="Stretch">
-
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="auto" />
-                                                <RowDefinition Height="auto" />
-                                            </Grid.RowDefinitions>
-
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="auto"/>
-                                                <ColumnDefinition Width="auto"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <TextBlock Text="{Binding Name}" 
-                                                       Grid.Row="0"
-                                                       Grid.Column="0" />
-
-                                            <PasswordBox Password="{Binding Value, Mode=TwoWay}" 
-                                                         PlaceholderText="Value"
-                                                         PasswordRevealMode="Visible"
-                                                         Grid.Row="1"
-                                                         Grid.Column="0"/>
-
-                                            <Button Grid.Row="1"
-                                                Grid.Column="1"
-                                                Command="{Binding DataContext.CopyFieldValueCommand, ElementName=AddNewItemPage}"
-                                                CommandParameter="{Binding}">
-                                                <SymbolIcon Symbol="Copy" />
-                                            </Button>
-
-                                            <!--Command items-->
-                                            <!--<CommandBar Grid.Row="1"
-                                                        Grid.Column="2">
-                                                <CommandBar.SecondaryCommands>
-                                                    <AppBarButton Icon="Delete" Label="Delete"
-                                                                  Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage}"
-                                                                  CommandParameter="{Binding}"/>
-                                                </CommandBar.SecondaryCommands>
-                                            </CommandBar>-->
-
-                                            <Button x:Name="MenuButton"
-                                                    Grid.Row="1"
-                                                    Grid.Column="2"
-                                                    Tapped="MenuButton_Tapped">
-                                                ...
-                                            </Button>
-
-                                        </Grid>
-
-
-                                        <!--<TextBlock Text="{Binding Name}" />-->
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
+                                
 
                             </ListBox>
                         </ScrollViewer>
@@ -212,9 +158,14 @@
                     <Pivot>
                         <PivotItem Header="Fields">
                             <ListBox ItemsSource="{Binding Fields}"
-                              
-                              >
+                                     ItemTemplate="{StaticResource FieldListDataTemplate}">
 
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                
                             </ListBox>
                         </PivotItem>
                         <PivotItem Header="Notes">

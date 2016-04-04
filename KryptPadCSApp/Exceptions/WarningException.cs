@@ -8,5 +8,9 @@ namespace KryptPadCSApp.Exceptions
 {
     class WarningException : Exception
     {
+        public WarningException(string message) : base(message)
+        {
+            
+        }
     }
 }

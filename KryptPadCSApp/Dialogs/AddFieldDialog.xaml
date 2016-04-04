@@ -18,9 +18,27 @@
     </local:ClosableContentDialog.DataContext>
 
     <Grid>
-        <StackPanel>
-            <TextBlock Text="Enter a field name (e.g. Password)" />
-            <TextBox Text="{Binding FieldName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        </StackPanel>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <!--Field type-->
+        <TextBlock Grid.Row="0" Text="Field type" />
+        <ComboBox Grid.Row="1"
+                  ItemsSource="{Binding FieldTypes}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Grid.Row="2" Text="Field name" />
+        <TextBox Grid.Row="3" Text="{Binding FieldName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
     </Grid>
 </local:ClosableContentDialog>

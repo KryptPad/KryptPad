@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace KryptPadCSApp.Models
 {
     class FieldModel : BaseModel
@@ -30,7 +31,6 @@ namespace KryptPadCSApp.Models
             set { _field.Id = value; }
         }
 
-
         /// <summary>
         /// Gets or sets the name of the field. e.g Password
         /// </summary>
@@ -39,7 +39,6 @@ namespace KryptPadCSApp.Models
             get { return _field.Name; }
             set { _field.Name = value; }
         }
-
 
         /// <summary>
         /// Gets or sets the value
@@ -54,9 +53,10 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Value));
             }
         }
+
+        
         #endregion
-
-
+        
         #region Ctor
         public FieldModel(ApiField field)
         {
@@ -66,9 +66,18 @@ namespace KryptPadCSApp.Models
             }
 
             _field = field;
+
+            RegisterCommands();
         }
         #endregion
 
+        #region Commands
+        private void RegisterCommands()
+        {
+            
+        }
+        #endregion
 
+        
     }
 }

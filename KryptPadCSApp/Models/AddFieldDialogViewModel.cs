@@ -1,4 +1,6 @@
-﻿using KryptPadCSApp.Classes;
+﻿using KryptPadCSApp.API;
+using KryptPadCSApp.API.Models;
+using KryptPadCSApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,8 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        public ApiFieldType[] FieldTypes { get; protected set; }
+
         public Command AddCommand { get; protected set; }
 
         public Command CancelCommand { get; protected set; }
@@ -38,6 +42,23 @@ namespace KryptPadCSApp.Models
         public AddFieldDialogViewModel()
         {
             RegisterCommands();
+            CreateFieldTypes();
+        }
+
+        /// <summary>
+        /// Creates field types
+        /// </summary>
+        private void CreateFieldTypes()
+        {
+            FieldTypes = new[] {
+                new ApiFieldType() { Id = (int)FieldType.Password, Name = "Password" },
+                new ApiFieldType() { Id = (int)FieldType.Username, Name = "Username" },
+                new ApiFieldType() { Id = (int)FieldType.Email, Name = "Email" },
+                new ApiFieldType() { Id = (int)FieldType.AccountNumber, Name = "Account Number" },
+                new ApiFieldType() { Id = (int)FieldType.CreditCardNumber, Name = "Credit Card Number" },
+                new ApiFieldType() { Id = (int)FieldType.Numeric, Name = "Numeric" },
+                new ApiFieldType() { Id = (int)FieldType.Text, Name = "Text" }
+            };
         }
 
 
@@ -48,11 +69,11 @@ namespace KryptPadCSApp.Models
         {
             AddCommand = new Command((p) =>
             {
-                
+
 
             }, false);
 
-            
+
         }
 
     }

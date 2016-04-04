@@ -16,6 +16,9 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
+using Windows.Foundation;
+using Windows.UI.Xaml.Media;
+using KryptPadCSApp.Exceptions;
 
 namespace KryptPadCSApp.Models
 {
@@ -116,7 +119,11 @@ namespace KryptPadCSApp.Models
 
         public Command AddFieldCommand { get; protected set; }
 
-        public Command DeleteFieldCommand { get; protected set; }
+        public UICommand DeleteFieldCommand
+        {
+            get; protected set;
+        }
+        public Command FieldMenuButtonCommand { get; protected set; }
 
         public Command DeleteItemCommand { get; protected set; }
 
@@ -170,32 +177,46 @@ namespace KryptPadCSApp.Models
 
             });
 
-            // Handles field delete
-            DeleteFieldCommand = new Command(async (p) =>
+            // Handle field menu click
+            FieldMenuButtonCommand = new Command(async p =>
             {
-                // Prompt user to delete the field
-                var promptResp = await DialogHelper.Confirm(
-                    "This action cannot be undone. Are you sure you want to delete this field?",
-                    async (c) =>
-                    {
-                        // Get field
-                        var f = p as FieldModel;
+                // Get data context
+                var field = (p as FrameworkElement)?.DataContext as FieldModel;
+                // Create popup menu
+                PopupMenu menu = new PopupMenu();
 
-                        try
+                menu.Commands.Add(new UICommand("Delete", async (dp) =>
+                {
+                    // Prompt user to delete the field
+                    var promptResp = await DialogHelper.Confirm(
+                        "This action cannot be undone. Are you sure you want to delete this field?",
+                        async (c) =>
                         {
-                            // Call api to delete the field from the item
-                            await KryptPadApi.DeleteFieldAsync(Category.Id, Item.Id, f.Id);
+                            
+                            try
+                            {
+                                // Call api to delete the field from the item
+                                await KryptPadApi.DeleteFieldAsync(Category.Id, Item.Id, field.Id);
 
-                            // Remove the field
-                            Fields.Remove(f);
-                        }
-                        catch (WebException ex)
-                        {
-                            // Operation failed
-                            await DialogHelper.ShowMessageDialogAsync(ex.Message);
-                        }
-                    });
+                                // Remove the field
+                                Fields.Remove(field);
+                            }
+                            catch (WebException ex)
+                            {
+                                // Operation failed
+                                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                            }
+                        });
 
+
+                }));
+
+
+                var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)p));
+                if (chosenCommand == null)
+                {
+
+                }
 
             });
 
@@ -247,23 +268,34 @@ namespace KryptPadCSApp.Models
         /// <param name="item"></param>
         public async Task LoadItem(ApiItem selectedItem, ApiCategory category)
         {
+            
+
+
             // Prevent change triggers
             _isLoading = true;
 
             try
             {
+                // Get list of categories for the combobox control
                 var categories = await KryptPadApi.GetCategoriesAsync();
 
-                // Get the categories
+                // Set the category view source for the combobox
                 CategoriesView.Source = categories.Categories;
 
                 // Update view
                 OnPropertyChanged(nameof(CategoriesView));
 
-                // Set the selected category
+                // Set the selected category in the list
                 Category = (from c in categories.Categories
                             where c.Id == category.Id
                             select c).SingleOrDefault();
+
+                // Check to make sure our parameters are set
+                if (Category == null)
+                {
+                    // Show error
+                    throw new WarningException("The item you are trying to edit does not exist in this category.");
+                }
 
                 // Get the item
                 var itemResp = await KryptPadApi.GetItemAsync(Category.Id, selectedItem.Id);
@@ -291,6 +323,11 @@ namespace KryptPadCSApp.Models
 
             }
             catch (WebException ex)
+            {
+                // Operation failed
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch(WarningException ex)
             {
                 // Operation failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
@@ -368,5 +405,19 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
         }
+
+        #region Helpers
+        /// <summary>
+        /// Gets the rect from an element
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        private static Rect GetElementRect(FrameworkElement element)
+        {
+            GeneralTransform buttonTransform = element.TransformToVisual(null);
+            Point point = buttonTransform.TransformPoint(new Point());
+            return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
+        }
+        #endregion
     }
 }
