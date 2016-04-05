@@ -33,6 +33,26 @@ namespace KryptPadCSApp.Models
 
         public ApiFieldType[] FieldTypes { get; protected set; }
 
+        private ApiFieldType _selectedFieldType;
+        public ApiFieldType SelectedFieldType
+        {
+            get { return _selectedFieldType; }
+            set
+            {
+                _selectedFieldType = value;
+
+                if (_selectedFieldType != null)
+                {
+                    // Update the field name to reflect the type. This is the default
+                    // but the user can change it
+                    FieldName = _selectedFieldType.Name;
+                }
+                
+                // Notify change
+                OnPropertyChanged(nameof(SelectedFieldType));
+            }
+        }
+
         public Command AddCommand { get; protected set; }
 
         public Command CancelCommand { get; protected set; }

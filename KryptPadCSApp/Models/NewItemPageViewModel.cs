@@ -151,10 +151,11 @@ namespace KryptPadCSApp.Models
 
                     try
                     {
-
+                        var m = (d.DataContext as AddFieldDialogViewModel);
                         var field = new FieldModel(new ApiField()
                         {
-                            Name = (d.DataContext as AddFieldDialogViewModel).FieldName
+                            Name = m.FieldName,
+                            FieldType = m.SelectedFieldType.Id
                         });
 
                         // Send the field to the API to be stored under the item
