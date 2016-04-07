@@ -17,11 +17,32 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
+            
+            <RowDefinition />
         </Grid.RowDefinitions>
         
         <!--Textbox for name-->
-        <TextBox x:Name="ItemNameTextBox" PlaceholderText="Enter name (e.g. My Website)"
+        <TextBox Grid.Row="0" x:Name="ItemNameTextBox" PlaceholderText="Enter name (e.g. My Website)"
                  Text="{Binding ItemName, Mode=TwoWay}"/>
+
+        <TextBlock Grid.Row="1" Text="Template" />
+        <ComboBox Grid.Row="2">
+            <ComboBoxItem IsSelected="True">
+                <TextBlock Text="None" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock Text="Bank Account" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock Text="Website" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock Text="Credit Card" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock Text="Website" />
+            </ComboBoxItem>
+        </ComboBox>
 
     </Grid>
 </ContentDialog>

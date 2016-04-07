@@ -24,10 +24,10 @@ namespace KryptPadCSApp.Models
             set
             {
                 _fieldName = value;
-                //notify change
+                // Notify change
                 OnPropertyChanged(nameof(FieldName));
-                //change can execure
-                AddCommand.CommandCanExecute = !string.IsNullOrWhiteSpace(_fieldName);
+                // Change can execure
+                PrimaryCommand.CommandCanExecute = AddFieldCommandCanExecute;
             }
         }
 
@@ -50,10 +50,12 @@ namespace KryptPadCSApp.Models
                 
                 // Notify change
                 OnPropertyChanged(nameof(SelectedFieldType));
+                // Change can execure
+                PrimaryCommand.CommandCanExecute = AddFieldCommandCanExecute;
             }
         }
 
-        public Command AddCommand { get; protected set; }
+        public Command PrimaryCommand { get; protected set; }
 
         public Command CancelCommand { get; protected set; }
 
@@ -87,14 +89,12 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            AddCommand = new Command((p) =>
-            {
-
-
-            }, false);
+            PrimaryCommand = new Command();
 
 
         }
+
+        private bool AddFieldCommandCanExecute => !string.IsNullOrWhiteSpace(FieldName) && SelectedFieldType != null;
 
     }
 }
