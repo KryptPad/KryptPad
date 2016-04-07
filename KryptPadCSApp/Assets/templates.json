@@ -1,0 +1,79 @@
+﻿[
+  {
+    "name": "Username & Password",
+    "fields": [
+      {
+        "fieldType": 2,
+        "name": "Username"
+      },
+      {
+        "fieldType": 1,
+        "name": "Password"
+      }
+    ]
+  },
+  {
+    "name": "Website",
+    "fields": [
+      {
+        "fieldType": 7,
+        "name": "Url"
+      },
+      {
+        "fieldType": 2,
+        "name": "Username"
+      },
+      {
+        "fieldType": 1,
+        "name": "Password"
+      }
+    ]
+  },
+  {
+    "name": "Bank Account",
+    "fields": [
+      {
+        "fieldType": 7,
+        "name": "Url"
+      },
+      {
+        "fieldType": 2,
+        "name": "Username"
+      },
+      {
+        "fieldType": 1,
+        "name": "Password"
+      },
+      {
+        "fieldType": 4,
+        "name": "Account Number"
+      },
+      {
+        "fieldType": 4,
+        "name": "Routing Number"
+      }
+    ]
+  },
+  {
+    "name": "Credit Card",
+    "fields": [
+      {
+        "fieldType": 5,
+        "name": "Card Number"
+      },
+      {
+        "fieldType": 6,
+        "name": "CCV"
+      }
+    ]
+  },
+  {
+    "name": "Safe Combination",
+    "fields": [
+      {
+        "fieldType": 7,
+        "name": "Combination"
+      }
+    ]
+  }
+]

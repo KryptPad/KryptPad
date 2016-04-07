@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.API
 {
-    enum FieldType
+    public enum FieldType
     {
         Password = 1,
         Username = 2,

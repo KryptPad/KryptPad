@@ -3,6 +3,7 @@ using KryptPadCSApp.API.Models;
 using KryptPadCSApp.Classes;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -28,13 +29,18 @@ namespace KryptPadCSApp.Dialogs
         /// </summary>
         public string ItemName { get; set; }
 
+        public ObservableCollection<ItemTemplate> ItemTemplates { get; set; } = new ObservableCollection<ItemTemplate>();
+
+        public ItemTemplate SelectedItemTemplate { get; set; }
         #endregion
 
 
         public AddItemDialog()
         {
             this.InitializeComponent();
+            
             this.DataContext = this;
+            
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -43,6 +49,17 @@ namespace KryptPadCSApp.Dialogs
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+        }
+
+        private async void ContentDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Get the available templates
+            var itemTemplates = await ItemTemplate.LoadTemplatesAsync();
+
+            foreach (var itemTemplate in itemTemplates)
+            {
+                ItemTemplates.Add(itemTemplate);
+            }
         }
     }
 }

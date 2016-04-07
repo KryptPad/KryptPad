@@ -10,7 +10,7 @@
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick" Loaded="ContentDialog_Loaded">
 
     <Grid>
 
@@ -26,22 +26,14 @@
                  Text="{Binding ItemName, Mode=TwoWay}"/>
 
         <TextBlock Grid.Row="1" Text="Template" />
-        <ComboBox Grid.Row="2">
-            <ComboBoxItem IsSelected="True">
-                <TextBlock Text="None" />
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock Text="Bank Account" />
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock Text="Website" />
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock Text="Credit Card" />
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock Text="Website" />
-            </ComboBoxItem>
+        <ComboBox Grid.Row="2"
+                  ItemsSource="{Binding ItemTemplates}"
+                  SelectedItem="{Binding SelectedItemTemplate, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
         </ComboBox>
 
     </Grid>

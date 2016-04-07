@@ -94,6 +94,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\templates.json" />
     <None Include="KryptPadCSApp_TemporaryKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
@@ -122,6 +123,8 @@
     <Compile Include="API\KryptPadApi.cs" />
     <Compile Include="Classes\Enumerators.cs" />
     <Compile Include="Classes\NavigationHelper.cs" />
+    <Compile Include="Classes\ItemTemplate.cs" />
+    <Compile Include="Classes\ItemTemplateField.cs" />
     <Compile Include="Collections\ProfileCollection.cs" />
     <Compile Include="Collections\RefreshableCollection.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />
