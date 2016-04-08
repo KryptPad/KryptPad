@@ -368,37 +368,37 @@ namespace KryptPadCSApp.API
 
         }
 
-        /// <summary>
-        /// Gets all items for the authenticated user
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        public static async Task<CategoryResponse> GetAllItemsAsync(string searchText)
-        {
-            using (var client = new HttpClient())
-            {
-                //authorize the request
-                AuthorizeRequest(client);
-                // Add passphrase to message
-                AddPassphraseHeader(client);
-                //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/items/?q={searchText}"));
+        ///// <summary>
+        ///// Gets all items for the authenticated user
+        ///// </summary>
+        ///// <param name="token"></param>
+        ///// <returns></returns>
+        //public static async Task<CategoryResponse> GetAllItemsAsync(string searchText)
+        //{
+        //    using (var client = new HttpClient())
+        //    {
+        //        //authorize the request
+        //        AuthorizeRequest(client);
+        //        // Add passphrase to message
+        //        AddPassphraseHeader(client);
+        //        //send request and get a response
+        //        var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/items/?q={searchText}"));
 
-                //deserialize the object based on the result
-                if (response.IsSuccessStatusCode)
-                {
-                    //read the data
-                    var data = await response.Content.ReadAsStringAsync();
-                    //deserialize the response as an ApiResponse object
-                    return JsonConvert.DeserializeObject<CategoryResponse>(data);
-                }
-                else
-                {
-                    throw await CreateException(response);
-                }
-            }
+        //        //deserialize the object based on the result
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            //read the data
+        //            var data = await response.Content.ReadAsStringAsync();
+        //            //deserialize the response as an ApiResponse object
+        //            return JsonConvert.DeserializeObject<CategoryResponse>(data);
+        //        }
+        //        else
+        //        {
+        //            throw await CreateException(response);
+        //        }
+        //    }
 
-        }
+        //}
 
         #endregion
 
@@ -558,39 +558,45 @@ namespace KryptPadCSApp.API
 
         #region Items
 
+        ///// <summary>
+        ///// Gets all categories for the authenticated user
+        ///// </summary>
+        ///// <returns></returns>
+        //public static async Task<ItemsResponse> GetItemsAsync(int categoryId)
+        //{
+        //    using (var client = new HttpClient())
+        //    {
+        //        //authorize the request
+        //        AuthorizeRequest(client);
+        //        // Add passphrase to message
+        //        AddPassphraseHeader(client);
+        //        //send request and get a response
+        //        var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items"));
+        //        //read the data
+        //        var data = await response.Content.ReadAsStringAsync();
+
+        //        //deserialize the object based on the result
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            //deserialize the response as an ApiResponse object
+        //            return JsonConvert.DeserializeObject<ItemsResponse>(data);
+        //        }
+        //        else
+        //        {
+        //            var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
+        //            // Throw exception with the WebExceptionResponse
+        //            throw wer.ToException();
+        //        }
+        //    }
+
+        //}
+
         /// <summary>
-        /// Gets all categories for the authenticated user
+        /// Gets an item by its id, including all the details
         /// </summary>
+        /// <param name="categoryId"></param>
+        /// <param name="itemId"></param>
         /// <returns></returns>
-        public static async Task<ItemsResponse> GetItemsAsync(int categoryId)
-        {
-            using (var client = new HttpClient())
-            {
-                //authorize the request
-                AuthorizeRequest(client);
-                // Add passphrase to message
-                AddPassphraseHeader(client);
-                //send request and get a response
-                var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items"));
-                //read the data
-                var data = await response.Content.ReadAsStringAsync();
-
-                //deserialize the object based on the result
-                if (response.IsSuccessStatusCode)
-                {
-                    //deserialize the response as an ApiResponse object
-                    return JsonConvert.DeserializeObject<ItemsResponse>(data);
-                }
-                else
-                {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
-                }
-            }
-
-        }
-
         public static async Task<ItemsResponse> GetItemAsync(int categoryId, int itemId)
         {
             using (var client = new HttpClient())

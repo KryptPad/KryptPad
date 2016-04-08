@@ -14,173 +14,187 @@
     </Page.DataContext>
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-
-        <!--Command bar-->
-        <Grid Grid.Row="0" Background="{ThemeResource AppBarBackgroundThemeBrush}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-
-            </Grid.ColumnDefinitions>
-
-            <!--Category-->
-            <Grid Grid.Column="0" >
-                <ComboBox  Margin="12,0"
-                           ItemsSource="{Binding CategoriesView.View}"
-                           SelectedItem="{Binding Category, Mode=TwoWay}"
-                           VerticalAlignment="Center">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-            </Grid>
-
-
-            <!--Command items-->
-            <CommandBar Grid.Column="1">
-                <CommandBar.SecondaryCommands>
-                    <AppBarButton Icon="Delete" Label="Delete this item" Command="{Binding DeleteItemCommand}" />
-                </CommandBar.SecondaryCommands>
-            </CommandBar>
-
-        </Grid>
-
-        <!--Main grid for the item details-->
-        <Grid Grid.Row="1"
-              Margin="12">
-
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!--Item info-->
-            <StackPanel Grid.Row="0" >
+            <!--Command bar-->
+            <Grid Grid.Row="0" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
 
-                <TextBlock Text="Item name" />
-                <TextBox x:Name="ItemNameTextBox"
-                     Text="{Binding ItemName, Mode=TwoWay}" 
-                     HorizontalAlignment="Left"
-                     Width="250"/>
+                </Grid.ColumnDefinitions>
 
-                <!--<TextBlock Text="Item type" />
-            <ComboBox ItemsSource="{Binding ItemTypes}"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+                <!--Category-->
+                <Grid Grid.Column="0" >
+                    <ComboBox  Margin="12,0"
+                           ItemsSource="{Binding CategoriesView.View}"
+                           SelectedItem="{Binding Category, Mode=TwoWay}"
+                           VerticalAlignment="Center">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
-            </StackPanel>
+                </Grid>
 
-            <!--Visibility="{Binding FieldsVisibility}"-->
-            <Grid Grid.Row="2">
+
+                <!--Command items-->
+                <CommandBar Grid.Column="1">
+                    <CommandBar.SecondaryCommands>
+                        <AppBarButton Icon="Delete" Label="Delete this item" Command="{Binding DeleteItemCommand}" />
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>
+
+            </Grid>
+
+            <!--Main grid for the item details-->
+            <Grid Grid.Row="1"
+              Margin="12">
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0"
-                        HorizontalAlignment="Left">
+                <!--Item info-->
+                <StackPanel Grid.Row="0" >
 
-                    <TextBlock TextWrapping="WrapWholeWords">
-                        Add fields to this profile (e.g. Username, Password, etc...)
-                    </TextBlock>
-                    <Button Command="{Binding AddFieldCommand}">Add Field</Button>
+                    <TextBlock Text="Item name" />
+                    <TextBox x:Name="ItemNameTextBox"
+                     Text="{Binding ItemName, Mode=TwoWay}" 
+                     HorizontalAlignment="Left"
+                     Width="250"/>
+
+                    <!--<TextBlock Text="Item type" />
+            <ComboBox ItemsSource="{Binding ItemTypes}"
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+
                 </StackPanel>
 
-
-                <!--This grid is for desktop view-->
-                <Grid x:Name="MainGrid" Grid.Row="1" Visibility="Collapsed">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                <!--Visibility="{Binding FieldsVisibility}"-->
+                <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Column="0" Grid.Row="0">
+                    <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Left">
+
+                        <TextBlock TextWrapping="WrapWholeWords">
+                        Add fields to this profile (e.g. Username, Password, etc...)
+                        </TextBlock>
+                        <Button Command="{Binding AddFieldCommand}">Add Field</Button>
+                    </StackPanel>
+
+
+                    <!--This grid is for desktop view-->
+                    <Grid x:Name="MainGrid" Grid.Row="1" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
                             <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
+                        <Grid Grid.Column="0" Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
                                    Grid.Row="0">Fields</TextBlock>
 
-                        <!--Custom fields-->
-                        <ScrollViewer Grid.Row="1" Margin="0,0,12,0">
-                            <ListBox ItemsSource="{Binding Fields}"
+                            <!--Custom fields-->
+                            <ScrollViewer Grid.Row="1" Margin="0,0,12,0">
+                                <ListBox ItemsSource="{Binding Fields}"
                                      ItemTemplate="{StaticResource FieldListDataTemplate}">
 
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="ListBoxItem">
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
 
-                                
 
-                            </ListBox>
-                        </ScrollViewer>
 
-                    </Grid>
+                                </ListBox>
+                            </ScrollViewer>
 
-                    <Grid Grid.Column="1" Grid.Row="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+                        </Grid>
 
-                        <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
+                        <Grid Grid.Column="1" Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
                                Grid.Row="0">Notes</TextBlock>
 
-                        <!--Notes-->
-                        <TextBox Text="{Binding Notes, Mode=TwoWay}"
+                            <!--Notes-->
+                            <TextBox Text="{Binding Notes, Mode=TwoWay}"
                              AcceptsReturn="True"
                              Grid.Row="1" />
 
 
+                        </Grid>
+
                     </Grid>
 
-                </Grid>
 
-
-                <!--This grid is for mobile view-->
-                <Grid x:Name="MobileGrid" Grid.Row="1" Visibility="Collapsed">
-                    <Pivot>
-                        <PivotItem Header="Fields">
-                            <ListBox ItemsSource="{Binding Fields}"
+                    <!--This grid is for mobile view-->
+                    <Grid x:Name="MobileGrid" Grid.Row="1" Visibility="Collapsed">
+                        <Pivot>
+                            <PivotItem Header="Fields">
+                                <ListBox ItemsSource="{Binding Fields}"
                                      ItemTemplate="{StaticResource FieldListDataTemplate}">
 
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="ListBoxItem">
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                
-                            </ListBox>
-                        </PivotItem>
-                        <PivotItem Header="Notes">
-                            <!--Notes-->
-                            <TextBox Text="{Binding Notes, Mode=TwoWay}"
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+
+                                </ListBox>
+                            </PivotItem>
+                            <PivotItem Header="Notes">
+                                <!--Notes-->
+                                <TextBox Text="{Binding Notes, Mode=TwoWay}"
                                  AcceptsReturn="True"
                                  />
-                        </PivotItem>
-                    </Pivot>
-                </Grid>
+                            </PivotItem>
+                        </Pivot>
+                    </Grid>
 
+
+                </Grid>
 
             </Grid>
 
+
         </Grid>
+
+        <!--Progress indicator-->
+        <Border Background="#3F000000"
+                Visibility="{Binding BusyIndicatorVisibility}">
+            <ProgressRing 
+                      Visibility="Visible"
+                      IsActive="{Binding IsBusy}"
+                      Width="50"
+                      Height="50"
+                      Foreground="{StaticResource ApplicationForegroundThemeBrush}"/>
+        </Border>
+
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">

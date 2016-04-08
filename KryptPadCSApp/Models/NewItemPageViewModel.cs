@@ -141,7 +141,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-
+            // Handle add new field
             AddFieldCommand = new Command(async (p) =>
             {
 
@@ -249,6 +249,7 @@ namespace KryptPadCSApp.Models
 
             });
 
+            // Handle copy field value
             CopyFieldValueCommand = new Command((p) =>
             {
 
@@ -270,10 +271,9 @@ namespace KryptPadCSApp.Models
         public async Task LoadItem(ApiItem selectedItem, ApiCategory category)
         {
             
-
-
             // Prevent change triggers
             _isLoading = true;
+            IsBusy = true;
 
             try
             {
@@ -310,12 +310,9 @@ namespace KryptPadCSApp.Models
                 // Set properties
                 ItemName = item.Name;
                 Notes = item.Notes;
-
-                // Get the fields from the API
-                var fieldResp = await KryptPadApi.GetFieldsAsync(Category.Id, item.Id);
-
+                
                 // Set fields
-                foreach (var field in fieldResp.Fields)
+                foreach (var field in item.Fields)
                 {
                     // Add field to the list
                     AddFieldToCollection(new FieldModel(field));
@@ -335,6 +332,7 @@ namespace KryptPadCSApp.Models
             }
 
             _isLoading = false;
+            IsBusy = false;
         }
 
         /// <summary>
