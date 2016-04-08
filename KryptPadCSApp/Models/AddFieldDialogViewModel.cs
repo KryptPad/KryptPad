@@ -73,13 +73,13 @@ namespace KryptPadCSApp.Models
         private void CreateFieldTypes()
         {
             FieldTypes = new[] {
-                new ApiFieldType() { Id = (int)FieldType.Password, Name = "Password" },
-                new ApiFieldType() { Id = (int)FieldType.Username, Name = "Username" },
-                new ApiFieldType() { Id = (int)FieldType.Email, Name = "Email" },
-                new ApiFieldType() { Id = (int)FieldType.AccountNumber, Name = "Account Number" },
-                new ApiFieldType() { Id = (int)FieldType.CreditCardNumber, Name = "Credit Card Number" },
-                new ApiFieldType() { Id = (int)FieldType.Numeric, Name = "Numeric" },
-                new ApiFieldType() { Id = (int)FieldType.Text, Name = "Text" }
+                new ApiFieldType() { Id = FieldType.Password, Name = "Password" },
+                new ApiFieldType() { Id = FieldType.Username, Name = "Username" },
+                new ApiFieldType() { Id = FieldType.Email, Name = "Email" },
+                new ApiFieldType() { Id = FieldType.AccountNumber, Name = "Account Number" },
+                new ApiFieldType() { Id = FieldType.CreditCardNumber, Name = "Credit Card Number" },
+                new ApiFieldType() { Id = FieldType.Numeric, Name = "Numeric" },
+                new ApiFieldType() { Id = FieldType.Text, Name = "Text" }
             };
         }
 

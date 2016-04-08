@@ -8,7 +8,7 @@ namespace KryptPadCSApp.API.Models
 {
     class ApiFieldType
     {
-        public int Id { get; set; }
+        public FieldType Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the field type

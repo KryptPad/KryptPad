@@ -10,7 +10,9 @@
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick" Loaded="ContentDialog_Loaded">
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    IsPrimaryButtonEnabled="False"
+    Loaded="ContentDialog_Loaded">
 
     <Grid>
 
@@ -23,7 +25,7 @@
         
         <!--Textbox for name-->
         <TextBox Grid.Row="0" x:Name="ItemNameTextBox" PlaceholderText="Enter name (e.g. My Website)"
-                 Text="{Binding ItemName, Mode=TwoWay}"/>
+                 Text="{Binding ItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Grid.Row="1" Text="Template" />
         <ComboBox Grid.Row="2"

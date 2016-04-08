@@ -24,23 +24,43 @@ namespace KryptPadCSApp.Dialogs
     public sealed partial class AddItemDialog : ContentDialog
     {
         #region Properties
+        private string _itemName;
         /// <summary>
         /// gets or sets the item name
         /// </summary>
-        public string ItemName { get; set; }
+        public string ItemName
+        {
+            get { return _itemName; }
+            set
+            {
+                _itemName = value;
+                // Can the user save?
+                IsPrimaryButtonEnabled = CanPrimaryButtonExecute;
+            }
+        }
 
         public ObservableCollection<ItemTemplate> ItemTemplates { get; set; } = new ObservableCollection<ItemTemplate>();
 
+        //private ItemTemplate _selectedItemTemplate;
         public ItemTemplate SelectedItemTemplate { get; set; }
+        //{
+        //    get { return _selectedItemTemplate; }
+        //    set
+        //    {
+        //        _selectedItemTemplate = value;
+
+
+        //    }
+        //}
         #endregion
 
 
         public AddItemDialog()
         {
             this.InitializeComponent();
-            
+
             this.DataContext = this;
-            
+
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -61,5 +81,7 @@ namespace KryptPadCSApp.Dialogs
                 ItemTemplates.Add(itemTemplate);
             }
         }
+
+        private bool CanPrimaryButtonExecute => !string.IsNullOrWhiteSpace(ItemName);
     }
 }

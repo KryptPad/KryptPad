@@ -16,7 +16,7 @@ namespace KryptPadCSApp.API.Models
         /// <summary>
         /// Gets or sets the field type
         /// </summary>
-        public int FieldType { get; set; }
+        public FieldType FieldType { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the field. e.g Password

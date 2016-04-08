@@ -2,6 +2,7 @@
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Dialogs;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,6 +115,16 @@ namespace KryptPadCSApp.Models
 
                     // Call api to create the profile.
                     var response = await KryptPadApi.SaveProfileAsync(profile, ProfilePassphrase);
+
+                    profile.Id = response.Id;
+                    
+                    // Go to profile
+                    await KryptPadApi.LoadProfileAsync(profile, ProfilePassphrase);
+
+                    // Redirect to the main item list page
+                    NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Frame);
+                    // Clear the back stack
+                    NavigationHelper.ClearBackStack();
                 }
                 catch (Exception ex)
                 {

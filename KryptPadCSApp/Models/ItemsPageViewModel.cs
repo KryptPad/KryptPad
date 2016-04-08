@@ -168,6 +168,27 @@ namespace KryptPadCSApp.Models
                         // Set the item
                         item.Id = r.Id;
 
+                        // If a template was selected, create a couple of fields to start with
+                        if (dialog.SelectedItemTemplate != null)
+                        {
+                            var templateFields = dialog.SelectedItemTemplate.Fields;
+
+                            // A template was selected, add all the fields from the template
+                            foreach (var templateField in templateFields)
+                            {
+                                // Create field
+                                var field = new ApiField()
+                                {
+                                    Name = templateField.Name,
+                                    FieldType = templateField.FieldType
+                                };
+
+                                // Send to api
+                                await KryptPadApi.SaveFieldAsync(category.Id, item.Id, field);
+                            }
+                        }
+
+
                         // Navigate to item edit page
                         Navigate(typeof(NewItemPage), new EditItemPageParams()
                         {
