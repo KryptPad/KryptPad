@@ -32,6 +32,9 @@
                         <!-- Home button -->
                         <RadioButton x:Name="HomeRadioButton" Tag="&#xE10F;" Content="Home" Style="{StaticResource SplitViewNavButtonStyle}" IsChecked="True" Click="HomeRadioButton_Click" />
 
+                        <!--Donate-->
+                        <RadioButton x:Name="DonateRadioButton" Tag="&#xE783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" 
+                                     Click="DonateRadioButton_Click"/>
                         <!-- Search button -->
                         <!--<RadioButton x:Name="SearchRadioButton"  Tag="&#xE11A;" Content="Search" Style="{StaticResource SplitViewNavButtonStyle}"
                                      Click="SearchRadioButton_Click"/>-->
@@ -48,9 +51,9 @@
                         <!-- About button -->
                         <RadioButton x:Name="AboutRadioButton" Tag="&#xE783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" 
                                      Click="AboutRadioButton_Click"/>
+
                         
-                        
-                        
+
                     </StackPanel>
 
                     <StackPanel Grid.Row="1">

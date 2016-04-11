@@ -92,12 +92,16 @@ namespace KryptPadCSApp
         {
             // Navigate
             NavigationHelper.Navigate(typeof(SelectProfilePage), null, NavigationHelper.NavigationType.Window);
+            // Clear backstack
+            NavigationHelper.ClearBackStack();
         }
 
         private void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate
             NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
+            // Clear backstack
+            NavigationHelper.ClearBackStack();
         }
 
         
@@ -122,8 +126,12 @@ namespace KryptPadCSApp
 
 
 
+
         #endregion
 
-        
+        private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

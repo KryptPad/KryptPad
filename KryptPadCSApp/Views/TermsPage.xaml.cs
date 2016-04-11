@@ -1,5 +1,4 @@
-﻿using KryptPadCSApp.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,17 +20,11 @@ namespace KryptPadCSApp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class LoginPage : Page
+    public sealed partial class TermsPage : Page
     {
-        public LoginPage()
+        public TermsPage()
         {
             this.InitializeComponent();
-        }
-
-        private void Hyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
-        {
-            // Go to terms page
-            NavigationHelper.Navigate(typeof(TermsPage), null, NavigationHelper.NavigationType.Window);
         }
     }
 }

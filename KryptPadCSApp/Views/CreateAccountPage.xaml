@@ -32,9 +32,10 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="Create Account" Style="{StaticResource LargeBlueTextBlock}" />
+                <TextBlock Grid.Row="0" Text="Create Account" Style="{ThemeResource HeaderTextBlockStyle}" />
                 
                 <TextBlock Grid.Row="1"
 					Margin="0,0,0,10"
@@ -55,17 +56,16 @@
                 <PasswordBox Grid.Row="4" PlaceholderText="Confirm Password" Margin="0,0,0,10" 
 					Password="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+                <!--Link to terms page-->
+                <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,10">
+                    Krypt Pad is licensed under MIT. By using this software, you accept this
+                    <Hyperlink Click="Hyperlink_Click">license</Hyperlink>.
+                </TextBlock>
 
-                <Grid Grid.Row="5" Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <Button Content="Create Account" Grid.Column="0" Margin="0,0,10,0" 
-                            Command="{Binding CreateAccountCommand}"/>
-
-                </Grid>
+                <Button Grid.Row="6"
+                        Margin="0,0,10,0" 
+                        Content="Create Account" 
+                        Command="{Binding CreateAccountCommand}"/>
 
 
             </Grid>

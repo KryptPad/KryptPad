@@ -103,7 +103,7 @@ namespace KryptPadCSApp.Models
                     await DialogHelper.ShowMessageDialogAsync("Your account has been successfully created.");
 
                     //go to login page
-                    Navigate(typeof(LoginPage));
+                    NavigationHelper.Navigate(typeof(LoginPage), null);
 
                 }
                 catch (Exception ex)

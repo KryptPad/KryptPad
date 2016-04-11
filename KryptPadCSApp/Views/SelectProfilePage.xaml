@@ -41,11 +41,11 @@
                         
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Row="0"
+                    <!--<Button Grid.Row="0"
                             Grid.Column="0"
                             Command="{Binding SignOutCommand}">
                         <SymbolIcon Symbol="Back" />
-                    </Button>
+                    </Button>-->
 
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="Profiles" Style="{StaticResource LargeBlueTextBlock}" />
                     <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="Choose a profile or create a new one" TextWrapping="WrapWholeWords"  />

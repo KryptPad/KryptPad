@@ -190,7 +190,7 @@ namespace KryptPadCSApp.Models
 
 
                         // Navigate to item edit page
-                        Navigate(typeof(NewItemPage), new EditItemPageParams()
+                        NavigationHelper.Navigate(typeof(NewItemPage), new EditItemPageParams()
                         {
                             Category = category,
                             Item = item
@@ -217,7 +217,12 @@ namespace KryptPadCSApp.Models
                                 select c).FirstOrDefault();
 
                 // Navigate to edit
-                Navigate(typeof(NewItemPage), new EditItemPageParams() { Category = category, Item = item });
+                NavigationHelper.Navigate(typeof(NewItemPage),
+                    new EditItemPageParams()
+                    {
+                        Category = category,
+                        Item = item
+                    });
 
 
             }, false);
