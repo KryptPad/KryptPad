@@ -31,10 +31,7 @@
 
                         <!-- Home button -->
                         <RadioButton x:Name="HomeRadioButton" Tag="&#xE10F;" Content="Home" Style="{StaticResource SplitViewNavButtonStyle}" IsChecked="True" Click="HomeRadioButton_Click" />
-
-                        <!--Donate-->
-                        <RadioButton x:Name="DonateRadioButton" Tag="&#xE783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" 
-                                     Click="DonateRadioButton_Click"/>
+                        
                         <!-- Search button -->
                         <!--<RadioButton x:Name="SearchRadioButton"  Tag="&#xE11A;" Content="Search" Style="{StaticResource SplitViewNavButtonStyle}"
                                      Click="SearchRadioButton_Click"/>-->
@@ -42,9 +39,16 @@
                         <!-- Categories button -->
                         <RadioButton x:Name="CategoriesRadioButton" Tag="&#xEA37;" Content="Manage Categories" Style="{StaticResource SplitViewNavButtonStyle}"
                                      Click="CategoriesRadioButton_Click"/>
-                        
-                        
-                        
+
+                        <!--Donate-->
+                        <RadioButton x:Name="DonateRadioButton" Tag="&#xE00B;" Content="Donate" Style="{StaticResource SplitViewNavButtonStyle}" 
+                                     Click="DonateRadioButton_Click"
+                                     Foreground="#FFFD6060"/>
+
+                        <!-- Feedback button -->
+                        <RadioButton x:Name="FeedbackRadioButton" Tag="&#xE76E;" Content="Feedback" Style="{StaticResource SplitViewNavButtonStyle}" 
+                                     Click="FeedbackRadioButton_Click"/>
+
                         <!-- Settings button -->
                         <!--<RadioButton Tag="&#xE115;" Content="Settings" Style="{StaticResource SplitViewNavButtonStyle}"  />-->
 

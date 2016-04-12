@@ -133,5 +133,10 @@ namespace KryptPadCSApp
         {
 
         }
+
+        private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
