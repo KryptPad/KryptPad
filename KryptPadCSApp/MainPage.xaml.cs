@@ -61,19 +61,28 @@ namespace KryptPadCSApp
             ClosePane();
         }
 
-        //private void SearchRadioButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    // Navigate
-        //    NavigationHelper.Navigate(typeof(SearchPage), null);
-
-        //    // Close the pane
-        //    ClosePane();
-        //}
-
         private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate
             NavigationHelper.Navigate(typeof(ManageCategoriesPage), null);
+
+            // Close the pane
+            ClosePane();
+        }
+
+        private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate
+            NavigationHelper.Navigate(typeof(DonatePage), null);
+
+            // Close the pane
+            ClosePane();
+        }
+
+        private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate
+            NavigationHelper.Navigate(typeof(FeedbackPage), null);
 
             // Close the pane
             ClosePane();
@@ -129,14 +138,6 @@ namespace KryptPadCSApp
 
         #endregion
 
-        private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }
