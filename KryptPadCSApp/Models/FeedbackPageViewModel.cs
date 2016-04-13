@@ -14,7 +14,9 @@ namespace KryptPadCSApp.Models
 
         public ICommand ReviewAppCommand { get; protected set; }
 
+        public ICommand SubmitIssueCommand { get; protected set; }
 
+        public string IssuesUri { get; protected set; } = "https://github.com/NeptuneCenturyStudios/KryptPad/issues";
         #endregion
 
         public FeedbackPageViewModel() {
@@ -31,6 +33,12 @@ namespace KryptPadCSApp.Models
                 await Windows.System.Launcher.LaunchUriAsync(new Uri($"ms-windows-store:REVIEW?PFN={packageFamilyName}"));
 
             } );
+
+            SubmitIssueCommand = new Command(async (p) => {
+                // Launch the uri
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(IssuesUri));
+
+            });
         }
     }
 }

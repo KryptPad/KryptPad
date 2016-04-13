@@ -9,5 +9,11 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+        <Grid Margin="12">
+            
+            <RelativePanel>
+                
+            </RelativePanel>
+        </Grid>
     </Grid>
 </Page>
