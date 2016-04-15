@@ -34,7 +34,7 @@
                         contributions are made securely through PayPal.
                     </TextBlock>
 
-                    <Button>
+                    <Button Content="Make a Donation">
                         
                     </Button>
                 </StackPanel>

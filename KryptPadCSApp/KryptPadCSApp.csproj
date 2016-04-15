@@ -157,6 +157,7 @@
     <Compile Include="Collections\CategoryCollection.cs" />
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\CreateAccountPageViewModel.cs" />
+    <Compile Include="Models\DonationPageViewModel.cs" />
     <Compile Include="Models\EditItemPageParams.cs" />
     <Compile Include="Collections\FieldCollection.cs" />
     <Compile Include="Models\FeedbackPageViewModel.cs" />
