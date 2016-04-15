@@ -21,23 +21,17 @@ namespace KryptPadCSApp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class LoginPage : Page
+    public sealed partial class PrivacyPage : Page
     {
-        public LoginPage()
+        public PrivacyPage()
         {
             this.InitializeComponent();
         }
 
-        private void Hyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        private void TermsHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {
             // Go to terms page
             NavigationHelper.Navigate(typeof(TermsPage), null, NavigationHelper.NavigationType.Window);
-        }
-
-        private void PrivacyHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
-        {
-            // Go to terms page
-            NavigationHelper.Navigate(typeof(PrivacyPage), null, NavigationHelper.NavigationType.Window);
         }
     }
 }

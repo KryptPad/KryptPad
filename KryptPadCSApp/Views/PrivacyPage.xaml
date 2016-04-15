@@ -1,0 +1,76 @@
+﻿<Page
+    x:Class="KryptPadCSApp.Views.PrivacyPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KryptPadCSApp.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ScrollViewer Grid.Row="0">
+                <StackPanel>
+                    <TextBlock Style="{ThemeResource HeaderTextBlockStyle}"
+                                Margin="0,0,0,12">
+                        Privacy Policy
+                    </TextBlock>
+
+                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}"
+                                Margin="0,0,0,12">
+                        Updated 4/15/2016
+                    </TextBlock>
+                    
+                    <TextBlock TextWrapping="WrapWholeWords">
+                    The following outlines what information is collected, and how it is used.
+                    <LineBreak />
+                    <LineBreak /><Bold>Email Address</Bold>
+                    <LineBreak />Your email address is used to sign into Krypt Pad. In no event will
+                    your email address be given or sold to any third-party, or be used to spam you.
+                    However, on occasion, you may receive important information or updates regarding your account.
+                    You cannot opt out of this.
+                    
+                    <LineBreak />
+                    <LineBreak /><Bold>Sensitive Information</Bold>
+                    <LineBreak />You accept full responsibility for the information you store in Krypt Pad. This
+                    software and service is licensed under MIT, and hence has no warranty whatsoever. For more
+                    information please see the <Hyperlink x:Name="TermsHyperlink" Click="TermsHyperlink_Click">Terms</Hyperlink> page. Or visit
+                    <Hyperlink NavigateUri="https://opensource.org/licenses/MIT">opensource.org</Hyperlink>
+                    
+                    <LineBreak />
+                    <LineBreak /><Bold>Security</Bold>
+                    <LineBreak />Your data is protected by a username (email) and password that you specify. You are
+                    responsible for choosing a secure password.
+                    
+                    <LineBreak />
+                    <LineBreak />Your sensitive information is stored in "profiles", and each profile is encrypted with
+                    an encryption key based on a passphrase you choose. You are responsible for choosing
+                    secure passphrases to encrypt your data.
+                    
+                    <LineBreak />
+                    <LineBreak />In order to provide you with the best experience possible across multiple devices,
+                    your data is stored in a database on a shared hosted server. Your data is secured with 256bit
+                    AES encryption. While your data is protected by encryption, there are absolutely no guarantees
+                    that the information you store in Krypt Pad will be 100% safe from theft or loss.
+                    Krypt Pad provides a way to back up your profiles, and you are responsible for making regular
+                    backups and keeping them safe.
+                    
+                    <LineBreak />
+                    <LineBreak />Remember, nothing you store online or in files is ever 100% secure.
+                    By using Krypt Pad you accept this risk.
+                        
+                    <LineBreak />
+                    <LineBreak /><Bold>This Privacy Policy may be changed at any time, and without notice.</Bold>
+
+                    </TextBlock>
+
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Page>

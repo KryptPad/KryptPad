@@ -31,38 +31,45 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="Krypt Pad" Style="{StaticResource LargeBlueTextBlock}"/>
+                <TextBlock Grid.Row="0" Text="Krypt Pad" Style="{ThemeResource HeaderTextBlockStyle}"/>
 
                 <!--Login email address-->
-                <TextBox Grid.Row="1" PlaceholderText="Email Address" Margin="0,0,0,10"
+                <TextBox Grid.Row="1" PlaceholderText="Email Address" Margin="0,0,0,12"
 					InputScope="EmailNameOrAddress"
 					Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!--Password-->
-                <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,10" 
+                <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,12" 
 					Password="{Binding Password, Mode=TwoWay}"/>
 
                 <!--Remember me-->
                 <CheckBox IsChecked="{Binding AutoSignIn, Mode=TwoWay}" Grid.Row="3" 
                           Content="Sign me in automatically"  
-                          Margin="0,0,0,10" />
+                          Margin="0,0,0,12" />
 
                 <!--Link to terms page-->
-                <TextBlock Grid.Row="4" TextWrapping="WrapWholeWords" Margin="0,0,0,10">
+                <TextBlock Grid.Row="4" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
                     Krypt Pad is licensed under MIT. By using this software, you accept this
                     <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. 
                 </TextBlock>
+
+                <!--Link to terms page-->
+                <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
+                    View the 
+                    <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
+                </TextBlock>
                 
                 <!--Login / Sign up buttons-->
-                <Grid Grid.Row="5" Margin="0,0,0,10">
+                <Grid Grid.Row="6" Margin="0,0,0,12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Content="Sign In" Grid.Column="0" Margin="0,0,10,0"
+                    <Button Content="Sign In" Grid.Column="0" Margin="0,0,12,0"
 						Command="{Binding LogInCommand}" />
 
                     <Button Content="Sign Up for Free" Grid.Column="1" 
