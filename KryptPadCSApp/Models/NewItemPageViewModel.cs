@@ -117,17 +117,17 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public FieldCollection Fields { get; protected set; } = new FieldCollection();
 
-        public Command AddFieldCommand { get; protected set; }
+        public ICommand AddFieldCommand { get; protected set; }
 
-        public UICommand DeleteFieldCommand
-        {
-            get; protected set;
-        }
-        public Command FieldMenuButtonCommand { get; protected set; }
+        public UICommand DeleteFieldCommand { get; protected set; }
 
-        public Command DeleteItemCommand { get; protected set; }
+        public ICommand FieldMenuButtonCommand { get; protected set; }
 
-        public Command CopyFieldValueCommand { get; protected set; }
+        public ICommand DeleteItemCommand { get; protected set; }
+
+        public ICommand CopyFieldValueCommand { get; protected set; }
+
+        public ICommand GeneratePasswordCommand { get; protected set; }
 
         #endregion
 
@@ -141,6 +141,14 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
+            GeneratePasswordCommand = new Command(async (p) =>
+            {
+                
+
+
+
+            });
+
             // Handle add new field
             AddFieldCommand = new Command(async (p) =>
             {
@@ -193,7 +201,7 @@ namespace KryptPadCSApp.Models
                         "This action cannot be undone. Are you sure you want to delete this field?",
                         async (c) =>
                         {
-                            
+
                             try
                             {
                                 // Call api to delete the field from the item
@@ -209,7 +217,15 @@ namespace KryptPadCSApp.Models
                             }
                         });
 
+                }));
 
+                menu.Commands.Add(new UICommand("Generate Password", async (dp) => {
+
+                    // Show the add field dialog
+                    var d = new PasswordGeneratorDialog();
+
+                    // Show the dialog
+                    var result = await d.ShowAsync();
                 }));
 
 
@@ -270,7 +286,7 @@ namespace KryptPadCSApp.Models
         /// <param name="item"></param>
         public async Task LoadItem(ApiItem selectedItem, ApiCategory category)
         {
-            
+
             // Prevent change triggers
             _isLoading = true;
             IsBusy = true;
@@ -310,7 +326,7 @@ namespace KryptPadCSApp.Models
                 // Set properties
                 ItemName = item.Name;
                 Notes = item.Notes;
-                
+
                 // Set fields
                 foreach (var field in item.Fields)
                 {
@@ -325,7 +341,7 @@ namespace KryptPadCSApp.Models
                 // Operation failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch(WarningException ex)
+            catch (WarningException ex)
             {
                 // Operation failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);

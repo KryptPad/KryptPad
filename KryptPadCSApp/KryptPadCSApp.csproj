@@ -144,6 +144,9 @@
     <Compile Include="Dialogs\PassphrasePrompt.xaml.cs">
       <DependentUpon>PassphrasePrompt.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\PasswordGeneratorDialog.xaml.cs">
+      <DependentUpon>PasswordGeneratorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ProfileDetailsDialog.xaml.cs">
       <DependentUpon>ProfileDetailsDialog.xaml</DependentUpon>
     </Compile>
@@ -162,6 +165,7 @@
     <Compile Include="Collections\FieldCollection.cs" />
     <Compile Include="Models\FeedbackPageViewModel.cs" />
     <Compile Include="Models\FieldModel.cs" />
+    <Compile Include="Models\GeneratePasswordDialogViewModel.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
     <Compile Include="Models\MainPageViewModel.cs" />
@@ -246,6 +250,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\PassphrasePrompt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\PasswordGeneratorDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
