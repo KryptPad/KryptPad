@@ -63,10 +63,12 @@
 
                     <!--Message-->
                     <TextBlock TextWrapping="WrapWholeWords">
-						<Run Text="Donations are used to help support my family and the development of Krypt Pad. Your contributions are made securely through PayPal."/>
+						Donations are used to help support my family and the development of Krypt Pad.
+                        Your contributions are made securely through PayPal.
                     </TextBlock>
 
                     <Button Content="Make a Donation"
+                            Margin="0,24,0,0"
 						Command="{Binding DonateCommand}"/>
                 </StackPanel>
 

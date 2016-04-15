@@ -28,9 +28,9 @@
             
             <!--Rate button-->
             <Button Grid.Row="1"
-                    Margin="0,0,0,12"
+                    Margin="0,24,0,48"
                     Command="{Binding ReviewAppCommand}">
-                Review This App
+                Review this App
             </Button>
 
             <!--Bugs and feature requests-->
@@ -41,9 +41,9 @@
 
             <!--Issues button-->
             <Button Grid.Row="3"
-                    Margin="0,0,0,12"
+                    Margin="0,24,0,0"
                     Command="{Binding SubmitIssueCommand}">
-                Visit Our GitHub Issues Page
+                Visit the GitHub Issues Page
             </Button>
         </Grid>
     </Grid>
