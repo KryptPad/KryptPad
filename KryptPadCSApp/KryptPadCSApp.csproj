@@ -165,7 +165,7 @@
     <Compile Include="Collections\FieldCollection.cs" />
     <Compile Include="Models\FeedbackPageViewModel.cs" />
     <Compile Include="Models\FieldModel.cs" />
-    <Compile Include="Models\GeneratePasswordDialogViewModel.cs" />
+    <Compile Include="Models\PasswordGeneratorDialogViewModel.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
     <Compile Include="Models\MainPageViewModel.cs" />

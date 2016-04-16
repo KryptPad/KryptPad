@@ -1,8 +1,10 @@
-﻿using System;
+﻿using KryptPadCSApp.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,14 +24,18 @@ namespace KryptPadCSApp.Dialogs
         public PasswordGeneratorDialog()
         {
             this.InitializeComponent();
+
+            // Determine the command's can execute state, and hook into the changed event
+            var m = DataContext as PasswordGeneratorDialogViewModel;
+            if (m != null && m.PrimaryCommand != null)
+            {
+                m.PrimaryCommand.CanExecuteChanged += (sender, e) =>
+                {
+                    IsPrimaryButtonEnabled = (sender as ICommand).CanExecute(null);
+                };
+            }
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-        }
-
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-        }
+       
     }
 }

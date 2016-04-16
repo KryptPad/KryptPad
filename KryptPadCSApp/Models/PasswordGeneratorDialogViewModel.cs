@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace KryptPadCSApp.Models
 {
-    class GeneratePasswordDialogViewModel : BasePageModel
+    class PasswordGeneratorDialogViewModel : BasePageModel
     {
 
         #region Properties
@@ -45,7 +45,9 @@ namespace KryptPadCSApp.Models
         public bool UseNumbers
         {
             get { return _useNumbers; }
-            set { _useNumbers = value;
+            set
+            {
+                _useNumbers = value;
                 // Notify of change
                 OnPropertyChanged(nameof(UseNumbers));
             }
@@ -53,10 +55,11 @@ namespace KryptPadCSApp.Models
 
 
         private int _length;
+
         public int Length
         {
             get { return _length; }
-            protected set
+            set
             {
                 _length = value;
                 // Notify of change
@@ -74,16 +77,19 @@ namespace KryptPadCSApp.Models
                 _password = value;
                 // Notify of change
                 OnPropertyChanged(nameof(Password));
-
+                // Set primary command enabled or not
+                PrimaryCommand.CommandCanExecute = !string.IsNullOrWhiteSpace(Password);
             }
         }
 
+       
 
+        public Command PrimaryCommand { get; protected set; }
         public ICommand GenerateCommand { get; protected set; }
 
         #endregion
 
-        public GeneratePasswordDialogViewModel()
+        public PasswordGeneratorDialogViewModel()
         {
             // Register commands
             RegisterCommands();
@@ -161,6 +167,8 @@ namespace KryptPadCSApp.Models
 
 
             });
+
+            PrimaryCommand = new Command();
         }
 
         /// <summary>
