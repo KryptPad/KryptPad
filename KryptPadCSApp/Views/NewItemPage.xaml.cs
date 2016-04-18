@@ -44,7 +44,7 @@ namespace KryptPadCSApp.Views
                 //get the page params
                 var pageParams = e.Parameter as EditItemPageParams;
                 //get the model
-                var model = DataContext as NewItemPageViewModel;
+                var model = DataContext as EditItemPageViewModel;
 
                 //set the category of the NewItemPageViewModel
                 if (pageParams != null && model != null)

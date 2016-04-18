@@ -171,7 +171,7 @@
     <Compile Include="Models\MainPageViewModel.cs" />
     <Compile Include="Models\ManageCategoriesViewModel.cs" />
     <Compile Include="Models\NamePromptDialogViewModel.cs" />
-    <Compile Include="Models\NewItemPageViewModel.cs" />
+    <Compile Include="Models\EditItemPageViewModel.cs" />
     <Compile Include="Models\PageNavigationParamsBase.cs" />
     <Compile Include="Models\ProfileDetailsDialogViewModel.cs" />
     <Compile Include="Models\SelectProfilePageViewModel.cs" />

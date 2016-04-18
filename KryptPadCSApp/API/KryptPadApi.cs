@@ -262,6 +262,38 @@ namespace KryptPadCSApp.API
         }
 
         /// <summary>
+        /// Uploads a profile
+        /// </summary>
+        /// <param name="profileData"></param>
+        /// <returns></returns>
+        public static async Task<SuccessResponse> UploadProfile(string profileData)
+        {
+            using (var client = new HttpClient())
+            {
+                // Authorize the request
+                AuthorizeRequest(client);
+
+                var content = new StringContent(profileData, Encoding.UTF8, "application/json");
+                // Send request and get a response
+                var response = await client.PostAsync(GetUrl($"api/profiles/upload"), content);
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
+                    return new SuccessResponse(Convert.ToInt32(data));
+
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+        }
+
+        /// <summary>
         /// Creates a new profile
         /// </summary>
         /// <param name="profile"></param>

@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.API.Models;
+﻿using KryptPadCSApp.API;
+using KryptPadCSApp.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,14 @@ namespace KryptPadCSApp.Models
         {
             get { return _field.Name; }
             set { _field.Name = value; }
+        }
+
+        /// <summary>
+        /// Gets the field type
+        /// </summary>
+        public FieldType FieldType
+        {
+            get { return _field.FieldType; }
         }
 
         /// <summary>

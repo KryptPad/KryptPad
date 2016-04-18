@@ -8,9 +8,11 @@ using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage.Pickers;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -32,6 +34,8 @@ namespace KryptPadCSApp.Models
         public Command SelectProfileCommand { get; protected set; }
 
         public Command SignOutCommand { get; protected set; }
+
+        public Command RestoreBackupCommand { get; protected set; }
 
         #endregion
 
@@ -85,7 +89,9 @@ namespace KryptPadCSApp.Models
             CreateProfileCommand = new Command(async (p) =>
             {
                 // Prompt the user for profile info
-                await PromptForProfileInfo();
+                var dialog = new ProfileDetailsDialog();
+
+                var result = await dialog.ShowAsync();
             });
 
             SelectProfileCommand = new Command(async (p) =>
@@ -121,21 +127,37 @@ namespace KryptPadCSApp.Models
                 // Sign out
                 NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
             });
+
+            RestoreBackupCommand = new Command(async (p) => {
+                var fop = new FileOpenPicker();
+                // Add supported file types
+                fop.FileTypeFilter.Add(".kdf");
+
+                // Pick file to open and read
+                var result = await fop.PickSingleFileAsync();
+
+                if (result != null )
+                {
+                    var fs = await result.OpenReadAsync();
+                    string profileData;
+                    // Create a stream reader
+                    using (var sr = new StreamReader(fs.AsStreamForRead()))
+                    {
+                        profileData = await sr.ReadToEndAsync();
+
+                    }
+
+                    // Upload the profile data
+                    var resp = await KryptPadApi.UploadProfile(profileData);
+
+                    await DialogHelper.ShowMessageDialogAsync("Profile restored successfully");
+
+                    await GetProfiles();
+
+                }
+
+            });
         }
-
-        private async Task PromptForProfileInfo()
-        {
-            var dialog = new ProfileDetailsDialog();
-
-            var result = await dialog.ShowAsync();
-
-            // If the user clicked the primary button, try to get the profile
-            if (result == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
-            {
-                // Get profiles
-                await GetProfiles();
-            }
-        }
-
+        
     }
 }

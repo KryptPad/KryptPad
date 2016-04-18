@@ -10,7 +10,7 @@
     Name="AddNewItemPage">
 
     <Page.DataContext>
-        <Models:NewItemPageViewModel/>
+        <Models:EditItemPageViewModel/>
     </Page.DataContext>
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">

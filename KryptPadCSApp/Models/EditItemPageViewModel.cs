@@ -22,7 +22,7 @@ using KryptPadCSApp.Exceptions;
 
 namespace KryptPadCSApp.Models
 {
-    class NewItemPageViewModel : BasePageModel
+    class EditItemPageViewModel : BasePageModel
     {
         #region Properties
 
@@ -84,13 +84,28 @@ namespace KryptPadCSApp.Models
                     value = string.Empty;
                 }
 
+                // Store old name
+                var oldName = _itemName;
+
+                // Set new name
                 _itemName = value.Trim();
+
+                // Check to make sure it is not empty
+                if (!string.IsNullOrWhiteSpace(_itemName))
+                {
+                    // Save the item (fire and forget)
+                    var t = SaveItem();
+
+                }
+                else
+                {
+                    // Restore old value
+                    _itemName = oldName;
+
+                }
+
                 //notify change
                 OnPropertyChanged(nameof(ItemName));
-
-                // Save the item (fire and forget)
-                var t = SaveItem();
-
             }
         }
 
@@ -127,11 +142,9 @@ namespace KryptPadCSApp.Models
 
         public ICommand CopyFieldValueCommand { get; protected set; }
 
-        public ICommand GeneratePasswordCommand { get; protected set; }
-
         #endregion
 
-        public NewItemPageViewModel()
+        public EditItemPageViewModel()
         {
             RegisterCommands();
         }
@@ -141,13 +154,6 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            GeneratePasswordCommand = new Command(async (p) =>
-            {
-                
-
-
-
-            });
 
             // Handle add new field
             AddFieldCommand = new Command(async (p) =>
@@ -194,6 +200,7 @@ namespace KryptPadCSApp.Models
                 // Create popup menu
                 PopupMenu menu = new PopupMenu();
 
+                // Add the delete command
                 menu.Commands.Add(new UICommand("Delete", async (dp) =>
                 {
                     // Prompt user to delete the field
@@ -201,7 +208,6 @@ namespace KryptPadCSApp.Models
                         "This action cannot be undone. Are you sure you want to delete this field?",
                         async (c) =>
                         {
-
                             try
                             {
                                 // Call api to delete the field from the item
@@ -219,18 +225,29 @@ namespace KryptPadCSApp.Models
 
                 }));
 
-                menu.Commands.Add(new UICommand("Generate Password", async (dp) => {
+                // Add the generate password command
+                if (field.FieldType == FieldType.Password)
+                {
+                    menu.Commands.Add(new UICommand("Generate Password...", async (dp) =>
+                    {
 
-                    // Show the add field dialog
-                    var d = new PasswordGeneratorDialog();
+                        await DialogHelper.Confirm("This will replace your existing password with a new one. Are you sure?",
+                            async (c) =>
+                            {
+                            // Show the add field dialog
+                            var d = new PasswordGeneratorDialog();
 
-                    // Show the dialog
-                    var result = await d.ShowAsync();
+                            // Show the dialog
+                            var result = await d.ShowAsync();
 
-                    // Set the password field to the new value
-                    field.Value = (d.DataContext as PasswordGeneratorDialogViewModel)?.Password;
-                }));
+                            // Set the password field to the new value
+                            field.Value = (d.DataContext as PasswordGeneratorDialogViewModel)?.Password;
+                            });
 
+
+
+                    }));
+                }
 
                 var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)p));
                 if (chosenCommand == null)
@@ -361,8 +378,7 @@ namespace KryptPadCSApp.Models
         {
             // If we are loading, do not save the item
             if (_isLoading) return;
-
-
+            
             try
             {
                 // Set item properties

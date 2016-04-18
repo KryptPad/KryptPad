@@ -18,44 +18,34 @@
         <!--Main grid for page-->
         <Grid HorizontalAlignment="Stretch"
 			MaxWidth="400"
-			Padding="10">
+			Padding="12">
+
 
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
+                <TextBlock Grid.Row="0" Text="Profiles" Style="{ThemeResource HeaderTextBlockStyle}" />
+                <TextBlock Grid.Row="1" Text="Choose a profile or create a new one" TextWrapping="WrapWholeWords"
+                           Margin="0,0,0,12"/>
 
-                <Grid Grid.Row="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
+                <StackPanel Grid.Row="2"
+                            Margin="0,0,0,24"
+                            Orientation="Horizontal">
+                    <Button Content="Create Profile"
+                            Command="{Binding CreateProfileCommand}"
+                            Margin="0,0,12,0"/>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
-                        
-                    </Grid.ColumnDefinitions>
+                    <Button Content="Restore Backup"
+                            Command="{Binding RestoreBackupCommand}"/>
+                </StackPanel>
+                
 
-                    <!--<Button Grid.Row="0"
-                            Grid.Column="0"
-                            Command="{Binding SignOutCommand}">
-                        <SymbolIcon Symbol="Back" />
-                    </Button>-->
-
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Profiles" Style="{StaticResource LargeBlueTextBlock}" />
-                    <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="Choose a profile or create a new one" TextWrapping="WrapWholeWords"  />
-                    <Button Grid.Row="2"
-                            Grid.ColumnSpan="2"
-                            Content="Create Profile"
-                            Command="{Binding CreateProfileCommand}"/>
-                </Grid>
-
-                <ListBox Grid.Row="1"
+                <ListBox Grid.Row="3"
                          ItemsSource="{Binding Profiles}"
                          SelectedItem="{Binding SelectedProfile, Mode=TwoWay}">
 
@@ -119,22 +109,19 @@
 
                                 <!--A nice little icon-->
                                 <SymbolIcon Grid.Column="0" Symbol="ProtectedDocument" Margin="0,0,12,0" />
-                                
+
                                 <!--Profile name-->
                                 <TextBlock Text="{Binding Name}"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"/>
 
-                                
+
                             </Grid>
 
                         </DataTemplate>
                     </ListBox.ItemTemplate>
 
                 </ListBox>
-
-
-                
 
             </Grid>
 
