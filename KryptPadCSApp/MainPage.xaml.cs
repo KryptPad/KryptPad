@@ -96,15 +96,7 @@ namespace KryptPadCSApp
             // Close the pane
             ClosePane();
         }
-
-        private void BackToProfilesRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate
-            NavigationHelper.Navigate(typeof(SelectProfilePage), null, NavigationHelper.NavigationType.Window);
-            // Clear backstack
-            NavigationHelper.ClearBackStack();
-        }
-
+        
         private void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate
@@ -112,9 +104,7 @@ namespace KryptPadCSApp
             // Clear backstack
             NavigationHelper.ClearBackStack();
         }
-
         
-
         #region Helper Methods
 
         /// <summary>
@@ -137,7 +127,6 @@ namespace KryptPadCSApp
 
 
         #endregion
-
-        
+                
     }
 }

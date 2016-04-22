@@ -71,8 +71,6 @@ namespace KryptPadCSApp.Classes
                     // Navigate
                     frame.Navigate(pageType, parameter);
 
-                    // Clear backstack
-                    //ClearBackStack(frame);
                 }
                 else
                 {

@@ -178,36 +178,7 @@ namespace KryptPadCSApp
             }
         }
         #endregion
-
-        #region Event Handlers
-
-        /// <summary>
-        /// Raises the PropertyChanged event for a property
-        /// </summary>
-        /// <param name="name"></param>
-        protected void OnPropertyChanged(string name)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        #endregion
-
-        #region Public methods
-
-        public void PushRecentFile(StorageFile selectedFile)
-        {
-            //get the most recently used file list
-            var list = StorageApplicationPermissions.MostRecentlyUsedList;
-
-            //add file to list with date it was added
-            var token = list.Add(selectedFile, DateTime.Now.ToString());
-
-        }
-
-        #endregion
+        
+        
     }
 }
