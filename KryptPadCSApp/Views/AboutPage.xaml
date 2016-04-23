@@ -8,6 +8,74 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Text="About Krypt Pad" />
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup" >
+
+                <VisualState x:Name="VisualStatePhone">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="MessageTextBlock.(RelativePanel.Below)" Value="HeartTextBlock" />
+                        <!--<Setter Target="HeartTextBlock.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="true"/>-->
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="VisualStateTablet">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="640"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="MessageTextBlock.(RelativePanel.RightOf)" Value="HeartTextBlock" />
+
+
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Grid Margin="12">
+
+            <RelativePanel>
+
+                <!--Heart-->
+                <TextBlock x:Name="HeartTextBlock" Text="&#xE783;"
+					Margin="0,0,24,0"
+					FontFamily="{ThemeResource SymbolThemeFontFamily}"
+					FontSize="144"
+					Foreground="{StaticResource SplitViewBackgroundBrush}" />
+
+                <!--Text-->
+                <StackPanel x:Name="MessageTextBlock">
+
+                    <!--Header-->
+                    <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
+						<Run Text="Krypt Pad"/>
+                    </TextBlock>
+
+                    <!--Message-->
+                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" TextWrapping="WrapWholeWords">
+						An open source project
+                    </TextBlock>
+
+                    <!--About-->
+                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" TextWrapping="WrapWholeWords">
+						Version 0.9.0.0 Beta
+                    </TextBlock>
+                    
+                    
+                </StackPanel>
+
+
+
+
+            </RelativePanel>
+
+
+
+        </Grid>
+
     </Grid>
 </Page>
