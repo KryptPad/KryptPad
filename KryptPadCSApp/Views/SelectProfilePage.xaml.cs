@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,32 +28,25 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
         }
-
-        public static Rect GetElementRect(FrameworkElement element)
+        
+        private void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
         {
-            GeneralTransform buttonTransform = element.TransformToVisual(null);
-            Point point = buttonTransform.TransformPoint(new Point());
-            return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
+            // Focus on the passphrase textbox
+            PassphrasePasswordBox.Focus(FocusState.Programmatic);
         }
 
-
-        private async void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        private void PassphrasePasswordBox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-            // Create a menu and add commands specifying a callback delegate for each. 
-            // Since command delegates are unique, no need to specify command Ids. 
-            var menu = new PopupMenu(); 
-            menu.Commands.Add(new UICommand("Open with", (command) => 
-            { 
-                //OutputTextBlock.Text = "'" + command.Label + "' selected"; 
-            })); 
-            menu.Commands.Add(new UICommand("Save attachment", (command) => 
-            { 
-                //OutputTextBlock.Text = "'" + command.Label + "' selected"; 
-            }));
-
-            var chosenCommand = await menu.ShowForSelectionAsync(Rect.Empty, Placement.Default);
-
-
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                // Get context
+                var m = DataContext as SelectProfilePageViewModel;
+                if (m.EnterProfileCommand.CanExecute(null))
+                {
+                    // Execute button command
+                    m.EnterProfileCommand.Execute(null);
+                }
+            }
         }
     }
 }

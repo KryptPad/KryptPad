@@ -61,8 +61,10 @@
                     </TextBlock>
 
                     <!--About-->
-                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" TextWrapping="WrapWholeWords">
+                    <TextBlock TextWrapping="WrapWholeWords">
 						Version 0.9.0.0 Beta
+                        <LineBreak />
+                        <LineBreak/><Hyperlink NavigateUri="https://www.kryptpad.com">Krypt Pad Website</Hyperlink>
                     </TextBlock>
                     
                     

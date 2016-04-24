@@ -7,7 +7,7 @@
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.SelectProfilePage"
     mc:Ignorable="d"
-    x:Name="SelectProfileViewPage">
+    x:Name="SelectProfileViewPage" Loaded="SelectProfileViewPage_Loaded">
 
     <Page.DataContext>
         <Models:SelectProfilePageViewModel/>
@@ -26,14 +26,66 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="Profiles" Style="{ThemeResource HeaderTextBlockStyle}" />
-                <TextBlock Grid.Row="1" Text="Choose a profile or create a new one" TextWrapping="WrapWholeWords"
-                           Margin="0,0,0,12"/>
+                <!--<TextBlock Grid.Row="1" Text="Choose a profile or create a new one" TextWrapping="WrapWholeWords"
+                           Margin="0,0,0,12"/>-->
+                
+                <!--Choose profile-->
+                <ComboBox Grid.Row="1"
+                          HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding Profiles}"
+                          SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
+                          Margin="0,0,0,12">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
 
-                <StackPanel Grid.Row="2"
+                            <Grid x:Name="ProfileGrid" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <!--A nice little icon-->
+                                <SymbolIcon Grid.Column="0" Symbol="ProtectedDocument" Margin="0,0,12,0" />
+                                
+                                <!--Profile name-->
+                                <TextBlock Text="{Binding Name}"
+                                           Grid.Column="1"
+                                           VerticalAlignment="Center"/>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <!--Passphrase grid-->
+                <Grid Grid.Row="2"
+                      Margin="0,0,0,12">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!--Enter passphrase-->
+                    <PasswordBox x:Name="PassphrasePasswordBox"
+                                 Grid.Column="0"
+                                 Password="{Binding Passphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 PlaceholderText="Enter passphrase" KeyUp="PassphrasePasswordBox_KeyUp"/>
+
+                    <Button Grid.Column="1"
+                            Command="{Binding EnterProfileCommand}">
+                        <SymbolIcon Symbol="Accept" />
+                    </Button>
+                </Grid>
+
+                <!--Create or restore profile-->
+                <StackPanel Grid.Row="3"
                             Margin="0,0,0,24"
                             Orientation="Horizontal">
                     <Button Content="Create Profile"
@@ -43,9 +95,8 @@
                     <Button Content="Restore Backup"
                             Command="{Binding RestoreBackupCommand}"/>
                 </StackPanel>
-                
 
-                <ListBox Grid.Row="3"
+                <!--<ListBox Grid.Row="3"
                          ItemsSource="{Binding Profiles}"
                          SelectedItem="{Binding SelectedProfile, Mode=TwoWay}">
 
@@ -107,10 +158,10 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <!--A nice little icon-->
+                                --><!--A nice little icon--><!--
                                 <SymbolIcon Grid.Column="0" Symbol="ProtectedDocument" Margin="0,0,12,0" />
 
-                                <!--Profile name-->
+                                --><!--Profile name--><!--
                                 <TextBlock Text="{Binding Name}"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"/>
@@ -121,7 +172,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
 
-                </ListBox>
+                </ListBox>-->
 
             </Grid>
 

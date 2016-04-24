@@ -29,12 +29,38 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public ProfileCollection Profiles { get; protected set; } = new ProfileCollection();
 
+        private string _passphrase;
+
+        public string Passphrase
+        {
+            get { return _passphrase; }
+            set
+            {
+                _passphrase = value;
+                // Enable login button
+                EnterProfileCommand.CommandCanExecute = CanLogIn;
+            }
+        }
+
+        private ApiProfile _selectedProfile;
+
+        public ApiProfile SelectedProfile
+        {
+            get { return _selectedProfile; }
+            set
+            {
+                _selectedProfile = value;
+                // Notify
+                OnPropertyChanged(nameof(SelectedProfile));
+                // Enable login button}
+                EnterProfileCommand.CommandCanExecute = CanLogIn;
+            }
+        }
+
         public Command CreateProfileCommand { get; protected set; }
-
-        public Command SelectProfileCommand { get; protected set; }
-
-        public Command SignOutCommand { get; protected set; }
-
+        
+        public Command EnterProfileCommand { get; protected set; }
+        
         public Command RestoreBackupCommand { get; protected set; }
 
         #endregion
@@ -75,7 +101,8 @@ namespace KryptPadCSApp.Models
                     Profiles.Add(profile);
                 }
 
-
+                // Set the selected profile
+                SelectedProfile = Profiles.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -84,6 +111,9 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        /// <summary>
+        /// Registers commands
+        /// </summary>
         private void RegisterCommands()
         {
             CreateProfileCommand = new Command(async (p) =>
@@ -94,41 +124,28 @@ namespace KryptPadCSApp.Models
                 var result = await dialog.ShowAsync();
             });
 
-            SelectProfileCommand = new Command(async (p) =>
+            EnterProfileCommand = new Command(async (p) =>
             {
-                // Prompt for passphrase
-                await DialogHelper.ShowDialog<PassphrasePrompt>(async (d) =>
+                try
                 {
+                    // Check the profile and determine if the passphrase is correct
+                    await KryptPadApi.LoadProfileAsync(SelectedProfile, Passphrase);
 
-                    try
-                    {
-                        // Check the profile and determine if the passphrase is correct
-                        await KryptPadApi.LoadProfileAsync(p as ApiProfile, d.Passphrase);
+                    // When a profile is selected, navigate to main page
+                    NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Frame);
+                    // Clear the back stack
+                    NavigationHelper.ClearBackStack();
 
-                        // When a profile is selected, navigate to main page
-                        NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Frame);
-                        // Clear the back stack
-                        NavigationHelper.ClearBackStack();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        // Operation failed
-                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
-                    }
-
-
-                });
-
+                }
+                catch (Exception ex)
+                {
+                    // Operation failed
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
             });
-
-            SignOutCommand = new Command((p) =>
+            
+            RestoreBackupCommand = new Command(async (p) =>
             {
-                // Sign out
-                NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
-            });
-
-            RestoreBackupCommand = new Command(async (p) => {
                 var fop = new FileOpenPicker();
                 // Add supported file types
                 fop.FileTypeFilter.Add(".kdf");
@@ -136,7 +153,7 @@ namespace KryptPadCSApp.Models
                 // Pick file to open and read
                 var result = await fop.PickSingleFileAsync();
 
-                if (result != null )
+                if (result != null)
                 {
                     var fs = await result.OpenReadAsync();
                     string profileData;
@@ -158,6 +175,8 @@ namespace KryptPadCSApp.Models
 
             });
         }
-        
+
+        private bool CanLogIn => !string.IsNullOrWhiteSpace(Passphrase) && SelectedProfile != null;
+
     }
 }

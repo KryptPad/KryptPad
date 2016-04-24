@@ -42,8 +42,7 @@
 
                         <!--Donate-->
                         <RadioButton x:Name="DonateRadioButton" Tag="&#xE00B;" Content="Donate" Style="{StaticResource SplitViewNavButtonStyle}" 
-                                     Click="DonateRadioButton_Click"
-                                     Foreground="#FFFD6060"/>
+                                     Click="DonateRadioButton_Click"/>
 
                         <!-- Feedback button -->
                         <RadioButton x:Name="FeedbackRadioButton" Tag="&#xE76E;" Content="Feedback" Style="{StaticResource SplitViewNavButtonStyle}" 
