@@ -135,20 +135,18 @@ namespace KryptPadCSApp.API
 
                 //execute request
                 var response = await client.PostAsync(GetUrl("api/account/register"), content);
-
-                //get the response content
-                var data = await response.Content.ReadAsStringAsync();
-
+                
                 //check if the response is a success code
                 if (response.IsSuccessStatusCode)
                 {
+                    //get the response content
+                    var data = await response.Content.ReadAsStringAsync();
+
                     return new SuccessResponse();
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
 
@@ -399,39 +397,7 @@ namespace KryptPadCSApp.API
             }
 
         }
-
-        ///// <summary>
-        ///// Gets all items for the authenticated user
-        ///// </summary>
-        ///// <param name="token"></param>
-        ///// <returns></returns>
-        //public static async Task<CategoryResponse> GetAllItemsAsync(string searchText)
-        //{
-        //    using (var client = new HttpClient())
-        //    {
-        //        //authorize the request
-        //        AuthorizeRequest(client);
-        //        // Add passphrase to message
-        //        AddPassphraseHeader(client);
-        //        //send request and get a response
-        //        var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/items/?q={searchText}"));
-
-        //        //deserialize the object based on the result
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            //read the data
-        //            var data = await response.Content.ReadAsStringAsync();
-        //            //deserialize the response as an ApiResponse object
-        //            return JsonConvert.DeserializeObject<CategoryResponse>(data);
-        //        }
-        //        else
-        //        {
-        //            throw await CreateException(response);
-        //        }
-        //    }
-
-        //}
-
+        
         #endregion
 
         #region Categories
@@ -882,9 +848,9 @@ namespace KryptPadCSApp.API
         /// Process a failed request
         /// </summary>
         /// <param name="response"></param>
-        private static async Task<Exception> CreateException(HttpResponseMessage response)
+        private static async Task<WebException> CreateException(HttpResponseMessage response)
         {
-            Exception exception;
+            WebException exception;
 
             // If a bad request is received, try and figure out why
             if (response.StatusCode == HttpStatusCode.BadRequest)
