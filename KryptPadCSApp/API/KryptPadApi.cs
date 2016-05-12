@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace KryptPadCSApp.API
@@ -38,6 +39,9 @@ namespace KryptPadCSApp.API
         private static string ServiceHost { get; } = "https://www.kryptpad.com/";
 #endif
 
+        #region Events
+        public static event EventHandler AccessTokenExpired;
+        #endregion
 
         #region Properties
 
@@ -73,6 +77,16 @@ namespace KryptPadCSApp.API
         {
             get { return !string.IsNullOrWhiteSpace(TokenResponse?.AccessToken); }
         }
+
+        /// <summary>
+        /// Gets or sets the CancellationToken for the task
+        /// </summary>
+        private static CancellationTokenSource ExpirationTaskCancelTokenSource { get; set; }
+
+        /// <summary>
+        /// Gets or sets the task used to check if the expiration date has passed
+        /// </summary>
+        private static Task ExpirationTask { get; set; }
         #endregion
 
 
@@ -107,12 +121,41 @@ namespace KryptPadCSApp.API
                     // Get the response as a string
                     var data = await response.Content.ReadAsStringAsync();
 
+                    // Before updating the token, kill the current task
+                    if (ExpirationTaskCancelTokenSource != null)
+                    {
+                        // Cancel task
+                        ExpirationTaskCancelTokenSource.Cancel();
+                        // Wait for the task to complete
+                        await ExpirationTask;
+                    }
+
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
                     
                     // Store the username and password for future use
                     Username = username;
                     Password = password;
+
+                    // Initialize new cancellation token
+                    ExpirationTaskCancelTokenSource = new CancellationTokenSource();
+
+                    // Start a task that will check the expiration date of the access token, when
+                    // the current time has passed token expiration, an event will be raised.
+                    ExpirationTask = Task.Factory.StartNew(async () => {
+                        // Get local date from expiration
+                        var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
+
+                        // Enter a while loop and check that the expiration date hasn't passed
+                        while (DateTime.Now < expiration)
+                        {
+                            // Wait a bit, then check again
+                            ExpirationTaskCancelTokenSource.Token.ThrowIfCancellationRequested();
+
+                            // Wait a bit, then check again
+                            await Task.Delay(1000);
+                        }
+                    }, ExpirationTaskCancelTokenSource.Token);
                 }
                 else
                 {
