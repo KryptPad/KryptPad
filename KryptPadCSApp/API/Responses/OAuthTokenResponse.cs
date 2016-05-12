@@ -14,5 +14,8 @@ namespace KryptPadCSApp.API.Responses
 
         [JsonProperty(PropertyName = "refresh_token")]
         public string RefreshToken { get; set; }
+
+        [JsonProperty(PropertyName = ".expires")]
+        public DateTime Expiration { get; set; }
     }
 }

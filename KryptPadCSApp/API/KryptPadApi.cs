@@ -30,8 +30,7 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        //private static string ServiceHost { get; } = "http://test.kryptpad.com/";
-        private static string ServiceHost { get; } = "http://localhost:50821/";
+        private static string ServiceHost { get; } = "http://test.kryptpad.com/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
@@ -45,15 +44,20 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets or sets the API OAuth access token to authorize API calls
         /// </summary>
-        private static string AccessToken { get; set; }
-
+        private static OAuthTokenResponse TokenResponse { get; set; }
+        
         /// <summary>
-        /// Gets or sets the refresh token
+        /// Gets or sets the username of the user logged in
         /// </summary>
-        private static string RefreshToken { get; set; }
+        private static string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the API OAuth access token to authorize API calls
+        /// Gets or sets the password of the user logged in
+        /// </summary>
+        private static string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the passphrase for the profile
         /// </summary>
         private static string Passphrase { get; set; }
 
@@ -67,7 +71,7 @@ namespace KryptPadCSApp.API
         /// </summary>
         public static bool IsSignedIn
         {
-            get { return !string.IsNullOrWhiteSpace(AccessToken); }
+            get { return !string.IsNullOrWhiteSpace(TokenResponse?.AccessToken); }
         }
         #endregion
 
@@ -79,9 +83,12 @@ namespace KryptPadCSApp.API
         /// <param name="password"></param>
         public static async Task AuthenticateAsync(string username, string password)
         {
+            // Clear token response
+            TokenResponse = null;
+
             using (var client = new HttpClient())
             {
-                //prepare form values
+                // Prepare form values
                 var values = new Dictionary<string, string>
                 {
                     { "grant_type", "password" },
@@ -89,25 +96,23 @@ namespace KryptPadCSApp.API
                     { "password", password }
                 };
 
-                //create the content to send
+                // Create the content to send
                 var content = new FormUrlEncodedContent(values);
-                //send the post request
+                // Send the post request
                 var response = await client.PostAsync(GetUrl("token"), content);
-
-
-
-                //get the data if the response is what we want
+                
+                // Get the data if the response is what we want
                 if (response.IsSuccessStatusCode)
                 {
-                    //get the response as a string
+                    // Get the response as a string
                     var data = await response.Content.ReadAsStringAsync();
 
                     // Deserialize the data and get the access token
-                    var tokenResp = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
-
-                    // Store the access token
-                    AccessToken = tokenResp.AccessToken;
-                    RefreshToken = tokenResp.RefreshToken;
+                    TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
+                    
+                    // Store the username and password for future use
+                    Username = username;
+                    Password = password;
                 }
                 else
                 {
@@ -116,59 +121,6 @@ namespace KryptPadCSApp.API
             }
             
         }
-
-        ///// <summary>
-        ///// Gets a new access token from the refresh token
-        ///// </summary>
-        ///// <returns></returns>
-        //private static async Task RefreshTokenAsync()
-        //{
-
-        //    using (var client = new HttpClient())
-        //    {
-
-        //        try
-        //        {
-        //            //prepare form values
-        //            var values = new Dictionary<string, string>
-        //            {
-        //                { "grant_type", "refresh_token" },
-        //                { "refresh_token", RefreshToken }
-        //            };
-
-        //            //create the content to send
-        //            var content = new FormUrlEncodedContent(values);
-        //            //send the post request
-        //            var response = await client.PostAsync(GetUrl("token"), content);
-
-
-
-        //            //get the data if the response is what we want
-        //            if (response.IsSuccessStatusCode)
-        //            {
-        //                //get the response as a string
-        //                var data = await response.Content.ReadAsStringAsync();
-
-        //                // Deserialize the data and get the access token
-        //                var tokenResp = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
-
-        //                // Store the access token
-        //                AccessToken = tokenResp.AccessToken;
-        //                RefreshToken = tokenResp.RefreshToken;
-        //            }
-        //            else
-        //            {
-        //                throw await CreateException(response);
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            throw;
-        //        }
-
-        //    }
-        //}
 
         /// <summary>
         /// Creates an account in the system
@@ -220,7 +172,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
 
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl("api/profiles"));
@@ -252,7 +204,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client, passphrase);
                 //send request and get a response
@@ -293,7 +245,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
                 //send request and get a response
@@ -326,7 +278,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 // Authorize the request
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
 
                 var content = new StringContent(profileData, Encoding.UTF8, "application/json");
                 // Send request and get a response
@@ -359,7 +311,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 // Authorize the request.
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client, passphrase);
                 // Create JSON content.
@@ -407,7 +359,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 // Authorize the request.
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client, oldPassphrase);
                 // Create JSON content.
@@ -441,7 +393,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 // Authorize the request.
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
 
                 // Send request and get a response
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{profile.Id}"));
@@ -469,7 +421,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
                 //send request and get a response
@@ -503,7 +455,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
                 //send request and get a response
@@ -539,7 +491,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 // Authorize the request.
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
                 // Create JSON content.
@@ -587,7 +539,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 // Authorize the request.
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
 
                 // Send request and get a response
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}"));
@@ -622,7 +574,7 @@ namespace KryptPadCSApp.API
         //    using (var client = new HttpClient())
         //    {
         //        //authorize the request
-        //        AuthorizeRequest(client);
+        //        await AuthorizeRequest(client);
         //        // Add passphrase to message
         //        AddPassphraseHeader(client);
         //        //send request and get a response
@@ -657,7 +609,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
                 //send request and get a response
@@ -694,7 +646,7 @@ namespace KryptPadCSApp.API
             {
 
                 // Authorize the request.
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
                 // Create content to send
@@ -745,7 +697,7 @@ namespace KryptPadCSApp.API
             {
 
                 // Authorize the request.
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
 
                 // Execute request
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}"));
@@ -784,7 +736,7 @@ namespace KryptPadCSApp.API
             {
 
                 // Authorize the request.
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
                 // Create content to send
@@ -840,7 +792,7 @@ namespace KryptPadCSApp.API
             using (var client = new HttpClient())
             {
                 //authorize the request
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
                 //send request and get a response
@@ -878,7 +830,7 @@ namespace KryptPadCSApp.API
             {
 
                 // Authorize the request.
-                AuthorizeRequest(client);
+                await AuthorizeRequest(client);
 
                 // Execute request
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields/{id}"));
@@ -975,12 +927,27 @@ namespace KryptPadCSApp.API
         /// Authorizes an http client request
         /// </summary>
         /// <param name="client"></param>
-        private static void AuthorizeRequest(HttpClient client)
+        private static async Task AuthorizeRequest(HttpClient client)
         {
-            if (!string.IsNullOrWhiteSpace(AccessToken))
+            if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
             {
+                
+                var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
+                // Before we execute the request, make sure the token isn't about to expire
+                if (DateTime.Now >= expiration.AddMinutes(-4) && DateTime.Now < expiration)
+                {
+                    // We are about to lose our access, reauthenticate with saved credentials
+                    await AuthenticateAsync(Username, Password);
+                    // Make sure we have a token
+                    if (TokenResponse == null)
+                    {
+                        // Authentication failed
+                        throw new WebException("Authentication failed");
+                    }
+                }
+                
                 //add the authorize header to the request
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenResponse.AccessToken);
             }
         }
 
@@ -1032,9 +999,12 @@ namespace KryptPadCSApp.API
         /// </summary>
         public static void SignOut()
         {
-            AccessToken = null;
+            // Clean up
+            TokenResponse = null;
             CurrentProfile = null;
             Passphrase = null;
+            Username = null;
+            Password = null;
 
             // TODO: Should we raise an event that the user can handle? Such as going to another page?
 
