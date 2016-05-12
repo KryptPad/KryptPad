@@ -48,6 +48,11 @@ namespace KryptPadCSApp.API
         private static string AccessToken { get; set; }
 
         /// <summary>
+        /// Gets or sets the refresh token
+        /// </summary>
+        private static string RefreshToken { get; set; }
+
+        /// <summary>
         /// Gets or sets the API OAuth access token to authorize API calls
         /// </summary>
         private static string Passphrase { get; set; }
@@ -102,16 +107,68 @@ namespace KryptPadCSApp.API
 
                     // Store the access token
                     AccessToken = tokenResp.AccessToken;
+                    RefreshToken = tokenResp.RefreshToken;
                 }
                 else
                 {
                     throw await CreateException(response);
                 }
             }
-
+            
         }
 
+        ///// <summary>
+        ///// Gets a new access token from the refresh token
+        ///// </summary>
+        ///// <returns></returns>
+        //private static async Task RefreshTokenAsync()
+        //{
 
+        //    using (var client = new HttpClient())
+        //    {
+
+        //        try
+        //        {
+        //            //prepare form values
+        //            var values = new Dictionary<string, string>
+        //            {
+        //                { "grant_type", "refresh_token" },
+        //                { "refresh_token", RefreshToken }
+        //            };
+
+        //            //create the content to send
+        //            var content = new FormUrlEncodedContent(values);
+        //            //send the post request
+        //            var response = await client.PostAsync(GetUrl("token"), content);
+
+
+
+        //            //get the data if the response is what we want
+        //            if (response.IsSuccessStatusCode)
+        //            {
+        //                //get the response as a string
+        //                var data = await response.Content.ReadAsStringAsync();
+
+        //                // Deserialize the data and get the access token
+        //                var tokenResp = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
+
+        //                // Store the access token
+        //                AccessToken = tokenResp.AccessToken;
+        //                RefreshToken = tokenResp.RefreshToken;
+        //            }
+        //            else
+        //            {
+        //                throw await CreateException(response);
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //            throw;
+        //        }
+
+        //    }
+        //}
 
         /// <summary>
         /// Creates an account in the system
@@ -135,7 +192,7 @@ namespace KryptPadCSApp.API
 
                 //execute request
                 var response = await client.PostAsync(GetUrl("api/account/register"), content);
-                
+
                 //check if the response is a success code
                 if (response.IsSuccessStatusCode)
                 {
@@ -397,7 +454,7 @@ namespace KryptPadCSApp.API
             }
 
         }
-        
+
         #endregion
 
         #region Categories
@@ -876,13 +933,13 @@ namespace KryptPadCSApp.API
                     {
                         // Deserialize the data
                         r = JsonConvert.DeserializeObject<OAuthTokenErrorResponse>(data);
-                        
+
                     }
                     else
                     {
                         // Deserialize the data
                         r = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                        
+
                     }
 
                     // If we have a WebExceptionResponse object, then use that to create an exception
