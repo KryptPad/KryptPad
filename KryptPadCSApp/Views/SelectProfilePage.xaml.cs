@@ -29,10 +29,13 @@ namespace KryptPadCSApp.Views
             this.InitializeComponent();
         }
         
-        private void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
+        private async void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
         {
             // Focus on the passphrase textbox
             PassphrasePasswordBox.Focus(FocusState.Programmatic);
+
+            // Load the profiles
+            await (DataContext as SelectProfilePageViewModel).GetProfilesAsync();
         }
 
         private void PassphrasePasswordBox_KeyUp(object sender, KeyRoutedEventArgs e)

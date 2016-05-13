@@ -122,7 +122,7 @@ namespace KryptPadCSApp.API
                     var data = await response.Content.ReadAsStringAsync();
 
                     // Before updating the token, kill the current task
-                    CancelExpirationTask();
+                    await CancelExpirationTask();
 
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
@@ -136,7 +136,7 @@ namespace KryptPadCSApp.API
 
                     // Start a task that will check the expiration date of the access token, when
                     // the current time has passed token expiration, an event will be raised.
-                    ExpirationTask = Task.Factory.StartNew(() =>
+                    ExpirationTask = Task.Factory.StartNew(async () =>
                     {
                         // Get local date from expiration
                         var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
@@ -151,7 +151,7 @@ namespace KryptPadCSApp.API
                             //ExpirationTaskCancelTokenSource.Token.ThrowIfCancellationRequested();
 
                             // Wait a bit, then check again
-                            Task.Delay(1000).Wait();
+                            await Task.Delay(1000);
                         }
 
                         // If the loop exits, then we have expired
@@ -1034,14 +1034,14 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Cancels the expiration task
         /// </summary>
-        private static void CancelExpirationTask()
+        private static async Task CancelExpirationTask()
         {
             if (ExpirationTaskCancelTokenSource != null)
             {
                 // Cancel task
                 ExpirationTaskCancelTokenSource.Cancel();
                 // Wait for the task to complete
-                ExpirationTask.Wait();
+                await ExpirationTask;
             }
         }
 
@@ -1059,10 +1059,10 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Signs out of the api
         /// </summary>
-        public static void SignOut()
+        public static async Task SignOutAsync()
         {
             // Cancel task
-            CancelExpirationTask();
+            await CancelExpirationTask();
 
             // Clean up
             TokenResponse = null;

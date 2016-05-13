@@ -33,10 +33,10 @@ namespace KryptPadCSApp.Models
             set
             {
                 _isBusy = value;
-                //notify change
+                // Notify change
                 OnPropertyChanged(nameof(IsBusy));
                 
-                //call the OnIsBusyChanged method so derived classes can handle it
+                // Call the OnIsBusyChanged method so derived classes can handle it
                 OnIsBusyChanged();
             }
         }
@@ -51,7 +51,7 @@ namespace KryptPadCSApp.Models
             set
             {
                 _busyIndicatorVisibility = value;
-                //notify change
+                // Notify change
                 OnPropertyChanged(nameof(BusyIndicatorVisibility));
 
             }
@@ -76,7 +76,7 @@ namespace KryptPadCSApp.Models
         /// When overriden in a derived class, handles the IsBusy property
         /// </summary>
         protected virtual void OnIsBusyChanged() {
-            //set the visibility of the busy indicator
+            // Set the visibility of the busy indicator
             BusyIndicatorVisibility = IsBusy ? Visibility.Visible : Visibility.Collapsed;
 
         }

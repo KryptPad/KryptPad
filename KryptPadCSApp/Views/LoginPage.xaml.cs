@@ -1,4 +1,5 @@
 ﻿using KryptPadCSApp.Classes;
+using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +27,7 @@ namespace KryptPadCSApp.Views
         public LoginPage()
         {
             this.InitializeComponent();
+            
         }
 
         private void Hyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
@@ -39,5 +41,11 @@ namespace KryptPadCSApp.Views
             // Go to terms page
             NavigationHelper.Navigate(typeof(PrivacyPage), null, NavigationHelper.NavigationType.Window);
         }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            await (DataContext as LoginPageViewModel).AutoLoginAsync();
+        }
+        
     }
 }

@@ -8,7 +8,7 @@
     x:Class="KryptPadCSApp.Views.ItemsPage"
     mc:Ignorable="d"
     xmlns:Commanding="using:Commanding"
-    x:Name="ItemsViewPage">
+    x:Name="ItemsViewPage" Loaded="ItemsViewPage_Loaded">
 
     <Page.DataContext>
         <Models:ItemsPageViewModel/>

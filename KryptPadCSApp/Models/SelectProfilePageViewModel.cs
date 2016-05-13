@@ -71,21 +71,14 @@ namespace KryptPadCSApp.Models
 
             // Ensure the passphrase is cleared
             KryptPadApi.CloseProfile();
-
-#if DEBUG
-            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
-#endif
-
-            // Get the list of profiles
-            var t = GetProfiles();
-
+            
         }
 
         /// <summary>
         /// Gets the profiles for the user
         /// </summary>
         /// <returns></returns>
-        private async Task GetProfiles()
+        public async Task GetProfilesAsync()
         {
             // Call the api and get some data!
             try
@@ -169,7 +162,7 @@ namespace KryptPadCSApp.Models
 
                     await DialogHelper.ShowMessageDialogAsync("Profile restored successfully");
 
-                    await GetProfiles();
+                    await GetProfilesAsync();
 
                 }
 
