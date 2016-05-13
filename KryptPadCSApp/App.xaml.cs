@@ -37,9 +37,9 @@ namespace KryptPadCSApp
     public partial class App : Application
     {
         private Frame _rootFrame;
-        
+
         #region Properties
-        
+
         /// <summary>
         /// Gets or sets whether the auto login is temporarily disabled
         /// </summary>
@@ -62,7 +62,7 @@ namespace KryptPadCSApp
             this.Resuming += OnResuming;
         }
 
-        
+
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -104,17 +104,19 @@ namespace KryptPadCSApp
                     AppViewBackButtonVisibility.Collapsed;
 
                 // Some API events
-                KryptPadApi.AccessTokenExpired += async (s, ev) => {
+                KryptPadApi.AccessTokenExpired += async (s, ev) =>
+                {
                     // Get the dispatcher
                     var dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
 
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
                         // Triggered when the access token has reached its expiration date
                         NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
                         // Clear backstack too
                         NavigationHelper.ClearBackStack();
                     });
-                    
+
                 };
 
             }
@@ -163,20 +165,23 @@ namespace KryptPadCSApp
                 AppViewBackButtonVisibility.Visible :
                 AppViewBackButtonVisibility.Collapsed;
 
-            // Check the page type, and hide or show the pane
-            if (e.SourcePageType == typeof(LoginPage))
+            // Get the MainPage instance and hide the pane
+            var page = Window.Current.Content as MainPage;
+            if (page != null)
             {
-                // Get the MainPage instance and hide the pane
-                var page = Window.Current.Content as MainPage;
-                if (page != null)
+                // Check the page type, and hide or show the pane
+                if (e.SourcePageType == typeof(LoginPage) 
+                    || e.SourcePageType == typeof(SelectProfilePage))
                 {
                     // Hide pane
                     page.ShowPane(false);
+
                 }
                 else
                 {
                     // Show pane
                     page.ShowPane(true);
+
                 }
             }
         }
@@ -209,7 +214,7 @@ namespace KryptPadCSApp
             }
         }
         #endregion
-        
-        
+
+
     }
 }

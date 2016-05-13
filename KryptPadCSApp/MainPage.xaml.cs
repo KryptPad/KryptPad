@@ -40,7 +40,7 @@ namespace KryptPadCSApp
             ShellSplitView.Content = RootFrame;
 
         }
-
+        
         private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
         {
 
