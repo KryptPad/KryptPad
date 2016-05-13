@@ -126,8 +126,7 @@ namespace KryptPadCSApp.Models
 
                     // When a profile is selected, navigate to main page
                     NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Frame);
-                    // Clear the back stack
-                    NavigationHelper.ClearBackStack();
+                    
 
                 }
                 catch (Exception ex)
