@@ -19,6 +19,7 @@
 		           PaneBackground="{ThemeResource SplitViewBackgroundBrush}">
             
             <SplitView.Pane>
+                
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />

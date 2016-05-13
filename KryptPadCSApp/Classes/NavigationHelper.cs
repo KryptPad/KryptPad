@@ -63,20 +63,20 @@ namespace KryptPadCSApp.Classes
 
             if (frame != null)
             {
-                if (navigationType == NavigationType.Window)
-                {
-                    // Set the frame on the window's main content
-                    Window.Current.Content = frame;    
-                }
-                else
-                {
-                    // Move the frame back into the main page
-                    if (!(Window.Current.Content is MainPage))
-                    {
-                        Window.Current.Content = new MainPage(frame);
-                    }
+                //if (navigationType == NavigationType.Window)
+                //{
+                //    // Set the frame on the window's main content
+                //    Window.Current.Content = frame;    
+                //}
+                //else
+                //{
+                //    // Move the frame back into the main page
+                //    if (!(Window.Current.Content is MainPage))
+                //    {
+                //        Window.Current.Content = new MainPage(frame);
+                //    }
                     
-                }
+                //}
 
                 // Navigate
                 frame.Navigate(pageType, parameter);

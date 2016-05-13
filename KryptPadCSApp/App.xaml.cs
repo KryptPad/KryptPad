@@ -88,8 +88,8 @@ namespace KryptPadCSApp
                 }
 
                 // Place the frame in the current Window
-                Window.Current.Content = _rootFrame;
-                //var page = new LogInPage(); //new MainPage(_rootFrame);
+                //Window.Current.Content = _rootFrame;
+                Window.Current.Content = new MainPage(_rootFrame);
 
 
 
@@ -129,8 +129,6 @@ namespace KryptPadCSApp
             // Ensure the current window is active
             Window.Current.Activate();
 
-            //prompt to login
-            //DialogHelper.LoginDialog();
         }
 
         protected override void OnActivated(IActivatedEventArgs args)
@@ -164,6 +162,23 @@ namespace KryptPadCSApp
                 ((Frame)sender).CanGoBack ?
                 AppViewBackButtonVisibility.Visible :
                 AppViewBackButtonVisibility.Collapsed;
+
+            // Check the page type, and hide or show the pane
+            if (e.SourcePageType == typeof(LoginPage))
+            {
+                // Get the MainPage instance and hide the pane
+                var page = Window.Current.Content as MainPage;
+                if (page != null)
+                {
+                    // Hide pane
+                    page.ShowPane(false);
+                }
+                else
+                {
+                    // Show pane
+                    page.ShowPane(true);
+                }
+            }
         }
 
         /// <summary>
