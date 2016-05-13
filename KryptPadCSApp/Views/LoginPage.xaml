@@ -37,7 +37,7 @@
                 <TextBlock Grid.Row="0" Text="Krypt Pad" Style="{ThemeResource HeaderTextBlockStyle}"/>
 
                 <!--Login email address-->
-                <TextBox Grid.Row="1" PlaceholderText="Email Address" Margin="0,0,0,12"
+                <TextBox Grid.Row="1" PlaceholderText="Email" Margin="0,0,0,12"
 					InputScope="EmailNameOrAddress"
 					Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -50,20 +50,8 @@
                           Content="Sign me in automatically"  
                           Margin="0,0,0,12" />
 
-                <!--Link to terms page-->
-                <TextBlock Grid.Row="4" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
-                    Krypt Pad is licensed under MIT. By using this software, you accept this
-                    <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. 
-                </TextBlock>
-
-                <!--Link to privacy page-->
-                <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
-                    View the 
-                    <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
-                </TextBlock>
-                
                 <!--Login / Sign up buttons-->
-                <Grid Grid.Row="6" Margin="0,0,0,12">
+                <Grid Grid.Row="4" Margin="0,0,0,12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
@@ -76,6 +64,13 @@
 						Command="{Binding CreateAccountCommand}" />
 
                 </Grid>
+                
+                <!--Link to terms page-->
+                <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
+                    Krypt Pad is licensed under MIT. By using this software, you accept this
+                    <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the 
+                    <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
+                </TextBlock>
 
 
             </Grid>

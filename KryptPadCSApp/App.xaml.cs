@@ -1,4 +1,5 @@
 ﻿
+using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Models;
@@ -14,6 +15,7 @@ using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -32,18 +34,17 @@ namespace KryptPadCSApp
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    public partial class App : Application, INotifyPropertyChanged
+    public partial class App : Application
     {
         private Frame _rootFrame;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        
         #region Properties
         
         /// <summary>
         /// Gets or sets whether the auto login is temporarily disabled
         /// </summary>
         internal bool DisableAutoLogin { get; set; }
+
         #endregion
 
 
@@ -61,7 +62,7 @@ namespace KryptPadCSApp
             this.Resuming += OnResuming;
         }
 
-
+        
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -101,6 +102,21 @@ namespace KryptPadCSApp
                     _rootFrame.CanGoBack ?
                     AppViewBackButtonVisibility.Visible :
                     AppViewBackButtonVisibility.Collapsed;
+
+                // Some API events
+                KryptPadApi.AccessTokenExpired += async (s, ev) => {
+                    // Get the dispatcher
+                    var dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        // Triggered when the access token has reached its expiration date
+                        NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
+                        // Clear backstack too
+                        NavigationHelper.ClearBackStack();
+                    });
+                    
+                };
+
             }
 
             if (_rootFrame.Content == null)

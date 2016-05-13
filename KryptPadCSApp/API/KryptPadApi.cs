@@ -49,7 +49,7 @@ namespace KryptPadCSApp.API
         /// Gets or sets the API OAuth access token to authorize API calls
         /// </summary>
         private static OAuthTokenResponse TokenResponse { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the username of the user logged in
         /// </summary>
@@ -114,7 +114,7 @@ namespace KryptPadCSApp.API
                 var content = new FormUrlEncodedContent(values);
                 // Send the post request
                 var response = await client.PostAsync(GetUrl("token"), content);
-                
+
                 // Get the data if the response is what we want
                 if (response.IsSuccessStatusCode)
                 {
@@ -122,17 +122,11 @@ namespace KryptPadCSApp.API
                     var data = await response.Content.ReadAsStringAsync();
 
                     // Before updating the token, kill the current task
-                    if (ExpirationTaskCancelTokenSource != null)
-                    {
-                        // Cancel task
-                        ExpirationTaskCancelTokenSource.Cancel();
-                        // Wait for the task to complete
-                        await ExpirationTask;
-                    }
+                    CancelExpirationTask();
 
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
-                    
+
                     // Store the username and password for future use
                     Username = username;
                     Password = password;
@@ -142,19 +136,30 @@ namespace KryptPadCSApp.API
 
                     // Start a task that will check the expiration date of the access token, when
                     // the current time has passed token expiration, an event will be raised.
-                    ExpirationTask = Task.Factory.StartNew(async () => {
+                    ExpirationTask = Task.Factory.StartNew(() =>
+                    {
                         // Get local date from expiration
                         var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
 
+                        // Store handle to event
+                        var handle = AccessTokenExpired;
+
                         // Enter a while loop and check that the expiration date hasn't passed
-                        while (DateTime.Now < expiration)
+                        while (DateTime.Now < expiration && handle != null && !ExpirationTaskCancelTokenSource.IsCancellationRequested)
                         {
                             // Wait a bit, then check again
-                            ExpirationTaskCancelTokenSource.Token.ThrowIfCancellationRequested();
+                            //ExpirationTaskCancelTokenSource.Token.ThrowIfCancellationRequested();
 
                             // Wait a bit, then check again
-                            await Task.Delay(1000);
+                            Task.Delay(1000).Wait();
                         }
+
+                        // If the loop exits, then we have expired
+                        if (!ExpirationTaskCancelTokenSource.IsCancellationRequested)
+                        {
+                            handle?.Invoke(null, EventArgs.Empty);
+                        }
+
                     }, ExpirationTaskCancelTokenSource.Token);
                 }
                 else
@@ -162,7 +167,7 @@ namespace KryptPadCSApp.API
                     throw await CreateException(response);
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -974,10 +979,10 @@ namespace KryptPadCSApp.API
         {
             if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
             {
-                
+
                 var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
                 // Before we execute the request, make sure the token isn't about to expire
-                if (DateTime.Now >= expiration.AddMinutes(-4) && DateTime.Now < expiration)
+                if (DateTime.Now >= expiration.AddSeconds(-30) && DateTime.Now < expiration)
                 {
                     // We are about to lose our access, reauthenticate with saved credentials
                     await AuthenticateAsync(Username, Password);
@@ -988,7 +993,7 @@ namespace KryptPadCSApp.API
                         throw new WebException("Authentication failed");
                     }
                 }
-                
+
                 //add the authorize header to the request
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenResponse.AccessToken);
             }
@@ -1027,6 +1032,20 @@ namespace KryptPadCSApp.API
         private static string GetUrl(string uri) => $"{ServiceHost}{uri}";
 
         /// <summary>
+        /// Cancels the expiration task
+        /// </summary>
+        private static void CancelExpirationTask()
+        {
+            if (ExpirationTaskCancelTokenSource != null)
+            {
+                // Cancel task
+                ExpirationTaskCancelTokenSource.Cancel();
+                // Wait for the task to complete
+                ExpirationTask.Wait();
+            }
+        }
+
+        /// <summary>
         /// Closes the current profile
         /// </summary>
         public static void CloseProfile()
@@ -1042,6 +1061,9 @@ namespace KryptPadCSApp.API
         /// </summary>
         public static void SignOut()
         {
+            // Cancel task
+            CancelExpirationTask();
+
             // Clean up
             TokenResponse = null;
             CurrentProfile = null;

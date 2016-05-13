@@ -96,14 +96,17 @@ namespace KryptPadCSApp.Models
                 IsBusy = true;
                 try
                 {
-                    //log in and get access token
+                    // Log in and get access token
                     var response = await KryptPadApi.CreateAccountAsync(Email, Password);
 
                     // The account was created
                     await DialogHelper.ShowMessageDialogAsync("Your account has been successfully created.");
 
-                    //go to login page
-                    NavigationHelper.Navigate(typeof(LoginPage), null);
+                    // Go to login page
+                    NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
+
+                    // Clear backstack
+                    NavigationHelper.ClearBackStack();
 
                 }
                 catch (Exception ex)
