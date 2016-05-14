@@ -48,7 +48,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Category));
 
                 // Save the item (fire and forget)
-                var t = SaveItem();
+                SaveItemAsync();
             }
         }
 
@@ -94,7 +94,7 @@ namespace KryptPadCSApp.Models
                 if (!string.IsNullOrWhiteSpace(_itemName))
                 {
                     // Save the item (fire and forget)
-                    var t = SaveItem();
+                    SaveItemAsync();
 
                 }
                 else
@@ -123,7 +123,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Notes));
 
                 // Save the item (fire and forget)
-                var t = SaveItem();
+                SaveItemAsync();
             }
         }
 
@@ -304,7 +304,7 @@ namespace KryptPadCSApp.Models
         /// Loads an item into the view model
         /// </summary>
         /// <param name="item"></param>
-        public async Task LoadItem(ApiItem selectedItem, ApiCategory category)
+        public async Task LoadItemAsync(ApiItem selectedItem, ApiCategory category)
         {
 
             // Prevent change triggers
@@ -374,7 +374,7 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Saves details about an item
         /// </summary>
-        private async Task SaveItem()
+        private async void SaveItemAsync()
         {
             // If we are loading, do not save the item
             if (_isLoading) return;

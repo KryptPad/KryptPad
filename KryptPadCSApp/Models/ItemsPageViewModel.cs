@@ -87,13 +87,6 @@ namespace KryptPadCSApp.Models
             // Register commands
             RegisterCommands();
 
-#if DEBUG
-            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
-#endif
-
-            // Get list of categories
-            var task = RefreshCategories();
-
         }
 
         /// <summary>
@@ -333,7 +326,7 @@ namespace KryptPadCSApp.Models
         /// Get the list of categories from the database
         /// </summary>
         /// <returns></returns>
-        private async Task RefreshCategories()
+        public async Task RefreshCategoriesAsync()
         {
             // Set busy
             IsBusy = true;

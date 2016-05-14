@@ -95,15 +95,22 @@ namespace KryptPadCSApp.Models
         public LoginPageViewModel()
         {
             RegisterCommands();
-
-            // Ensure that the access token is cleared upon arrival
-            KryptPadApi.SignOut();
-
-            // Check the password vault for any saved credentials.
-            LoginFromSavedCredentials();
-
+            
         }
 
+        /// <summary>
+        /// Create instance of the view model
+        /// </summary>
+        /// <returns></returns>
+        public async Task AutoLoginAsync()
+        {
+            // Ensure that the access token is cleared upon arrival
+            await KryptPadApi.SignOutAsync();
+
+            // Check the password vault for any saved credentials.
+            await LoginFromSavedCredentialsAsync();
+            
+        }
 
         #region Helper Methods
 
@@ -128,7 +135,7 @@ namespace KryptPadCSApp.Models
         /// Checks to see if there are any saved credentials. If there are, the app is auto-logged in.
         /// Only logs in if there is no access token already
         /// </summary>
-        private void LoginFromSavedCredentials()
+        private async Task LoginFromSavedCredentialsAsync()
         {
 
 
@@ -152,7 +159,7 @@ namespace KryptPadCSApp.Models
                     if (!DisableAutoLogin && !KryptPadApi.IsSignedIn)
                     {
                         // Do login
-                        var t = LoginAsync();
+                        await LoginAsync();
 
                         // Disable the auto login
                         DisableAutoLogin = true;
@@ -167,6 +174,9 @@ namespace KryptPadCSApp.Models
 
         }
 
+        /// <summary>
+        /// Stores the user's credentials in the credential locker
+        /// </summary>
         private void SaveCredentialsIfAutoSignIn()
         {
             if (AutoSignIn)
@@ -190,6 +200,10 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        /// <summary>
+        /// Performs login
+        /// </summary>
+        /// <returns></returns>
         private async Task LoginAsync()
         {
             IsBusy = true;

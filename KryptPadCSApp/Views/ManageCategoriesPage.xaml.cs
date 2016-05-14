@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,11 @@ namespace KryptPadCSApp.Views
         public ManageCategoriesPage()
         {
             this.InitializeComponent();
+        }
+
+        private async void ManageCategoriesViewPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            await (DataContext as ManageCategoriesViewModel).RefreshCategoriesAsync();
         }
     }
 }

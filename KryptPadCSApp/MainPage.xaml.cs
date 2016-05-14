@@ -35,12 +35,12 @@ namespace KryptPadCSApp
         public MainPage(Frame frame)
         {
             this.InitializeComponent();
-            
+
             RootFrame = frame;
             ShellSplitView.Content = RootFrame;
-            
-        }
 
+        }
+        
         private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -48,7 +48,7 @@ namespace KryptPadCSApp
             MenuRadioButton.IsChecked = false;
             // Command the split view to be closed or opened
             ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
-            
+
         }
 
         private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
@@ -96,7 +96,7 @@ namespace KryptPadCSApp
             // Close the pane
             ClosePane();
         }
-        
+
         private void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate
@@ -104,7 +104,7 @@ namespace KryptPadCSApp
             // Clear backstack
             NavigationHelper.ClearBackStack();
         }
-        
+
         #region Helper Methods
 
         /// <summary>
@@ -127,6 +127,13 @@ namespace KryptPadCSApp
 
 
         #endregion
-                
+
+        #region Public methods
+        public void ShowPane(bool value)
+        {
+            ShellSplitView.CompactPaneLength = (value ? 48 : 0);
+            ShellSplitView.OpenPaneLength = (value ? 300 : 0);
+        }
+        #endregion
     }
 }

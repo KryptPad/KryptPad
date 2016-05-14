@@ -7,7 +7,7 @@
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.ManageCategoriesPage"
     mc:Ignorable="d"
-    x:Name="ManageCategoriesViewPage">
+    x:Name="ManageCategoriesViewPage" Loaded="ManageCategoriesViewPage_Loaded">
 
     <Page.DataContext>
         <Models:ManageCategoriesViewModel/>

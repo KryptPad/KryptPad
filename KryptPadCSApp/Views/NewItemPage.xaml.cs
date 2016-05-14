@@ -50,7 +50,7 @@ namespace KryptPadCSApp.Views
                 if (pageParams != null && model != null)
                 {
                     //set properties on the model
-                    await model.LoadItem(pageParams.Item, pageParams.Category);
+                    await model.LoadItemAsync(pageParams.Item, pageParams.Category);
                         
                 }
             }

@@ -48,17 +48,9 @@ namespace KryptPadCSApp.Models
 
         public ManageCategoriesViewModel()
         {
-            // Set the categories list to the collection view
-            //CategorySource = new CollectionViewSource() { Source = Categories };
-
             // Register commands
             RegisterCommands();
 
-#if DEBUG
-            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) { return; }
-#endif
-            // Get list of categories
-            var t = RefreshCategories();
         }
 
         /// <summary>
@@ -167,7 +159,7 @@ namespace KryptPadCSApp.Models
         /// Get the list of categories from the database
         /// </summary>
         /// <returns></returns>
-        private async Task RefreshCategories()
+        public async Task RefreshCategoriesAsync()
         {
 
             // Clear the list
