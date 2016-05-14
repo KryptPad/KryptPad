@@ -79,8 +79,8 @@
                                  PlaceholderText="Enter passphrase" KeyUp="PassphrasePasswordBox_KeyUp"/>
 
                     <Button Grid.Column="1"
-                            Command="{Binding EnterProfileCommand}">
-                        <SymbolIcon Symbol="Accept" />
+                            Command="{Binding EnterProfileCommand}" VerticalAlignment="Bottom">
+                        <SymbolIcon Symbol="Forward" />
                     </Button>
                 </Grid>
 

@@ -290,13 +290,18 @@ namespace KryptPadCSApp.Models
             {
 
                 var field = p as FieldModel;
+                // Check if field value is null
+                if (!string.IsNullOrWhiteSpace(field.Value))
+                {
+                    // Create a data package
+                    var package = new DataPackage();
+                    package.SetText(field.Value);
 
-                // Create a data package
-                var package = new DataPackage();
-                package.SetText(field.Value);
+                    // Set the value of the field to the clipboard
+                    Clipboard.SetContent(package);
+                }
 
-                // Set the value of the field to the clipboard
-                Clipboard.SetContent(package);
+                
             });
         }
 
