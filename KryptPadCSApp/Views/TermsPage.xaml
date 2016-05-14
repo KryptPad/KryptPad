@@ -10,21 +10,21 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid Margin="12">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-            <TextBlock Grid.Row="0" Style="{ThemeResource HeaderTextBlockStyle}">
+
+            <ScrollViewer Grid.Row="0">
+
+                <StackPanel>
+                    <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
                 Krypt Pad
-            </TextBlock>
+                    </TextBlock>
 
-            <TextBlock Grid.Row="1" 
-                       Style="{ThemeResource SubtitleTextBlockStyle}" >
+                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" >
                 An open source project.
-            </TextBlock>
+                    </TextBlock>
 
-            <TextBlock Grid.Row="2" Margin="0,10,0,0" TextWrapping="WrapWholeWords" >
+                    <TextBlock Grid.Row="2" Margin="0,10,0,0" TextWrapping="WrapWholeWords" >
                 Krypt Pad is licensed under MIT.
                 <LineBreak />
                 <LineBreak />Copyright (c) 2015-2016 Eric Butler
@@ -35,8 +35,11 @@
                 <LineBreak/>
                 <LineBreak />THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-            </TextBlock>
+                    </TextBlock>
+
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
-        
+
     </Grid>
 </Page>

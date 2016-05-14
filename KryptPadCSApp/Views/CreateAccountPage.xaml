@@ -59,7 +59,8 @@
                 <!--Link to terms page-->
                 <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,10">
                     Krypt Pad is licensed under MIT. By using this software, you accept this
-                    <Hyperlink Click="Hyperlink_Click">license</Hyperlink>.
+                    <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the
+                    <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
                 </TextBlock>
 
                 <Button Grid.Row="6"

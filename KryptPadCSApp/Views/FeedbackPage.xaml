@@ -46,9 +46,9 @@
 
             <RelativePanel>
 
-                <!--Heart-->
+                <!--Icon-->
                 <TextBlock x:Name="IconTextBlock" Text="&#xE76E;"
-					Margin="0,0,24,0"
+					Margin="0,0,24,24"
 					FontFamily="{ThemeResource SymbolThemeFontFamily}"
 					FontSize="144"
 					Foreground="{StaticResource SplitViewBackgroundBrush}" />

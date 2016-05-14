@@ -48,7 +48,7 @@
 
                 <!--Heart-->
                 <TextBlock x:Name="HeartTextBlock" Text="&#xE00B;"
-					Margin="0,0,24,0"
+					Margin="0,0,24,24"
 					FontFamily="{ThemeResource SymbolThemeFontFamily}"
 					FontSize="144"
 					Foreground="#FFFD6060" />
@@ -58,7 +58,7 @@
 
                     <!--Header-->
                     <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
-						<Run Text="Krypt Pad"/>
+						<Run Text="Donate"/>
                     </TextBlock>
 
                     <!--Message-->

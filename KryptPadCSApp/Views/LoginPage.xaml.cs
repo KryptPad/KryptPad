@@ -36,7 +36,7 @@ namespace KryptPadCSApp.Views
 
         private void PrivacyHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {
-            // Go to terms page
+            // Go to privacy page
             NavigationHelper.Navigate(typeof(PrivacyPage), null, NavigationHelper.NavigationType.Window);
         }
     }

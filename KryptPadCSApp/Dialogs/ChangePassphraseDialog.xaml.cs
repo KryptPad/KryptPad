@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.ComponentModel;
 using KryptPadCSApp.Exceptions;
+using KryptPadCSApp.API;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -95,7 +96,7 @@ namespace KryptPadCSApp.Dialogs
             try
             {
                 // Change the passphrase
-                await API.KryptPadApi.ChangePassphraseAsync(OldPassphrase, NewPassphrase);
+                await KryptPadApi.ChangePassphraseAsync(OldPassphrase, NewPassphrase);
             }
             catch (WarningException ex)
             {

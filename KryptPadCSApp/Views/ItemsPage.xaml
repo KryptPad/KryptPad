@@ -50,7 +50,7 @@
                 <AppBarButton Icon="Add" Label="Add category" Command="{Binding AddCategoryCommand}" />
                 
                 <CommandBar.SecondaryCommands>
-                    <AppBarButton Icon="Permissions" Label="Change password" Command="{Binding ChangePassphraseCommand}" />
+                    <AppBarButton Icon="Permissions" Label="Change passphrase" Command="{Binding ChangePassphraseCommand}" />
                     <AppBarButton Icon="SaveLocal" Label="Download profile" Command="{Binding DownloadProfileCommand}" />
                     <AppBarButton Icon="Rename" Label="Rename profile" Command="{Binding RenameProfileCommand}" />
                     <AppBarButton Icon="Delete" Label="Delete profile" Command="{Binding DeleteProfileCommand}"/>

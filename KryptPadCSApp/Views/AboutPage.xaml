@@ -42,7 +42,7 @@
 
                 <!--Heart-->
                 <TextBlock x:Name="HeartTextBlock" Text="&#xE783;"
-					Margin="0,0,24,0"
+					Margin="0,0,24,24"
 					FontFamily="{ThemeResource SymbolThemeFontFamily}"
 					FontSize="144"
 					Foreground="{StaticResource SplitViewBackgroundBrush}" />

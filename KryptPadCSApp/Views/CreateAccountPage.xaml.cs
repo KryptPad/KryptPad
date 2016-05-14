@@ -33,6 +33,12 @@ namespace KryptPadCSApp.Views
             // Go to terms page
             NavigationHelper.Navigate(typeof(TermsPage), null, NavigationHelper.NavigationType.Window);
         }
+
+        private void PrivacyHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            // Go to privacy page
+            NavigationHelper.Navigate(typeof(PrivacyPage), null, NavigationHelper.NavigationType.Window);
+        }
     }
 
     
