@@ -20,6 +20,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Security.Authentication.OnlineId;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.API;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -39,8 +41,19 @@ namespace KryptPadCSApp
             RootFrame = frame;
             ShellSplitView.Content = RootFrame;
 
+            KryptPadApi.AccessTokenExpirationTimer += async (expiration) =>
+            {
+                // Get time remaining
+                var timeRemaining = DateTime.Now.Subtract(expiration);
+
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    CountDownTextBlock.Text = timeRemaining.ToString(@"mm\:ss");
+                });
+            };
+
         }
-        
+
         private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -108,7 +121,7 @@ namespace KryptPadCSApp
                 NavigationHelper.ClearBackStack();
             });
 
-            
+
         }
 
         #region Helper Methods

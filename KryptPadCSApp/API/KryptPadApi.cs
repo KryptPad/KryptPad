@@ -39,8 +39,15 @@ namespace KryptPadCSApp.API
         private static string ServiceHost { get; } = "https://www.kryptpad.com/";
 #endif
 
+        #region Delegates
+        public delegate void AccessTokenExpirationTimerHandler(DateTime expiration);
+        #endregion
+
         #region Events
+
         public static event EventHandler AccessTokenExpired;
+
+        public static event AccessTokenExpirationTimerHandler AccessTokenExpirationTimer;
         #endregion
 
         #region Properties
@@ -90,6 +97,44 @@ namespace KryptPadCSApp.API
         #endregion
 
 
+        private static void StartExpirationTask()
+        {
+            // Initialize new cancellation token
+            ExpirationTaskCancelTokenSource = new CancellationTokenSource();
+
+            // Start a task that will check the expiration date of the access token, when
+            // the current time has passed token expiration, an event will be raised.
+            ExpirationTask = Task.Factory.StartNew(async () =>
+            {
+                // Get local date from expiration
+                var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
+
+                // Store handle to event
+                var expHandle = AccessTokenExpired;
+                var tickHandle = AccessTokenExpirationTimer;
+
+                // Enter a while loop and check that the expiration date hasn't passed
+                while (DateTime.Now < expiration && expHandle != null)
+                {
+                    // Wait a bit, then check again
+                    ExpirationTaskCancelTokenSource.Token.ThrowIfCancellationRequested();
+
+                    // Wait a bit, then check again
+                    await Task.Delay(1000);
+
+                    // Send the tick event
+                    tickHandle?.Invoke(expiration);
+                }
+
+                // If the loop exits, then we have expired
+                if (!ExpirationTaskCancelTokenSource.IsCancellationRequested)
+                {
+                    expHandle?.Invoke(null, EventArgs.Empty);
+                }
+
+            }, ExpirationTaskCancelTokenSource.Token);
+        }
+
         /// <summary>
         /// Creates an authorization request
         /// </summary>
@@ -120,9 +165,13 @@ namespace KryptPadCSApp.API
                 {
                     // Get the response as a string
                     var data = await response.Content.ReadAsStringAsync();
-
-                    // Before updating the token, kill the current task
-                    await CancelExpirationTask();
+                    
+                    if (ExpirationTask != null)
+                    {
+                        // Before updating the token, kill the current task
+                        CancelExpirationTask();
+                        await ExpirationTask;
+                    }
 
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
@@ -131,36 +180,8 @@ namespace KryptPadCSApp.API
                     Username = username;
                     Password = password;
 
-                    // Initialize new cancellation token
-                    ExpirationTaskCancelTokenSource = new CancellationTokenSource();
-
-                    // Start a task that will check the expiration date of the access token, when
-                    // the current time has passed token expiration, an event will be raised.
-                    ExpirationTask = Task.Factory.StartNew(async () =>
-                    {
-                        // Get local date from expiration
-                        var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
-
-                        // Store handle to event
-                        var handle = AccessTokenExpired;
-
-                        // Enter a while loop and check that the expiration date hasn't passed
-                        while (DateTime.Now < expiration && handle != null && !ExpirationTaskCancelTokenSource.IsCancellationRequested)
-                        {
-                            // Wait a bit, then check again
-                            //ExpirationTaskCancelTokenSource.Token.ThrowIfCancellationRequested();
-
-                            // Wait a bit, then check again
-                            await Task.Delay(1000);
-                        }
-
-                        // If the loop exits, then we have expired
-                        if (!ExpirationTaskCancelTokenSource.IsCancellationRequested)
-                        {
-                            handle?.Invoke(null, EventArgs.Empty);
-                        }
-
-                    }, ExpirationTaskCancelTokenSource.Token);
+                    // Start the expiration task
+                    StartExpirationTask();
                 }
                 else
                 {
@@ -989,7 +1010,7 @@ namespace KryptPadCSApp.API
 
                 var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
                 // Before we execute the request, make sure the token isn't about to expire
-                if (DateTime.Now >= expiration.AddMinutes(-2) && DateTime.Now < expiration)
+                if (DateTime.Now >= expiration.AddMinutes(-5) && DateTime.Now < expiration)
                 {
                     // We are about to lose our access, reauthenticate with saved credentials
                     await AuthenticateAsync(Username, Password);
@@ -1041,14 +1062,13 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Cancels the expiration task
         /// </summary>
-        private static async Task CancelExpirationTask()
+        private static void CancelExpirationTask()
         {
             if (ExpirationTaskCancelTokenSource != null)
             {
                 // Cancel task
                 ExpirationTaskCancelTokenSource.Cancel();
-                // Wait for the task to complete
-                await ExpirationTask;
+
             }
         }
 
@@ -1065,10 +1085,10 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Signs out of the api
         /// </summary>
-        public static async Task SignOutAsync()
+        public static void SignOutAsync()
         {
             // Cancel task
-            await CancelExpirationTask();
+            CancelExpirationTask();
 
             // Clean up
             TokenResponse = null;
@@ -1076,7 +1096,7 @@ namespace KryptPadCSApp.API
             Passphrase = null;
             Username = null;
             Password = null;
-            
+
         }
         #endregion
 

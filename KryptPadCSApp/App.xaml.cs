@@ -36,9 +36,11 @@ namespace KryptPadCSApp
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    public partial class App : Application
+    public partial class App : Application, INotifyPropertyChanged
     {
         private Frame _rootFrame;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #region Properties
 
@@ -46,6 +48,26 @@ namespace KryptPadCSApp
         /// Gets or sets whether the auto login is temporarily disabled
         /// </summary>
         internal bool DisableAutoLogin { get; set; }
+
+        private TimeSpan _timeRemaining;
+        /// <summary>
+        /// Gets or sets the time remaining on the session
+        /// </summary>
+        internal TimeSpan TimeRemaining
+        {
+            get
+            {
+                return _timeRemaining;
+            }
+            set
+            {
+                // Set time
+                _timeRemaining = value;
+                // Value changed
+                OnPropertyChanged(nameof(TimeRemaining));
+            }
+
+        }
 
         #endregion
 
@@ -215,6 +237,21 @@ namespace KryptPadCSApp
         }
         #endregion
 
+        #region Event Handlers
 
+        /// <summary>
+        /// Raises the PropertyChanged event for a property
+        /// </summary>
+        /// <param name="name"></param>
+        protected void OnPropertyChanged(string name)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        #endregion
     }
 }

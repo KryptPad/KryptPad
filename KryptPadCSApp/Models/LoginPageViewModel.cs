@@ -94,6 +94,10 @@ namespace KryptPadCSApp.Models
 
         public LoginPageViewModel()
         {
+            // Ensure that the access token is cleared upon arrival
+            KryptPadApi.SignOutAsync();
+
+            // Register commands
             RegisterCommands();
             
         }
@@ -104,9 +108,6 @@ namespace KryptPadCSApp.Models
         /// <returns></returns>
         public async Task AutoLoginAsync()
         {
-            // Ensure that the access token is cleared upon arrival
-            await KryptPadApi.SignOutAsync();
-
             // Check the password vault for any saved credentials.
             await LoginFromSavedCredentialsAsync();
             
