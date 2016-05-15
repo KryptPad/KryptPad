@@ -127,7 +127,7 @@ namespace KryptPadCSApp.Models
             CreateAccountCommand = new Command((p) =>
             {
                 // Navigate to the create account page
-                NavigationHelper.Navigate(typeof(CreateAccountPage), null, NavigationHelper.NavigationType.Window);
+                NavigationHelper.Navigate(typeof(CreateAccountPage), null);
             });
         }
 
@@ -217,7 +217,7 @@ namespace KryptPadCSApp.Models
                 SaveCredentialsIfAutoSignIn();
 
                 //navigate to the select profile page
-                NavigationHelper.Navigate(typeof(SelectProfilePage), null, NavigationHelper.NavigationType.Window);
+                NavigationHelper.Navigate(typeof(SelectProfilePage), null);
 
             }
             catch (WebException ex)

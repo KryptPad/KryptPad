@@ -410,8 +410,15 @@ namespace KryptPadCSApp.API
                 await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client, oldPassphrase);
+
+                // Create object to send to API
+                var values = new
+                {
+                    NewPassphrase = newPassphrase
+                };
+
                 // Create JSON content.
-                var content = JsonContent(newPassphrase);
+                var content = JsonContent(values);
 
                 // Create
                 var response = await client.PostAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/change-passphrase"), content);
@@ -982,7 +989,7 @@ namespace KryptPadCSApp.API
 
                 var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
                 // Before we execute the request, make sure the token isn't about to expire
-                if (DateTime.Now >= expiration.AddSeconds(-30) && DateTime.Now < expiration)
+                if (DateTime.Now >= expiration.AddMinutes(-2) && DateTime.Now < expiration)
                 {
                     // We are about to lose our access, reauthenticate with saved credentials
                     await AuthenticateAsync(Username, Password);
@@ -1053,7 +1060,6 @@ namespace KryptPadCSApp.API
             CurrentProfile = null;
             Passphrase = null;
 
-            // TODO: Should we raise an event that the user can handle? Such as going to another page?
         }
 
         /// <summary>
@@ -1070,9 +1076,7 @@ namespace KryptPadCSApp.API
             Passphrase = null;
             Username = null;
             Password = null;
-
-            // TODO: Should we raise an event that the user can handle? Such as going to another page?
-
+            
         }
         #endregion
 

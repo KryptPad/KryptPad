@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace KryptPadCSApp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class TermsPage : Page
+    public sealed partial class TermsPage : Page, INoSideNavPage
     {
         public TermsPage()
         {

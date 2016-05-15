@@ -78,35 +78,12 @@ namespace KryptPadCSApp.Models
         {
             SaveCommand = new Command(async (p) =>
             {
+                // Get reference to dialog
+                var dialog = p as ClosableContentDialog;
+
                 try
                 {
-                    var errors = new List<string>();
-                    // Check password
-                    if (ProfilePassphrase.Length < 8)
-                    {
-                        // Opps, passphrase doesn't meet criteria
-                        errors.Add("Passphrase must be at least eight characters long.");
-
-                    }
-                    else if (!ProfilePassphrase.Equals(ConfirmProfilePassphrase))
-                    {
-                        // Opps, passphrase doesn't meet criteria
-                        errors.Add("Passphrase and Confirm Passphrase must match.");
-                    }
-
-                    if (errors.Count > 0)
-                    {
-                        var dialog = p as ProfileDetailsDialog;
-
-                        dialog.Cancel = true;
-
-                        var errorMsg = string.Join("\n", errors);
-                        // Show message if we have any errors
-                        await DialogHelper.ShowMessageDialogAsync(errorMsg);
-
-                        return;
-                    }
-
+                    
                     //create a new profile
                     var profile = new ApiProfile()
                     {
@@ -122,14 +99,18 @@ namespace KryptPadCSApp.Models
                     await KryptPadApi.LoadProfileAsync(profile, ProfilePassphrase);
 
                     // Redirect to the main item list page
-                    NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Frame);
+                    NavigationHelper.Navigate(typeof(ItemsPage), null);
                     // Clear the back stack
                     NavigationHelper.ClearBackStack();
                 }
                 catch (Exception ex)
                 {
+                    // Cancel closing
+                    dialog.Cancel = true;
+                    
                     // Operation failed
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                                        
                 }
 
             }, false);

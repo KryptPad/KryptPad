@@ -125,7 +125,7 @@ namespace KryptPadCSApp.Models
                     await KryptPadApi.LoadProfileAsync(SelectedProfile, Passphrase);
 
                     // When a profile is selected, navigate to main page
-                    NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Frame);
+                    NavigationHelper.Navigate(typeof(ItemsPage), null);
                     
 
                 }

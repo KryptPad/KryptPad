@@ -11,13 +11,7 @@ namespace KryptPadCSApp.Classes
 {
     class NavigationHelper
     {
-
-        public enum NavigationType
-        {
-            Window,
-            Frame
-        }
-
+        
         /// <summary>
         /// Gets the current frame
         /// </summary>
@@ -42,6 +36,16 @@ namespace KryptPadCSApp.Classes
             return frame;
         }
 
+        ///// <summary>
+        ///// Navigates to a page using the frame
+        ///// </summary>
+        ///// <param name="pageType"></param>
+        ///// <param name="parameter"></param>
+        //public static void Navigate(Type pageType, object parameter)
+        //{
+        //    Navigate(pageType, parameter, NavigationType.Frame);
+        //}
+
         /// <summary>
         /// Navigates to a page using the frame
         /// </summary>
@@ -49,35 +53,10 @@ namespace KryptPadCSApp.Classes
         /// <param name="parameter"></param>
         public static void Navigate(Type pageType, object parameter)
         {
-            Navigate(pageType, parameter, NavigationType.Frame);
-        }
-
-        /// <summary>
-        /// Navigates to a page using the frame
-        /// </summary>
-        /// <param name="pageType"></param>
-        /// <param name="parameter"></param>
-        public static void Navigate(Type pageType, object parameter, NavigationType navigationType)
-        {
             var frame = GetFrame();
 
             if (frame != null)
             {
-                //if (navigationType == NavigationType.Window)
-                //{
-                //    // Set the frame on the window's main content
-                //    Window.Current.Content = frame;    
-                //}
-                //else
-                //{
-                //    // Move the frame back into the main page
-                //    if (!(Window.Current.Content is MainPage))
-                //    {
-                //        Window.Current.Content = new MainPage(frame);
-                //    }
-                    
-                //}
-
                 // Navigate
                 frame.Navigate(pageType, parameter);
 

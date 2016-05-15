@@ -97,12 +97,18 @@ namespace KryptPadCSApp
             ClosePane();
         }
 
-        private void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
+        private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate
-            NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
-            // Clear backstack
-            NavigationHelper.ClearBackStack();
+
+            await DialogHelper.Confirm("Are you sure you want to sign out?", "SIGN OUT", (p) =>
+            {
+                // Navigate
+                NavigationHelper.Navigate(typeof(LoginPage), null);
+                // Clear backstack
+                NavigationHelper.ClearBackStack();
+            });
+
+            
         }
 
         #region Helper Methods

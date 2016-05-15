@@ -268,7 +268,10 @@ namespace KryptPadCSApp.Models
                         await KryptPadApi.DeleteProfileAsync(KryptPadApi.CurrentProfile);
 
                         // Navigate back to the profiles list
-                        NavigationHelper.Navigate(typeof(SelectProfilePage), null, NavigationHelper.NavigationType.Window);
+                        NavigationHelper.Navigate(typeof(SelectProfilePage), null);
+
+                        // Clear backstack
+                        NavigationHelper.ClearBackStack();
                     }
                 );
 

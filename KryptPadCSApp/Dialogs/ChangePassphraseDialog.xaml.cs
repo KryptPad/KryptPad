@@ -97,6 +97,9 @@ namespace KryptPadCSApp.Dialogs
             {
                 // Change the passphrase
                 await KryptPadApi.ChangePassphraseAsync(OldPassphrase, NewPassphrase);
+
+                // Done
+                await DialogHelper.ShowMessageDialogAsync("Profile passphrase changed successfully.");
             }
             catch (WarningException ex)
             {

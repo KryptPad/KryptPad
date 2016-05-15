@@ -2,6 +2,7 @@
 using KryptPadCSApp.API;
 using KryptPadCSApp.API.Models;
 using KryptPadCSApp.Classes;
+using KryptPadCSApp.Interfaces;
 using KryptPadCSApp.Models;
 using KryptPadCSApp.UserControls;
 using KryptPadCSApp.Views;
@@ -12,6 +13,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -112,7 +114,7 @@ namespace KryptPadCSApp
                     await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
                         // Triggered when the access token has reached its expiration date
-                        NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Window);
+                        NavigationHelper.Navigate(typeof(LoginPage), null);
                         // Clear backstack too
                         NavigationHelper.ClearBackStack();
                     });
@@ -170,12 +172,10 @@ namespace KryptPadCSApp
             if (page != null)
             {
                 // Check the page type, and hide or show the pane
-                if (e.SourcePageType == typeof(LoginPage) 
-                    || e.SourcePageType == typeof(SelectProfilePage))
+                if (typeof(INoSideNavPage).IsAssignableFrom(e.SourcePageType))
                 {
                     // Hide pane
                     page.ShowPane(false);
-
                 }
                 else
                 {

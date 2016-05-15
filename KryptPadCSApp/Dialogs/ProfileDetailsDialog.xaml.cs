@@ -45,7 +45,7 @@ namespace KryptPadCSApp.Dialogs
             if (e.Key == Windows.System.VirtualKey.Enter && PrimaryButtonCommand.CanExecute(null))
             {
                 // Yes, it can execute, call it
-                PrimaryButtonCommand.Execute(null);
+                PrimaryButtonCommand.Execute(this);
 
                 // Close the dialog
                 Close(ContentDialogResult.Primary);

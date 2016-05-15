@@ -1,4 +1,5 @@
 ﻿using KryptPadCSApp.Classes;
+using KryptPadCSApp.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +22,7 @@ namespace KryptPadCSApp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class PrivacyPage : Page
+    public sealed partial class PrivacyPage : Page, INoSideNavPage
     {
         public PrivacyPage()
         {
@@ -31,7 +32,7 @@ namespace KryptPadCSApp.Views
         private void TermsHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {
             // Go to terms page
-            NavigationHelper.Navigate(typeof(TermsPage), null, NavigationHelper.NavigationType.Window);
+            NavigationHelper.Navigate(typeof(TermsPage), null);
         }
     }
 }

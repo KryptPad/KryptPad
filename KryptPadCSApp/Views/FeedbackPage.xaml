@@ -48,46 +48,40 @@
 
                 <!--Icon-->
                 <TextBlock x:Name="IconTextBlock" Text="&#xE76E;"
-					Margin="0,0,24,24"
+					Margin="0,0,24,0"
 					FontFamily="{ThemeResource SymbolThemeFontFamily}"
 					FontSize="144"
 					Foreground="{StaticResource SplitViewBackgroundBrush}" />
 
                 <!--Text-->
-                <Grid x:Name="MessageTextBlock">
+                <StackPanel x:Name="MessageTextBlock">
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Grid.Row="0" TextWrapping="WrapWholeWords">
-                Like this app? Leave us a comment in the Windows Store.
+                    <!--Header-->
+                    <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
+						<Run Text="Feedback"/>
+                    </TextBlock>
+                    
+                    <TextBlock TextWrapping="WrapWholeWords">
+                        Like this app? Leave us a comment in the Windows Store.
                     </TextBlock>
 
                     <!--Rate button-->
-                    <Button Grid.Row="1"
-                    Margin="0,24,0,48"
-                    Command="{Binding ReviewAppCommand}">
+                    <Button Margin="0,24,0,48" Command="{Binding ReviewAppCommand}">
                         Review this App
                     </Button>
 
                     <!--Bugs and feature requests-->
-                    <TextBlock Grid.Row="2" TextWrapping="WrapWholeWords">
-                To request new features, or report issues, please visit our <Hyperlink NavigateUri="{Binding IssuesUri}">Issues</Hyperlink> page on GitHub.
-                You'll need to create an account with GitHub if you don't have one.
+                    <TextBlock TextWrapping="WrapWholeWords">
+                        To request new features, or report issues, please visit our <Hyperlink NavigateUri="{Binding IssuesUri}">Issues</Hyperlink> page on GitHub.
+                        You'll need to create an account with GitHub if you don't have one.
                     </TextBlock>
 
                     <!--Issues button-->
-                    <Button Grid.Row="3"
-                    Margin="0,24,0,0"
-                    Command="{Binding SubmitIssueCommand}">
+                    <Button Margin="0,24,0,0" Command="{Binding SubmitIssueCommand}">
                         Visit the GitHub Issues Page
                     </Button>
 
-                </Grid>
+                </StackPanel>
 
             </RelativePanel>
             

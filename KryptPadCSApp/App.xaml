@@ -13,12 +13,12 @@
         <SolidColorBrush x:Key="SplitViewBackgroundBrush" Color="#FF0078d7" />
         <SolidColorBrush x:Key="SplitViewForegroundBrush" Color="White" />
 
-        <SolidColorBrush x:Key="MenuButtonBackgroundBrush" Color="#FF5FBDFF" />
-        <SolidColorBrush x:Key="MenuButtonPressedBackgroundBrush" Color="#ff8b40c2" />
-        <SolidColorBrush x:Key="MenuButtonHoverBackgroundBrush" Color="#FF5FBDFF" />
-        <SolidColorBrush x:Key="MenuButtonCheckedBackgroundBrush" Color="#ff4b0082" />
-        <SolidColorBrush x:Key="MenuButtonCheckedPressedBackgroundBrush" Color="#ff4b0082" />
-        <SolidColorBrush x:Key="MenuButtonCheckedHoverBackgroundBrush" Color="#ff4b0082" />
+        <SolidColorBrush x:Key="MenuButtonBackgroundBrush" Color="#FF0078d7" />
+        <SolidColorBrush x:Key="MenuButtonPressedBackgroundBrush" Color="#FF505050" />
+        <SolidColorBrush x:Key="MenuButtonHoverBackgroundBrush" Color="#FF555555" />
+        <SolidColorBrush x:Key="MenuButtonCheckedBackgroundBrush" Color="#FF505050" />
+        <SolidColorBrush x:Key="MenuButtonCheckedPressedBackgroundBrush" Color="#FF606060" />
+        <SolidColorBrush x:Key="MenuButtonCheckedHoverBackgroundBrush" Color="#FF656565" />
 
         <SolidColorBrush x:Key="NavButtonPressedBackgroundBrush" Color="#FF505050" />
         <SolidColorBrush x:Key="NavButtonHoverBackgroundBrush" Color="#FF555555" />
