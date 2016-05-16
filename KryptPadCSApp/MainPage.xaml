@@ -61,7 +61,10 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="1">
-                        <TextBlock x:Name="CountDownTextBlock" />
+                        <TextBlock x:Name="CountDownTextBlock"
+                                   Foreground="{StaticResource SplitViewForegroundBrush}"
+                                   Text="00:00" Margin="6,0,0,0"
+                                   />
                         <!-- Sign out button -->
                         <RadioButton x:Name="SignOutRadioButton" Tag="&#xE72B;" Content="Sign out" Style="{StaticResource SplitViewNavButtonStyle}" Click="SignOutRadioButton_Click" />
                     </StackPanel>

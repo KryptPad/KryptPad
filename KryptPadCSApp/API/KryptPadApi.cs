@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -102,64 +103,56 @@ namespace KryptPadCSApp.API
         /// </summary>
         private static void StartExpirationTask()
         {
-            // If the expiration task is already running, don't run it again
-            if (ExpirationTask != null)
-            {
-                return;
-            }
-
             // Initialize new cancellation token
             ExpirationTaskCancelTokenSource = new CancellationTokenSource();
 
             // Start a task that will check the expiration date of the access token, when
             // the current time has passed token expiration, an event will be raised.
-            ExpirationTask = Task.Factory.StartNew(async () =>
+            ExpirationTask = Task.Factory.StartNew(
+                async () => await ExpirationTaskWork(ExpirationTaskCancelTokenSource.Token),
+                ExpirationTaskCancelTokenSource.Token);
+        }
+
+        /// <summary>
+        /// Performs the work of the expiration task
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        private static async Task ExpirationTaskWork(CancellationToken token)
+        {
+            // Check to see if we still have a token response object
+            var tr = TokenResponse;
+            if (tr == null)
             {
-                var tr = TokenResponse;
-                if (tr == null)
-                {
-                    return;
-                }
+                return;
+            }
+
+            // Get local date from expiration
+            var expiration = TimeZoneInfo.ConvertTime(tr.Expiration, TimeZoneInfo.Local);
+
+            // Store handle to event
+            EventHandler expHandle = AccessTokenExpired;
+            AccessTokenExpirationTimerHandler tickHandle = AccessTokenExpirationTimer;
+
+            // Enter a while loop and check that the expiration date hasn't passed
+            while (DateTime.Now < expiration)
+            {
+                // Wait a bit, then check again
+                token.ThrowIfCancellationRequested();
 
                 // Get local date from expiration
-                var expiration = TimeZoneInfo.ConvertTime(tr.Expiration, TimeZoneInfo.Local);
+                expiration = TimeZoneInfo.ConvertTime(tr.Expiration, TimeZoneInfo.Local);
 
-                // Store handle to event
-                EventHandler expHandle = AccessTokenExpired;
-                AccessTokenExpirationTimerHandler tickHandle = AccessTokenExpirationTimer;
+                // Send the tick event
+                tickHandle?.Invoke(expiration);
 
-                // Enter a while loop and check that the expiration date hasn't passed
-                while (DateTime.Now < expiration && expHandle != null)
-                {
-                    // Get handles to events
-                    expHandle = AccessTokenExpired;
-                    tickHandle = AccessTokenExpirationTimer;
+                // Wait a bit, then check again
+                await Task.Delay(100);
+                
+            }
 
-                    tr = TokenResponse;
-                    if (tr == null)
-                    {
-                        return;
-                    }
-                    // Get local date from expiration
-                    expiration = TimeZoneInfo.ConvertTime(tr.Expiration, TimeZoneInfo.Local);
-
-                    // Wait a bit, then check again
-                    ExpirationTaskCancelTokenSource.Token.ThrowIfCancellationRequested();
-
-                    // Wait a bit, then check again
-                    await Task.Delay(1000);
-
-                    // Send the tick event
-                    tickHandle?.Invoke(expiration);
-                }
-
-                // If the loop exits, then we have expired
-                if (!ExpirationTaskCancelTokenSource.IsCancellationRequested)
-                {
-                    expHandle?.Invoke(null, EventArgs.Empty);
-                }
-
-            }, ExpirationTaskCancelTokenSource.Token);
+            // If the loop exits, then we have expired
+            expHandle?.Invoke(null, EventArgs.Empty);
         }
 
         /// <summary>
@@ -169,8 +162,19 @@ namespace KryptPadCSApp.API
         /// <param name="password"></param>
         public static async Task AuthenticateAsync(string username, string password)
         {
-            // Clear token response
-            TokenResponse = null;
+            
+            if (ExpirationTask != null)
+            {
+                // Cancel task
+                CancelExpirationTask();
+
+                // Wait for task to finish
+                await ExpirationTask;
+                
+                // Clear token response
+                TokenResponse = null;
+                
+            }
 
             using (var client = new HttpClient())
             {
