@@ -38,7 +38,7 @@
                                      Click="SearchRadioButton_Click"/>-->
 
                         <!-- Categories button -->
-                        <RadioButton x:Name="CategoriesRadioButton" Tag="&#xEA37;" Content="Manage Categories" Style="{StaticResource SplitViewNavButtonStyle}"
+                        <RadioButton x:Name="CategoriesRadioButton" Tag="&#xEA37;" Content="Categories" Style="{StaticResource SplitViewNavButtonStyle}"
                                      Click="CategoriesRadioButton_Click"/>
 
                         <!--Donate-->

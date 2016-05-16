@@ -125,18 +125,10 @@
 
                                 <!--Custom fields-->
                                 <ScrollViewer Grid.Row="1" Margin="0,0,12,0">
-                                    <ListBox ItemsSource="{Binding Fields}"
-                                     ItemTemplate="{StaticResource FieldListDataTemplate}">
-
-                                        <ListBox.ItemContainerStyle>
-                                            <Style TargetType="ListBoxItem">
-                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                                            </Style>
-                                        </ListBox.ItemContainerStyle>
-
-
-
-                                    </ListBox>
+                                    <!--Fields-->
+                                    <ItemsControl ItemsSource="{Binding Fields}"
+                                                  ItemTemplate="{StaticResource FieldListDataTemplate}">
+                                    </ItemsControl>
                                 </ScrollViewer>
 
                             </Grid>
@@ -165,21 +157,15 @@
                         <Grid x:Name="MobileGrid" Grid.Row="1" Visibility="Collapsed">
                             <Pivot>
                                 <PivotItem Header="Fields">
-                                    <ListBox ItemsSource="{Binding Fields}"
-                                     ItemTemplate="{StaticResource FieldListDataTemplate}">
-
-                                        <ListBox.ItemContainerStyle>
-                                            <Style TargetType="ListBoxItem">
-                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                                            </Style>
-                                        </ListBox.ItemContainerStyle>
-
-                                    </ListBox>
+                                    <!--Fields-->
+                                    <ItemsControl ItemsSource="{Binding Fields}"
+                                                  ItemTemplate="{StaticResource FieldListDataTemplate}">
+                                    </ItemsControl>
                                 </PivotItem>
                                 <PivotItem Header="Notes">
                                     <!--Notes-->
                                     <TextBox Text="{Binding Notes, Mode=TwoWay}"
-                                 AcceptsReturn="True"
+                                             AcceptsReturn="True"
                                  />
                                 </PivotItem>
                             </Pivot>
