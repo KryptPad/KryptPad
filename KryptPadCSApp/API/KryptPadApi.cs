@@ -97,8 +97,17 @@ namespace KryptPadCSApp.API
         #endregion
 
 
+        /// <summary>
+        /// Starts the expiration task
+        /// </summary>
         private static void StartExpirationTask()
         {
+            // If the expiration task is already running, don't run it again
+            if (ExpirationTask != null)
+            {
+                return;
+            }
+
             // Initialize new cancellation token
             ExpirationTaskCancelTokenSource = new CancellationTokenSource();
 
@@ -106,16 +115,34 @@ namespace KryptPadCSApp.API
             // the current time has passed token expiration, an event will be raised.
             ExpirationTask = Task.Factory.StartNew(async () =>
             {
+                var tr = TokenResponse;
+                if (tr == null)
+                {
+                    return;
+                }
+
                 // Get local date from expiration
-                var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
+                var expiration = TimeZoneInfo.ConvertTime(tr.Expiration, TimeZoneInfo.Local);
 
                 // Store handle to event
-                var expHandle = AccessTokenExpired;
-                var tickHandle = AccessTokenExpirationTimer;
+                EventHandler expHandle = AccessTokenExpired;
+                AccessTokenExpirationTimerHandler tickHandle = AccessTokenExpirationTimer;
 
                 // Enter a while loop and check that the expiration date hasn't passed
                 while (DateTime.Now < expiration && expHandle != null)
                 {
+                    // Get handles to events
+                    expHandle = AccessTokenExpired;
+                    tickHandle = AccessTokenExpirationTimer;
+
+                    tr = TokenResponse;
+                    if (tr == null)
+                    {
+                        return;
+                    }
+                    // Get local date from expiration
+                    expiration = TimeZoneInfo.ConvertTime(tr.Expiration, TimeZoneInfo.Local);
+
                     // Wait a bit, then check again
                     ExpirationTaskCancelTokenSource.Token.ThrowIfCancellationRequested();
 
@@ -166,13 +193,6 @@ namespace KryptPadCSApp.API
                     // Get the response as a string
                     var data = await response.Content.ReadAsStringAsync();
                     
-                    if (ExpirationTask != null)
-                    {
-                        // Before updating the token, kill the current task
-                        CancelExpirationTask();
-                        await ExpirationTask;
-                    }
-
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
 
