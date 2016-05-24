@@ -221,7 +221,7 @@ namespace KryptPadCSApp.API
         /// <param name="username"></param>
         /// <param name="email"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> CreateAccountAsync(string username, string password)
+        public static async Task<SuccessResponse> CreateAccountAsync(string username, string password, string confirmPassword)
         {
             using (var client = new HttpClient())
             {
@@ -229,7 +229,8 @@ namespace KryptPadCSApp.API
                 var values = new
                 {
                     email = username,
-                    password = password
+                    password = password,
+                    confirmPassword = confirmPassword
                 };
 
                 //create content

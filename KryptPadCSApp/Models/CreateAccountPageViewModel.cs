@@ -97,7 +97,7 @@ namespace KryptPadCSApp.Models
                 try
                 {
                     // Log in and get access token
-                    var response = await KryptPadApi.CreateAccountAsync(Email, Password);
+                    var response = await KryptPadApi.CreateAccountAsync(Email, Password, ConfirmPassword);
 
                     // The account was created
                     await DialogHelper.ShowMessageDialogAsync("Your account has been successfully created.");
