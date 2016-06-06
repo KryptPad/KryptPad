@@ -1,5 +1,4 @@
 ﻿using KryptPadCSApp.Dialogs;
-using KryptPadCSApp.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;

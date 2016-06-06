@@ -1,5 +1,4 @@
 ﻿using KryptPadCSApp.Models;
-using KryptPadCSApp.UserControls;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
