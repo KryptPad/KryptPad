@@ -235,7 +235,7 @@ namespace KryptPadCSApp.Models
             {
 
                 // Prompt for name
-                await DialogHelper.ShowDialog<NamePromptDialog>(async (d) =>
+                await DialogHelper.ShowNameDialog(async (d) =>
                 {
                     try
                     {
@@ -252,7 +252,7 @@ namespace KryptPadCSApp.Models
                         // Operation failed
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
-                }, "RENAME PROFILE");
+                }, "RENAME PROFILE", KryptPadApi.CurrentProfile.Name);
             });
 
             // Handle delete command
