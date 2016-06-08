@@ -70,7 +70,10 @@
                     <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
                 </TextBlock>
 
-
+                <TextBlock Grid.Row="6">
+                    <Hyperlink NavigateUri="{Binding WebsiteUrl}"><Run Text="{Binding WebsiteUrl}" /></Hyperlink>
+                </TextBlock>
+                
             </Grid>
 
         </Grid>

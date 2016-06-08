@@ -70,6 +70,14 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        /// <summary>
+        /// Gets the url of the website that the API is connected to
+        /// </summary>
+        public string WebsiteUrl
+        {
+            get { return KryptPadApi.ServiceHost; }
+        }
+
         private Visibility _loginVisibility;
         /// <summary>
         /// Gets or sets whether the ui element is visible

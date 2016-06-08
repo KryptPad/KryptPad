@@ -381,20 +381,24 @@ namespace KryptPadCSApp.Models
 
 
             }
-            catch (WebException ex)
-            {
-                // Operation failed
-                await DialogHelper.ShowMessageDialogAsync(ex.Message);
-            }
             catch (WarningException ex)
             {
                 // Operation failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
+            catch (WebException ex)
+            {
+                // Operation failed
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                // Navigate back to the items page
+                NavigationHelper.Navigate(typeof(ItemsPage), null);
+            }
             catch (Exception)
             {
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
+                // Navigate back to the items page
+                NavigationHelper.Navigate(typeof(ItemsPage), null);
             }
 
             _isLoading = false;

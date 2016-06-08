@@ -27,17 +27,17 @@ namespace KryptPadCSApp.API
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        private static string ServiceHost { get; } = "http://localhost:50821/"; //
+        public static string ServiceHost { get; } = "http://localhost:50821/"; //
 #elif DEBUG
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        private static string ServiceHost { get; } = "http://test.kryptpad.com/";
+        public static string ServiceHost { get; } = "http://test.kryptpad.com/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        private static string ServiceHost { get; } = "https://www.kryptpad.com/";
+        public static string ServiceHost { get; } = "https://www.kryptpad.com/";
 #endif
 
         #region Delegates
@@ -148,7 +148,7 @@ namespace KryptPadCSApp.API
 
                 // Wait a bit, then check again
                 await Task.Delay(100);
-                
+
             }
 
             // If the loop exits, then we have expired
@@ -162,7 +162,7 @@ namespace KryptPadCSApp.API
         /// <param name="password"></param>
         public static async Task AuthenticateAsync(string username, string password)
         {
-            
+
             if (ExpirationTask != null)
             {
                 // Cancel task
@@ -170,10 +170,10 @@ namespace KryptPadCSApp.API
 
                 // Wait for task to finish
                 await ExpirationTask;
-                
+
                 // Clear token response
                 TokenResponse = null;
-                
+
             }
 
             using (var client = new HttpClient())
@@ -196,7 +196,7 @@ namespace KryptPadCSApp.API
                 {
                     // Get the response as a string
                     var data = await response.Content.ReadAsStringAsync();
-                    
+
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
 
@@ -1030,26 +1030,39 @@ namespace KryptPadCSApp.API
         /// <param name="client"></param>
         private static async Task AuthorizeRequest(HttpClient client)
         {
-            if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
+            try
             {
-
-                var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
-                // Before we execute the request, make sure the token isn't about to expire
-                if (DateTime.Now >= expiration.AddMinutes(-5) && DateTime.Now < expiration)
+                if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
                 {
-                    // We are about to lose our access, reauthenticate with saved credentials
-                    await AuthenticateAsync(Username, Password);
-                    // Make sure we have a token
-                    if (TokenResponse == null)
-                    {
-                        // Authentication failed
-                        throw new WebException("Authentication failed");
-                    }
-                }
 
-                //add the authorize header to the request
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenResponse.AccessToken);
+                    var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
+                    // Before we execute the request, make sure the token isn't about to expire
+                    if (DateTime.Now >= expiration.AddMinutes(-5) && DateTime.Now < expiration)
+                    {
+                        // We are about to lose our access, reauthenticate with saved credentials
+                        await AuthenticateAsync(Username, Password);
+                        // Make sure we have a token
+                        if (TokenResponse == null)
+                        {
+                            throw new Exception();
+                        }
+                    }
+
+                    //add the authorize header to the request
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenResponse.AccessToken);
+                }
+                else
+                {
+                    throw new Exception();
+                }
             }
+            catch (Exception)
+            {
+                // If an error occurs, log out
+                EventHandler expHandle = AccessTokenExpired;
+                expHandle?.Invoke(null, EventArgs.Empty);
+            }
+            
         }
 
         /// <summary>
