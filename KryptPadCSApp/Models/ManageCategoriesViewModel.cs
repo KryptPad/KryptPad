@@ -120,7 +120,7 @@ namespace KryptPadCSApp.Models
             DeleteCategoryCommand = new Command(async (p) =>
             {
                 // Confirm delete
-                var res = await DialogHelper.Confirm("Are you sure you want to delete this category?",
+                var res = await DialogHelper.Confirm("All items under this category will be deleted. Are you sure you want to delete this category?",
                     async (ap) =>
                     {
                         var category = p as ApiCategory;
