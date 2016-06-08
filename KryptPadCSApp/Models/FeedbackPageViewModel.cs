@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,17 +30,39 @@ namespace KryptPadCSApp.Models
         {
             ReviewAppCommand = new Command(async (p) =>
             {
-                // Get the package family name
-                var packageFamilyName = Windows.ApplicationModel.Package.Current.Id.FamilyName;
-                // Launch the uri
-                await Windows.System.Launcher.LaunchUriAsync(new Uri($"ms-windows-store:REVIEW?PFN={packageFamilyName}"));
+
+                try
+                {
+                    // Get the package family name
+                    var packageFamilyName = Windows.ApplicationModel.Package.Current.Id.FamilyName;
+                    // Launch the uri
+                    await Windows.System.Launcher.LaunchUriAsync(new Uri($"ms-windows-store:REVIEW?PFN={packageFamilyName}"));
+
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowMessageDialogAsync("Could not launch the requested url.");
+                }
+
+                
 
             });
 
             SubmitIssueCommand = new Command(async (p) =>
             {
-                // Launch the uri
-                await Windows.System.Launcher.LaunchUriAsync(new Uri(IssuesUri));
+                try
+                {
+                    // Launch the uri
+                    await Windows.System.Launcher.LaunchUriAsync(new Uri(IssuesUri));
+
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowMessageDialogAsync("Could not launch the requested url.");
+                }
+
 
             });
         }

@@ -44,7 +44,8 @@ namespace KryptPadCSApp.Classes
         public static async Task<IUICommand> ShowConnectionErrorMessageDialog()
         {
             var msgBox = new MessageDialog(
-                "An error occurred while trying to process your request. Make sure you are connected to the internet.");
+                "An error occurred while trying to process your request. Make sure you are connected to the internet.", "No Network");
+            
             //show
             return await msgBox.ShowAsync();
 

@@ -7,6 +7,7 @@ using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
@@ -80,10 +81,15 @@ namespace KryptPadCSApp.Models
                         // Add the category to the collection
                         Categories.Add(category);
                     }
-                    catch (Exception ex)
+                    catch (WebException ex)
                     {
-                        // Operation failed
+                        // Something went wrong in the api
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                    catch (Exception)
+                    {
+                        // Failed
+                        await DialogHelper.ShowConnectionErrorMessageDialog();
                     }
                 }, "ADD CATEGORY");
             });
@@ -108,10 +114,15 @@ namespace KryptPadCSApp.Models
                         // Refresh the view
                         Categories.RefreshItem(category);
                     }
-                    catch (Exception ex)
+                    catch (WebException ex)
                     {
-                        // Operation failed
+                        // Something went wrong in the api
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                    catch (Exception)
+                    {
+                        // Failed
+                        await DialogHelper.ShowConnectionErrorMessageDialog();
                     }
                 }, "RENAME CATEGORY", category.Name);
             });
@@ -139,11 +150,15 @@ namespace KryptPadCSApp.Models
                                 }
 
                             }
-                            catch (Exception ex)
+                            catch (WebException ex)
                             {
-                                // Operation failed
+                                // Something went wrong in the api
                                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
-
+                            }
+                            catch (Exception)
+                            {
+                                // Failed
+                                await DialogHelper.ShowConnectionErrorMessageDialog();
                             }
                         }
                     }
@@ -177,10 +192,15 @@ namespace KryptPadCSApp.Models
                     Categories.Add(category);
                 }
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
-                // Operation failed
+                // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
             }
 
 

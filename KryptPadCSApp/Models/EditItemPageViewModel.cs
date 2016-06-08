@@ -182,8 +182,13 @@ namespace KryptPadCSApp.Models
                     }
                     catch (WebException ex)
                     {
-                        // Operation failed
+                        // Something went wrong in the api
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                    catch (Exception)
+                    {
+                        // Failed
+                        await DialogHelper.ShowConnectionErrorMessageDialog();
                     }
 
 
@@ -218,8 +223,13 @@ namespace KryptPadCSApp.Models
                             }
                             catch (WebException ex)
                             {
-                                // Operation failed
+                                // Something went wrong in the api
                                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                            }
+                            catch (Exception)
+                            {
+                                // Failed
+                                await DialogHelper.ShowConnectionErrorMessageDialog();
                             }
                         });
 
@@ -234,14 +244,14 @@ namespace KryptPadCSApp.Models
                         await DialogHelper.Confirm("This will replace your existing password with a new one. Are you sure?",
                             async (c) =>
                             {
-                            // Show the add field dialog
-                            var d = new PasswordGeneratorDialog();
+                                // Show the add field dialog
+                                var d = new PasswordGeneratorDialog();
 
-                            // Show the dialog
-                            var result = await d.ShowAsync();
+                                // Show the dialog
+                                var result = await d.ShowAsync();
 
-                            // Set the password field to the new value
-                            field.Value = (d.DataContext as PasswordGeneratorDialogViewModel)?.Password;
+                                // Set the password field to the new value
+                                field.Value = (d.DataContext as PasswordGeneratorDialogViewModel)?.Password;
                             });
 
 
@@ -250,10 +260,10 @@ namespace KryptPadCSApp.Models
                 }
 
                 var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)p));
-                if (chosenCommand == null)
-                {
+                //if (chosenCommand == null)
+                //{
 
-                }
+                //}
 
             });
 
@@ -277,31 +287,41 @@ namespace KryptPadCSApp.Models
                         }
                         catch (WebException ex)
                         {
-                            // Operation failed
+                            // Something went wrong in the api
                             await DialogHelper.ShowMessageDialogAsync(ex.Message);
-
+                        }
+                        catch (Exception)
+                        {
+                            // Failed
+                            await DialogHelper.ShowConnectionErrorMessageDialog();
                         }
                     });
 
             });
 
             // Handle copy field value
-            CopyFieldValueCommand = new Command((p) =>
+            CopyFieldValueCommand = new Command(async (p) =>
             {
-
-                var field = p as FieldModel;
-                // Check if field value is null
-                if (!string.IsNullOrWhiteSpace(field.Value))
+                try
                 {
-                    // Create a data package
-                    var package = new DataPackage();
-                    package.SetText(field.Value);
+                    var field = p as FieldModel;
+                    // Check if field value is null
+                    if (!string.IsNullOrWhiteSpace(field.Value))
+                    {
+                        // Create a data package
+                        var package = new DataPackage();
+                        package.SetText(field.Value);
 
-                    // Set the value of the field to the clipboard
-                    Clipboard.SetContent(package);
+                        // Set the value of the field to the clipboard
+                        Clipboard.SetContent(package);
+                    }
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowMessageDialogAsync("Failed to copy text to clipboard.");
                 }
 
-                
             });
         }
 
@@ -371,6 +391,11 @@ namespace KryptPadCSApp.Models
                 // Operation failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
+            }
 
             _isLoading = false;
             IsBusy = false;
@@ -383,7 +408,7 @@ namespace KryptPadCSApp.Models
         {
             // If we are loading, do not save the item
             if (_isLoading) return;
-            
+
             try
             {
                 // Set item properties
@@ -399,8 +424,13 @@ namespace KryptPadCSApp.Models
             }
             catch (WebException ex)
             {
-                // Failed
+                // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
             }
         }
 
@@ -440,8 +470,13 @@ namespace KryptPadCSApp.Models
             }
             catch (WebException ex)
             {
-                // Operation failed
+                // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
             }
         }
 

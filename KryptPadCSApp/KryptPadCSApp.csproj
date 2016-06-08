@@ -175,7 +175,6 @@
     <Compile Include="Models\PasswordGeneratorDialogViewModel.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
-    <Compile Include="Models\MainPageViewModel.cs" />
     <Compile Include="Models\ManageCategoriesViewModel.cs" />
     <Compile Include="Models\NamePromptDialogViewModel.cs" />
     <Compile Include="Models\EditItemPageViewModel.cs" />

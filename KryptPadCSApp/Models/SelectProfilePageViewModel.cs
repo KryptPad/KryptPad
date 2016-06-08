@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage.Pickers;
@@ -97,10 +98,15 @@ namespace KryptPadCSApp.Models
                 // Set the selected profile
                 SelectedProfile = Profiles.FirstOrDefault();
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
-                // Operation failed
+                // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
             }
         }
 
@@ -129,41 +135,60 @@ namespace KryptPadCSApp.Models
                     
 
                 }
-                catch (Exception ex)
+                catch (WebException ex)
                 {
-                    // Operation failed
+                    // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
                 }
             });
             
             RestoreBackupCommand = new Command(async (p) =>
             {
-                var fop = new FileOpenPicker();
-                // Add supported file types
-                fop.FileTypeFilter.Add(".kdf");
-
-                // Pick file to open and read
-                var result = await fop.PickSingleFileAsync();
-
-                if (result != null)
+                try
                 {
-                    var fs = await result.OpenReadAsync();
-                    string profileData;
-                    // Create a stream reader
-                    using (var sr = new StreamReader(fs.AsStreamForRead()))
+                    var fop = new FileOpenPicker();
+                    // Add supported file types
+                    fop.FileTypeFilter.Add(".kdf");
+
+                    // Pick file to open and read
+                    var result = await fop.PickSingleFileAsync();
+
+                    if (result != null)
                     {
-                        profileData = await sr.ReadToEndAsync();
+                        var fs = await result.OpenReadAsync();
+                        string profileData;
+                        // Create a stream reader
+                        using (var sr = new StreamReader(fs.AsStreamForRead()))
+                        {
+                            profileData = await sr.ReadToEndAsync();
+
+                        }
+
+                        // Upload the profile data
+                        var resp = await KryptPadApi.UploadProfile(profileData);
+
+                        await DialogHelper.ShowMessageDialogAsync("Profile restored successfully");
+
+                        await GetProfilesAsync();
 
                     }
-
-                    // Upload the profile data
-                    var resp = await KryptPadApi.UploadProfile(profileData);
-
-                    await DialogHelper.ShowMessageDialogAsync("Profile restored successfully");
-
-                    await GetProfilesAsync();
-
                 }
+                catch (WebException ex)
+                {
+                    // Something went wrong in the api
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                }
+
 
             });
         }

@@ -123,11 +123,17 @@ namespace KryptPadCSApp.Models
                         // Refresh
                         OnPropertyChanged(nameof(ItemsView));
                     }
-                    catch (Exception ex)
+                    catch (WebException ex)
                     {
-                        // Operation failed
+                        // Something went wrong in the api
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
+                    catch (Exception)
+                    {
+                        // Failed
+                        await DialogHelper.ShowConnectionErrorMessageDialog();
+                    }
+
                 }, "Add Category");
             });
 
@@ -190,10 +196,15 @@ namespace KryptPadCSApp.Models
                         });
 
                     }
-                    catch (Exception ex)
+                    catch (WebException ex)
+                    {
+                        // Something went wrong in the api
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                    catch (Exception)
                     {
                         // Failed
-                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                        await DialogHelper.ShowConnectionErrorMessageDialog();
                     }
 
                 }
@@ -249,8 +260,13 @@ namespace KryptPadCSApp.Models
                     }
                     catch (WebException ex)
                     {
-                        // Operation failed
+                        // Something went wrong in the api
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                    catch (Exception)
+                    {
+                        // Failed
+                        await DialogHelper.ShowConnectionErrorMessageDialog();
                     }
                 }, "RENAME PROFILE", KryptPadApi.CurrentProfile.Name);
             });
@@ -264,14 +280,29 @@ namespace KryptPadCSApp.Models
                     "WARNING - CONFIRM DELETE",
                     async (ap) =>
                     {
-                        // Delete the selected profile
-                        await KryptPadApi.DeleteProfileAsync(KryptPadApi.CurrentProfile);
+                        try
+                        {
+                            // Delete the selected profile
+                            await KryptPadApi.DeleteProfileAsync(KryptPadApi.CurrentProfile);
 
-                        // Navigate back to the profiles list
-                        NavigationHelper.Navigate(typeof(SelectProfilePage), null);
+                            // Navigate back to the profiles list
+                            NavigationHelper.Navigate(typeof(SelectProfilePage), null);
 
-                        // Clear backstack
-                        NavigationHelper.ClearBackStack();
+                            // Clear backstack
+                            NavigationHelper.ClearBackStack();
+
+                        }
+                        catch (WebException ex)
+                        {
+                            // Something went wrong in the api
+                            await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                        }
+                        catch (Exception)
+                        {
+                            // Failed
+                            await DialogHelper.ShowConnectionErrorMessageDialog();
+                        }
+                        
                     }
                 );
 
@@ -315,11 +346,14 @@ namespace KryptPadCSApp.Models
                 }
                 catch (WebException ex)
                 {
-                    // Operation failed
+                    // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
-
-
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                }
 
             });
 
@@ -348,10 +382,15 @@ namespace KryptPadCSApp.Models
                 // Refresh
                 OnPropertyChanged(nameof(ItemsView));
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
-                // Operation failed
+                // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
             }
 
             // Not busy any more
@@ -386,10 +425,15 @@ namespace KryptPadCSApp.Models
                 // Refresh
                 OnPropertyChanged(nameof(ItemsView));
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
-                // Operation failed
+                // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
             }
 
         }

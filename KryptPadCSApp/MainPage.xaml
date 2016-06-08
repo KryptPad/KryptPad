@@ -8,11 +8,6 @@
     x:Class="KryptPadCSApp.MainPage"
     mc:Ignorable="d">
 
-
-    <Page.DataContext>
-        <Models:MainPageViewModel/>
-    </Page.DataContext>
-
     <Grid>
         <SplitView x:Name="ShellSplitView" 
                    CompactPaneLength="48" OpenPaneLength="300"

@@ -6,6 +6,7 @@ using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -103,14 +104,15 @@ namespace KryptPadCSApp.Models
                     // Clear the back stack
                     NavigationHelper.ClearBackStack();
                 }
-                catch (Exception ex)
+                catch (WebException ex)
                 {
-                    // Cancel closing
-                    dialog.Cancel = true;
-                    
-                    // Operation failed
+                    // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
-                                        
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
                 }
 
             }, false);

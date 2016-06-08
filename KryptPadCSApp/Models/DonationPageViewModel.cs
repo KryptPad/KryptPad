@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,9 +28,18 @@ namespace KryptPadCSApp.Models
 
             DonateCommand = new Command(async (p) =>
             {
-                // Launch the uri
-                await Windows.System.Launcher.LaunchUriAsync(
-                    new Uri("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5547784"));
+                try
+                {
+                    // Launch the uri
+                    await Windows.System.Launcher.LaunchUriAsync(
+                        new Uri("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5547784"));
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowMessageDialogAsync("Could not launch the requested url.");
+                }
+                
 
             });
         }
