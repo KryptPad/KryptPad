@@ -18,7 +18,11 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>KryptPadCSApp_StoreKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>0DE5A56EBD882B607D348D0862D29C7C3FB7812F</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>EA8358A1F46D4EE56A2E10D125F89DCD9D2D8594</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <AppxPackageDir>C:\Users\Eric\Desktop\</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
