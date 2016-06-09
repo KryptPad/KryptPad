@@ -17,8 +17,8 @@
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>KryptPadCSApp_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>375E1DBA90D92A321E801C2BDFDC7A583C86BB8D</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>KryptPadCSApp_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>0DE5A56EBD882B607D348D0862D29C7C3FB7812F</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -101,6 +101,7 @@
     <Content Include="Assets\Square71x71Logo.scale-200.png" />
     <Content Include="Assets\Square71x71Logo.scale-400.png" />
     <Content Include="Assets\templates.json" />
+    <None Include="KryptPadCSApp_StoreKey.pfx" />
     <None Include="KryptPadCSApp_TemporaryKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
@@ -222,6 +223,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
