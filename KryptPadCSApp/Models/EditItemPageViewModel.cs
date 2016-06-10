@@ -250,8 +250,11 @@ namespace KryptPadCSApp.Models
                                 // Show the dialog
                                 var result = await d.ShowAsync();
 
-                                // Set the password field to the new value
-                                field.Value = (d.DataContext as PasswordGeneratorDialogViewModel)?.Password;
+                                if (result == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+                                {
+                                    // Set the password field to the new value
+                                    field.Value = (d.DataContext as PasswordGeneratorDialogViewModel)?.Password;
+                                }
                             });
 
 
