@@ -31,7 +31,12 @@ namespace KryptPadCSApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        #region Properties
         public Frame RootFrame { get; private set; }
+
+        private bool IsBusy { get; set; }
+        #endregion
+
 
         public MainPage(Frame frame)
         {
@@ -65,6 +70,7 @@ namespace KryptPadCSApp
 
         private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsBusy) return;
 
             // Navigate
             NavigationHelper.Navigate(typeof(ItemsPage), null);
@@ -75,6 +81,8 @@ namespace KryptPadCSApp
 
         private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsBusy) return;
+
             // Navigate
             NavigationHelper.Navigate(typeof(ManageCategoriesPage), null);
 
@@ -84,6 +92,8 @@ namespace KryptPadCSApp
 
         private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsBusy) return;
+
             // Navigate
             NavigationHelper.Navigate(typeof(DonatePage), null);
 
@@ -93,6 +103,8 @@ namespace KryptPadCSApp
 
         private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsBusy) return;
+
             // Navigate
             NavigationHelper.Navigate(typeof(FeedbackPage), null);
 
@@ -102,6 +114,8 @@ namespace KryptPadCSApp
 
         private void AboutRadioButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsBusy) return;
+
             // Navigate
             NavigationHelper.Navigate(typeof(AboutPage), null);
 
@@ -111,6 +125,7 @@ namespace KryptPadCSApp
 
         private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsBusy) return;
 
             await DialogHelper.Confirm("Are you sure you want to sign out?", "SIGN OUT", (p) =>
             {
@@ -138,19 +153,31 @@ namespace KryptPadCSApp
                 ShellSplitView.IsPaneOpen = false;
             }
         }
-
-
-
-
-
+        
 
         #endregion
 
         #region Public methods
+
+        /// <summary>
+        /// Shows or hides the pane
+        /// </summary>
+        /// <param name="value"></param>
         public void ShowPane(bool value)
         {
             ShellSplitView.CompactPaneLength = (value ? 48 : 0);
             ShellSplitView.OpenPaneLength = (value ? 300 : 0);
+        }
+
+        /// <summary>
+        /// Sets the busy state
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetIsBusy(bool value)
+        {
+            IsBusy = value;
+            BusyBorder.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            BusyIndicator.IsActive = value;
         }
         #endregion
     }

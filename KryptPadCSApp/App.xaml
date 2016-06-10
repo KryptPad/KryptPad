@@ -356,9 +356,8 @@
                            Grid.Row="0"
                            Grid.Column="0" />
 
-                <PasswordBox Password="{Binding Value, Mode=TwoWay}" 
+                <TextBox Text="{Binding Value, Mode=TwoWay}" 
                              PlaceholderText="Value"
-                             PasswordRevealMode="Visible"
                              Grid.Row="1"
                              Grid.Column="0"/>
 

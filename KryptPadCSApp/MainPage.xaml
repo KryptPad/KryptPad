@@ -68,6 +68,20 @@
             </SplitView.Pane>
         </SplitView>
 
+        <!--Progress indicator-->
+        <Border x:Name="BusyBorder"
+                Background="#3F000000"
+                Visibility="Collapsed">
+            
+            <!--Indicates something is happening-->
+            <ProgressRing x:Name="BusyIndicator"
+                          Visibility="Visible"
+                          IsActive="False"
+                          Width="50"
+                          Height="50"
+                          Foreground="{StaticResource ApplicationForegroundThemeBrush}"/>
+        </Border>
+        
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup" >
                                 

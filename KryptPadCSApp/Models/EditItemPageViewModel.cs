@@ -413,6 +413,9 @@ namespace KryptPadCSApp.Models
             // If we are loading, do not save the item
             if (_isLoading) return;
 
+            // Set main window busy state
+            (Window.Current.Content as MainPage).SetIsBusy(true);
+
             try
             {
                 // Set item properties
@@ -436,6 +439,9 @@ namespace KryptPadCSApp.Models
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
+
+            // Set main window busy state
+            (Window.Current.Content as MainPage).SetIsBusy(false);
         }
 
         /// <summary>
@@ -467,6 +473,9 @@ namespace KryptPadCSApp.Models
 
             if (_isLoading) return;
 
+            // Set main window busy state
+            (Window.Current.Content as MainPage).SetIsBusy(true);
+
             try
             {
                 // Send the field to the API to be stored under the item
@@ -482,6 +491,9 @@ namespace KryptPadCSApp.Models
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
+
+            // Set main window busy state
+            (Window.Current.Content as MainPage).SetIsBusy(false);
         }
 
         #region Helpers
