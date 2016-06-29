@@ -13,12 +13,11 @@
         <Models:SelectProfilePageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{StaticResource AppLoginBackgroundBrush}">
 
         <!--Main grid for page-->
-        <Grid HorizontalAlignment="Stretch"
-			MaxWidth="400"
-			Padding="12">
+        <Grid x:Name="MainGrid"
+              Style="{StaticResource LoginGridStyle}" >
 
 
             <Grid>
@@ -28,43 +27,47 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" Text="Profiles" Style="{ThemeResource HeaderTextBlockStyle}" />
-                <!--<TextBlock Grid.Row="1" Text="Choose a profile or create a new one" TextWrapping="WrapWholeWords"
-                           Margin="0,0,0,12"/>-->
                 
+
+                <TextBlock Grid.Row="0"
+                           Text="Profiles"
+                           Style="{ThemeResource HeaderTextBlockStyle}" />
+
+                <TextBlock Grid.Row="1"
+                           TextWrapping="WrapWholeWords"
+                           Margin="0,0,0,12">
+                    Select a profile from the list, or create a new profile. You can also restore a profile from a backup.
+                </TextBlock>
+
+                <!--Create or restore profile-->
+                <StackPanel Grid.Row="2"
+                            Margin="0,0,0,24"
+                            Orientation="Horizontal">
+                    <Button Content="Create Profile"
+                            Command="{Binding CreateProfileCommand}"
+                            Margin="0,0,12,0"/>
+
+                    <Button Content="Restore Backup"
+                            Command="{Binding RestoreBackupCommand}"/>
+                </StackPanel>
+
                 <!--Choose profile-->
-                <ComboBox Grid.Row="1"
-                          HorizontalAlignment="Stretch"
-                          ItemsSource="{Binding Profiles}"
-                          SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
-                          Margin="0,0,0,12">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
+                <ListBox Grid.Row="3"
+                         Visibility="{Binding ProfileSelectionVisible}"
+                         HorizontalAlignment="Stretch"
+                         ItemsSource="{Binding Profiles}"
+                         SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
+                         Margin="0,0,0,12"
+                         ItemTemplate="{StaticResource ProfileListDataTemplate}" SelectionChanged="ListBox_SelectionChanged"
+                         >
 
-                            <Grid x:Name="ProfileGrid" >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                
-                                <!--A nice little icon-->
-                                <SymbolIcon Grid.Column="0" Symbol="ProtectedDocument" Margin="0,0,12,0" />
-                                
-                                <!--Profile name-->
-                                <TextBlock Text="{Binding Name}"
-                                           Grid.Column="1"
-                                           VerticalAlignment="Center"/>
-
-                            </Grid>
-
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                </ListBox>
                 
                 <!--Passphrase grid-->
-                <Grid Grid.Row="2"
+                <Grid Grid.Row="4"
+                      Visibility="{Binding ProfileSelectionVisible}"
                       Margin="0,0,0,12">
 
                     <Grid.ColumnDefinitions>
@@ -84,100 +87,41 @@
                     </Button>
                 </Grid>
 
-                <!--Create or restore profile-->
-                <StackPanel Grid.Row="3"
-                            Margin="0,0,0,24"
-                            Orientation="Horizontal">
-                    <Button Content="Create Profile"
-                            Command="{Binding CreateProfileCommand}"
-                            Margin="0,0,12,0"/>
-
-                    <Button Content="Restore Backup"
-                            Command="{Binding RestoreBackupCommand}"/>
-                </StackPanel>
-
-                <!--<ListBox Grid.Row="3"
-                         ItemsSource="{Binding Profiles}"
-                         SelectedItem="{Binding SelectedProfile, Mode=TwoWay}">
-
-                    <ListBox.Background>
-                        <SolidColorBrush Color="#FFDFEEF7" Opacity="0.5"/>
-                    </ListBox.Background>
-
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate >
-                                        <Button x:Name="button" HorizontalAlignment="Stretch"
-                                                HorizontalContentAlignment="Stretch"
-                                                Command="{Binding DataContext.SelectProfileCommand, ElementName=SelectProfileViewPage}"
-                                                CommandParameter="{Binding}">
-                                            <ContentPresenter />
-
-                                            <Button.Style>
-                                                <Style TargetType="Button">
-                                                    <Setter Property="BorderThickness" Value="0" />
-                                                    <Setter Property="Padding" Value="8" />
-                                                </Style>
-                                            </Button.Style>
-
-                                            <VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup x:Name="CommonStates">
-                                                    <VisualState x:Name="Normal" />
-                                                    <VisualState x:Name="PointerOver">
-                                                        <VisualState.Setters>
-                                                            <Setter Target="button.(Control.Background)" Value="{ThemeResource SystemControlHighlightListAccentHighBrush}"/>
-                                                        </VisualState.Setters>
-
-                                                    </VisualState>
-                                                    <VisualState x:Name="Pressed">
-                                                        <VisualState.Setters>
-                                                            <Setter Target="button.(Control.Background)" Value="{ThemeResource SystemControlHighlightListMediumBrush}"/>
-
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>
-
-                                        </Button>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-
-                            <Grid x:Name="ProfileGrid" >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                --><!--A nice little icon--><!--
-                                <SymbolIcon Grid.Column="0" Symbol="ProtectedDocument" Margin="0,0,12,0" />
-
-                                --><!--Profile name--><!--
-                                <TextBlock Text="{Binding Name}"
-                                           Grid.Column="1"
-                                           VerticalAlignment="Center"/>
-
-
-                            </Grid>
-
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-
-                </ListBox>-->
+               
 
             </Grid>
 
         </Grid>
 
+
+        <!--Visual state manager-->
+        <VisualStateManager.VisualStateGroups>
+            
+            <VisualStateGroup x:Name="VisualStateGroup">
+
+                <!--Vertical align the grid to the top of the page-->
+                <VisualState x:Name="VisualStatePhone">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="MainGrid.VerticalAlignment" Value="Top" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <!--Move the grid to the center of the page-->
+                <VisualState x:Name="VisualStateTablet">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1024"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="MainGrid.VerticalAlignment" Value="Center" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
     </Grid>
 </Page>

@@ -52,5 +52,11 @@ namespace KryptPadCSApp.Views
                 }
             }
         }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Focus on the passphrase textbox
+            PassphrasePasswordBox.Focus(FocusState.Programmatic);
+        }
     }
 }

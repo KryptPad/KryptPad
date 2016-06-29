@@ -38,6 +38,10 @@ namespace KryptPadCSApp.Models
             set
             {
                 _passphrase = value;
+
+                // Changed
+                OnPropertyChanged(nameof(Passphrase));
+
                 // Enable login button
                 EnterProfileCommand.CommandCanExecute = CanLogIn;
             }
@@ -58,10 +62,26 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private Visibility _profileSelectionVisible;
+        /// <summary>
+        /// Gets or sets whether the profile selection is visible
+        /// </summary>
+        public Visibility ProfileSelectionVisible
+        {
+            get { return _profileSelectionVisible; }
+            set
+            {
+                _profileSelectionVisible = value;
+                // Changed
+                OnPropertyChanged(nameof(ProfileSelectionVisible));
+            }
+        }
+
+
         public Command CreateProfileCommand { get; protected set; }
-        
+
         public Command EnterProfileCommand { get; protected set; }
-        
+
         public Command RestoreBackupCommand { get; protected set; }
 
         #endregion
@@ -72,7 +92,7 @@ namespace KryptPadCSApp.Models
 
             // Ensure the passphrase is cleared
             KryptPadApi.CloseProfile();
-            
+
         }
 
         /// <summary>
@@ -95,8 +115,12 @@ namespace KryptPadCSApp.Models
                     Profiles.Add(profile);
                 }
 
-                // Set the selected profile
+                // Set the selected profile.
+                // TODO: Make this restore last selected profile... somehow
                 SelectedProfile = Profiles.FirstOrDefault();
+
+                // If we don't have any profiles, hide the selection
+                ProfileSelectionVisible = Profiles.Any() ? Visibility.Visible : Visibility.Collapsed;
             }
             catch (WebException ex)
             {
@@ -132,13 +156,16 @@ namespace KryptPadCSApp.Models
 
                     // When a profile is selected, navigate to main page
                     NavigationHelper.Navigate(typeof(ItemsPage), null);
-                    
+
 
                 }
                 catch (WebException ex)
                 {
                     // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
+
+                    // Clear out the passphrase
+                    Passphrase = null;
                 }
                 catch (Exception)
                 {
@@ -146,7 +173,7 @@ namespace KryptPadCSApp.Models
                     await DialogHelper.ShowConnectionErrorMessageDialog();
                 }
             });
-            
+
             RestoreBackupCommand = new Command(async (p) =>
             {
                 try
