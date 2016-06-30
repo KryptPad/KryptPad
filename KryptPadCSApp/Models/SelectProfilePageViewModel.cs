@@ -90,7 +90,10 @@ namespace KryptPadCSApp.Models
         {
             RegisterCommands();
 
-            // Ensure the passphrase is cleared
+            // Set the profile selection visibility
+            ProfileSelectionVisible = Visibility.Collapsed;
+
+            // Ensure the profile is closed and stored passphrase is cleared
             KryptPadApi.CloseProfile();
 
         }

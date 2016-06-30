@@ -17,44 +17,61 @@
 
         <!--Main grid for page-->
         <Grid x:Name="MainGrid"
-              Style="{StaticResource LoginGridStyle}" >
+              Style="{StaticResource LoginGridWrapperStyle}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                
+            </Grid.RowDefinitions>
 
-
-            <Grid>
+            <!--Header-->
+            <StackPanel Grid.Row="0"
+                       >
+                <TextBlock Text="Krypt Pad" 
+                           Style="{ThemeResource HeaderTextBlockStyle}"    
+                           Foreground="White"/>
+                <TextBlock Text="PROFILES" 
+                           Margin="0,0,0,12"    
+                           Style="{ThemeResource SubtitleTextBlockStyle}"    
+                           Foreground="White"/>
+            </StackPanel>
+            
+            <!--Profiles-->
+            <Grid Grid.Row="1"
+                  Style="{StaticResource LoginGridStyle}">
+                
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
+                    
                 </Grid.RowDefinitions>
-                
-
+                                
+                <!--Description-->
                 <TextBlock Grid.Row="0"
-                           Text="Profiles"
-                           Style="{ThemeResource HeaderTextBlockStyle}" />
-
-                <TextBlock Grid.Row="1"
                            TextWrapping="WrapWholeWords"
                            Margin="0,0,0,12">
                     Select a profile from the list, or create a new profile. You can also restore a profile from a backup.
                 </TextBlock>
 
                 <!--Create or restore profile-->
-                <StackPanel Grid.Row="2"
+                <StackPanel Grid.Row="1"
                             Margin="0,0,0,24"
                             Orientation="Horizontal">
+                    
+                    <!--Create new profile-->
                     <Button Content="Create Profile"
                             Command="{Binding CreateProfileCommand}"
                             Margin="0,0,12,0"/>
 
+                    <!--Restore a profile from a backup-->
                     <Button Content="Restore Backup"
                             Command="{Binding RestoreBackupCommand}"/>
                 </StackPanel>
 
                 <!--Choose profile-->
-                <ListBox Grid.Row="3"
+                <ListBox Grid.Row="2"
                          Visibility="{Binding ProfileSelectionVisible}"
                          HorizontalAlignment="Stretch"
                          ItemsSource="{Binding Profiles}"
@@ -66,7 +83,7 @@
                 </ListBox>
                 
                 <!--Passphrase grid-->
-                <Grid Grid.Row="4"
+                <Grid Grid.Row="3"
                       Visibility="{Binding ProfileSelectionVisible}"
                       Margin="0,0,0,12">
 

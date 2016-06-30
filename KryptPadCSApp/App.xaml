@@ -48,10 +48,13 @@
             <Setter Property="FontSize" Value="{ThemeResource SplitViewNormalNavFontSize}" />
         </Style>
 
-        <Style x:Key="LoginGridStyle" TargetType="Grid">
-            <Setter Property="Background" Value="{StaticResource AppLoginMainGridBackgroundBrush}"/>
+        <Style x:Key="LoginGridWrapperStyle" TargetType="Grid">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="MaxWidth" Value="400" />
+        </Style>
+        
+        <Style x:Key="LoginGridStyle" TargetType="Grid">
+            <Setter Property="Background" Value="{StaticResource AppLoginMainGridBackgroundBrush}"/>
             <Setter Property="Padding" Value="12" />
         </Style>
         
