@@ -56,6 +56,22 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private Visibility _emptyMessageVisibility;
+        /// <summary>
+        /// Gets or sets whether the empty message is visible
+        /// </summary>
+        public Visibility EmptyMessageVisibility
+        {
+            get { return _emptyMessageVisibility; }
+            set
+            {
+                _emptyMessageVisibility = value;
+                // Changed
+                OnPropertyChanged(nameof(EmptyMessageVisibility));
+            }
+        }
+
+
         /// <summary>
         /// Opens new category page
         /// </summary>
@@ -87,6 +103,8 @@ namespace KryptPadCSApp.Models
             // Register commands
             RegisterCommands();
 
+            // Hide the message
+            //EmptyMessageVisibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -302,7 +320,7 @@ namespace KryptPadCSApp.Models
                             // Failed
                             await DialogHelper.ShowConnectionErrorMessageDialog();
                         }
-                        
+
                     }
                 );
 
@@ -381,6 +399,9 @@ namespace KryptPadCSApp.Models
 
                 // Refresh
                 OnPropertyChanged(nameof(ItemsView));
+
+                // Show empty message if there are no categories
+                EmptyMessageVisibility = Categories.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             }
             catch (WebException ex)
             {
