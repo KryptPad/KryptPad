@@ -521,26 +521,24 @@ namespace KryptPad.Api
 
             using (var client = new HttpClient())
             {
-                //authorize the request
+                // Authorize the request
                 await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
-                //send request and get a response
+                // Send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/with-items"));
-                //read the data
-                var data = await response.Content.ReadAsStringAsync();
 
-                //deserialize the object based on the result
+                // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
-                    //deserialize the response as an ApiResponse object
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
                     return JsonConvert.DeserializeObject<CategoryResponse>(data);
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
 
@@ -555,26 +553,24 @@ namespace KryptPad.Api
 
             using (var client = new HttpClient())
             {
-                //authorize the request
+                // Authorize the request
                 await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
-                //send request and get a response
+                // Send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories"));
-                //read the data
-                var data = await response.Content.ReadAsStringAsync();
 
-                //deserialize the object based on the result
+                // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
-                    //deserialize the response as an ApiResponse object
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
                     return JsonConvert.DeserializeObject<CategoryResponse>(data);
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
 
@@ -653,12 +649,7 @@ namespace KryptPad.Api
                 }
                 else
                 {
-                    // Read the data
-                    var data = await response.Content.ReadAsStringAsync();
-
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
         }
@@ -709,26 +700,24 @@ namespace KryptPad.Api
         {
             using (var client = new HttpClient())
             {
-                //authorize the request
+                // Authorize the request
                 await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
-                //send request and get a response
+                // Send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}"));
-                //read the data
-                var data = await response.Content.ReadAsStringAsync();
 
-                //deserialize the object based on the result
+                // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
-                    //deserialize the response as an ApiResponse object
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
                     return JsonConvert.DeserializeObject<ItemsResponse>(data);
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
 
@@ -765,19 +754,17 @@ namespace KryptPad.Api
                     response = await client.PutAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{item.Id}"), content);
                 }
 
-                // Get the response content
-                var data = await response.Content.ReadAsStringAsync();
-
                 // Check if the response is a success code
                 if (response.IsSuccessStatusCode)
                 {
+                    // Get the response content
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Create SuccessResponse object
                     return new SuccessResponse(Convert.ToInt32(data));
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
 
 
@@ -803,15 +790,10 @@ namespace KryptPad.Api
                 // Execute request
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}"));
 
-                // Get the response content
-                var data = await response.Content.ReadAsStringAsync();
-
                 // Check if the response is a success code
                 if (!response.IsSuccessStatusCode)
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
 
 
@@ -856,26 +838,22 @@ namespace KryptPad.Api
                     // Update
                     response = await client.PutAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields/{field.Id}"), content);
                 }
-
-                // Get the response content
-                var data = await response.Content.ReadAsStringAsync();
-
+                                
                 // Check if the response is a success code
                 if (response.IsSuccessStatusCode)
                 {
+                    // Get the response content
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Create SuccessResponse object
                     return new SuccessResponse(Convert.ToInt32(data));
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
 
 
             }
-
-
 
 
         }
@@ -892,26 +870,24 @@ namespace KryptPad.Api
         {
             using (var client = new HttpClient())
             {
-                //authorize the request
+                // Authorize the request
                 await AuthorizeRequest(client);
                 // Add passphrase to message
                 AddPassphraseHeader(client);
-                //send request and get a response
+                // Send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields"));
-                //read the data
-                var data = await response.Content.ReadAsStringAsync();
-
-                //deserialize the object based on the result
+                
+                // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
-                    //deserialize the response as an ApiResponse object
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
                     return JsonConvert.DeserializeObject<FieldsResponse>(data);
                 }
                 else
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
             }
 
@@ -935,16 +911,11 @@ namespace KryptPad.Api
 
                 // Execute request
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields/{id}"));
-
-                // Get the response content
-                var data = await response.Content.ReadAsStringAsync();
-
+                
                 // Check if the response is a success code
                 if (!response.IsSuccessStatusCode)
                 {
-                    var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-                    // Throw exception with the WebExceptionResponse
-                    throw wer.ToException();
+                    throw await CreateException(response);
                 }
 
 
@@ -1062,7 +1033,7 @@ namespace KryptPad.Api
                 EventHandler expHandle = AccessTokenExpired;
                 expHandle?.Invoke(null, EventArgs.Empty);
             }
-            
+
         }
 
         /// <summary>
