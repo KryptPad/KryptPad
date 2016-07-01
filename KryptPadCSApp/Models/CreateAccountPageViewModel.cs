@@ -135,7 +135,7 @@ namespace KryptPadCSApp.Models
             AccountInfoVisibility = IsBusy ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        protected bool CanSignUp() => !string.IsNullOrEmpty(Email) && !string.IsNullOrWhiteSpace(Password) && Password.Equals(ConfirmPassword);
+        protected bool CanSignUp() => !string.IsNullOrEmpty(Email) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(ConfirmPassword);
 
     }
 }
