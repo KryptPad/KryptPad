@@ -6,9 +6,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API.Responses
+namespace KryptPad.Api.Responses
 {
-    class ApiResponse
+    public class ApiResponse
     {
 
         #region Properties

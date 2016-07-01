@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API.Responses
+namespace KryptPad.Api.Responses
 {
-    class ModelState
+    public class ModelState
     {
         public string[] Errors { get; set; }
         

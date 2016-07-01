@@ -1,5 +1,5 @@
-﻿using KryptPadCSApp.API;
-using KryptPadCSApp.API.Responses;
+﻿using KryptPad.Api;
+using KryptPad.Api.Responses;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Views;
 using System;

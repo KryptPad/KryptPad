@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API.Models
+namespace KryptPad.Api.Models
 {
     public class ApiField
     {

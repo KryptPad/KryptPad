@@ -1,5 +1,5 @@
-﻿using KryptPadCSApp.API.Models;
-using KryptPadCSApp.API.Responses;
+﻿using KryptPad.Api.Models;
+using KryptPad.Api.Responses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,13 +15,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API
+namespace KryptPad.Api
 {
 
     /// <summary>
     /// Accesses the KryptPad API
     /// </summary>
-    class KryptPadApi
+    public class KryptPadApi
     {
 #if LOCAL
         /// <summary>

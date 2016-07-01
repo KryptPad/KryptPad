@@ -1,6 +1,6 @@
-﻿using KryptPadCSApp.API;
-using KryptPadCSApp.API.Models;
-using KryptPadCSApp.API.Responses;
+﻿using KryptPad.Api;
+using KryptPad.Api.Models;
+using KryptPad.Api.Responses;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Collections;
 using KryptPadCSApp.Dialogs;

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API.Responses
+namespace KryptPad.Api.Responses
 {
-    class SuccessResponse : ApiResponse
+    public class SuccessResponse : ApiResponse
     {
         /// <summary>
         /// Gets or sets the Id of the resource affected by the operation

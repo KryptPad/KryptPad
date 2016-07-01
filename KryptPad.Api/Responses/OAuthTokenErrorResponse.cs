@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Net;
 
-namespace KryptPadCSApp.API.Responses
+namespace KryptPad.Api.Responses
 {
-    class OAuthTokenErrorResponse : ApiWebExceptionResponse
+    public class OAuthTokenErrorResponse : ApiWebExceptionResponse
     {
 
         public string Error { get; set; }

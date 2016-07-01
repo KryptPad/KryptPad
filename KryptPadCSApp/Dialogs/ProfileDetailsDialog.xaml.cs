@@ -1,5 +1,5 @@
-﻿using KryptPadCSApp.API;
-using KryptPadCSApp.API.Models;
+﻿using KryptPad.Api;
+using KryptPad.Api.Models;
 using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;

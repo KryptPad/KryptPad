@@ -1,4 +1,4 @@
-﻿using KryptPadCSApp.API.Models;
+﻿using KryptPad.Api.Models;
 using KryptPadCSApp.Interfaces;
 using KryptPadCSApp.Models;
 using System;

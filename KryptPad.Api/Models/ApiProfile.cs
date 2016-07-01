@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API.Models
+namespace KryptPad.Api.Models
 {
-    class ApiProfile
+    public class ApiProfile
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -6,9 +6,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API.Responses
+namespace KryptPad.Api.Responses
 {
-    class WebExceptionResponse : ApiWebExceptionResponse
+    public class WebExceptionResponse : ApiWebExceptionResponse
     {
         public string Message { get; set; }
         public IDictionary<string, string[]> ModelState { get; set; }

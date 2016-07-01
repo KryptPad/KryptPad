@@ -5,9 +5,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.API.Responses
+namespace KryptPad.Api.Responses
 {
-    abstract class ApiWebExceptionResponse : ApiResponse
+    public abstract class ApiWebExceptionResponse : ApiResponse
     {
 
         /// <summary>

@@ -107,6 +107,24 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerators.cs" />
+    <Compile Include="KryptPadApi.cs" />
+    <Compile Include="Models\ApiCategory.cs" />
+    <Compile Include="Models\ApiField.cs" />
+    <Compile Include="Models\ApiFieldType.cs" />
+    <Compile Include="Models\ApiItem.cs" />
+    <Compile Include="Models\ApiProfile.cs" />
+    <Compile Include="Responses\ApiResponse.cs" />
+    <Compile Include="Responses\ApiWebExceptionResponse.cs" />
+    <Compile Include="Responses\CategoryResponse.cs" />
+    <Compile Include="Responses\FieldsResponse.cs" />
+    <Compile Include="Responses\ItemsResponse.cs" />
+    <Compile Include="Responses\ModelState.cs" />
+    <Compile Include="Responses\OAuthTokenErrorResponse.cs" />
+    <Compile Include="Responses\OAuthTokenResponse.cs" />
+    <Compile Include="Responses\ProfileResponse.cs" />
+    <Compile Include="Responses\SuccessResponse.cs" />
+    <Compile Include="Responses\WebExceptionResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\KryptPad.Api.rd.xml" />
   </ItemGroup>

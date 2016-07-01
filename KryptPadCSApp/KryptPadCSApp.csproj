@@ -115,28 +115,10 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Enumerators.cs" />
-    <Compile Include="API\Models\ApiCategory.cs" />
-    <Compile Include="API\Models\ApiField.cs" />
-    <Compile Include="API\Models\ApiFieldType.cs" />
-    <Compile Include="API\Models\ApiItem.cs" />
-    <Compile Include="API\Models\ApiProfile.cs" />
-    <Compile Include="API\Responses\ApiWebExceptionResponse.cs" />
-    <Compile Include="API\Responses\CategoryResponse.cs" />
-    <Compile Include="API\Responses\FieldsResponse.cs" />
-    <Compile Include="API\Responses\ItemsResponse.cs" />
-    <Compile Include="API\Responses\ProfileResponse.cs" />
-    <Compile Include="API\Responses\OAuthTokenErrorResponse.cs" />
-    <Compile Include="API\Responses\OAuthTokenResponse.cs" />
-    <Compile Include="API\Responses\SuccessResponse.cs" />
-    <Compile Include="API\Responses\WebExceptionResponse.cs" />
-    <Compile Include="API\Responses\ApiResponse.cs" />
-    <Compile Include="API\Responses\ModelState.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\DialogHelper.cs" />
-    <Compile Include="API\KryptPadApi.cs" />
     <Compile Include="Classes\Enumerators.cs" />
     <Compile Include="Classes\NavigationHelper.cs" />
     <Compile Include="Classes\ItemTemplate.cs" />
@@ -325,7 +307,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\KryptPad.Api\KryptPad.Api.csproj">
+      <Project>{6a8f9834-4603-4bd9-8aa5-c3a6a3a90b36}</Project>
+      <Name>KryptPad.Api</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

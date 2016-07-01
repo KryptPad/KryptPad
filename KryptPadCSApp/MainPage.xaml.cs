@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Security.Authentication.OnlineId;
 using KryptPadCSApp.Classes;
-using KryptPadCSApp.API;
+using KryptPad.Api;
 using Windows.UI.Core;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
