@@ -8,7 +8,7 @@
     x:Class="KryptPadCSApp.Views.CreateAccountPage"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{StaticResource AppLoginBackgroundBrush}">
 
         <Grid.DataContext>
             <Models:CreateAccountPageViewModel/>
@@ -16,14 +16,28 @@
 
         <!--Main grid for page-->
         <Grid x:Name="MainGrid"
-              VerticalAlignment="Top" 
-              HorizontalAlignment="Stretch"
-			  MaxWidth="400"
-			  Padding="10">
-            
-            
+              Visibility="{Binding AccountInfoVisibility}"
+              Style="{StaticResource LoginGridWrapperStyle}">
 
-            <Grid Visibility="{Binding AccountInfoVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <!--Header-->
+            <StackPanel Grid.Row="0"
+                       >
+                <TextBlock Text="Krypt Pad" 
+                           Style="{ThemeResource HeaderTextBlockStyle}"    
+                           Foreground="White"/>
+                <TextBlock Text="SIGN UP" 
+                           Margin="0,0,0,12"    
+                           Style="{ThemeResource SubtitleTextBlockStyle}"    
+                           Foreground="White"/>
+            </StackPanel>
+
+
+            <Grid Grid.Row="1"  Style="{StaticResource LoginGridStyle}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
@@ -31,38 +45,35 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" Text="Create Account" Style="{ThemeResource HeaderTextBlockStyle}" />
                 
-                <TextBlock Grid.Row="1"
+                <TextBlock Grid.Row="0"
 					Margin="0,0,0,10"
 					TextWrapping="WrapWholeWords">
 					<Run Text="Before you can use KryptPad, you must create an account with kryptpad.com."/>
                 </TextBlock>
 
                 <!--Login email address-->
-                <TextBox Grid.Row="2" PlaceholderText="Email Address" Margin="0,0,0,10"
+                <TextBox Grid.Row="1" PlaceholderText="Email Address" Margin="0,0,0,10"
 					InputScope="EmailNameOrAddress"
 					Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <!--Password-->
-                <PasswordBox Grid.Row="3" PlaceholderText="Password" Margin="0,0,0,10" 
+                <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,10" 
 					Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <!--Password-->
-                <PasswordBox Grid.Row="4" PlaceholderText="Confirm Password" Margin="0,0,0,10" 
+                <PasswordBox Grid.Row="3" PlaceholderText="Confirm Password" Margin="0,0,0,10" 
 					Password="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <!--Link to terms page-->
-                <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,10">
+                <TextBlock Grid.Row="4" TextWrapping="WrapWholeWords" Margin="0,0,0,10">
                     Krypt Pad is licensed under MIT. By using this software, you accept this
                     <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the
                     <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
                 </TextBlock>
 
-                <Button Grid.Row="6"
+                <Button Grid.Row="5"
                         Margin="0,0,10,0" 
                         Content="Create Account" 
                         Command="{Binding CreateAccountCommand}"/>
@@ -77,7 +88,7 @@
                       IsActive="{Binding IsBusy}"
                       Width="50"
                       Height="50"
-                      Foreground="{StaticResource ApplicationForegroundThemeBrush}"/>
+                      Foreground="White"/>
 
 
         <VisualStateManager.VisualStateGroups>

@@ -18,10 +18,10 @@
         <!--Main grid for page-->
         <Grid x:Name="MainGrid"
               Style="{StaticResource LoginGridWrapperStyle}" >
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
-                
             </Grid.RowDefinitions>
 
             <!--Header-->
