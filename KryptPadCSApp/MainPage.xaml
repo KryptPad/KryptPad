@@ -9,7 +9,27 @@
     mc:Ignorable="d">
 
     <Grid>
-        <SplitView x:Name="ShellSplitView" 
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Pivot Title="Krypt Pad">
+                <PivotItem Header="Items">
+                    <Grid/>
+                </PivotItem>
+                <PivotItem Header="PivotItem 1">
+                    <Grid/>
+                </PivotItem>
+            </Pivot>
+
+        </Grid>
+        
+        
+        <SplitView x:Name="ShellSplitView"
+                   Grid.Row="1"
                    CompactPaneLength="48" OpenPaneLength="300"
 		           PaneBackground="{ThemeResource SplitViewBackgroundBrush}">
             
