@@ -48,22 +48,19 @@ namespace KryptPadCSApp
         /// </summary>
         internal bool DisableAutoLogin { get; set; }
 
-        private TimeSpan _timeRemaining;
+        private bool _isSignedIn;
         /// <summary>
         /// Gets or sets the time remaining on the session
         /// </summary>
-        internal TimeSpan TimeRemaining
+        internal bool IsSignedIn
         {
-            get
-            {
-                return _timeRemaining;
-            }
+            get { return _isSignedIn; }
             set
             {
-                // Set time
-                _timeRemaining = value;
+                // Set value
+                _isSignedIn = value;
                 // Value changed
-                OnPropertyChanged(nameof(TimeRemaining));
+                OnPropertyChanged(nameof(IsSignedIn));
             }
 
         }
@@ -99,9 +96,14 @@ namespace KryptPadCSApp
             // just ensure that the window is active
             if (Window.Current.Content == null)
             {
-                // Create a Frame to act as the navigation context and navigate to the first page
-                _rootFrame = new Frame();
+                // Create main page instance
+                var mainPage = new MainPage();
 
+
+                //Get the Frame to act as the navigation context and navigate to the first page
+                _rootFrame = mainPage.RootFrame;
+
+                // Add some event handlers
                 _rootFrame.NavigationFailed += OnNavigationFailed;
                 _rootFrame.Navigated += OnNavigated;
 
@@ -111,10 +113,7 @@ namespace KryptPadCSApp
                 }
 
                 // Place the frame in the current Window
-                //Window.Current.Content = _rootFrame;
-                Window.Current.Content = new MainPage(_rootFrame);
-
-
+                Window.Current.Content = mainPage;
 
 
                 // Register a handler for BackRequested events and set the
@@ -188,23 +187,23 @@ namespace KryptPadCSApp
                 AppViewBackButtonVisibility.Visible :
                 AppViewBackButtonVisibility.Collapsed;
 
-            // Get the MainPage instance and hide the pane
-            var page = Window.Current.Content as MainPage;
-            if (page != null)
-            {
-                // Check the page type, and hide or show the pane
-                if (typeof(INoSideNavPage).IsAssignableFrom(e.SourcePageType))
-                {
-                    // Hide pane
-                    page.ShowPane(false);
-                }
-                else
-                {
-                    // Show pane
-                    page.ShowPane(true);
+            //// Get the MainPage instance and hide the pane
+            //var page = Window.Current.Content as MainPage;
+            //if (page != null)
+            //{
+            //    // Check the page type, and hide or show the pane
+            //    if (typeof(INoSideNavPage).IsAssignableFrom(e.SourcePageType))
+            //    {
+            //        // Hide pane
+            //        page.ShowPane(false);
+            //    }
+            //    else
+            //    {
+            //        // Show pane
+            //        page.ShowPane(true);
 
-                }
-            }
+            //    }
+            //}
         }
 
         /// <summary>

@@ -105,6 +105,8 @@ namespace KryptPadCSApp.Models
             // Ensure that the access token is cleared upon arrival
             KryptPadApi.SignOutAsync();
 
+            (App.Current as App).IsSignedIn = false;
+
             // Register commands
             RegisterCommands();
             

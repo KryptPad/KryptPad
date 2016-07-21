@@ -12,141 +12,63 @@
 
     <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <Grid Padding="12"
+            <!--Nav grid-->
+            <Grid Grid.Row="0"
+              Padding="12"
               Background="{StaticResource AppLoginBackgroundBrush}"
               >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Style="{StaticResource SubtitleTextBlockStyle}" Text="Krypt Pad" Foreground="White" />
+                <!--Header text-->
+                <TextBlock Grid.Column="0" Style="{StaticResource SubtitleTextBlockStyle}" Text="Krypt Pad" Foreground="White" />
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-                <StackPanel.Resources>
-                    <Style TargetType="TextBlock">
-
-                        <Setter Property="Foreground" Value="White" />
-                        <Setter Property="FontFamily" Value="{StaticResource SymbolThemeFontFamily}" />
-
-                    </Style>
-
-                    <Style TargetType="Button">
-                        <Setter Property="Margin" Value="0"/>
-                        <Setter Property="Padding" Value="8,0"/>
-                        <Setter Property="Foreground" Value="White" />
-                        <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="FontSize" Value="20" />
-                        <Setter Property="Background" Value="Transparent" />
-                    </Style>
-
-                </StackPanel.Resources>
-
-                <!--Symbols-->
-                <!--About-->
-                <RadioButton x:Name="AboutRadioButton" Tag="&#xE783;" Style="{StaticResource TabNavButtonStyle}" 
-                                     Click="AboutRadioButton_Click" IsChecked="True" >
-                </RadioButton>
-                <!--Feedback-->
-                <RadioButton x:Name="FeedbackRadioButton" Tag="&#xE76E;" Content="Feedback" Style="{StaticResource TabNavButtonStyle}" 
-                                     Click="FeedbackRadioButton_Click"/>
-                <!--Donate-->
-                <Button>
-                    <TextBlock Text="&#xE00B;" />
-                </Button>
-                <!--Home-->
-                <Button>
-                    <TextBlock Text="&#xE10F;" />
-                </Button>
-            </StackPanel>
-        </Grid>
+                <!--Navigation icons-->
+                <StackPanel x:Name="NavPanel"
+                        Grid.Column="1" 
+                        Orientation="Horizontal"
+                        FlowDirection="RightToLeft">
+                    <!--Symbols-->
+                    <!--Sign out-->
+                    <RadioButton x:Name="SignOutRadioButton" Tag="&#xE72B;"
+                             Style="{StaticResource TabNavButtonStyle}"
+                             Click="SignOutRadioButton_Click" />
+                    <!--About-->
+                    <RadioButton x:Name="AboutRadioButton" Tag="&#xE783;"
+                             Style="{StaticResource TabNavButtonStyle}" 
+                             Click="AboutRadioButton_Click" IsChecked="True" />
+                    <!--Feedback-->
+                    <RadioButton x:Name="FeedbackRadioButton" Tag="&#xE76E;"
+                             Style="{StaticResource TabNavButtonStyle}" 
+                             Click="FeedbackRadioButton_Click"/>
+                    <!--Donate-->
+                    <RadioButton x:Name="DonateRadioButton" Tag="&#xE00B;"
+                             Style="{StaticResource TabNavButtonStyle}" 
+                             Click="DonateRadioButton_Click"/>
+                    <!--Home-->
+                    <RadioButton x:Name="HomeRadioButton" Tag="&#xE10F;" Content="Home" 
+                             Style="{StaticResource TabNavButtonStyle}" IsChecked="True" 
+                             Click="HomeRadioButton_Click" />
+                </StackPanel>
+            </Grid>
 
 
-        <Grid Grid.Row="1">
-            <Pivot x:Name="NavPivot">
-
-                <PivotItem Header="Home">
-                    <Grid>
-                        <TextBlock Text="Item 1" />
-                    </Grid>
-                </PivotItem>
-                <PivotItem Header="Donate">
-                    <TextBlock Text="Item 2" />
-                </PivotItem>
-            </Pivot>
+            <!--Main frame-->
+            <Frame x:Name="NavFrame" Grid.Row="1"/>
 
         </Grid>
-
-
-        <SplitView x:Name="ShellSplitView"
-                   Grid.Row="2"
-                   CompactPaneLength="48" OpenPaneLength="300"
-		           PaneBackground="{ThemeResource SplitViewBackgroundBrush}">
-
-            <SplitView.Pane>
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
-
-                    <StackPanel Grid.Row="0">
-                        <!-- Menu (hamburger) button -->
-                        <RadioButton x:Name="MenuRadioButton" Style="{StaticResource SplitViewMenuButtonStyle}" Click="MenuRadioButton_Click" />
-
-                        <!-- Home button -->
-                        <RadioButton x:Name="HomeRadioButton" Tag="&#xE10F;" Content="Home" Style="{StaticResource SplitViewNavButtonStyle}" IsChecked="True" Click="HomeRadioButton_Click" />
-
-                        <!-- Search button -->
-                        <!--<RadioButton x:Name="SearchRadioButton"  Tag="&#xE11A;" Content="Search" Style="{StaticResource SplitViewNavButtonStyle}"
-                                     Click="SearchRadioButton_Click"/>-->
-
-                        <!-- Categories button -->
-                        <RadioButton x:Name="CategoriesRadioButton" Tag="&#xEA37;" Content="Categories" Style="{StaticResource SplitViewNavButtonStyle}"
-                                     Click="CategoriesRadioButton_Click"/>
-
-                        <!--Donate-->
-                        <RadioButton x:Name="DonateRadioButton" Tag="&#xE00B;" Content="Donate" Style="{StaticResource SplitViewNavButtonStyle}" 
-                                     Click="DonateRadioButton_Click"/>
-
-                        <!-- Feedback button -->
-                        <!--<RadioButton x:Name="FeedbackRadioButton" Tag="&#xE76E;" Content="Feedback" Style="{StaticResource SplitViewNavButtonStyle}" 
-                                     Click="FeedbackRadioButton_Click"/>-->
-
-                        <!-- Settings button -->
-                        <!--<RadioButton Tag="&#xE115;" Content="Settings" Style="{StaticResource SplitViewNavButtonStyle}"  />-->
-
-                        <!-- About button -->
-                        <!--<RadioButton x:Name="AboutRadioButton" Tag="&#xE783;" Content="About" Style="{StaticResource SplitViewNavButtonStyle}" 
-                                     Click="AboutRadioButton_Click"/>-->
-
-
-
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="1">
-                        <TextBlock x:Name="CountDownTextBlock"
-                                   Foreground="{StaticResource SplitViewForegroundBrush}"
-                                   Text="00:00" Margin="6,0,0,0"
-                                   />
-                        <!-- Sign out button -->
-                        <RadioButton x:Name="SignOutRadioButton" Tag="&#xE72B;" Content="Sign out" Style="{StaticResource SplitViewNavButtonStyle}" Click="SignOutRadioButton_Click" />
-                    </StackPanel>
-                </Grid>
-
-            </SplitView.Pane>
-        </SplitView>
 
         <!--Progress indicator-->
         <Border x:Name="BusyBorder"
-                Background="#3F000000"
+                Background="#7F000000"
                 Visibility="Collapsed">
 
             <!--Indicates something is happening-->
@@ -155,10 +77,11 @@
                           IsActive="False"
                           Width="50"
                           Height="50"
-                          Foreground="{StaticResource ApplicationForegroundThemeBrush}"/>
+                          Foreground="{StaticResource AppDarkForegroundBrush}"/>
         </Border>
 
-        <VisualStateManager.VisualStateGroups>
+        <!--Manage layout-->
+        <!--<VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup" >
 
                 <VisualState x:Name="VisualStatePhone">
@@ -183,7 +106,7 @@
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+        </VisualStateManager.VisualStateGroups>-->
     </Grid>
 
 

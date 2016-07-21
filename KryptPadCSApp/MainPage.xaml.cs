@@ -32,100 +32,103 @@ namespace KryptPadCSApp
     public sealed partial class MainPage : Page
     {
         #region Properties
-        public Frame RootFrame { get; private set; }
+        /// <summary>
+        /// Gets the main frame for content
+        /// </summary>
+        public Frame RootFrame { get { return NavFrame; } }
 
         private bool IsBusy { get; set; }
         #endregion
 
 
-        public MainPage(Frame frame)
+        public MainPage()
         {
             this.InitializeComponent();
 
-            RootFrame = frame;
-            ShellSplitView.Content = RootFrame;
+            //RootFrame = frame;
+            //ShellSplitView.Content = RootFrame;
 
-            KryptPadApi.AccessTokenExpirationTimer += async (expiration) =>
+            //KryptPadApi.AccessTokenExpirationTimer += async (expiration) =>
+            //{
+            //    // Get time remaining
+            //    var timeRemaining = DateTime.Now.Subtract(expiration);
+
+            //    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            //    {
+            //        CountDownTextBlock.Text = timeRemaining.ToString(@"mm\:ss");
+            //    });
+            //};
+
+            // Success, tell the app we are signed in
+            (App.Current as App).PropertyChanged += (sender, e) =>
             {
-                // Get time remaining
-                var timeRemaining = DateTime.Now.Subtract(expiration);
-
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                // Success, tell the app we are signed in
+                if (e.PropertyName == nameof(App.IsSignedIn))
                 {
-                    CountDownTextBlock.Text = timeRemaining.ToString(@"mm\:ss");
-                });
+                    ShowPane((App.Current as App).IsSignedIn);
+                }
             };
 
         }
 
-        private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
-        {
+        //private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
+        //{
 
-            // This button should not be checked
-            MenuRadioButton.IsChecked = false;
-            // Command the split view to be closed or opened
-            ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
+        //    // This button should not be checked
+        //    //MenuRadioButton.IsChecked = false;
+        //    // Command the split view to be closed or opened
+        //    ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
 
-        }
+        //}
 
         private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
+            //if (IsBusy) return;
 
             // Navigate
             NavigationHelper.Navigate(typeof(ItemsPage), null);
-
-            // Close the pane
-            ClosePane();
+            
         }
 
-        private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsBusy) return;
+        //private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //if (IsBusy) return;
 
-            // Navigate
-            NavigationHelper.Navigate(typeof(ManageCategoriesPage), null);
-
-            // Close the pane
-            ClosePane();
-        }
+        //    // Navigate
+        //    NavigationHelper.Navigate(typeof(ManageCategoriesPage), null);
+            
+        //}
 
         private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
+            //if (IsBusy) return;
 
             // Navigate
             NavigationHelper.Navigate(typeof(DonatePage), null);
-
-            // Close the pane
-            ClosePane();
+            
         }
 
         private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
+            //if (IsBusy) return;
 
             // Navigate
             NavigationHelper.Navigate(typeof(FeedbackPage), null);
 
-            // Close the pane
-            ClosePane();
         }
 
         private void AboutRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
+            //if (IsBusy) return;
 
             // Navigate
             NavigationHelper.Navigate(typeof(AboutPage), null);
-
-            // Close the pane
-            ClosePane();
+            
         }
 
         private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
+            //if (IsBusy) return;
 
             await DialogHelper.Confirm("Are you sure you want to sign out?", "SIGN OUT", (p) =>
             {
@@ -134,26 +137,25 @@ namespace KryptPadCSApp
                 // Clear backstack
                 NavigationHelper.ClearBackStack();
             });
-
-
+            
         }
 
         #region Helper Methods
 
-        /// <summary>
-        /// Closes the pane if in CompactOverlay mode
-        /// </summary>
-        private void ClosePane()
-        {
-            // Check to see if the pane is in overlay mode, if it is, then we close it,
-            // otherwise, we do not close it
-            if (ShellSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
-            {
-                // Only force closed when in CompactOverlay mode
-                ShellSplitView.IsPaneOpen = false;
-            }
-        }
-        
+        ///// <summary>
+        ///// Closes the pane if in CompactOverlay mode
+        ///// </summary>
+        //private void ClosePane()
+        //{
+        //    // Check to see if the pane is in overlay mode, if it is, then we close it,
+        //    // otherwise, we do not close it
+        //    if (ShellSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
+        //    {
+        //        // Only force closed when in CompactOverlay mode
+        //        ShellSplitView.IsPaneOpen = false;
+        //    }
+        //}
+
 
         #endregion
 
@@ -165,8 +167,13 @@ namespace KryptPadCSApp
         /// <param name="value"></param>
         public void ShowPane(bool value)
         {
-            ShellSplitView.CompactPaneLength = (value ? 48 : 0);
-            ShellSplitView.OpenPaneLength = (value ? 300 : 0);
+            // Hide nav panel
+            NavPanel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+
+            //// Hide buttons we can't access yet
+            //var visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            //SignOutRadioButton.Visibility = visibility;
+            //HomeRadioButton.Visibility = visibility;
         }
 
         /// <summary>

@@ -78,7 +78,8 @@ namespace KryptPadCSApp.Models
         protected virtual void OnIsBusyChanged() {
             // Set the visibility of the busy indicator
             BusyIndicatorVisibility = IsBusy ? Visibility.Visible : Visibility.Collapsed;
-
+            // Set main window busy state
+            (Window.Current.Content as MainPage).SetIsBusy(IsBusy);
         }
 
         #endregion
