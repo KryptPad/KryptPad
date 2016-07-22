@@ -15,63 +15,65 @@
 
     <Grid Background="{StaticResource AppLoginBackgroundBrush}">
 
-        <!--Main grid for page-->
-        <Grid x:Name="MainGrid"
-              Style="{StaticResource LoginGridWrapperStyle}" >
-            
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+        <ScrollViewer>
 
-            <!--Header-->
-            <StackPanel Grid.Row="0"
-                       >
-                <TextBlock Text="Krypt Pad" 
-                           Style="{ThemeResource HeaderTextBlockStyle}"    
-                           Foreground="White"/>
-                <TextBlock Text="PROFILES" 
-                           Margin="0,0,0,12"    
-                           Style="{ThemeResource SubtitleTextBlockStyle}"    
-                           Foreground="White"/>
-            </StackPanel>
-            
-            <!--Profiles-->
-            <Grid Grid.Row="1"
-                  Style="{StaticResource LoginGridStyle}">
-                
+            <!--Main grid for page-->
+            <Grid x:Name="MainGrid"
+              Style="{StaticResource LoginGridWrapperStyle}" >
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    
                 </Grid.RowDefinitions>
-                                
-                <!--Description-->
-                <TextBlock Grid.Row="0"
+
+                <!--Header-->
+                <StackPanel Grid.Row="0"
+                       >
+                    <!--<TextBlock Text="Krypt Pad" 
+                           Style="{ThemeResource HeaderTextBlockStyle}"    
+                           Foreground="White"/>-->
+                    <TextBlock Text="PROFILES" 
+                           Margin="0,0,0,12"    
+                           Style="{ThemeResource SubtitleTextBlockStyle}"    
+                           Foreground="White"/>
+                </StackPanel>
+
+                <!--Profiles-->
+                <Grid Grid.Row="1"
+                  Style="{StaticResource LoginGridStyle}">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+
+                    </Grid.RowDefinitions>
+
+                    <!--Description-->
+                    <TextBlock Grid.Row="0"
                            TextWrapping="WrapWholeWords"
                            Margin="0,0,0,12">
                     Select a profile from the list, or create a new profile. You can also restore a profile from a backup.
-                </TextBlock>
+                    </TextBlock>
 
-                <!--Create or restore profile-->
-                <StackPanel Grid.Row="1"
+                    <!--Create or restore profile-->
+                    <StackPanel Grid.Row="1"
                             Margin="0,0,0,24"
                             Orientation="Horizontal">
-                    
-                    <!--Create new profile-->
-                    <Button Content="Create Profile"
+
+                        <!--Create new profile-->
+                        <Button Content="Create Profile"
                             Command="{Binding CreateProfileCommand}"
                             Margin="0,0,12,0"/>
 
-                    <!--Restore a profile from a backup-->
-                    <Button Content="Restore Backup"
+                        <!--Restore a profile from a backup-->
+                        <Button Content="Restore Backup"
                             Command="{Binding RestoreBackupCommand}"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!--Choose profile-->
-                <ListBox Grid.Row="2"
+                    <!--Choose profile-->
+                    <ListBox Grid.Row="2"
                          Visibility="{Binding ProfileSelectionVisible}"
                          HorizontalAlignment="Stretch"
                          ItemsSource="{Binding Profiles}"
@@ -80,40 +82,41 @@
                          ItemTemplate="{StaticResource ProfileListDataTemplate}" SelectionChanged="ListBox_SelectionChanged"
                          >
 
-                </ListBox>
-                
-                <!--Passphrase grid-->
-                <Grid Grid.Row="3"
+                    </ListBox>
+
+                    <!--Passphrase grid-->
+                    <Grid Grid.Row="3"
                       Visibility="{Binding ProfileSelectionVisible}"
                       Margin="0,0,0,12">
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <!--Enter passphrase-->
-                    <PasswordBox x:Name="PassphrasePasswordBox"
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--Enter passphrase-->
+                        <PasswordBox x:Name="PassphrasePasswordBox"
                                  Grid.Column="0"
                                  Password="{Binding Passphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  PlaceholderText="Enter passphrase" KeyUp="PassphrasePasswordBox_KeyUp"/>
 
-                    <Button Grid.Column="1"
+                        <Button Grid.Column="1"
                             Command="{Binding EnterProfileCommand}" VerticalAlignment="Bottom">
-                        <SymbolIcon Symbol="Forward" />
-                    </Button>
-                </Grid>
+                            <SymbolIcon Symbol="Forward" />
+                        </Button>
+                    </Grid>
 
-               
+
+
+                </Grid>
 
             </Grid>
 
-        </Grid>
-
+        </ScrollViewer>
 
         <!--Visual state manager-->
         <VisualStateManager.VisualStateGroups>
-            
+
             <VisualStateGroup x:Name="VisualStateGroup">
 
                 <!--Vertical align the grid to the top of the page-->

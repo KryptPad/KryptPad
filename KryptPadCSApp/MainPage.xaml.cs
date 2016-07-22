@@ -69,6 +69,35 @@ namespace KryptPadCSApp
                 }
             };
 
+            RootFrame.Navigated += RootFrame_Navigated;
+
+        }
+
+        private void RootFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            // Get the MainPage instance and hide the pane
+            var page = Window.Current.Content as MainPage;
+            if (page != null)
+            {
+                // Check the page type, and hide or show the pane
+                if (e.Content is ItemsPage)
+                {
+                    HomeRadioButton.IsChecked = true;
+                }
+                else if (e.Content is DonatePage)
+                {
+                    DonateRadioButton.IsChecked = true;
+                }
+                else if (e.Content is FeedbackPage)
+                {
+                    FeedbackRadioButton.IsChecked = true;
+                }
+                else if (e.Content is AboutPage)
+                {
+                    AboutRadioButton.IsChecked = true;
+                }
+
+            }
         }
 
         //private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
@@ -87,7 +116,7 @@ namespace KryptPadCSApp
 
             // Navigate
             NavigationHelper.Navigate(typeof(ItemsPage), null);
-            
+
         }
 
         //private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
@@ -96,7 +125,7 @@ namespace KryptPadCSApp
 
         //    // Navigate
         //    NavigationHelper.Navigate(typeof(ManageCategoriesPage), null);
-            
+
         //}
 
         private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
@@ -105,7 +134,7 @@ namespace KryptPadCSApp
 
             // Navigate
             NavigationHelper.Navigate(typeof(DonatePage), null);
-            
+
         }
 
         private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
@@ -123,7 +152,7 @@ namespace KryptPadCSApp
 
             // Navigate
             NavigationHelper.Navigate(typeof(AboutPage), null);
-            
+
         }
 
         private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
@@ -137,7 +166,7 @@ namespace KryptPadCSApp
                 // Clear backstack
                 NavigationHelper.ClearBackStack();
             });
-            
+
         }
 
         #region Helper Methods

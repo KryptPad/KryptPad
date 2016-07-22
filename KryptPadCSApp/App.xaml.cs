@@ -186,24 +186,6 @@ namespace KryptPadCSApp
                 ((Frame)sender).CanGoBack ?
                 AppViewBackButtonVisibility.Visible :
                 AppViewBackButtonVisibility.Collapsed;
-
-            //// Get the MainPage instance and hide the pane
-            //var page = Window.Current.Content as MainPage;
-            //if (page != null)
-            //{
-            //    // Check the page type, and hide or show the pane
-            //    if (typeof(INoSideNavPage).IsAssignableFrom(e.SourcePageType))
-            //    {
-            //        // Hide pane
-            //        page.ShowPane(false);
-            //    }
-            //    else
-            //    {
-            //        // Show pane
-            //        page.ShowPane(true);
-
-            //    }
-            //}
         }
 
         /// <summary>
