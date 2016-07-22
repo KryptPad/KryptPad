@@ -47,6 +47,19 @@ namespace KryptPadCSApp.Views
         {
             await (DataContext as LoginPageViewModel).AutoLoginAsync();
         }
-        
+
+        private void PasswordBox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                // Trigger login
+                var m = DataContext as LoginPageViewModel;
+
+                if (m.LogInCommand.CanExecute(null))
+                {
+                    m.LogInCommand.Execute(null);
+                }
+            }
+        }
     }
 }

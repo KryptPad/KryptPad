@@ -108,6 +108,9 @@ namespace KryptPadCSApp.Models
         /// <returns></returns>
         public async Task GetProfilesAsync()
         {
+
+            IsBusy = true;
+
             // Call the api and get some data!
             try
             {
@@ -139,6 +142,8 @@ namespace KryptPadCSApp.Models
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
+
+            IsBusy = false;
         }
 
         /// <summary>

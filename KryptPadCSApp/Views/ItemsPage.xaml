@@ -123,14 +123,6 @@
 
         </Grid>
 
-        <!--Progress indicator-->
-        <ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
-                      IsActive="{Binding IsBusy}"
-                      Width="50"
-                      Height="50"
-                      Grid.Row="2"
-                      Foreground="{StaticResource ApplicationForegroundThemeBrush}"/>
-
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="VisualStatePhone">
