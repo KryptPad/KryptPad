@@ -79,13 +79,13 @@
             <!--Items grid-->
             <GridView Grid.Row="0"
                       CanDragItems="true"
-                      AllowDrop="True"
                       DragItemsStarting="GridView_DragItemsStarting"
                       ItemsSource="{Binding ItemsView.View}"
                       IsItemClickEnabled="true"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                       ItemTemplate="{StaticResource GridViewItemsTemplate }">
 
+                <!--Group header style-->
                 <GridView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
@@ -114,12 +114,15 @@
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
 
+                        <!--Define a template for the items panel-->
                         <GroupStyle.Panel>
                             <ItemsPanelTemplate>
+                                <!--This seems to be ignored-->
                                 <VariableSizedWrapGrid Orientation="Vertical" AllowDrop="True"
                                                        DragOver="VariableSizedWrapGrid_DragOver"
                                                        Drop="VariableSizedWrapGrid_Drop"
                                                        />
+                                
                             </ItemsPanelTemplate>
                         </GroupStyle.Panel>
                     </GroupStyle>

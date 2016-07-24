@@ -56,5 +56,16 @@ namespace KryptPadCSApp.Views
             e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
             e.Handled = true;
         }
+
+        private void GridView_DragOver(object sender, DragEventArgs e)
+        {
+            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
+            e.Handled = true;
+        }
+
+        private void GridView_Drop(object sender, DragEventArgs e)
+        {
+
+        }
     }
 }
