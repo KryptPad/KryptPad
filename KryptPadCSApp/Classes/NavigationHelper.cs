@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,5 +81,21 @@ namespace KryptPadCSApp.Classes
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
             }
         }
+
+        #region Common navigation tasks
+        public static void GoToLicenseTerms()
+        {
+            // Go to terms page
+            Navigate(typeof(TermsPage), null);
+        }
+
+        public static void GoToPrivacyPolicy()
+        {
+            // Go to terms page
+            Navigate(typeof(PrivacyPage), null);
+        }
+        #endregion
+
+
     }
 }

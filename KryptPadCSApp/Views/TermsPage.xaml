@@ -8,12 +8,10 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid Margin="12">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
 
-            <ScrollViewer Grid.Row="0">
+        <ScrollViewer>
+
+            <Grid Margin="12">
 
                 <StackPanel>
                     <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
@@ -38,8 +36,8 @@
                     </TextBlock>
 
                 </StackPanel>
-            </ScrollViewer>
-        </Grid>
 
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -97,7 +97,7 @@ namespace KryptPadCSApp.Models
         public Command LogInCommand { get; protected set; }
 
         public Command CreateAccountCommand { get; protected set; }
-
+        
         #endregion
 
         public LoginPageViewModel()

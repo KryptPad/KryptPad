@@ -1,4 +1,5 @@
 ﻿using KryptPad.Api.Models;
+using KryptPadCSApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,12 +58,20 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        /// <summary>
+        /// Gets the command to view the license terms
+        /// </summary>
+        public Command ViewLicenseTermsCommand { get; protected set; }
+
         #endregion
 
         #region Ctor
         public BasePageModel()
         {
             BusyIndicatorVisibility = Visibility.Collapsed;
+
+            // Set commands
+            ViewLicenseTermsCommand = new Command((p) => { NavigationHelper.GoToLicenseTerms(); });
         }
         #endregion
 

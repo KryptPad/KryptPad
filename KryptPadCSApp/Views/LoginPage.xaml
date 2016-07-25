@@ -21,7 +21,7 @@
                 </AppBarButton.Icon>
             </AppBarButton>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="View license" />
+                <AppBarButton Label="View license terms" Command="{Binding ViewLicenseTermsCommand}" />
                 <AppBarButton Label="View privacy policy" />
                 <AppBarButton Label="Feedback &amp; Issues" />
                 <AppBarButton Label="About" />
