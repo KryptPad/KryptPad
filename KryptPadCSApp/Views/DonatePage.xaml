@@ -23,8 +23,8 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MessageTextBlock.(RelativePanel.Below)" Value="HeartTextBlock" />
-                        <!--<Setter Target="HeartTextBlock.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="true"/>-->
+                        <!--<Setter Target="MessageTextBlock.(RelativePanel.Below)" Value="IconTextBlock" />-->
+                        <Setter Target="IconTextBlock.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
 
@@ -34,7 +34,7 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MessageTextBlock.(RelativePanel.RightOf)" Value="HeartTextBlock" />
+                        <Setter Target="MessageTextBlock.(RelativePanel.RightOf)" Value="IconTextBlock" />
 
 
                     </VisualState.Setters>
@@ -42,44 +42,45 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Grid Margin="12">
+        <ScrollViewer>
+            <Grid Margin="12">
 
-            <RelativePanel>
+                <RelativePanel>
 
-                <!--Heart-->
-                <TextBlock x:Name="HeartTextBlock" Text="&#xE00B;"
+                    <!--Heart-->
+                    <TextBlock x:Name="IconTextBlock" Text="&#xE00B;"
 					Margin="0,0,24,0"
 					FontFamily="{ThemeResource SymbolThemeFontFamily}"
 					FontSize="144"
 					Foreground="#FFFD6060" />
 
-                <!--Text-->
-                <StackPanel x:Name="MessageTextBlock">
+                    <!--Text-->
+                    <StackPanel x:Name="MessageTextBlock">
 
-                    <!--Header-->
-                    <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
+                        <!--Header-->
+                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
 						<Run Text="Donate"/>
-                    </TextBlock>
+                        </TextBlock>
 
-                    <!--Message-->
-                    <TextBlock TextWrapping="WrapWholeWords">
+                        <!--Message-->
+                        <TextBlock TextWrapping="WrapWholeWords">
 						Donations are used to help support my family and the development of Krypt Pad.
                         Your contributions are made securely through PayPal.
-                    </TextBlock>
+                        </TextBlock>
 
-                    <Button Content="Make a Donation"
+                        <Button Content="Make a Donation"
                             Margin="0,24,0,0"
 						Command="{Binding DonateCommand}"/>
-                </StackPanel>
+                    </StackPanel>
 
 
 
 
-            </RelativePanel>
+                </RelativePanel>
 
 
 
-        </Grid>
-
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -63,6 +63,13 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public Command ViewLicenseTermsCommand { get; protected set; }
 
+        public Command ViewPrivacyPolicyCommand { get; protected set; }
+
+        public Command ViewFeedBackCommand { get; protected set; }
+
+        public Command ViewDonateCommand { get; protected set; }
+
+        public Command ViewAboutCommand { get; protected set; }
         #endregion
 
         #region Ctor
@@ -72,6 +79,10 @@ namespace KryptPadCSApp.Models
 
             // Set commands
             ViewLicenseTermsCommand = new Command((p) => { NavigationHelper.GoToLicenseTerms(); });
+            ViewPrivacyPolicyCommand = new Command((p) => { NavigationHelper.GoToPrivacyPolicy(); });
+            ViewFeedBackCommand = new Command((p) => { NavigationHelper.GoToFeedback(); });
+            ViewDonateCommand = new Command((p) => { NavigationHelper.GoToDonate(); });
+            ViewAboutCommand = new Command((p) => { NavigationHelper.GoToAbout(); });
         }
         #endregion
 

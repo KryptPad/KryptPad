@@ -94,6 +94,24 @@ namespace KryptPadCSApp.Classes
             // Go to terms page
             Navigate(typeof(PrivacyPage), null);
         }
+
+        public static void GoToDonate()
+        {
+            // Go to terms page
+            Navigate(typeof(DonatePage), null);
+        }
+
+        public static void GoToFeedback()
+        {
+            // Go to terms page
+            Navigate(typeof(FeedbackPage), null);
+        }
+
+        public static void GoToAbout()
+        {
+            // Go to terms page
+            Navigate(typeof(AboutPage), null);
+        }
         #endregion
 
 
