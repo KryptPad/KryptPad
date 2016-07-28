@@ -177,7 +177,7 @@ namespace KryptPadCSApp.Models
                 catch (WebException ex)
                 {
                     // Something went wrong in the api
-                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    await DialogHelper.ShowMessageDialogAsync("The passphrase you entered is incorrect.");
 
                     // Clear out the passphrase
                     Passphrase = null;

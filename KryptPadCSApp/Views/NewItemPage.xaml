@@ -154,7 +154,7 @@
 
 
                         <!--This grid is for mobile view-->
-                        <Grid x:Name="MobileGrid" Grid.Row="1" Visibility="Collapsed">
+                        <Grid x:Name="MobileGrid" Grid.Row="1" Visibility="Collapsed" Margin="0,0,0,12">
                             <Pivot>
                                 <PivotItem Header="Fields">
                                     <!--Fields-->
@@ -165,8 +165,7 @@
                                 <PivotItem Header="Notes">
                                     <!--Notes-->
                                     <TextBox Text="{Binding Notes, Mode=TwoWay}"
-                                             AcceptsReturn="True"
-                                 />
+                                             AcceptsReturn="True" Height="275"/>
                                 </PivotItem>
                             </Pivot>
                         </Grid>
@@ -177,18 +176,6 @@
                 </Grid>
             </ScrollViewer>
         </Grid>
-
-        <!--Progress indicator-->
-        <Border Background="#3F000000"
-                Visibility="{Binding BusyIndicatorVisibility}">
-            <ProgressRing 
-                      Visibility="Visible"
-                      IsActive="{Binding IsBusy}"
-                      Width="50"
-                      Height="50"
-                      Foreground="{StaticResource ApplicationForegroundThemeBrush}"/>
-        </Border>
-
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">

@@ -126,7 +126,7 @@ namespace KryptPadCSApp
                     AppViewBackButtonVisibility.Collapsed;
 
                 // Some API events
-                KryptPadApi.AccessTokenExpired += async (s, ev) =>
+                KryptPadApi.SessionEnded += async (s, ev) =>
                 {
                     // Get the dispatcher
                     var dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;

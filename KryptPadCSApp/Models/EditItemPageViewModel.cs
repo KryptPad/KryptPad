@@ -417,7 +417,7 @@ namespace KryptPadCSApp.Models
             if (_isLoading) return;
 
             // Set main window busy state
-            (Window.Current.Content as MainPage).SetIsBusy(true);
+            //(Window.Current.Content as MainPage).SetIsBusy(true);
 
             try
             {
@@ -444,7 +444,7 @@ namespace KryptPadCSApp.Models
             }
 
             // Set main window busy state
-            (Window.Current.Content as MainPage).SetIsBusy(false);
+            //(Window.Current.Content as MainPage).SetIsBusy(false);
         }
 
         /// <summary>
@@ -477,7 +477,7 @@ namespace KryptPadCSApp.Models
             if (_isLoading) return;
 
             // Set main window busy state
-            (Window.Current.Content as MainPage).SetIsBusy(true);
+            //(Window.Current.Content as MainPage).SetIsBusy(true);
 
             try
             {
@@ -496,7 +496,7 @@ namespace KryptPadCSApp.Models
             }
 
             // Set main window busy state
-            (Window.Current.Content as MainPage).SetIsBusy(false);
+            //(Window.Current.Content as MainPage).SetIsBusy(false);
         }
 
         #region Helpers

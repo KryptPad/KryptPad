@@ -148,9 +148,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private async Task LoginFromSavedCredentialsAsync()
         {
-
-
-            //create instance to credential locker
+            // Create instance to credential locker
             var locker = new PasswordVault();
             try
             {
@@ -166,8 +164,8 @@ namespace KryptPadCSApp.Models
                     Password = login.Password;
                     AutoSignIn = true;
 
-                    // Make sure we can auto login in, and that we don't already have an access token
-                    if (!DisableAutoLogin && !KryptPadApi.IsSignedIn)
+                    // If autologin is enabled, attempt to sign in
+                    if (!DisableAutoLogin)
                     {
                         // Do login
                         await LoginAsync();
