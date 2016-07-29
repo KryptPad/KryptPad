@@ -24,7 +24,9 @@ namespace KryptPad.Api
     public class KryptPadApi
     {
 
-        private const int SESSION_TIME_MINUTES = 1;
+        private const int SESSION_TIME_MINUTES = 5;
+        private static SemaphoreSlim ReauthenticateSemaphore = new SemaphoreSlim(1, 1);
+
 
 #if LOCAL
         /// <summary>
@@ -89,13 +91,13 @@ namespace KryptPad.Api
         //    get { return !string.IsNullOrWhiteSpace(TokenResponse?.AccessToken); }
         //}
 
-        private static DateTime SessionEndDate {get;set;}
+        private static DateTime SessionEndDate { get; set; }
 
         /// <summary>
         /// Gets or sets the CancellationToken for the task
         /// </summary>
         private static CancellationTokenSource ExpirationTaskCancelTokenSource { get; set; }
-        
+
         #endregion
 
 
@@ -121,14 +123,14 @@ namespace KryptPad.Api
         /// <returns></returns>
         private static async Task ExpirationTaskWork(CancellationToken token)
         {
-            
+
             // Get local date from expiration
             var expiration = SessionEndDate;
 
             // Store handle to events
             var sessionEndingHandler = SessionEnding;
             var sessionEndedHandler = SessionEnded;
-            
+
             // Enter a while loop and check that the expiration date hasn't passed
             while (DateTime.Now < expiration)
             {
@@ -138,7 +140,7 @@ namespace KryptPad.Api
                 // Set date to check
                 expiration = SessionEndDate;
 
-                
+
                 // Wait a bit, then check again
                 await Task.Delay(100);
 
@@ -155,7 +157,7 @@ namespace KryptPad.Api
         /// <param name="password"></param>
         public static async Task AuthenticateAsync(string username, string password)
         {
-            
+
             using (var client = new HttpClient())
             {
                 // Prepare form values
@@ -230,7 +232,7 @@ namespace KryptPad.Api
 
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
-                    
+
                 }
                 else
                 {
@@ -681,7 +683,7 @@ namespace KryptPad.Api
         #endregion
 
         #region Items
-        
+
         /// <summary>
         /// Gets an item by its id, including all the details
         /// </summary>
@@ -830,7 +832,7 @@ namespace KryptPad.Api
                     // Update
                     response = await client.PutAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields/{field.Id}"), content);
                 }
-                                
+
                 // Check if the response is a success code
                 if (response.IsSuccessStatusCode)
                 {
@@ -868,7 +870,7 @@ namespace KryptPad.Api
                 AddPassphraseHeader(client);
                 // Send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields"));
-                
+
                 // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
@@ -903,7 +905,7 @@ namespace KryptPad.Api
 
                 // Execute request
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields/{id}"));
-                
+
                 // Check if the response is a success code
                 if (!response.IsSuccessStatusCode)
                 {
@@ -993,27 +995,40 @@ namespace KryptPad.Api
         /// <param name="client"></param>
         private static async Task AuthorizeRequest(HttpClient client)
         {
-            // If we have a token, use it to authorize the request
-            if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
+            await ReauthenticateSemaphore.WaitAsync();
+            try
             {
-
-                // We had been authorized, but it looks like the token has expired
-                var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
-                if (expiration <= DateTime.Now)
+                // If we have a token, use it to authorize the request
+                if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
                 {
-                    // Attempt to get a new access token
-                    await ReauthenticateAsync();
+
+                    // We had been authorized, but it looks like the token has expired
+                    var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
+                    if (expiration <= DateTime.Now)
+                    {
+                        // Attempt to get a new access token
+                        await ReauthenticateAsync();
+                    }
+
+                    //add the authorize header to the request
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenResponse.AccessToken);
+
+                    // Set the session end time
+                    SessionEndDate = DateTime.Now.AddMinutes(SESSION_TIME_MINUTES);
                 }
-
-                //add the authorize header to the request
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenResponse.AccessToken);
-
-                // Set the session end time
-                SessionEndDate = DateTime.Now.AddMinutes(SESSION_TIME_MINUTES);
+                else
+                {
+                    // No token? Hmm.
+                }
             }
-            else
+            catch (Exception)
             {
-                // No token? Hmm.
+                //ReauthenticateSemaphore.Release();
+            }
+            finally
+            {
+                ReauthenticateSemaphore.Release();
+
             }
 
         }
