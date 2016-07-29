@@ -25,6 +25,7 @@ namespace KryptPad.Api
     {
 
         private const int SESSION_TIME_MINUTES = 5;
+        private const int SESSION_WARNING_MINUTES = 1;
         private static SemaphoreSlim ReauthenticateSemaphore = new SemaphoreSlim(1, 1);
 
 
@@ -46,12 +47,13 @@ namespace KryptPad.Api
 #endif
 
         #region Delegates
-        //public delegate void AccessTokenExpirationTimerHandler(DateTime expiration);
+        public delegate void SessionEndingHandler(DateTime expiration);
+        public delegate void SessionEndedHandler();
         #endregion
 
         #region Events
-        public static event EventHandler SessionEnding;
-        public static event EventHandler SessionEnded;
+        public static event SessionEndingHandler SessionEnding;
+        public static event SessionEndedHandler SessionEnded;
 
         //public static event AccessTokenExpirationTimerHandler AccessTokenExpirationTimer;
         #endregion
@@ -62,17 +64,7 @@ namespace KryptPad.Api
         /// Gets or sets the API OAuth access token to authorize API calls
         /// </summary>
         private static OAuthTokenResponse TokenResponse { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets the username of the user logged in
-        ///// </summary>
-        //private static string Username { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets the password of the user logged in
-        ///// </summary>
-        //private static string Password { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the passphrase for the profile
         /// </summary>
@@ -83,14 +75,9 @@ namespace KryptPad.Api
         /// </summary>
         public static ApiProfile CurrentProfile { get; private set; }
 
-        ///// <summary>
-        ///// Gets whether the user is signed in
-        ///// </summary>
-        //public static bool IsSignedIn
-        //{
-        //    get { return !string.IsNullOrWhiteSpace(TokenResponse?.AccessToken); }
-        //}
-
+        /// <summary>
+        /// Gets or sets the session end time
+        /// </summary>
         private static DateTime SessionEndDate { get; set; }
 
         /// <summary>
@@ -140,6 +127,11 @@ namespace KryptPad.Api
                 // Set date to check
                 expiration = SessionEndDate;
 
+                // Calculate the time when the warning should show
+                //var warningTime = expiration.AddMinutes(-SESSION_WARNING_MINUTES);
+
+                // Fire event
+                sessionEndingHandler?.Invoke(expiration);
 
                 // Wait a bit, then check again
                 await Task.Delay(100);
@@ -147,7 +139,7 @@ namespace KryptPad.Api
             }
 
             // If the loop exits, then we have expired
-            sessionEndedHandler?.Invoke(null, EventArgs.Empty);
+            sessionEndedHandler?.Invoke();
         }
 
         /// <summary>
@@ -186,7 +178,7 @@ namespace KryptPad.Api
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
 
                     // Set the session end time
-                    SessionEndDate = DateTime.Now.AddMinutes(SESSION_TIME_MINUTES);
+                    ExtendSessionTime();
 
                     // Start session expiration task
                     StartExpirationTask();
@@ -1014,7 +1006,7 @@ namespace KryptPad.Api
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenResponse.AccessToken);
 
                     // Set the session end time
-                    SessionEndDate = DateTime.Now.AddMinutes(SESSION_TIME_MINUTES);
+                    ExtendSessionTime();
                 }
                 else
                 {
@@ -1103,6 +1095,15 @@ namespace KryptPad.Api
             //Username = null;
             //Password = null;
 
+        }
+
+        /// <summary>
+        /// Extends the session time
+        /// </summary>
+        public static void ExtendSessionTime()
+        {
+            // Set the session end time
+            SessionEndDate = DateTime.Now.AddMinutes(SESSION_TIME_MINUTES);
         }
         #endregion
 

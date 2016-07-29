@@ -45,19 +45,47 @@ namespace KryptPadCSApp
         {
             this.InitializeComponent();
 
-            //RootFrame = frame;
-            //ShellSplitView.Content = RootFrame;
+            // Some API events
+            KryptPadApi.SessionEnded += async () =>
+            {
+                // Get the dispatcher
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    // Triggered when the access token has reached its expiration date
+                    NavigationHelper.Navigate(typeof(LoginPage), null);
+                    // Clear backstack too
+                    NavigationHelper.ClearBackStack();
 
-            //KryptPadApi.AccessTokenExpirationTimer += async (expiration) =>
-            //{
-            //    // Get time remaining
-            //    var timeRemaining = DateTime.Now.Subtract(expiration);
+                    // Hide the warning message
+                    SessionEndWarning.Visibility = Visibility.Collapsed;
+                });
 
-            //    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            //    {
-            //        CountDownTextBlock.Text = timeRemaining.ToString(@"mm\:ss");
-            //    });
-            //};
+            };
+
+            KryptPadApi.SessionEnding += async (expiration) =>
+            {
+                var warningTime = expiration.AddMinutes(-1);
+                
+                // Show the message
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    if (DateTime.Now >= warningTime)
+                    {
+                        // Get time remaining
+                        var timeRemaining = DateTime.Now.Subtract(expiration);
+                        // Set the label with how much time the user has left
+                        TimeRemainingRun.Text = timeRemaining.ToString(@"mm\:ss");
+                        // Show the warning
+                        SessionEndWarning.Visibility = Visibility.Visible;
+
+                    }
+                    else
+                    {
+                        // Hide the warning
+                        SessionEndWarning.Visibility = Visibility.Collapsed;
+                    }
+                });
+            };
 
             // Success, tell the app we are signed in
             (App.Current as App).PropertyChanged += (sender, e) =>
@@ -169,6 +197,11 @@ namespace KryptPadCSApp
 
         }
 
+        private void SessionEndWarning_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            KryptPadApi.ExtendSessionTime();
+        }
+
         #region Helper Methods
 
         ///// <summary>
@@ -216,5 +249,7 @@ namespace KryptPadCSApp
             BusyIndicator.IsActive = value;
         }
         #endregion
+
+       
     }
 }

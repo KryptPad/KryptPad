@@ -26,6 +26,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
 
                 <!--Header text-->
@@ -64,6 +65,23 @@
             <!--Main frame-->
             <Frame x:Name="NavFrame" Grid.Row="1"/>
 
+            <!--Session ending message-->
+            <Border x:Name="SessionEndWarning"
+                    Grid.Row="2" 
+                    Background="#FFFF4A4A"
+                    VerticalAlignment="Bottom"
+                    Padding="12"
+                    Visibility="Collapsed"
+                    Tapped="SessionEndWarning_Tapped">
+                <TextBlock Foreground="White"
+                           TextAlignment="Center">
+                    <Run>Your session will expire in</Run>
+                    <Run x:Name="TimeRemainingRun"/>
+                    <LineBreak />
+                    <Run>Tap to extend your time</Run>
+                </TextBlock>
+            </Border>
+            
         </Grid>
 
         <!--Progress indicator-->

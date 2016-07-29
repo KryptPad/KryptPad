@@ -124,23 +124,7 @@ namespace KryptPadCSApp
                     _rootFrame.CanGoBack ?
                     AppViewBackButtonVisibility.Visible :
                     AppViewBackButtonVisibility.Collapsed;
-
-                // Some API events
-                KryptPadApi.SessionEnded += async (s, ev) =>
-                {
-                    // Get the dispatcher
-                    var dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
-
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        // Triggered when the access token has reached its expiration date
-                        NavigationHelper.Navigate(typeof(LoginPage), null);
-                        // Clear backstack too
-                        NavigationHelper.ClearBackStack();
-                    });
-
-                };
-
+                
             }
 
             if (_rootFrame.Content == null)

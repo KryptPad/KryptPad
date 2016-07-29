@@ -95,7 +95,7 @@
                             Margin="12">
 
                             <TextBlock TextWrapping="WrapWholeWords">
-                        Add fields to this profile (e.g. Username, Password, etc...)
+                                Add fields (e.g. Username, Password, etc...)
                             </TextBlock>
                             <Button Command="{Binding AddFieldCommand}">Add Field</Button>
                         </StackPanel>
