@@ -114,6 +114,7 @@
     <Compile Include="Models\ApiFieldType.cs" />
     <Compile Include="Models\ApiItem.cs" />
     <Compile Include="Models\ApiProfile.cs" />
+    <Compile Include="Requests\CreateProfileRequest.cs" />
     <Compile Include="Responses\ApiResponse.cs" />
     <Compile Include="Responses\ApiWebExceptionResponse.cs" />
     <Compile Include="Responses\CategoryResponse.cs" />

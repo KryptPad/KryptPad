@@ -1,41 +1,38 @@
-﻿<local:ClosableContentDialog
+﻿<ContentDialog
     x:Class="KryptPadCSApp.Dialogs.ProfileDetailsDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Models="using:KryptPadCSApp.Models"
     mc:Ignorable="d"
-    Title="CREATE PROFILE"
+    Title="PROFILE"
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
-    PrimaryButtonCommand="{Binding SaveCommand}"
-    PrimaryButtonCommandParameter="{Binding ElementName=ProfileDetailsDialogView}"
-    IsPrimaryButtonEnabled="False"
-    x:Name="ProfileDetailsDialogView">
-
-    <local:ClosableContentDialog.DataContext>
-        <Models:ProfileDetailsDialogViewModel/>
-    </local:ClosableContentDialog.DataContext>
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    IsPrimaryButtonEnabled="False">
 
     <Grid>
+        <StackPanel>
 
-        <Grid>
-            <StackPanel>
-                <TextBlock Text="Profile name" />
-                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="e.g. My Passwords"
+            <TextBox Text="{Binding ProfileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,0,0,12"
+                     PlaceholderText="Profile name (e.g. Passwords)"
+                     KeyUp="TriggerAction" />
+
+            <TextBlock TextWrapping="WrapWholeWords">
+                Your passphrase should be at least eight characters long and contain at least one
+                symbol, one lower-case letter, one upper-case letter, and one number.
+            </TextBlock>
+            <PasswordBox Password="{Binding ProfilePassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,0,12"
+                         PlaceholderText="Passphrase (make it secure)"
                          KeyUp="TriggerAction"/>
-                
-                <TextBlock Text="Create a passphrase" />
-                <PasswordBox Password="{Binding ProfilePassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText=""
-                             KeyUp="TriggerAction"/>
-                
-                <TextBlock Text="Confirm passphrase" />
-                <PasswordBox Password="{Binding ConfirmProfilePassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText=""
-                             KeyUp="TriggerAction"/>
-            </StackPanel>
-        </Grid>
-        
+
+
+            <PasswordBox Password="{Binding ConfirmProfilePassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         PlaceholderText="Confirm passphrase"
+                         KeyUp="TriggerAction"/>
+        </StackPanel>
     </Grid>
-</local:ClosableContentDialog>
+</ContentDialog>

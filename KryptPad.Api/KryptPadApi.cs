@@ -1,4 +1,5 @@
 ﻿using KryptPad.Api.Models;
+using KryptPad.Api.Requests;
 using KryptPad.Api.Responses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -419,6 +420,43 @@ namespace KryptPad.Api
         /// <param name="profile"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
+        public static async Task<SuccessResponse> CreateProfileAsync(ApiProfile profile, string passphrase = null)
+        {
+            using (var client = new HttpClient())
+            {
+                // Authorize the request.
+                await AuthorizeRequest(client);
+                // Add passphrase to message
+                AddPassphraseHeader(client, passphrase);
+                // Create JSON content.
+                var content = JsonContent(profile);
+
+                // Send request and get a response
+                var response = await client.PostAsync(GetUrl($"api/profiles"), content);
+
+
+                // Deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
+                    return new SuccessResponse(Convert.ToInt32(data));
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Creates a new profile
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <param name="passphrase"></param>
+        /// <returns></returns>
         public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile, string passphrase = null)
         {
             using (var client = new HttpClient())
@@ -431,20 +469,8 @@ namespace KryptPad.Api
                 var content = JsonContent(profile);
 
                 // Send request and get a response
-                HttpResponseMessage response;
-
-                if (profile.Id == 0)
-                {
-                    // Create
-                    response = await client.PostAsync(GetUrl($"api/profiles"), content);
-                }
-                else
-                {
-                    // Update
-                    response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}"), content);
-                }
-
-
+                var response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}"), content);
+                
                 // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {

@@ -172,9 +172,8 @@ namespace KryptPadCSApp.Models
                     // When a profile is selected, navigate to main page
                     NavigationHelper.Navigate(typeof(ItemsPage), null);
 
-
                 }
-                catch (WebException ex)
+                catch (WebException)
                 {
                     // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync("The passphrase you entered is incorrect.");
