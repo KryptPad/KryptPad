@@ -420,14 +420,13 @@ namespace KryptPad.Api
         /// <param name="profile"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> CreateProfileAsync(ApiProfile profile, string passphrase = null)
+        public static async Task<ApiProfile> CreateProfileAsync(CreateProfileRequest profile)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
-                // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                
                 // Create JSON content.
                 var content = JsonContent(profile);
 
@@ -440,8 +439,16 @@ namespace KryptPad.Api
                 {
                     // Read the data
                     var data = await response.Content.ReadAsStringAsync();
-                    // Deserialize the response as an ApiResponse object
-                    return new SuccessResponse(Convert.ToInt32(data));
+
+                    // Create an ApiProfile object
+                    var p = new ApiProfile()
+                    {
+                        Name = profile.Name,
+                        Id = Convert.ToInt32(data)
+                    };
+
+                    // Return the profile object
+                    return p;
                 }
                 else
                 {
@@ -457,14 +464,13 @@ namespace KryptPad.Api
         /// <param name="profile"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile, string passphrase = null)
+        public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
-                // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+                
                 // Create JSON content.
                 var content = JsonContent(profile);
 

@@ -1,5 +1,6 @@
 ﻿using KryptPad.Api;
 using KryptPad.Api.Models;
+using KryptPad.Api.Requests;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Views;
 using System;
@@ -90,16 +91,16 @@ namespace KryptPadCSApp.Dialogs
             try
             {
                 // Create a new profile
-                var profile = new ApiProfile()
+                var request = new CreateProfileRequest()
                 {
-                    Name = ProfileName
+                    Name = ProfileName,
+                    Passphrase = ProfilePassphrase,
+                    ConfirmPassphrase = ConfirmProfilePassphrase
                 };
 
                 // Call api to create the profile.
-                var response = await KryptPadApi.CreateProfileAsync(profile, ProfilePassphrase);
-
-                profile.Id = response.Id;
-
+                var profile = await KryptPadApi.CreateProfileAsync(request);
+                
                 // Go to profile
                 await KryptPadApi.LoadProfileAsync(profile, ProfilePassphrase);
 
