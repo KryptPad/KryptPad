@@ -195,8 +195,6 @@ namespace KryptPad.Api
         /// <summary>
         /// Refreshes the access token using the refresh token
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
         /// <returns></returns>
         public static async Task ReauthenticateAsync()
         {
