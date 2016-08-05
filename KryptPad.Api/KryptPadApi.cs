@@ -1024,7 +1024,11 @@ namespace KryptPad.Api
                 if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
                 {
 
-                    // We had been authorized, but it looks like the token has expired
+                    // We had been authorized, but it looks like the token has expired.
+                    // TODO: This seems to be unreliable. On a test phone, the local time was different
+                    // from the server local time (by a minute or so) preventing the refresh token
+                    // from being sent to get a new access token. I think I may need to send a custom test
+                    // api request and determine if the access token is expired.
                     var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
                     if (expiration <= DateTime.Now)
                     {
