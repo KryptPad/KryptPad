@@ -27,6 +27,10 @@ namespace KryptPad.Api
 
         private const int SESSION_TIME_MINUTES = 5;
         private const int SESSION_WARNING_MINUTES = 1;
+        // How much time is taken away from the token's ttl to account for network latency
+        private const int EXPIRATION_TIME_THRESHOLD = 10;
+
+        // Use a semaphore to prevent a task from executing simultaniously
         private static SemaphoreSlim ReauthenticateSemaphore = new SemaphoreSlim(1, 1);
 
 
@@ -66,6 +70,11 @@ namespace KryptPad.Api
         /// </summary>
         private static OAuthTokenResponse TokenResponse { get; set; }
         
+        /// <summary>
+        /// Gets or sets when the token is supposed to expire
+        /// </summary>
+        private static DateTime TokenExpirationDate { get; set; }
+
         /// <summary>
         /// Gets or sets the passphrase for the profile
         /// </summary>
@@ -178,6 +187,9 @@ namespace KryptPad.Api
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
 
+                    // Set the expiration date based on the ttl of the access token
+                    TokenExpirationDate = DateTime.Now.AddSeconds(TokenResponse.ExpiresIn - EXPIRATION_TIME_THRESHOLD);
+
                     // Set the session end time
                     ExtendSessionTime();
 
@@ -223,6 +235,9 @@ namespace KryptPad.Api
 
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
+
+                    // Set the expiration date based on the ttl of the access token
+                    TokenExpirationDate = DateTime.Now.AddSeconds(TokenResponse.ExpiresIn - EXPIRATION_TIME_THRESHOLD);
 
                 }
                 else
@@ -1023,14 +1038,9 @@ namespace KryptPad.Api
                 // If we have a token, use it to authorize the request
                 if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
                 {
-
-                    // We had been authorized, but it looks like the token has expired.
-                    // TODO: This seems to be unreliable. On a test phone, the local time was different
-                    // from the server local time (by a minute or so) preventing the refresh token
-                    // from being sent to get a new access token. I think I may need to send a custom test
-                    // api request and determine if the access token is expired.
-                    var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
-                    if (expiration <= DateTime.Now)
+                    
+                    // Check the expiration time
+                    if (TokenExpirationDate <= DateTime.Now)
                     {
                         // Attempt to get a new access token
                         await ReauthenticateAsync();

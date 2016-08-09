@@ -49,21 +49,9 @@ namespace KryptPadCSApp.Views
         private void GridView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
         {
             _draggedItem = e.Items[0] as ApiItem;
-        }
+        }       
 
-        private void VariableSizedWrapGrid_DragOver(object sender, DragEventArgs e)
-        {
-            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
-            e.Handled = true;
-        }
-
-        private void GridView_DragOver(object sender, DragEventArgs e)
-        {
-            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
-            e.Handled = true;
-        }
-
-        private void GridView_Drop(object sender, DragEventArgs e)
+        private void GridView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
 
         }
