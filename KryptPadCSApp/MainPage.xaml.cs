@@ -45,7 +45,7 @@ namespace KryptPadCSApp
         {
             this.InitializeComponent();
 
-            BorderStoryBoardFadeOut.Completed += BorderStoryBoardFadeOut_Completed;
+            //BorderStoryBoardFadeOut.Completed += BorderStoryBoardFadeOut_Completed;
 
             // Some API events
             KryptPadApi.SessionEnded += async () =>
@@ -59,8 +59,8 @@ namespace KryptPadCSApp
                     NavigationHelper.ClearBackStack();
 
                     // Hide the warning message
-                    
-                    BorderStoryBoardFadeOut.Begin();
+                    SessionEndWarning.Visibility = Visibility.Collapsed;
+
                     _messageShowing = false;
                 });
 
@@ -69,29 +69,33 @@ namespace KryptPadCSApp
             KryptPadApi.SessionEnding += async (expiration) =>
             {
                 var warningTime = expiration.AddMinutes(-1);
-                
+
                 // Show the message
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
+                    
                     if (DateTime.Now >= warningTime && !_messageShowing)
                     {
-                        // Get time remaining
-                        var timeRemaining = DateTime.Now.Subtract(expiration);
-                        // Set the label with how much time the user has left
-                        TimeRemainingRun.Text = timeRemaining.ToString(@"mm\:ss");
                         // Show the warning
                         SessionEndWarning.Visibility = Visibility.Visible;
-                        BorderStoryBoard.Begin();
-                        
+
                         _messageShowing = true;
                     }
                     else if (DateTime.Now < warningTime && _messageShowing)
                     {
                         // Hide the warning
-                        
-                        BorderStoryBoardFadeOut.Begin();
+                        SessionEndWarning.Visibility = Visibility.Collapsed;
 
                         _messageShowing = false;
+                    }
+
+                    // Show time remaining
+                    if (DateTime.Now >= warningTime)
+                    {
+                        // Get time remaining
+                        var timeRemaining = DateTime.Now.Subtract(expiration);
+                        // Set the label with how much time the user has left
+                        TimeRemainingRun.Text = timeRemaining.ToString(@"mm\:ss");
                     }
                 });
             };
@@ -210,8 +214,9 @@ namespace KryptPadCSApp
         private void SessionEndWarning_Tapped(object sender, TappedRoutedEventArgs e)
         {
             KryptPadApi.ExtendSessionTime();
-            BorderStoryBoardFadeOut.Begin();
-            
+            // Hide the message
+            SessionEndWarning.Visibility = Visibility.Collapsed;
+
             _messageShowing = false;
         }
 
@@ -268,6 +273,6 @@ namespace KryptPadCSApp
         }
         #endregion
 
-       
+
     }
 }

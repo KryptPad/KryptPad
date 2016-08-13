@@ -10,13 +10,13 @@
     PrimaryButtonText="OK"
     SecondaryButtonText="CANCEL"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
     IsPrimaryButtonEnabled="False"
     >
     
     <Grid>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -29,18 +29,20 @@
                      Password="{Binding OldPassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,0,12"/>
 
+        <!--Password requirements-->
+        <TextBlock Grid.Row="1" Style="{StaticResource SmallInfoTextBlock}" TextWrapping="WrapWholeWords" x:Uid="PassphraseRequirement" />
+        
         <!--New passphrase-->
         <PasswordBox x:Name="NewPassphrasePasswordBox"
-                     Grid.Row="1"
+                     Grid.Row="2"
                      PlaceholderText="Enter new passphrase"
                      Password="{Binding NewPassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0,0,0,4"/>
+                     Margin="0,0,0,12"/>
         
         <PasswordBox x:Name="ConfirmPassphrasePasswordBox"
-                     Grid.Row="2"
+                     Grid.Row="3"
                      PlaceholderText="Confirm new passphrase"
-                     Password="{Binding ConfirmPassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0,0,0,4"/>
+                     Password="{Binding ConfirmPassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         
     </Grid>
 </ContentDialog>
