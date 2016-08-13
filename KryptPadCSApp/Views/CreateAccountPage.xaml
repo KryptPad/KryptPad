@@ -29,9 +29,7 @@
                 <!--Header-->
                 <StackPanel Grid.Row="0"
                        >
-                    <TextBlock Text="Krypt Pad" 
-                           Style="{ThemeResource HeaderTextBlockStyle}"    
-                           Foreground="White"/>
+                    
                     <TextBlock Text="SIGN UP" 
                            Margin="0,0,0,12"    
                            Style="{ThemeResource SubtitleTextBlockStyle}"    
@@ -41,6 +39,7 @@
 
                 <Grid Grid.Row="1"  Style="{StaticResource LoginGridStyle}">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
@@ -60,22 +59,25 @@
 					InputScope="EmailNameOrAddress"
 					Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+                    <!--Password requirements-->
+                    <TextBlock Grid.Row="2" Style="{StaticResource SmallInfoTextBlock}" TextWrapping="WrapWholeWords" x:Uid="PasswordRequirement" />
+
                     <!--Password-->
-                    <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,10" 
+                    <PasswordBox Grid.Row="3" PlaceholderText="Password" Margin="0,0,0,10" 
 					Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <!--Password-->
-                    <PasswordBox Grid.Row="3" PlaceholderText="Confirm Password" Margin="0,0,0,10" 
+                    <PasswordBox Grid.Row="4" PlaceholderText="Confirm Password" Margin="0,0,0,10" 
 					Password="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <!--Link to terms page-->
-                    <TextBlock Grid.Row="4" TextWrapping="WrapWholeWords" Margin="0,0,0,10">
+                    <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,10">
                     Krypt Pad is licensed under MIT. By using this software, you accept this
                     <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the
                     <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
                     </TextBlock>
 
-                    <Button Grid.Row="5"
+                    <Button Grid.Row="6"
                         Margin="0,0,10,0" 
                         Content="Create Account" 
                         Command="{Binding CreateAccountCommand}"/>

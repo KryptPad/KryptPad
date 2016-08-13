@@ -40,10 +40,12 @@ namespace KryptPadCSApp
         private bool IsBusy { get; set; }
         #endregion
 
-
+        private bool _messageShowing = false;
         public MainPage()
         {
             this.InitializeComponent();
+
+            BorderStoryBoardFadeOut.Completed += BorderStoryBoardFadeOut_Completed;
 
             // Some API events
             KryptPadApi.SessionEnded += async () =>
@@ -57,7 +59,9 @@ namespace KryptPadCSApp
                     NavigationHelper.ClearBackStack();
 
                     // Hide the warning message
-                    SessionEndWarning.Visibility = Visibility.Collapsed;
+                    
+                    BorderStoryBoardFadeOut.Begin();
+                    _messageShowing = false;
                 });
 
             };
@@ -69,7 +73,7 @@ namespace KryptPadCSApp
                 // Show the message
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    if (DateTime.Now >= warningTime)
+                    if (DateTime.Now >= warningTime && !_messageShowing)
                     {
                         // Get time remaining
                         var timeRemaining = DateTime.Now.Subtract(expiration);
@@ -77,12 +81,17 @@ namespace KryptPadCSApp
                         TimeRemainingRun.Text = timeRemaining.ToString(@"mm\:ss");
                         // Show the warning
                         SessionEndWarning.Visibility = Visibility.Visible;
-
+                        BorderStoryBoard.Begin();
+                        
+                        _messageShowing = true;
                     }
-                    else
+                    else if (DateTime.Now < warningTime && _messageShowing)
                     {
                         // Hide the warning
-                        SessionEndWarning.Visibility = Visibility.Collapsed;
+                        
+                        BorderStoryBoardFadeOut.Begin();
+
+                        _messageShowing = false;
                     }
                 });
             };
@@ -126,6 +135,7 @@ namespace KryptPadCSApp
                 }
 
             }
+
         }
 
         //private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
@@ -200,6 +210,14 @@ namespace KryptPadCSApp
         private void SessionEndWarning_Tapped(object sender, TappedRoutedEventArgs e)
         {
             KryptPadApi.ExtendSessionTime();
+            BorderStoryBoardFadeOut.Begin();
+            
+            _messageShowing = false;
+        }
+
+        private void BorderStoryBoardFadeOut_Completed(object sender, object e)
+        {
+            SessionEndWarning.Visibility = Visibility.Collapsed;
         }
 
         #region Helper Methods

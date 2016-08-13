@@ -20,10 +20,9 @@
                      PlaceholderText="Profile name (e.g. Passwords)"
                      KeyUp="TriggerAction" />
 
-            <TextBlock TextWrapping="WrapWholeWords">
-                Your passphrase should be at least eight characters long and contain at least one
-                symbol, one lower-case letter, one upper-case letter, and one number.
-            </TextBlock>
+            <!--Password requirements-->
+            <TextBlock Style="{StaticResource SmallInfoTextBlock}" TextWrapping="WrapWholeWords" x:Uid="PassphraseRequirement" />
+            
             <PasswordBox Password="{Binding ProfilePassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Margin="0,0,0,12"
                          PlaceholderText="Passphrase (make it secure)"

@@ -35,7 +35,10 @@
         <x:Double x:Key="SplitViewLargeNavFontSize">20</x:Double>
         <x:Double x:Key="SplitViewBackButtonHeight">32</x:Double>
 
-
+        <Style x:Key="SmallInfoTextBlock" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        
         <Style x:Key="MediumHeaderTextBlock" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe UI Light" />
             <Setter Property="FontWeight" Value="Normal" />

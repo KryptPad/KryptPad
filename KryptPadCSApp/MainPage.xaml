@@ -64,14 +64,25 @@
             <!--Main frame-->
             <Frame x:Name="NavFrame" Grid.Row="1"/>
 
+            
+            
             <!--Session ending message-->
             <Border x:Name="SessionEndWarning"
                     Grid.Row="2" 
                     Background="#FFFF4A4A"
                     VerticalAlignment="Bottom"
                     Padding="12"
+                    Opacity="0"
                     Visibility="Collapsed"
                     Tapped="SessionEndWarning_Tapped">
+                <Border.Resources>
+                    <Storyboard x:Name="BorderStoryBoard">
+                        <DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="Opacity" Duration="200" From="0.0" To="1.0" />
+                    </Storyboard>
+                    <Storyboard x:Name="BorderStoryBoardFadeOut">
+                        <DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="Opacity" Duration="200" From="1.0" To="0.0" />
+                    </Storyboard>
+                </Border.Resources>
                 <TextBlock Foreground="White"
                            TextAlignment="Center">
                     <Run>Your session will expire in</Run>
