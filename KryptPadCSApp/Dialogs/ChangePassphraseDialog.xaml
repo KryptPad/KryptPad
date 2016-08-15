@@ -20,6 +20,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         
         <!--Old passphrase-->
@@ -43,6 +44,9 @@
                      Grid.Row="3"
                      PlaceholderText="Confirm new passphrase"
                      Password="{Binding ConfirmPassphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        
+
+        <!--Password requirements-->
+        <TextBlock Grid.Row="4" TextWrapping="WrapWholeWords" x:Uid="PassphraseNote" />
+
     </Grid>
 </ContentDialog>

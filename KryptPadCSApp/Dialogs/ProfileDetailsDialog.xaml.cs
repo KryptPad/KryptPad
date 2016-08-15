@@ -60,7 +60,7 @@ namespace KryptPadCSApp.Dialogs
             }
         }
         private string _confirmProfilePassphrase;
-        
+
         public string ConfirmProfilePassphrase
         {
             get { return _confirmProfilePassphrase; }
@@ -100,13 +100,13 @@ namespace KryptPadCSApp.Dialogs
 
                 // Call api to create the profile.
                 var profile = await KryptPadApi.CreateProfileAsync(request);
-                
+
                 // Go to profile
                 await KryptPadApi.LoadProfileAsync(profile, ProfilePassphrase);
 
                 // Redirect to the main item list page
                 NavigationHelper.Navigate(typeof(ItemsPage), null);
-                
+
                 // Hide the dialog
                 Hide();
             }
@@ -154,17 +154,21 @@ namespace KryptPadCSApp.Dialogs
 
                 // Save the profile
                 await SaveProfile();
-                
+
                 // Restore the button
                 IsPrimaryButtonEnabled = CanSaveProfile;
             }
         }
 
-
-        private bool CanSaveProfile => !string.IsNullOrWhiteSpace(ProfileName)
-            && !string.IsNullOrWhiteSpace(ProfilePassphrase)
-            && !string.IsNullOrWhiteSpace(ConfirmProfilePassphrase);
         #endregion
 
+        #region Helper methods
+
+        private bool CanSaveProfile => 
+            !string.IsNullOrWhiteSpace(ProfileName)
+            && !string.IsNullOrWhiteSpace(ProfilePassphrase)
+            && ConfirmProfilePassphrase == ProfilePassphrase;
+
+        #endregion
     }
 }
