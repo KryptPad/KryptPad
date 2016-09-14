@@ -5,6 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
+    xmlns:Behaviors="using:KryptPadCSApp.Behaviors"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"  
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core" 
     x:Class="KryptPadCSApp.Views.ItemsPage"
     mc:Ignorable="d"
     xmlns:Commanding="using:Commanding"
@@ -44,12 +47,12 @@
                          VerticalAlignment="Center"
                          Width="400" Margin="12,0"/>
             </Grid>
-            
+
             <!--Menu-->
             <CommandBar Grid.Column="1">
-                
+
                 <AppBarButton Icon="Add" Label="Add category" Command="{Binding AddCategoryCommand}" />
-                
+
                 <CommandBar.SecondaryCommands>
                     <AppBarButton Icon="Permissions" Label="Change passphrase" Command="{Binding ChangePassphraseCommand}" />
                     <AppBarButton Icon="SaveLocal" Label="Download profile" Command="{Binding DownloadProfileCommand}" />
@@ -67,12 +70,12 @@
                 to add a new category.
             </TextBlock>
         </StackPanel>
-        
-        
+
+
         <!--Search and items-->
         <Grid Grid.Row="2" Margin="12">
             <Grid.RowDefinitions>
-                
+
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -109,7 +112,23 @@
                                     <TextBlock Grid.Column="1" 
                                                Text="{Binding Name}"
                                                Margin="8,0,0,0"
-                                               Style="{StaticResource MediumHeaderTextBlock}" />
+                                               Style="{StaticResource MediumHeaderTextBlock}" >
+                                        
+                                        <!--Behavior to open flyout-->
+                                        <i:Interaction.Behaviors>
+                                            <core:EventTriggerBehavior EventName="Holding">
+                                                <Behaviors:OpenMenuFlyoutAction />
+                                            </core:EventTriggerBehavior>
+                                        </i:Interaction.Behaviors>          
+                                        
+                                        <!--Context menu-->
+                                        <FlyoutBase.AttachedFlyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem Text="Delete" />
+                                            </MenuFlyout>
+                                        </FlyoutBase.AttachedFlyout>
+                                    </TextBlock>
+
 
 
                                 </Grid>
@@ -119,7 +138,9 @@
                         <!--Define a template for the items panel-->
                         <!--<GroupStyle.Panel>
                             <ItemsPanelTemplate>
-                                --><!--This seems to be ignored--><!--
+                                -->
+                        <!--This seems to be ignored-->
+                        <!--
                                 <VariableSizedWrapGrid Orientation="Vertical" AllowDrop="True"
                                                        DragOver="VariableSizedWrapGrid_DragOver"
                                                        Drop="VariableSizedWrapGrid_Drop"
@@ -154,7 +175,7 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                   
+
 
                     </VisualState.Setters>
                 </VisualState>
