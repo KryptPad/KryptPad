@@ -124,7 +124,12 @@
                                         <!--Context menu-->
                                         <FlyoutBase.AttachedFlyout>
                                             <MenuFlyout>
-                                                <MenuFlyoutItem Text="Delete" />
+                                                <MenuFlyoutItem Text="Rename"
+                                                                Command="{Binding DataContext.RenameCategoryCommand, ElementName=ItemsViewPage }"
+                                                                CommandParameter="{Binding}" />
+                                                <MenuFlyoutItem Text="Delete"
+                                                                Command="{Binding DataContext.DeleteCategoryCommand, ElementName=ItemsViewPage }"
+                                                                CommandParameter="{Binding}" />
                                             </MenuFlyout>
                                         </FlyoutBase.AttachedFlyout>
                                     </TextBlock>
