@@ -20,7 +20,7 @@
             <!--Nav grid-->
             <Grid Grid.Row="0"
               Padding="12"
-              Background="{StaticResource AppLoginBackgroundBrush}"
+              Background="{StaticResource SignInBackgroundBrush}"
               >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
@@ -29,7 +29,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!--Header text-->
-                <TextBlock Grid.Column="0" Style="{StaticResource SubtitleTextBlockStyle}" Text="Krypt Pad" Foreground="White" />
+                <TextBlock Grid.Column="0" Style="{StaticResource SubtitleTextBlockStyle}" Text="Krypt Pad" />
 
                 <!--Navigation icons-->
                 <StackPanel x:Name="NavPanel"
@@ -104,7 +104,7 @@
                           IsActive="False"
                           Width="50"
                           Height="50"
-                          Foreground="{StaticResource AppDarkForegroundBrush}"/>
+                          Foreground="White"/>
         </Border>
 
         <!--Manage layout-->

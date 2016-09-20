@@ -13,7 +13,7 @@
         <Models:SelectProfilePageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource AppLoginBackgroundBrush}">
+    <Grid Background="{StaticResource SignInBackgroundGradientBrush}">
 
         <ScrollViewer>
 
@@ -35,7 +35,7 @@
                     <TextBlock Text="PROFILES" 
                            Margin="0,0,0,12"    
                            Style="{ThemeResource SubtitleTextBlockStyle}"    
-                           Foreground="White"/>
+                           />
                 </StackPanel>
 
                 <!--Profiles-->

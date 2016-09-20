@@ -29,7 +29,7 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{StaticResource AppLoginBackgroundBrush}" >
+    <Grid Background="{StaticResource SignInBackgroundGradientBrush}"  >
 
         <ScrollViewer>
             <!--Main grid for page-->
@@ -50,8 +50,7 @@
                            Foreground="White"/>-->
                     <TextBlock Text="SIGN IN" 
                            Margin="0,0,0,12"    
-                           Style="{ThemeResource SubtitleTextBlockStyle}"    
-                           Foreground="{StaticResource AppDarkForegroundBrush}"/>
+                           Style="{ThemeResource SubtitleTextBlockStyle}" />
                 </StackPanel>
 
                 <!--Main grid for input-->
@@ -121,16 +120,16 @@
                 </Grid>
 
             </Grid>
-            
+
         </ScrollViewer>
-        
+
         <!--Progress indicator-->
         <!--<ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
                       IsActive="{Binding IsBusy}"
                       Width="50"
                       Height="50"
                       Foreground="White"/>-->
-        
+
         <!--Visual state manager-->
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">

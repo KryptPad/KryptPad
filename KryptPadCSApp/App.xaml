@@ -9,10 +9,13 @@
 
     <Application.Resources>
         <!--FF3297D1-->
-        <SolidColorBrush x:Key="AppLoginBackgroundBrush" Color="#FF173A55" />
-        <SolidColorBrush x:Key="AppLoginMainGridBackgroundBrush" Color="#FFE0E0E0" />
-
-        <SolidColorBrush x:Key="AppDarkForegroundBrush" Color="White" />
+        <SolidColorBrush x:Key="SignInBackgroundBrush" Color="#FF93D4F9" />
+        <SolidColorBrush x:Key="SignInMainGridBackgroundBrush" Color="White" Opacity="0.75"/>
+        <LinearGradientBrush x:Key="SignInBackgroundGradientBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF93D4F9" Offset="0"/>
+            <GradientStop Color="White" Offset="1"/>
+            
+        </LinearGradientBrush>
 
         <SolidColorBrush x:Key="SplitViewBackgroundBrush" Color="#FF0078d7" />
         <SolidColorBrush x:Key="SplitViewForegroundBrush" Color="White" />
@@ -61,7 +64,7 @@
         </Style>
 
         <Style x:Key="LoginGridStyle" TargetType="Grid">
-            <Setter Property="Background" Value="{StaticResource AppLoginMainGridBackgroundBrush}"/>
+            <Setter Property="Background" Value="{StaticResource SignInMainGridBackgroundBrush}"/>
             <Setter Property="Padding" Value="12" />
         </Style>
 
@@ -69,7 +72,7 @@
         <Style TargetType="RadioButton" x:Key="TabNavButtonStyle">
             <Setter Property="MinWidth" Value="0" />
             <Setter Property="Margin" Value="8,0" />
-            <Setter Property="Foreground" Value="{StaticResource AppDarkForegroundBrush}" />
+            
             <Setter Property="Template">
                 <Setter.Value>
 
@@ -216,8 +219,9 @@
 
             </Grid>
         </DataTemplate>
-
         
+
+
     </Application.Resources>
 
 
