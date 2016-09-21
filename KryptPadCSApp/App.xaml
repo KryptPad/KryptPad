@@ -4,7 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp"
     xmlns:Models="using:KryptPadCSApp.Models"
-    
+    xmlns:Behaviors="using:KryptPadCSApp.Behaviors"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core" 
     RequestedTheme="Light">
 
     <Application.Resources>
@@ -178,12 +180,33 @@
                     <SymbolIcon Symbol="Copy" />
                 </Button>
 
+                <!--Command="{Binding DataContext.FieldMenuButtonCommand, ElementName=AddNewItemPage}"-->
+                <!--CommandParameter="{Binding ElementName=MenuButton}"-->
                 <Button x:Name="MenuButton"
                         Grid.Row="1"
                         Grid.Column="2"
-                        Command="{Binding DataContext.FieldMenuButtonCommand, ElementName=AddNewItemPage}"
-                        CommandParameter="{Binding ElementName=MenuButton}">
+                        
+                        >
                     ...
+
+                    <!--Behavior to open flyout-->
+                    <i:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="Tapped">
+                            <Behaviors:OpenMenuFlyoutAction />
+                        </core:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+
+                    <!--Context menu-->
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Rename"
+                                            Command="{Binding DataContext.RenameCategoryCommand, ElementName=AddNewItemPage }"
+                                                            CommandParameter="{Binding}" />
+                            <MenuFlyoutItem Text="Delete"
+                                                                Command="{Binding DataContext.DeleteCategoryCommand, ElementName=AddNewItemPage }"
+                                                                CommandParameter="{Binding}" />
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
                 </Button>
 
             </Grid>
