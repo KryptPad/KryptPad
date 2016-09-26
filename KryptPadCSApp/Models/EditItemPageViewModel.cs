@@ -134,9 +134,11 @@ namespace KryptPadCSApp.Models
 
         public ICommand AddFieldCommand { get; protected set; }
 
-        public UICommand DeleteFieldCommand { get; protected set; }
+        public Command DeleteFieldCommand { get; protected set; }
 
-        public ICommand FieldMenuButtonCommand { get; protected set; }
+        public Command RenameFieldCommand { get; protected set; }
+
+        public Command GeneratePasswordCommand { get; protected set; }
 
         public ICommand DeleteItemCommand { get; protected set; }
 
@@ -197,79 +199,6 @@ namespace KryptPadCSApp.Models
 
             });
 
-            // Handle field menu click
-            FieldMenuButtonCommand = new Command(async p =>
-            {
-                // Get data context
-                var field = (p as FrameworkElement)?.DataContext as FieldModel;
-                // Create popup menu
-                PopupMenu menu = new PopupMenu();
-
-                // Add the delete command
-                menu.Commands.Add(new UICommand("Delete", async (dp) =>
-                {
-                    // Prompt user to delete the field
-                    var promptResp = await DialogHelper.Confirm(
-                        "This action cannot be undone. Are you sure you want to delete this field?",
-                        async (c) =>
-                        {
-                            try
-                            {
-                                // Call api to delete the field from the item
-                                await KryptPadApi.DeleteFieldAsync(Category.Id, Item.Id, field.Id);
-
-                                // Remove the field
-                                Fields.Remove(field);
-                            }
-                            catch (WebException ex)
-                            {
-                                // Something went wrong in the api
-                                await DialogHelper.ShowMessageDialogAsync(ex.Message);
-                            }
-                            catch (Exception)
-                            {
-                                // Failed
-                                await DialogHelper.ShowConnectionErrorMessageDialog();
-                            }
-                        });
-
-                }));
-
-                // Add the generate password command
-                if (field.FieldType == FieldType.Password)
-                {
-                    menu.Commands.Add(new UICommand("Generate Password...", async (dp) =>
-                    {
-
-                        await DialogHelper.Confirm("This will replace your existing password with a new one. Are you sure?",
-                            async (c) =>
-                            {
-                                // Show the add field dialog
-                                var d = new PasswordGeneratorDialog();
-
-                                // Show the dialog
-                                var result = await d.ShowAsync();
-
-                                if (result == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
-                                {
-                                    // Set the password field to the new value
-                                    field.Value = (d.DataContext as PasswordGeneratorDialogViewModel)?.Password;
-                                }
-                            });
-
-
-
-                    }));
-                }
-
-                var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)p));
-                //if (chosenCommand == null)
-                //{
-
-                //}
-
-            });
-
             // Handle item delete
             DeleteItemCommand = new Command(async (p) =>
             {
@@ -326,6 +255,15 @@ namespace KryptPadCSApp.Models
                 }
 
             });
+
+            // Delete field
+            DeleteFieldCommand = new Command(DeleteFieldCommandHandler);
+
+            // Rename field
+            RenameFieldCommand = new Command(RenameFieldCommandHandler);
+
+            // Generate password
+            GeneratePasswordCommand = new Command(GeneratePasswordCommandHandler);
         }
 
         /// <summary>
@@ -498,6 +436,107 @@ namespace KryptPadCSApp.Models
             // Set main window busy state
             //(Window.Current.Content as MainPage).SetIsBusy(false);
         }
+
+        #region Command handlers
+        protected async void DeleteFieldCommandHandler(object p)
+        {
+            // Get data context
+            var field = p as FieldModel;
+
+            // Prompt user to delete the field
+            var promptResp = await DialogHelper.Confirm(
+                "This action cannot be undone. Are you sure you want to delete this field?",
+                async (c) =>
+                {
+                    try
+                    {
+                        // Call api to delete the field from the item
+                        await KryptPadApi.DeleteFieldAsync(Category.Id, Item.Id, field.Id);
+
+                        // Remove the field
+                        Fields.Remove(field);
+                    }
+                    catch (WebException ex)
+                    {
+                        // Something went wrong in the api
+                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    }
+                    catch (Exception)
+                    {
+                        // Failed
+                        await DialogHelper.ShowConnectionErrorMessageDialog();
+                    }
+                });
+        }
+
+        protected async void RenameFieldCommandHandler(object p)
+        {
+            // Get data context
+            var field = p as FieldModel;
+
+            await DialogHelper.ShowNameDialog(async (d) =>
+            {
+
+                try
+                {
+                    // Update name
+                    field.Name = d.Value;
+
+                    // Call api to delete the field from the item
+                    await KryptPadApi.SaveFieldAsync(Category.Id, Item.Id, field.Field);
+
+                }
+                catch (WebException ex)
+                {
+                    // Something went wrong in the api
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                }
+            });
+        }
+
+        protected async void GeneratePasswordCommandHandler(object p)
+        {
+            // Get data context
+            var field = p as FieldModel;
+            // Prompt only if there is something in the field
+            var prompt = !string.IsNullOrWhiteSpace(field.Value);
+            // If we don't need to prompt, then show the dialog
+            var result = !prompt;
+
+            // Prompt only if we need to
+            if (prompt)
+            {
+                await DialogHelper.Confirm(
+                    "This will replace your existing password with a new one. Are you sure?",
+                    (c) => { result = true; });
+                
+            }
+
+            // If the result is true, then show the dialog
+            if (result)
+            {
+                // Show the add field dialog
+                var d = new PasswordGeneratorDialog();
+
+                // Show the dialog
+                var action = await d.ShowAsync();
+
+                if (action == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+                {
+                    // Set the password field to the new value
+                    field.Value = (d.DataContext as PasswordGeneratorDialogViewModel)?.Password;
+                }
+            }
+
+
+        }
+
+        #endregion
 
         #region Helpers
         /// <summary>

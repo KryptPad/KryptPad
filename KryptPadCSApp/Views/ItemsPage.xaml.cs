@@ -34,26 +34,6 @@ namespace KryptPadCSApp.Views
         {
             await (DataContext as ItemsPageViewModel).RefreshCategoriesAsync();
         }
-
         
-        ApiItem _draggedItem;
-
-        private void VariableSizedWrapGrid_Drop(object sender, DragEventArgs e)
-        {
-            if (_draggedItem != null)
-            {
-                var sourceGroup = _draggedItem.CategoryId;
-            }
-        }
-
-        private void GridView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
-        {
-            _draggedItem = e.Items[0] as ApiItem;
-        }       
-
-        private void GridView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
-        {
-
-        }
     }
 }

@@ -7,9 +7,13 @@
     xmlns:Behaviors="using:KryptPadCSApp.Behaviors"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core" 
+    xmlns:Converters="using:KryptPadCSApp.Converters"
     RequestedTheme="Light">
 
     <Application.Resources>
+
+        <Converters:VisibilityConverter x:Name="VisibilityConverter" />
+
         <!--FF3297D1-->
         <SolidColorBrush x:Key="SignInBackgroundBrush" Color="#FF93D4F9" />
         <SolidColorBrush x:Key="SignInMainGridBackgroundBrush" Color="White" Opacity="0.75"/>
@@ -134,14 +138,15 @@
             </Setter>
         </Style>
 
+        <!--Style for the items page grid view-->
         <DataTemplate x:Key="GridViewItemsTemplate">
             <!--<Border Background="{Binding Background}">-->
             <Grid Width="116" Height="116" >
-                <StackPanel Padding="10" VerticalAlignment="Center" >
+                <StackPanel Padding="8" VerticalAlignment="Center" >
                     <!--<TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
                                                    Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                                    Margin="0,0,0,10"/>-->
-                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="WrapWholeWords" />
+                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="Wrap" />
                 </StackPanel>
             </Grid>
             <!--</Border>-->
@@ -199,12 +204,18 @@
                     <!--Context menu-->
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Text="Rename"
-                                            Command="{Binding DataContext.RenameCategoryCommand, ElementName=AddNewItemPage }"
-                                                            CommandParameter="{Binding}" />
                             <MenuFlyoutItem Text="Delete"
-                                                                Command="{Binding DataContext.DeleteCategoryCommand, ElementName=AddNewItemPage }"
-                                                                CommandParameter="{Binding}" />
+                                            Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage }"
+                                            CommandParameter="{Binding}" />
+                            
+                            <MenuFlyoutItem Text="Rename"
+                                            Command="{Binding DataContext.RenameFieldCommand, ElementName=AddNewItemPage }"
+                                            CommandParameter="{Binding}" />
+                            
+                            <MenuFlyoutItem Text="Generate password"
+                                            Command="{Binding DataContext.GeneratePasswordCommand, ElementName=AddNewItemPage }"
+                                            CommandParameter="{Binding}" 
+                                            Visibility="{Binding IsPasswordType, Converter={StaticResource VisibilityConverter}}"/>
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
                 </Button>

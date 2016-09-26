@@ -128,6 +128,7 @@
     <Compile Include="Collections\ProfileCollection.cs" />
     <Compile Include="Collections\RefreshableCollection.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />
+    <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">
       <DependentUpon>AddFieldDialog.xaml</DependentUpon>
     </Compile>
@@ -169,7 +170,6 @@
     <Compile Include="Models\PasswordGeneratorDialogViewModel.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
-    <Compile Include="Models\ManageCategoriesViewModel.cs" />
     <Compile Include="Models\NamePromptDialogViewModel.cs" />
     <Compile Include="Models\EditItemPageViewModel.cs" />
     <Compile Include="Models\PageNavigationParamsBase.cs" />
@@ -313,6 +313,7 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

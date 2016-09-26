@@ -38,7 +38,12 @@ namespace KryptPadCSApp.Models
         public string Name
         {
             get { return _field.Name; }
-            set { _field.Name = value; }
+            set
+            {
+                _field.Name = value;
+                // Notify change
+                OnPropertyChanged(nameof(Name));
+            }
         }
 
         /// <summary>
@@ -63,10 +68,17 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        
+        /// <summary>
+        /// Gets a value indicating whether this is a password type
+        /// </summary>
+        public bool IsPasswordType
+        {
+            get { return FieldType == FieldType.Password; }
+        }
+
         #endregion
-        
-        #region Ctor
+
+        #region Constructor
         public FieldModel(ApiField field)
         {
             if (field == null)
@@ -76,17 +88,8 @@ namespace KryptPadCSApp.Models
 
             _field = field;
 
-            RegisterCommands();
         }
         #endregion
-
-        #region Commands
-        private void RegisterCommands()
-        {
-            
-        }
-        #endregion
-
         
     }
 }
