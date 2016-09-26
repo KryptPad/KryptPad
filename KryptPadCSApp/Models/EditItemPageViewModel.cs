@@ -537,19 +537,6 @@ namespace KryptPadCSApp.Models
         }
 
         #endregion
-
-        #region Helpers
-        /// <summary>
-        /// Gets the rect from an element
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        private static Rect GetElementRect(FrameworkElement element)
-        {
-            GeneralTransform buttonTransform = element.TransformToVisual(null);
-            Point point = buttonTransform.TransformPoint(new Point());
-            return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
-        }
-        #endregion
+        
     }
 }
