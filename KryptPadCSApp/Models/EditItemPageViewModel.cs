@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Data;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 using KryptPadCSApp.Exceptions;
+using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Models
 {
@@ -526,7 +527,7 @@ namespace KryptPadCSApp.Models
                 // Show the dialog
                 var action = await d.ShowAsync();
 
-                if (action == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+                if (action == ContentDialogResult.Primary)
                 {
                     // Set the password field to the new value
                     field.Value = (d.DataContext as PasswordGeneratorDialogViewModel)?.Password;
