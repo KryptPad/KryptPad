@@ -12,31 +12,7 @@
     mc:Ignorable="d"
     xmlns:Commanding="using:Commanding"
     x:Name="ItemsViewPage" Loaded="ItemsViewPage_Loaded">
-    <Page.Resources>
-        <Style x:Key="GridViewHeaderItemStyle" TargetType="GridViewHeaderItem">
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-            <Setter Property="FontSize" Value="{ThemeResource GridViewHeaderItemThemeFontSize}"/>
-            <Setter Property="Background" Value="{ThemeResource GridViewHeaderItemBackground}"/>
-            <Setter Property="Margin" Value="0,0,0,4"/>
-            <Setter Property="Padding" Value="0,8,0,0"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="VerticalContentAlignment" Value="Top"/>
-            <Setter Property="MinHeight" Value="{ThemeResource GridViewHeaderItemMinHeight}"/>
-            <Setter Property="UseSystemFocusVisuals" Value="True"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="GridViewHeaderItem">
-                        <StackPanel BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                            <ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <Rectangle HorizontalAlignment="Stretch" Height="1" Margin="0,8,0,0" Stroke="{ThemeResource GridViewHeaderItemDividerStroke}" StrokeThickness="0.5" VerticalAlignment="Bottom"/>
-                        </StackPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Page.Resources>
-
-
+    
     <Page.DataContext>
         <Models:ItemsPageViewModel/>
     </Page.DataContext>
@@ -115,7 +91,7 @@
 
                 <!--Group header style-->
                 <GridView.GroupStyle>
-                    <GroupStyle HeaderContainerStyle="{StaticResource GridViewHeaderItemStyle}">
+                    <GroupStyle>
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -139,6 +115,10 @@
                                         
                                         <!--Behavior to open flyout-->
                                         <i:Interaction.Behaviors>
+                                            <core:EventTriggerBehavior EventName="RightTapped">
+                                                <Behaviors:OpenMenuFlyoutAction />
+                                            </core:EventTriggerBehavior>
+                                            
                                             <core:EventTriggerBehavior EventName="Holding">
                                                 <Behaviors:OpenMenuFlyoutAction />
                                             </core:EventTriggerBehavior>
