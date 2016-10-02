@@ -104,6 +104,9 @@ namespace KryptPadCSApp.Dialogs
                 // Go to profile
                 await KryptPadApi.LoadProfileAsync(profile, ProfilePassphrase);
 
+                // Success, tell the app we are signed in
+                (App.Current as App).IsSignedIn = true;
+
                 // Redirect to the main item list page
                 NavigationHelper.Navigate(typeof(ItemsPage), null);
 
