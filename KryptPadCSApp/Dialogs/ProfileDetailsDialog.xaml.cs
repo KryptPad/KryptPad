@@ -1,12 +1,16 @@
 ﻿using KryptPad.Api;
 using KryptPad.Api.Models;
-using KryptPadCSApp.Models;
+using KryptPad.Api.Requests;
+using KryptPadCSApp.Classes;
+using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Windows.Input;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -21,37 +25,153 @@ using Windows.UI.Xaml.Navigation;
 
 namespace KryptPadCSApp.Dialogs
 {
-    public sealed partial class ProfileDetailsDialog : ClosableContentDialog
+    public sealed partial class ProfileDetailsDialog : ContentDialog
     {
+
+        #region Properties
+
+        private string _profileName;
+
+        public string ProfileName
+        {
+            get { return _profileName; }
+            set
+            {
+                _profileName = value;
+                // Notify change
+                //OnPropertyChanged(nameof(ProfileName));
+                // Can we execute command?
+                IsPrimaryButtonEnabled = CanSaveProfile;
+            }
+        }
+
+        private string _profilePassphrase;
+
+        public string ProfilePassphrase
+        {
+            get { return _profilePassphrase; }
+            set
+            {
+                _profilePassphrase = value;
+                // Notify change
+                //OnPropertyChanged(nameof(ProfilePassphrase));
+                // Can we execute command?
+                IsPrimaryButtonEnabled = CanSaveProfile;
+            }
+        }
+        private string _confirmProfilePassphrase;
+
+        public string ConfirmProfilePassphrase
+        {
+            get { return _confirmProfilePassphrase; }
+            set
+            {
+                _confirmProfilePassphrase = value;
+                // Notify change
+                //OnPropertyChanged(nameof(ConfirmProfilePassphrase));
+                // Can we execute command?
+                IsPrimaryButtonEnabled = CanSaveProfile;
+
+            }
+        }
+
+
+        #endregion
+
         public ProfileDetailsDialog()
         {
             this.InitializeComponent();
+            this.DataContext = this;
+        }
 
-            // Determine the command's can execute state, and hook into the changed event
-            var m = DataContext as ProfileDetailsDialogViewModel;
-            if (m != null && m.SaveCommand != null)
+        #region Methods
+        private async Task SaveProfile()
+        {
+
+            try
             {
-                m.SaveCommand.CanExecuteChanged += (sender, e) =>
+                // Create a new profile
+                var request = new CreateProfileRequest()
                 {
-                    IsPrimaryButtonEnabled = (sender as ICommand).CanExecute(null);
+                    Name = ProfileName,
+                    Passphrase = ProfilePassphrase,
+                    ConfirmPassphrase = ConfirmProfilePassphrase
                 };
+
+                // Call api to create the profile.
+                var profile = await KryptPadApi.CreateProfileAsync(request);
+
+                // Go to profile
+                await KryptPadApi.LoadProfileAsync(profile, ProfilePassphrase);
+
+                // Success, tell the app we are signed in
+                (App.Current as App).IsSignedIn = true;
+
+                // Redirect to the main item list page
+                NavigationHelper.Navigate(typeof(ItemsPage), null);
+
+                // Hide the dialog
+                Hide();
+            }
+            catch (WebException ex)
+            {
+                // Something went wrong in the api
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
+
             }
 
         }
 
-        private void TriggerAction(object sender, KeyRoutedEventArgs e)
+        #endregion
+
+        #region Events
+        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            // Disable the primary button
+            IsPrimaryButtonEnabled = false;
+
+            // Force the dialog to stay open until the operation completes.
+            // We will call Hide() when the api calls are done.
+            args.Cancel = true;
+
+            // Save the profile
+            await SaveProfile();
+
+            // Restore the button
+            IsPrimaryButtonEnabled = CanSaveProfile;
+        }
+
+        private async void TriggerAction(object sender, KeyRoutedEventArgs e)
         {
             // Trigger the primary action
-            if (e.Key == Windows.System.VirtualKey.Enter && PrimaryButtonCommand.CanExecute(null))
+            if (e.Key == Windows.System.VirtualKey.Enter && IsPrimaryButtonEnabled)
             {
-                // Yes, it can execute, call it
-                PrimaryButtonCommand.Execute(this);
+                // Disable the primary button
+                IsPrimaryButtonEnabled = false;
 
-                // Close the dialog
-                Close(ContentDialogResult.Primary);
+                // Save the profile
+                await SaveProfile();
+
+                // Restore the button
+                IsPrimaryButtonEnabled = CanSaveProfile;
             }
         }
 
-       
+        #endregion
+
+        #region Helper methods
+
+        private bool CanSaveProfile => 
+            !string.IsNullOrWhiteSpace(ProfileName)
+            && !string.IsNullOrWhiteSpace(ProfilePassphrase)
+            && ConfirmProfilePassphrase == ProfilePassphrase;
+
+        #endregion
     }
 }

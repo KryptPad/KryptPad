@@ -94,7 +94,10 @@ namespace KryptPadCSApp.Models
             // Register commands
             RegisterCommands();
 
+            // Set defaults
             Length = 12;
+            UseUpperLowerCase = true;
+            UseNumbers = true;
         }
 
         /// <summary>

@@ -48,7 +48,9 @@ namespace KryptPadCSApp.Models
         }
 
         private ApiProfile _selectedProfile;
-
+        /// <summary>
+        /// Gets or sets the selected profile
+        /// </summary>
         public ApiProfile SelectedProfile
         {
             get { return _selectedProfile; }
@@ -96,6 +98,8 @@ namespace KryptPadCSApp.Models
             // Ensure the profile is closed and stored passphrase is cleared
             KryptPadApi.CloseProfile();
 
+            // Success, tell the app we are not signed in
+            (App.Current as App).IsSignedIn = false;
         }
 
         /// <summary>
@@ -104,6 +108,9 @@ namespace KryptPadCSApp.Models
         /// <returns></returns>
         public async Task GetProfilesAsync()
         {
+
+            IsBusy = true;
+
             // Call the api and get some data!
             try
             {
@@ -135,6 +142,8 @@ namespace KryptPadCSApp.Models
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
+
+            IsBusy = false;
         }
 
         /// <summary>
@@ -157,20 +166,22 @@ namespace KryptPadCSApp.Models
                     // Check the profile and determine if the passphrase is correct
                     await KryptPadApi.LoadProfileAsync(SelectedProfile, Passphrase);
 
+                    // Success, tell the app we are signed in
+                    (App.Current as App).IsSignedIn = true;
+
                     // When a profile is selected, navigate to main page
                     NavigationHelper.Navigate(typeof(ItemsPage), null);
 
-
                 }
-                catch (WebException ex)
+                catch (WebException)
                 {
                     // Something went wrong in the api
-                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                    await DialogHelper.ShowMessageDialogAsync("The passphrase you entered is incorrect.");
 
                     // Clear out the passphrase
                     Passphrase = null;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     // Failed
                     await DialogHelper.ShowConnectionErrorMessageDialog();

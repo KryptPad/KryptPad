@@ -11,18 +11,18 @@
     <AssemblyName>KryptPadCSApp</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>KryptPadCSApp_StoreKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>EA8358A1F46D4EE56A2E10D125F89DCD9D2D8594</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>5CACBFEDAC9B877CF5633F8BD39086946222ECF1</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <AppxPackageDir>C:\Users\neptu\Desktop\Packages\</AppxPackageDir>
+    <AppxPackageDir>C:\Users\ebutler\Desktop\Packages\</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -110,6 +110,7 @@
     <Content Include="Assets\Square71x71Logo.scale-200.png" />
     <Content Include="Assets\Square71x71Logo.scale-400.png" />
     <Content Include="Assets\templates.json" />
+    <PRIResource Include="Assets\Resources.resw" />
     <None Include="KryptPadCSApp_StoreKey.pfx" />
     <None Include="KryptPadCSApp_TemporaryKey.pfx" />
     <None Include="project.json" />
@@ -118,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Behaviors\OpenMenuFlyoutAction.cs" />
     <Compile Include="Classes\DialogHelper.cs" />
     <Compile Include="Classes\Enumerators.cs" />
     <Compile Include="Classes\NavigationHelper.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="Collections\ProfileCollection.cs" />
     <Compile Include="Collections\RefreshableCollection.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />
+    <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">
       <DependentUpon>AddFieldDialog.xaml</DependentUpon>
     </Compile>
@@ -167,11 +170,9 @@
     <Compile Include="Models\PasswordGeneratorDialogViewModel.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
-    <Compile Include="Models\ManageCategoriesViewModel.cs" />
     <Compile Include="Models\NamePromptDialogViewModel.cs" />
     <Compile Include="Models\EditItemPageViewModel.cs" />
     <Compile Include="Models\PageNavigationParamsBase.cs" />
-    <Compile Include="Models\ProfileDetailsDialogViewModel.cs" />
     <Compile Include="Models\SelectProfilePageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\AboutPage.xaml.cs">
@@ -191,9 +192,6 @@
     </Compile>
     <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ManageCategoriesPage.xaml.cs">
-      <DependentUpon>ManageCategoriesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewItemPage.xaml.cs">
       <DependentUpon>NewItemPage.xaml</DependentUpon>
@@ -287,10 +285,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ManageCategoriesPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\NewItemPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -314,6 +308,12 @@
       <Name>KryptPad.Api</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

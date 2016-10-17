@@ -17,8 +17,8 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MessageTextBlock.(RelativePanel.Below)" Value="HeartTextBlock" />
-                        <!--<Setter Target="HeartTextBlock.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="true"/>-->
+                        <!--<Setter Target="MessageTextBlock.(RelativePanel.Below)" Value="IconTextBlock" />-->
+                        <Setter Target="IconTextBlock.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
 
@@ -28,7 +28,7 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MessageTextBlock.(RelativePanel.RightOf)" Value="HeartTextBlock" />
+                        <Setter Target="MessageTextBlock.(RelativePanel.RightOf)" Value="IconTextBlock" />
 
 
                     </VisualState.Setters>
@@ -36,48 +36,49 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Grid Margin="12">
+        <ScrollViewer>
+            <Grid Margin="12">
 
-            <RelativePanel>
+                <RelativePanel>
 
-                <!--Heart-->
-                <TextBlock x:Name="HeartTextBlock" Text="&#xE783;"
-					Margin="0,0,24,0"
-					FontFamily="{ThemeResource SymbolThemeFontFamily}"
-					FontSize="144"
-					Foreground="{StaticResource SplitViewBackgroundBrush}" />
+                    <!--Heart-->
+                    <TextBlock x:Name="IconTextBlock" Text="&#xE910;"
+					           Margin="0,0,24,0"
+					           FontFamily="{ThemeResource SymbolThemeFontFamily}"
+					           FontSize="144"
+					           Foreground="{StaticResource SplitViewBackgroundBrush}" />   
 
-                <!--Text-->
-                <StackPanel x:Name="MessageTextBlock">
+                    <!--Text-->
+                    <StackPanel x:Name="MessageTextBlock">
 
-                    <!--Header-->
-                    <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
+                        <!--Header-->
+                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
 						<Run Text="Krypt Pad"/>
-                    </TextBlock>
+                        </TextBlock>
 
-                    <!--Message-->
-                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" TextWrapping="WrapWholeWords">
+                        <!--Message-->
+                        <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" TextWrapping="WrapWholeWords">
 						An open source project
-                    </TextBlock>
+                        </TextBlock>
 
-                    <!--About-->
-                    <TextBlock TextWrapping="WrapWholeWords">
-						Version 0.9.0.0 Beta
+                        <!--About-->
+                        <TextBlock TextWrapping="WrapWholeWords">
+						Version 1.0.0.0
                         <LineBreak />
                         <LineBreak/><Hyperlink NavigateUri="https://www.kryptpad.com">Krypt Pad Website</Hyperlink>
-                    </TextBlock>
-                    
-                    
-                </StackPanel>
+                        </TextBlock>
+
+
+                    </StackPanel>
 
 
 
 
-            </RelativePanel>
+                </RelativePanel>
 
 
 
-        </Grid>
-
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

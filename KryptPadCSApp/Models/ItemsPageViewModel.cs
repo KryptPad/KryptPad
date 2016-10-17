@@ -95,6 +95,16 @@ namespace KryptPadCSApp.Models
 
         public Command DownloadProfileCommand { get; protected set; }
 
+        /// <summary>
+        /// Opens rename dialog
+        /// </summary>
+        public Command RenameCategoryCommand { get; private set; }
+
+        /// <summary>
+        /// Deletes the category
+        /// </summary>
+        public Command DeleteCategoryCommand { get; private set; }
+
         #endregion
 
 
@@ -375,8 +385,16 @@ namespace KryptPadCSApp.Models
 
             });
 
+            // Handle category rename
+            RenameCategoryCommand = new Command(RenameCategoryCommandHandler);
+
+            // Handle category delete
+            DeleteCategoryCommand = new Command(DeleteCategoryCommandHandler);
+
         }
 
+        #region Methods
+        
         /// <summary>
         /// Get the list of categories from the database
         /// </summary>
@@ -459,5 +477,81 @@ namespace KryptPadCSApp.Models
 
         }
 
+        #endregion
+
+        #region Command handlers
+
+        private async void RenameCategoryCommandHandler(object p)
+        {
+            //create new category
+            var category = p as ApiCategory;
+
+            // Prompt for name
+            await DialogHelper.ShowNameDialog(async (d) =>
+            {
+                try
+                {
+                    // Set new name
+                    category.Name = d.Value;
+
+                    // Send the category to the api
+                    var resp = await KryptPadApi.SaveCategoryAsync(category);
+
+                    // Refresh the view
+                    await RefreshCategoriesAsync();
+                }
+                catch (WebException ex)
+                {
+                    // Something went wrong in the api
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                }
+            }, "RENAME CATEGORY", category.Name);
+        }
+
+        private async void DeleteCategoryCommandHandler(object p)
+        {
+            // Confirm delete
+            var res = await DialogHelper.Confirm("All items under this category will be deleted. Are you sure you want to delete this category?",
+                async (ap) =>
+                {
+                    var category = p as ApiCategory;
+                    // Get the selected items and delete them
+                    if (category != null)
+                    {
+                        try
+                        {
+                            // Delete the item
+                            var success = await KryptPadApi.DeleteCategoryAsync(category.Id);
+
+                            // If sucessful, remove item from the list
+                            if (success)
+                            {
+                                // Refresh the view
+                                await RefreshCategoriesAsync();
+                            }
+
+                        }
+                        catch (WebException ex)
+                        {
+                            // Something went wrong in the api
+                            await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                        }
+                        catch (Exception)
+                        {
+                            // Failed
+                            await DialogHelper.ShowConnectionErrorMessageDialog();
+                        }
+                    }
+                }
+            );
+
+
+        }
+        #endregion
     }
 }

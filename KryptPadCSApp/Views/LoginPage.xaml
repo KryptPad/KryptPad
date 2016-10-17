@@ -12,100 +12,123 @@
         <Models:LoginPageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource AppLoginBackgroundBrush}" >
+    <Page.BottomAppBar>
+        <CommandBar Visibility="{Binding LoginVisibility}">
+            <AppBarButton Icon="Accept" Label="Sign in" Command="{Binding LogInCommand}" />
+            <AppBarButton Label="Donate" Command="{Binding ViewDonateCommand}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE00B;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="View license terms" Command="{Binding ViewLicenseTermsCommand}" />
+                <AppBarButton Label="View privacy policy" Command="{Binding ViewPrivacyPolicyCommand}" />
+                <AppBarButton Label="Feedback &amp; Issues" Command="{Binding ViewFeedBackCommand}" />
+                <AppBarButton Label="About" Command="{Binding ViewAboutCommand}" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 
-        <!--Main grid for page-->
-        <Grid x:Name="MainGrid"
+    <Grid Background="{StaticResource SignInBackgroundGradientBrush}"  >
+
+        <ScrollViewer>
+            <!--Main grid for page-->
+            <Grid x:Name="MainGrid"
               Style="{StaticResource LoginGridWrapperStyle}" 
               Visibility="{Binding LoginVisibility}">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
-
-            <!--Header-->
-            <StackPanel Grid.Row="0"
-                       >
-                <TextBlock Text="Krypt Pad" 
-                           Style="{ThemeResource HeaderTextBlockStyle}"    
-                           Foreground="White"/>
-                <TextBlock Text="SIGN IN" 
-                           Margin="0,0,0,12"    
-                           Style="{ThemeResource SubtitleTextBlockStyle}"    
-                           Foreground="White"/>
-            </StackPanel>
-
-            <!--Main grid for input-->
-            <Grid Grid.Row="1"
-                  Style="{StaticResource LoginGridStyle}">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
+                <!--Header-->
+                <StackPanel Grid.Row="0"
+                       >
+                    <!--<TextBlock Text="Krypt Pad" 
+                           Style="{ThemeResource HeaderTextBlockStyle}"    
+                           Foreground="White"/>-->
+                    <TextBlock Text="SIGN IN" 
+                           Margin="0,0,0,12"    
+                           Style="{ThemeResource SubtitleTextBlockStyle}" />
+                </StackPanel>
+
+                <!--Main grid for input-->
+                <Grid Grid.Row="1"
+                  Style="{StaticResource LoginGridStyle}">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
                     Sign in to your account. If you don't have an account, sign up. It's free!
-                </TextBlock>
+                    </TextBlock>
 
-                <!--Login email address-->
-                <TextBox Grid.Row="1" PlaceholderText="Email" Margin="0,0,0,12"
-					InputScope="EmailNameOrAddress"
-					Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <!--Login email address-->
+                    <TextBox x:Name="EmailTextBox"
+                             Grid.Row="1"
+                             PlaceholderText="Email"
+                             Margin="0,0,0,12"
+                             InputScope="EmailNameOrAddress"
+                             Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             KeyUp="Login_KeyUp"/>
 
-                <!--Password-->
-                <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,12" 
-					Password="{Binding Password, Mode=TwoWay}"/>
+                    <!--Password-->
+                    <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,12" 
+					             Password="{Binding Password, Mode=TwoWay}"
+                                 KeyUp="Login_KeyUp"/>
 
-                <!--Remember me-->
-                <CheckBox Grid.Row="3"
+                    <!--Remember me-->
+                    <CheckBox Grid.Row="3"
                           IsChecked="{Binding AutoSignIn, Mode=TwoWay}"  
                           Content="Sign me in automatically"  
                           Margin="0,0,0,12" />
 
-                <!--Login / Sign up buttons-->
-                <Grid Grid.Row="4" Margin="0,0,0,12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
+                    <!--Login / Sign up buttons-->
+                    <Grid Grid.Row="4" Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <Button Content="Sign In" Grid.Column="0" Margin="0,0,12,0"
+                        <Button Content="Sign In" Grid.Column="0" Margin="0,0,12,0"
 						Command="{Binding LogInCommand}" />
 
-                    <Button Content="Sign Up for Free" Grid.Column="1" 
+                        <Button Content="Sign Up for Free" Grid.Column="1" 
 						Command="{Binding CreateAccountCommand}" />
 
-                </Grid>
+                    </Grid>
 
-                <!--Link to terms page-->
-                <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
+                    <!--Link to terms page-->
+                    <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
                     Krypt Pad is licensed under MIT. By using this software, you accept this
                     <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the 
                     <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
-                </TextBlock>
+                    </TextBlock>
 
-                <TextBlock Grid.Row="6">
+                    <TextBlock Grid.Row="6">
                     <Hyperlink NavigateUri="{Binding WebsiteUrl}"><Run Text="{Binding WebsiteUrl}" /></Hyperlink>
-                </TextBlock>
+                    </TextBlock>
+
+                </Grid>
 
             </Grid>
 
-        </Grid>
+        </ScrollViewer>
 
         <!--Progress indicator-->
-        <ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
+        <!--<ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
                       IsActive="{Binding IsBusy}"
                       Width="50"
                       Height="50"
-                      Foreground="White"/>
-
+                      Foreground="White"/>-->
 
         <!--Visual state manager-->
         <VisualStateManager.VisualStateGroups>

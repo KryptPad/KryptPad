@@ -34,7 +34,7 @@ namespace KryptPadCSApp.Views
         private void Hyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {
             // Go to terms page
-            NavigationHelper.Navigate(typeof(TermsPage), null);
+            NavigationHelper.GoToLicenseTerms();
         }
 
         private void PrivacyHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
@@ -46,6 +46,20 @@ namespace KryptPadCSApp.Views
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             await (DataContext as LoginPageViewModel).AutoLoginAsync();
+        }
+
+        private void Login_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                // Trigger login
+                var m = DataContext as LoginPageViewModel;
+
+                if (m.LogInCommand.CanExecute(null))
+                {
+                    m.LogInCommand.Execute(null);
+                }
+            }
         }
         
     }

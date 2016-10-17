@@ -97,13 +97,15 @@ namespace KryptPadCSApp.Models
         public Command LogInCommand { get; protected set; }
 
         public Command CreateAccountCommand { get; protected set; }
-
+        
         #endregion
 
         public LoginPageViewModel()
         {
             // Ensure that the access token is cleared upon arrival
             KryptPadApi.SignOutAsync();
+
+            (App.Current as App).IsSignedIn = false;
 
             // Register commands
             RegisterCommands();
@@ -146,9 +148,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private async Task LoginFromSavedCredentialsAsync()
         {
-
-
-            //create instance to credential locker
+            // Create instance to credential locker
             var locker = new PasswordVault();
             try
             {
@@ -164,8 +164,8 @@ namespace KryptPadCSApp.Models
                     Password = login.Password;
                     AutoSignIn = true;
 
-                    // Make sure we can auto login in, and that we don't already have an access token
-                    if (!DisableAutoLogin && !KryptPadApi.IsSignedIn)
+                    // If autologin is enabled, attempt to sign in
+                    if (!DisableAutoLogin)
                     {
                         // Do login
                         await LoginAsync();

@@ -73,16 +73,7 @@ namespace KryptPadCSApp.Dialogs
                 IsPrimaryButtonEnabled = CanChangePassphrase;
             }
         }
-
-
-        /// <summary>
-        /// Gets whether the primary button is enabled or not
-        /// </summary>
-        public bool CanChangePassphrase =>
-            !string.IsNullOrWhiteSpace(OldPassphrase)
-            && !string.IsNullOrWhiteSpace(NewPassphrase)
-            && NewPassphrase.Equals(ConfirmPassphrase);
-
+        
         #endregion
 
         public ChangePassphraseDialog()
@@ -91,8 +82,16 @@ namespace KryptPadCSApp.Dialogs
             this.DataContext = this;
         }
 
+        #region Events
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            // Disable the primary button
+            IsPrimaryButtonEnabled = false;
+
+            // Force the dialog to stay open until the operation completes.
+            // We will call Hide() when the api calls are done.
+            args.Cancel = true;
+
             try
             {
                 // Change the passphrase
@@ -100,6 +99,9 @@ namespace KryptPadCSApp.Dialogs
 
                 // Done
                 await DialogHelper.ShowMessageDialogAsync("Profile passphrase changed successfully.");
+
+                // Hide dialog
+                Hide();
             }
             catch (WarningException ex)
             {
@@ -111,10 +113,24 @@ namespace KryptPadCSApp.Dialogs
                 // Operation failed
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
+
+            // Restore the button
+            IsPrimaryButtonEnabled = CanChangePassphrase;
         }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-        }
+        #endregion
+
+        #region Helper methods
+        /// <summary>
+        /// Gets whether the primary button is enabled or not
+        /// </summary>
+        public bool CanChangePassphrase =>
+            !string.IsNullOrWhiteSpace(OldPassphrase)
+            && !string.IsNullOrWhiteSpace(NewPassphrase)
+            && NewPassphrase.Equals(ConfirmPassphrase);
+        #endregion
+
+
+
     }
 }

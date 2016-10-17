@@ -23,8 +23,8 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MessageTextBlock.(RelativePanel.Below)" Value="IconTextBlock" />
-                        <!--<Setter Target="IconTextBlock.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="true"/>-->
+                        <!--<Setter Target="MessageTextBlock.(RelativePanel.Below)" Value="IconTextBlock" />-->
+                        <Setter Target="IconTextBlock.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
 
@@ -35,56 +35,58 @@
 
                     <VisualState.Setters>
                         <Setter Target="MessageTextBlock.(RelativePanel.RightOf)" Value="IconTextBlock" />
-
-
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Grid Margin="12">
+        <ScrollViewer>
 
-            <RelativePanel>
+            <Grid Margin="12">
 
-                <!--Icon-->
-                <TextBlock x:Name="IconTextBlock" Text="&#xE76E;"
+                <RelativePanel>
+
+                    <!--Icon-->
+                    <TextBlock x:Name="IconTextBlock" Text="&#xE76E;"
 					Margin="0,0,24,0"
 					FontFamily="{ThemeResource SymbolThemeFontFamily}"
 					FontSize="144"
 					Foreground="{StaticResource SplitViewBackgroundBrush}" />
 
-                <!--Text-->
-                <StackPanel x:Name="MessageTextBlock">
+                    <!--Text-->
+                    <StackPanel x:Name="MessageTextBlock">
 
-                    <!--Header-->
-                    <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
+                        <!--Header-->
+                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
 						<Run Text="Feedback"/>
-                    </TextBlock>
-                    
-                    <TextBlock TextWrapping="WrapWholeWords">
+                        </TextBlock>
+
+                        <TextBlock TextWrapping="WrapWholeWords">
                         Like this app? Leave us a comment in the Windows Store.
-                    </TextBlock>
+                        </TextBlock>
 
-                    <!--Rate button-->
-                    <Button Margin="0,24,0,48" Command="{Binding ReviewAppCommand}">
-                        Review this App
-                    </Button>
+                        <!--Rate button-->
+                        <Button Margin="0,24,0,48" Command="{Binding ReviewAppCommand}">
+                            Review this App
+                        </Button>
 
-                    <!--Bugs and feature requests-->
-                    <TextBlock TextWrapping="WrapWholeWords">
+                        <!--Bugs and feature requests-->
+                        <TextBlock TextWrapping="WrapWholeWords">
                         To request new features, or report issues, please visit our <Hyperlink NavigateUri="{Binding IssuesUri}">Issues</Hyperlink> page on GitHub.
                         You'll need to create an account with GitHub if you don't have one.
-                    </TextBlock>
+                        </TextBlock>
 
-                    <!--Issues button-->
-                    <Button Margin="0,24,0,0" Command="{Binding SubmitIssueCommand}">
-                        Visit the GitHub Issues Page
-                    </Button>
+                        <!--Issues button-->
+                        <Button Margin="0,24,0,0" Command="{Binding SubmitIssueCommand}">
+                            Visit the GitHub Issues Page
+                        </Button>
 
-                </StackPanel>
+                    </StackPanel>
 
-            </RelativePanel>
-            
-        </Grid>
+                </RelativePanel>
+
+            </Grid>
+
+        </ScrollViewer>
     </Grid>
 </Page>

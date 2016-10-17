@@ -34,7 +34,6 @@ namespace KryptPadCSApp.Views
         {
             await (DataContext as ItemsPageViewModel).RefreshCategoriesAsync();
         }
-
-
+        
     }
 }

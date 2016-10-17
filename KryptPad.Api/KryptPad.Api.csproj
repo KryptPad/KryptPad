@@ -23,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -114,6 +114,7 @@
     <Compile Include="Models\ApiFieldType.cs" />
     <Compile Include="Models\ApiItem.cs" />
     <Compile Include="Models\ApiProfile.cs" />
+    <Compile Include="Requests\CreateProfileRequest.cs" />
     <Compile Include="Responses\ApiResponse.cs" />
     <Compile Include="Responses\ApiWebExceptionResponse.cs" />
     <Compile Include="Responses\CategoryResponse.cs" />
