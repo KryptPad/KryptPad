@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -24,6 +25,8 @@ namespace KryptPadCSApp.Views
     /// </summary>
     public sealed partial class ItemsPage : Page
     {
+        private ApiItem draggedItem;
+
         public ItemsPage()
         {
             this.InitializeComponent();
@@ -34,6 +37,52 @@ namespace KryptPadCSApp.Views
         {
             await (DataContext as ItemsPageViewModel).RefreshCategoriesAsync();
         }
-        
+
+        private void GridView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        {
+            draggedItem = e.Items[0] as ApiItem;
+
+            e.Data.RequestedOperation = DataPackageOperation.Move;
+        }
+
+        private void VariableSizedWrapGrid_Drop(object sender, DragEventArgs e)
+        {
+            try
+
+            {
+
+                if (draggedItem != null)
+
+                {
+
+                    //var sourceCategory = draggedItem.Cate;
+
+                    //var child = (((VariableSizedWrapGrid)sender).Children[0] as GridViewItem).Content as Book;
+
+                    //draggedItem.Cate = child.Cate;
+
+
+
+                    //child.Cate.BookList.Add(draggedItem);
+
+                    //sourceCategory.BookList.Remove(draggedItem);
+
+                    draggedItem = null;
+
+                }
+
+            }
+
+            catch (Exception ex)
+
+            {
+
+            }
+        }
+
+        private void VariableSizedWrapGrid_DragOver(object sender, DragEventArgs e)
+        {
+            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
+        }
     }
 }

@@ -12,7 +12,9 @@
 
     <Application.Resources>
 
+        <!--Converters-->
         <Converters:VisibilityConverter x:Name="VisibilityConverter" />
+        <Converters:NotVisibleConverter x:Name="NotVisibleConverter" />
 
         <!--FF3297D1-->
         <SolidColorBrush x:Key="SignInBackgroundBrush" Color="#FF93D4F9" />
@@ -138,6 +140,11 @@
             </Setter>
         </Style>
 
+        <!--Items page panel template-->
+        <ItemsPanelTemplate x:Key="CategoryItemPanelTemplate">
+            <StackPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
+        
         <!--Style for the items page grid view-->
         <DataTemplate x:Key="GridViewItemsTemplate">
             <!--<Border Background="{Binding Background}">-->

@@ -64,7 +64,7 @@
         </Grid>
 
         <!--No categories message-->
-        <StackPanel Grid.Row="1" Visibility="{Binding EmptyMessageVisibility}">
+        <StackPanel Grid.Row="1" >
             <TextBlock TextWrapping="WrapWholeWords" Margin="12">
                 You haven't added any categories yet. Click the <Span FontFamily="{StaticResource SymbolThemeFontFamily}">&#xE710;</Span>
                 to add a new category.
@@ -86,15 +86,20 @@
                       ItemsSource="{Binding ItemsView.View}"
                       IsItemClickEnabled="true"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
-                      ItemTemplate="{StaticResource GridViewItemsTemplate }" >
+                      ItemTemplate="{StaticResource GridViewItemsTemplate }"
+                      ItemsPanel="{StaticResource CategoryItemPanelTemplate}"
+                      
+                      CanDragItems="True"
+                      DragItemsStarting="GridView_DragItemsStarting">
 
 
                 <!--Group header style-->
                 <GridView.GroupStyle>
-                    <GroupStyle>
+                    <GroupStyle HidesIfEmpty="False" >
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
-                                <Grid>
+                                
+                                <Grid Margin="0,12">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="auto" />
@@ -108,7 +113,8 @@
                                     </Button>
 
                                     <!--Name of category-->
-                                    <TextBlock Grid.Column="1" 
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
                                                Text="{Binding Name}"
                                                Margin="8,0,0,0"
                                                Style="{StaticResource MediumHeaderTextBlock}" >
@@ -143,6 +149,17 @@
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
 
+                        <!--Panel for items inside the group-->
+                        <GroupStyle.Panel>
+                            <ItemsPanelTemplate>
+                                <VariableSizedWrapGrid AllowDrop="True"
+                                                       Orientation="Horizontal"
+                                                       Drop="VariableSizedWrapGrid_Drop"
+                                                       DragOver="VariableSizedWrapGrid_DragOver" />
+
+                            </ItemsPanelTemplate>
+                        </GroupStyle.Panel>
+                        
                     </GroupStyle>
                 </GridView.GroupStyle>
 
