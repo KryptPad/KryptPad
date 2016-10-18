@@ -25,6 +25,9 @@ namespace KryptPadCSApp.Views
     /// </summary>
     public sealed partial class SelectProfilePage : Page, INoSideNavPage
     {
+
+        private bool _setFocus = false;
+
         public SelectProfilePage()
         {
             this.InitializeComponent();
@@ -32,11 +35,10 @@ namespace KryptPadCSApp.Views
         
         private async void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // Focus on the passphrase textbox
-            PassphrasePasswordBox.Focus(FocusState.Programmatic);
-
             // Load the profiles
             await (DataContext as SelectProfilePageViewModel).GetProfilesAsync();
+
+            _setFocus = true;
         }
 
         private void PassphrasePasswordBox_KeyUp(object sender, KeyRoutedEventArgs e)
@@ -57,6 +59,18 @@ namespace KryptPadCSApp.Views
         {
             // Focus on the passphrase textbox
             PassphrasePasswordBox.Focus(FocusState.Programmatic);
+        }
+
+        private void SelectProfileViewPage_LayoutUpdated(object sender, object e)
+        {
+
+            if (_setFocus)
+            {
+                // Focus on the passphrase textbox
+                PassphrasePasswordBox.Focus(FocusState.Programmatic);
+                _setFocus = false;
+            }
+
         }
     }
 }

@@ -7,7 +7,10 @@
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.SelectProfilePage"
     mc:Ignorable="d"
-    x:Name="SelectProfileViewPage" Loaded="SelectProfileViewPage_Loaded">
+    x:Name="SelectProfileViewPage"
+    Loaded="SelectProfileViewPage_Loaded"
+    LayoutUpdated="SelectProfileViewPage_LayoutUpdated"
+    >
 
     <Page.DataContext>
         <Models:SelectProfilePageViewModel/>
