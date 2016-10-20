@@ -140,15 +140,12 @@
             </Setter>
         </Style>
 
-        <!--Items page panel template-->
-        <ItemsPanelTemplate x:Key="CategoryItemPanelTemplate">
-            <StackPanel Orientation="Vertical" />
-        </ItemsPanelTemplate>
+        
         
         <!--Style for the items page grid view-->
         <DataTemplate x:Key="GridViewItemsTemplate">
-            <!--<Border Background="{Binding Background}">-->
-            <Grid Width="116" Height="116" >
+            <Border Background="{Binding Background}">
+                <Grid Width="116" Height="116" >
                 <StackPanel Padding="8" VerticalAlignment="Center" >
                     <!--<TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="32" HorizontalAlignment="Center"
                                                    Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
@@ -156,7 +153,7 @@
                     <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="Wrap" />
                 </StackPanel>
             </Grid>
-            <!--</Border>-->
+            </Border>
         </DataTemplate>
 
         <!--Template for field list-->

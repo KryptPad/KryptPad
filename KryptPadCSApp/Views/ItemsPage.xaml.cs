@@ -45,7 +45,7 @@ namespace KryptPadCSApp.Views
             e.Data.RequestedOperation = DataPackageOperation.Move;
         }
 
-        private void VariableSizedWrapGrid_Drop(object sender, DragEventArgs e)
+        private async void VariableSizedWrapGrid_Drop(object sender, DragEventArgs e)
         {
             try
 
@@ -54,14 +54,15 @@ namespace KryptPadCSApp.Views
                 if (draggedItem != null)
 
                 {
-
-                    //var sourceCategory = draggedItem.Cate;
-
-                    //var child = (((VariableSizedWrapGrid)sender).Children[0] as GridViewItem).Content as Book;
-
-                    //draggedItem.Cate = child.Cate;
+                    //var m = DataContext as ItemsPageViewModel;
+                    //var sourceCategory = draggedItem.CategoryId;
 
 
+                    //var child = (((ItemsWrapGrid)sender).Children[0] as GridViewItem).Content as ApiItem;
+
+                    //draggedItem.CategoryId = child.CategoryId;
+
+                    //await m.RefreshCategoriesAsync();
 
                     //child.Cate.BookList.Add(draggedItem);
 

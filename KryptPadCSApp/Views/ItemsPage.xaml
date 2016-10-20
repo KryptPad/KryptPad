@@ -12,12 +12,66 @@
     mc:Ignorable="d"
     xmlns:Commanding="using:Commanding"
     x:Name="ItemsViewPage" Loaded="ItemsViewPage_Loaded">
+
     <Page.Resources>
-        <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
-            <!--<ItemsWrapGrid Orientation="Vertical" />-->
-            <!--<ItemsStackPanel Orientation="Vertical" />-->
-            <StackPanel Orientation="Vertical" />
+        <!--Items page panel template-->
+        <ItemsPanelTemplate x:Key="CategoryItemPanelTemplate">
+            <ItemsWrapGrid Orientation="Horizontal"
+                           AllowDrop="True"
+                           DragOver="VariableSizedWrapGrid_DragOver"
+                           Drop="VariableSizedWrapGrid_Drop"/>
         </ItemsPanelTemplate>
+        <Style x:Key="GridViewItemStyle1" TargetType="GridViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="Background" Value="{ThemeResource GridViewItemBackground}"/>
+            <Setter Property="Foreground" Value="{ThemeResource GridViewItemForeground}"/>
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="IsHoldingEnabled" Value="True"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,4,4"/>
+            <Setter Property="MinWidth" Value="{ThemeResource GridViewItemMinWidth}"/>
+            <Setter Property="MinHeight" Value="{ThemeResource GridViewItemMinHeight}"/>
+            <Setter Property="AllowDrop" Value="False"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
+            <Setter Property="FocusVisualMargin" Value="-2"/>
+            <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource GridViewItemFocusVisualPrimaryBrush}"/>
+            <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+            <Setter Property="FocusVisualSecondaryBrush" Value="{ThemeResource GridViewItemFocusVisualSecondaryBrush}"/>
+            <Setter Property="FocusVisualSecondaryThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewItem">
+                        <ListViewItemPresenter Margin="12,12,0,0"
+                                               CheckBrush="{ThemeResource GridViewItemCheckBrush}" 
+                                               ContentMargin="{TemplateBinding Padding}"
+                                               CheckMode="{ThemeResource GridViewItemCheckMode}"
+                                               ContentTransitions="{TemplateBinding ContentTransitions}"
+                                               CheckBoxBrush="{ThemeResource GridViewItemCheckBoxBrush}"
+                                               DragForeground="{ThemeResource GridViewItemDragForeground}"
+                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
+                                               DragBackground="{ThemeResource GridViewItemDragBackground}"
+                                               DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" 
+                                               FocusBorderBrush="{ThemeResource GridViewItemFocusBorderBrush}"
+                                               FocusSecondaryBorderBrush="{ThemeResource GridViewItemFocusSecondaryBorderBrush}"                                              
+                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               Control.IsTemplateFocusTarget="True"
+                                               PointerOverForeground="{ThemeResource GridViewItemForegroundPointerOver}"
+                                               PressedBackground="{ThemeResource GridViewItemBackgroundPressed}" 
+                                               PlaceholderBackground="{ThemeResource GridViewItemPlaceholderBackground}" 
+                                               PointerOverBackground="{ThemeResource GridViewItemBackgroundPointerOver}"
+                                               ReorderHintOffset="{ThemeResource GridViewItemReorderHintThemeOffset}"
+                                               SelectedPressedBackground="{ThemeResource GridViewItemBackgroundSelectedPressed}"
+                                               SelectionCheckMarkVisualEnabled="{ThemeResource GridViewItemSelectionCheckMarkVisualEnabled}"
+                                               SelectedForeground="{ThemeResource GridViewItemForegroundSelected}" 
+                                               SelectedPointerOverBackground="{ThemeResource GridViewItemBackgroundSelectedPointerOver}"
+                                               SelectedBackground="{ThemeResource GridViewItemBackgroundSelected}"
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Page.DataContext>
@@ -91,16 +145,14 @@
 
             <!--Items grid-->
             <GridView Grid.Row="0"
-                      Padding="12"
+                      
                       Margin="0"
                       ItemsSource="{Binding ItemsView.View}"
                       IsItemClickEnabled="true"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                       ItemTemplate="{StaticResource GridViewItemsTemplate }"
-                      ItemsPanel="{StaticResource ItemsPanelTemplate1}"
-                      
                       CanDragItems="True"
-                      DragItemsStarting="GridView_DragItemsStarting" >
+                      DragItemsStarting="GridView_DragItemsStarting" ItemContainerStyle="{StaticResource GridViewItemStyle1}" >
 
 
                 <!--Group header style-->
@@ -109,7 +161,7 @@
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
 
-                                <Grid Margin="0,12">
+                                <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="auto" />
@@ -160,15 +212,17 @@
                         </GroupStyle.HeaderTemplate>
 
                         <!--Panel for items inside the group-->
-                        <GroupStyle.Panel>
+                        <!--<GroupStyle.Panel>
                             <ItemsPanelTemplate>
-                                <VariableSizedWrapGrid AllowDrop="True"
-                                                       Orientation="Horizontal"
-                                                       Drop="VariableSizedWrapGrid_Drop"
-                                                       DragOver="VariableSizedWrapGrid_DragOver" />
+                                <ItemsPanelTemplate>
+                                    <ItemsWrapGrid Orientation="Horizontal"
+                                                   AllowDrop="True"
+                                                   DragOver="VariableSizedWrapGrid_DragOver"
+                                                   Drop="VariableSizedWrapGrid_Drop"/>              
+                                </ItemsPanelTemplate>
 
                             </ItemsPanelTemplate>
-                        </GroupStyle.Panel>
+                        </GroupStyle.Panel>-->
 
                     </GroupStyle>
                 </GridView.GroupStyle>

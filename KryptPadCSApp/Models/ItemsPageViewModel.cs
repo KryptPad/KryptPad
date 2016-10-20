@@ -166,79 +166,7 @@ namespace KryptPadCSApp.Models
             });
 
             // Handle add new item
-            AddItemCommand = new Command(async (p) =>
-            {
-
-                // Prompt to create the new item
-                var dialog = new AddItemDialog();
-
-                // Show the dialog and wait for a response
-                var dialogResp = await dialog.ShowAsync();
-
-                if (dialogResp == ContentDialogResult.Primary)
-                {
-
-                    try
-                    {
-                        // Get the category
-                        var category = p as ApiCategory;
-
-                        // Create an item
-                        var item = new ApiItem()
-                        {
-                            Name = dialog.ItemName
-                        };
-
-                        // Save the item to the api
-                        var r = await KryptPadApi.SaveItemAsync(category.Id, item);
-
-                        // Set the item
-                        item.Id = r.Id;
-
-                        // If a template was selected, create a couple of fields to start with
-                        if (dialog.SelectedItemTemplate != null)
-                        {
-                            var templateFields = dialog.SelectedItemTemplate.Fields;
-
-                            // A template was selected, add all the fields from the template
-                            foreach (var templateField in templateFields)
-                            {
-                                // Create field
-                                var field = new ApiField()
-                                {
-                                    Name = templateField.Name,
-                                    FieldType = templateField.FieldType
-                                };
-
-                                // Send to api
-                                await KryptPadApi.SaveFieldAsync(category.Id, item.Id, field);
-                            }
-                        }
-
-
-                        // Navigate to item edit page
-                        NavigationHelper.Navigate(typeof(NewItemPage), new EditItemPageParams()
-                        {
-                            Category = category,
-                            Item = item
-                        });
-
-                    }
-                    catch (WebException ex)
-                    {
-                        // Something went wrong in the api
-                        await DialogHelper.ShowMessageDialogAsync(ex.Message);
-                    }
-                    catch (Exception)
-                    {
-                        // Failed
-                        await DialogHelper.ShowConnectionErrorMessageDialog();
-                    }
-
-                }
-
-
-            });
+            AddItemCommand = new Command(AddItemCommandHandler);
 
             // Handle item click
             ItemClickCommand = new Command((p) =>
@@ -393,8 +321,10 @@ namespace KryptPadCSApp.Models
 
         }
 
-        #region Methods
         
+
+        #region Methods
+
         /// <summary>
         /// Get the list of categories from the database
         /// </summary>
@@ -480,6 +410,77 @@ namespace KryptPadCSApp.Models
         #endregion
 
         #region Command handlers
+
+        private async void AddItemCommandHandler(object p)
+        {
+            // Prompt to create the new item
+            var dialog = new AddItemDialog();
+
+            // Show the dialog and wait for a response
+            var dialogResp = await dialog.ShowAsync();
+
+            if (dialogResp == ContentDialogResult.Primary)
+            {
+
+                try
+                {
+                    // Get the category
+                    var category = p as ApiCategory;
+
+                    // Create an item
+                    var item = new ApiItem()
+                    {
+                        Name = dialog.ItemName
+                    };
+
+                    // Save the item to the api
+                    var r = await KryptPadApi.SaveItemAsync(category.Id, item);
+
+                    // Set the item
+                    item.Id = r.Id;
+
+                    // If a template was selected, create a couple of fields to start with
+                    if (dialog.SelectedItemTemplate != null)
+                    {
+                        var templateFields = dialog.SelectedItemTemplate.Fields;
+
+                        // A template was selected, add all the fields from the template
+                        foreach (var templateField in templateFields)
+                        {
+                            // Create field
+                            var field = new ApiField()
+                            {
+                                Name = templateField.Name,
+                                FieldType = templateField.FieldType
+                            };
+
+                            // Send to api
+                            await KryptPadApi.SaveFieldAsync(category.Id, item.Id, field);
+                        }
+                    }
+
+
+                    // Navigate to item edit page
+                    NavigationHelper.Navigate(typeof(NewItemPage), new EditItemPageParams()
+                    {
+                        Category = category,
+                        Item = item
+                    });
+
+                }
+                catch (WebException ex)
+                {
+                    // Something went wrong in the api
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                }
+
+            }
+        }
 
         private async void RenameCategoryCommandHandler(object p)
         {
