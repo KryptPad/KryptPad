@@ -12,7 +12,14 @@
     mc:Ignorable="d"
     xmlns:Commanding="using:Commanding"
     x:Name="ItemsViewPage" Loaded="ItemsViewPage_Loaded">
-    
+    <Page.Resources>
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
+            <!--<ItemsWrapGrid Orientation="Vertical" />-->
+            <!--<ItemsStackPanel Orientation="Vertical" />-->
+            <StackPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
+    </Page.Resources>
+
     <Page.DataContext>
         <Models:ItemsPageViewModel/>
     </Page.DataContext>
@@ -64,8 +71,11 @@
         </Grid>
 
         <!--No categories message-->
-        <StackPanel Grid.Row="1" >
-            <TextBlock TextWrapping="WrapWholeWords" Margin="12">
+        <StackPanel Grid.Row="1" Visibility="{Binding EmptyMessageVisibility}" Margin="12" Padding="12"
+                    Background="AliceBlue"
+                    BorderThickness="1"
+                    BorderBrush="CornflowerBlue">
+            <TextBlock TextWrapping="WrapWholeWords" >
                 You haven't added any categories yet. Click the <Span FontFamily="{StaticResource SymbolThemeFontFamily}">&#xE710;</Span>
                 to add a new category.
             </TextBlock>
@@ -87,10 +97,10 @@
                       IsItemClickEnabled="true"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                       ItemTemplate="{StaticResource GridViewItemsTemplate }"
-                      ItemsPanel="{StaticResource CategoryItemPanelTemplate}"
+                      ItemsPanel="{StaticResource ItemsPanelTemplate1}"
                       
                       CanDragItems="True"
-                      DragItemsStarting="GridView_DragItemsStarting">
+                      DragItemsStarting="GridView_DragItemsStarting" >
 
 
                 <!--Group header style-->
@@ -98,7 +108,7 @@
                     <GroupStyle HidesIfEmpty="False" >
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
-                                
+
                                 <Grid Margin="0,12">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -159,7 +169,7 @@
 
                             </ItemsPanelTemplate>
                         </GroupStyle.Panel>
-                        
+
                     </GroupStyle>
                 </GridView.GroupStyle>
 
@@ -167,30 +177,37 @@
 
         </Grid>
 
+        <!--Handle visual states-->
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
+
                 <VisualState x:Name="VisualStatePhone">
+
+                    <!--Trigger when the width is at least 0-->
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-
+                        <!--Modify the search bar to stretch full width when in mobile mode-->
                         <Setter Target="SearchTextBox.HorizontalAlignment" Value="Stretch" />
                         <Setter Target="SearchTextBox.Width" Value="auto" />
                     </VisualState.Setters>
                 </VisualState>
 
+
                 <VisualState x:Name="VisualStateTablet">
+
+                    <!--Trigger when the width is at least tablet sizeMargin="12"-->
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1024"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-
-
+                        <!--Reset-->
                     </VisualState.Setters>
                 </VisualState>
+
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>
