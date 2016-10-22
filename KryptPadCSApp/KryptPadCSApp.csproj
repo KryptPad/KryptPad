@@ -120,6 +120,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Behaviors\OpenMenuFlyoutAction.cs" />
+    <Compile Include="Classes\Creators.cs" />
     <Compile Include="Classes\DialogHelper.cs" />
     <Compile Include="Classes\Enumerators.cs" />
     <Compile Include="Classes\NavigationHelper.cs" />

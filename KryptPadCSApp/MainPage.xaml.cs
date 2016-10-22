@@ -21,6 +21,7 @@ using Windows.Security.Authentication.OnlineId;
 using KryptPadCSApp.Classes;
 using KryptPad.Api;
 using Windows.UI.Core;
+using CodeCreators.UWP.UI;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -77,14 +78,17 @@ namespace KryptPadCSApp
                     if (DateTime.Now >= warningTime && !_messageShowing)
                     {
                         // Show the warning
-                        SessionEndWarning.Visibility = Visibility.Visible;
+                        //SessionEndWarning.Visibility = Visibility.Visible;
+                        BorderStoryBoard.Begin();
+                        //Creators.CreateElementOpacityFadeStoryBoard(SessionEndWarning, 0, 1);
 
                         _messageShowing = true;
                     }
                     else if (DateTime.Now < warningTime && _messageShowing)
                     {
                         // Hide the warning
-                        SessionEndWarning.Visibility = Visibility.Collapsed;
+                        //SessionEndWarning.Visibility = Visibility.Collapsed;
+                        BorderStoryBoardFadeOut.Begin();
 
                         _messageShowing = false;
                     }
@@ -215,14 +219,16 @@ namespace KryptPadCSApp
         {
             KryptPadApi.ExtendSessionTime();
             // Hide the message
-            SessionEndWarning.Visibility = Visibility.Collapsed;
+            //SessionEndWarning.Visibility = Visibility.Collapsed;
+            BorderStoryBoardFadeOut.Begin();
 
             _messageShowing = false;
         }
 
         private void BorderStoryBoardFadeOut_Completed(object sender, object e)
         {
-            SessionEndWarning.Visibility = Visibility.Collapsed;
+            //SessionEndWarning.Visibility = Visibility.Collapsed;
+            BorderStoryBoardFadeOut.Begin();
         }
 
         #region Helper Methods
