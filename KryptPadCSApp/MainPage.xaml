@@ -72,20 +72,20 @@
                     Background="#FFFF4A4A"
                     VerticalAlignment="Bottom"
                     Padding="12"
-                    Opacity="0"
+                    
                     Tapped="SessionEndWarning_Tapped">
                 <Border.RenderTransform>
-                    <CompositeTransform TranslateY="0" />
+                    <CompositeTransform x:Name="CompositTrans" TranslateY="100" />
                 </Border.RenderTransform>
                 
                 <Border.Resources>
                     <Storyboard x:Name="BorderStoryBoard">
-                        <DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="Opacity" Duration="200" From="0.0" To="1.0" />
-                        <DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="(RenderTransform).(CompositeTransform.TranslateY)" Duration="200" From="100" To="0" />
+                        <!--<DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="Opacity" Duration="200" From="0.0" To="1.0" />-->
+                        <DoubleAnimation Storyboard.TargetName="CompositTrans" Storyboard.TargetProperty="TranslateY" Duration="200" From="100" To="0" />
                     </Storyboard>
                     <Storyboard x:Name="BorderStoryBoardFadeOut">
-                        <DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="Opacity" Duration="200" From="1.0" To="0.0" />
-                        <DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="(RenderTransform).(CompositeTransform.TranslateY)" Duration="200" From="0" To="100" />
+                        <!--<DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="Opacity" Duration="200" From="1.0" To="0.0" />-->
+                        <DoubleAnimation Storyboard.TargetName="CompositTrans" Storyboard.TargetProperty="TranslateY" Duration="200" From="0" To="100" />
                     </Storyboard>
                 </Border.Resources>
                 <TextBlock Foreground="White"
