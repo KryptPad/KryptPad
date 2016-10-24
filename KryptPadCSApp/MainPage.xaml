@@ -72,22 +72,82 @@
                     Background="#FFFF4A4A"
                     VerticalAlignment="Bottom"
                     Padding="12"
-                    
+                    Opacity="0.0"
                     Tapped="SessionEndWarning_Tapped">
+                
                 <Border.RenderTransform>
                     <CompositeTransform x:Name="CompositTrans" TranslateY="100" />
                 </Border.RenderTransform>
                 
                 <Border.Resources>
-                    <Storyboard x:Name="BorderStoryBoard">
-                        <!--<DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="Opacity" Duration="200" From="0.0" To="1.0" />-->
-                        <DoubleAnimation Storyboard.TargetName="CompositTrans" Storyboard.TargetProperty="TranslateY" Duration="200" From="100" To="0" />
+                    <Storyboard x:Name="BorderStoryBoardFadeIn">
+
+                        <!--Fade in-->
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SessionEndWarning" 
+                                                       Storyboard.TargetProperty="Opacity" 
+                                                       Duration="500">
+                            
+                            <!--End keyframe-->
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5"
+                                                  Value="1.0">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut" />
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+
+                        </DoubleAnimationUsingKeyFrames>
+
+                        <!--Slide up-->
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="CompositTrans" 
+                                                       Storyboard.TargetProperty="TranslateY" 
+                                                       Duration="500">
+                            
+                            <!--End keyframe-->
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5"
+                                                  Value="0">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut" />
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+
+                        </DoubleAnimationUsingKeyFrames>
+                        
                     </Storyboard>
                     <Storyboard x:Name="BorderStoryBoardFadeOut">
-                        <!--<DoubleAnimation Storyboard.TargetName="SessionEndWarning" Storyboard.TargetProperty="Opacity" Duration="200" From="1.0" To="0.0" />-->
-                        <DoubleAnimation Storyboard.TargetName="CompositTrans" Storyboard.TargetProperty="TranslateY" Duration="200" From="0" To="100" />
+
+                        <!--Fade out-->
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SessionEndWarning" 
+                                                       Storyboard.TargetProperty="Opacity" 
+                                                       Duration="500">
+
+                            <!--End keyframe-->
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5"
+                                                  Value="0.0">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut" />
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+
+                        </DoubleAnimationUsingKeyFrames>
+                        
+                        <!--Slide down-->
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="CompositTrans" 
+                                                       Storyboard.TargetProperty="TranslateY" 
+                                                       Duration="500">
+                            
+                            <!--End keyframe-->
+                            <EasingDoubleKeyFrame KeyTime="00:00:00.5"
+                                                  Value="100">
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut" />
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+
+                        </DoubleAnimationUsingKeyFrames>
+
                     </Storyboard>
                 </Border.Resources>
+                
                 <TextBlock Foreground="White"
                            TextAlignment="Center">
                     <Run>Your session will expire in</Run>

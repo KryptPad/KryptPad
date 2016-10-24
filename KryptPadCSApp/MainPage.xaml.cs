@@ -46,8 +46,6 @@ namespace KryptPadCSApp
         {
             this.InitializeComponent();
 
-            //BorderStoryBoardFadeOut.Completed += BorderStoryBoardFadeOut_Completed;
-
             // Some API events
             KryptPadApi.SessionEnded += async () =>
             {
@@ -79,9 +77,8 @@ namespace KryptPadCSApp
                     {
                         // Show the warning
                         //SessionEndWarning.Visibility = Visibility.Visible;
-                        BorderStoryBoard.Begin();
-                        //Creators.CreateElementOpacityFadeStoryBoard(SessionEndWarning, 0, 1);
-
+                        BorderStoryBoardFadeIn.Begin();
+                        
                         _messageShowing = true;
                     }
                     else if (DateTime.Now < warningTime && _messageShowing)
@@ -221,14 +218,14 @@ namespace KryptPadCSApp
             // Hide the message
             //SessionEndWarning.Visibility = Visibility.Collapsed;
             BorderStoryBoardFadeOut.Begin();
-
+            
             _messageShowing = false;
         }
 
         private void BorderStoryBoardFadeOut_Completed(object sender, object e)
         {
             //SessionEndWarning.Visibility = Visibility.Collapsed;
-            BorderStoryBoardFadeOut.Begin();
+
         }
 
         #region Helper Methods
