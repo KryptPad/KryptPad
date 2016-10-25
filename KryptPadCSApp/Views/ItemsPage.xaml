@@ -16,11 +16,9 @@
     <Page.Resources>
         <!--Items page panel template-->
         <ItemsPanelTemplate x:Key="CategoryItemPanelTemplate">
-            <ItemsWrapGrid Orientation="Horizontal"
-                           AllowDrop="True"
-                           DragOver="VariableSizedWrapGrid_DragOver"
-                           Drop="VariableSizedWrapGrid_Drop"/>
+            <ItemsStackPanel Orientation="Vertical" />
         </ItemsPanelTemplate>
+
         <Style x:Key="GridViewItemStyle1" TargetType="GridViewItem">
             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
             <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
@@ -28,8 +26,8 @@
             <Setter Property="Foreground" Value="{ThemeResource GridViewItemForeground}"/>
             <Setter Property="TabNavigation" Value="Local"/>
             <Setter Property="IsHoldingEnabled" Value="True"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
             <Setter Property="Margin" Value="0,0,4,4"/>
             <Setter Property="MinWidth" Value="{ThemeResource GridViewItemMinWidth}"/>
             <Setter Property="MinHeight" Value="{ThemeResource GridViewItemMinHeight}"/>
@@ -43,7 +41,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="GridViewItem">
-                        <ListViewItemPresenter Margin="12,12,0,0"
+                        <ListViewItemPresenter Margin="12,12,12,0"
                                                CheckBrush="{ThemeResource GridViewItemCheckBrush}" 
                                                ContentMargin="{TemplateBinding Padding}"
                                                CheckMode="{ThemeResource GridViewItemCheckMode}"
@@ -67,7 +65,8 @@
                                                SelectedForeground="{ThemeResource GridViewItemForegroundSelected}" 
                                                SelectedPointerOverBackground="{ThemeResource GridViewItemBackgroundSelectedPointerOver}"
                                                SelectedBackground="{ThemeResource GridViewItemBackgroundSelected}"
-                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                               />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -144,6 +143,7 @@
             </Grid.RowDefinitions>
 
             <!--Items grid-->
+            <!---->
             <GridView Grid.Row="0"
                       
                       Margin="0"
@@ -151,13 +151,15 @@
                       IsItemClickEnabled="true"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                       ItemTemplate="{StaticResource GridViewItemsTemplate }"
+                      ItemsPanel="{StaticResource CategoryItemPanelTemplate}"
                       CanDragItems="True"
-                      DragItemsStarting="GridView_DragItemsStarting" ItemContainerStyle="{StaticResource GridViewItemStyle1}" >
+                      DragItemsStarting="GridView_DragItemsStarting"
+                      ItemContainerStyle="{StaticResource GridViewItemStyle1}" >
 
 
                 <!--Group header style-->
                 <GridView.GroupStyle>
-                    <GroupStyle HidesIfEmpty="False" >
+                    <GroupStyle >
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
 
@@ -212,17 +214,17 @@
                         </GroupStyle.HeaderTemplate>
 
                         <!--Panel for items inside the group-->
-                        <!--<GroupStyle.Panel>
-                            <ItemsPanelTemplate>
-                                <ItemsPanelTemplate>
-                                    <ItemsWrapGrid Orientation="Horizontal"
-                                                   AllowDrop="True"
-                                                   DragOver="VariableSizedWrapGrid_DragOver"
-                                                   Drop="VariableSizedWrapGrid_Drop"/>              
-                                </ItemsPanelTemplate>
+                        <GroupStyle.Panel>
 
+                            <ItemsPanelTemplate>
+                                <VariableSizedWrapGrid Orientation="Horizontal"
+                                                       Background="Black"
+                                                       AllowDrop="True"
+                                                       DragOver="VariableSizedWrapGrid_DragOver"
+                                                       Drop="VariableSizedWrapGrid_Drop" />
                             </ItemsPanelTemplate>
-                        </GroupStyle.Panel>-->
+
+                        </GroupStyle.Panel>
 
                     </GroupStyle>
                 </GridView.GroupStyle>

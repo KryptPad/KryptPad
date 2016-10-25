@@ -1,0 +1,22 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KryptPadCSApp">
+
+    <ResourceDictionary.ThemeDictionaries>
+
+        <!--Styles for dark theme-->
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#FF191919" />
+            <SolidColorBrush x:Key="GridViewItemBackgroundThemeBrush" Color="#FF191919" />
+        </ResourceDictionary>
+
+        <!--Styles for light theme-->
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#FFE4E4E4" />
+            <SolidColorBrush x:Key="GridViewItemBackgroundThemeBrush" Color="#FFE4E4E4" />
+        </ResourceDictionary>
+
+    </ResourceDictionary.ThemeDictionaries>
+
+</ResourceDictionary>
