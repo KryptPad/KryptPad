@@ -116,16 +116,16 @@ namespace KryptPadCSApp
             Window.Current.Activate();
 
             // Check for presence of the status bar
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                // Get status bar
-                //#FF173A55
-                var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-                statusBar.BackgroundColor = Windows.UI.ColorHelper.FromArgb(255, 17, 58, 85);
-                statusBar.BackgroundOpacity = 1;
-                statusBar.ForegroundColor = Windows.UI.Colors.White;
+            //if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            //{
+            //    // Get status bar
+            //    //#FF173A55
+            //    var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+            //    statusBar.BackgroundColor = Windows.UI.ColorHelper.FromArgb(255, 17, 58, 85);
+            //    statusBar.BackgroundOpacity = 1;
+            //    statusBar.ForegroundColor = Windows.UI.Colors.White;
 
-            }
+            //}
         }
 
         protected override void OnActivated(IActivatedEventArgs args)

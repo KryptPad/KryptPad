@@ -77,23 +77,7 @@ namespace KryptPadCSApp.Models
         {
             get { return KryptPadApi.ServiceHost; }
         }
-
-        private Visibility _loginVisibility;
-        /// <summary>
-        /// Gets or sets whether the ui element is visible
-        /// </summary>
-        public Visibility LoginVisibility
-        {
-            get { return _loginVisibility; }
-            set
-            {
-                _loginVisibility = value;
-                //notify change
-                OnPropertyChanged(nameof(LoginVisibility));
-
-            }
-        }
-
+        
         public Command LogInCommand { get; protected set; }
 
         public Command CreateAccountCommand { get; protected set; }
@@ -249,12 +233,6 @@ namespace KryptPadCSApp.Models
         /// <returns></returns>
         private bool IsLoginEnabled() => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
         #endregion
-
-        protected override void OnIsBusyChanged()
-        {
-            base.OnIsBusyChanged();
-
-            LoginVisibility = IsBusy ? Visibility.Collapsed : Visibility.Visible;
-        }
+        
     }
 }

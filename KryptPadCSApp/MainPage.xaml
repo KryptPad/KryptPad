@@ -20,7 +20,7 @@
             <!--Nav grid-->
             <Grid Grid.Row="0"
               Padding="12"
-              Background="{StaticResource SignInBackgroundBrush}"
+              Background="{StaticResource AppHeaderBackgroundThemeBrush}"
               >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
