@@ -37,7 +37,7 @@
                 </StackPanel>
 
 
-                <Grid Grid.Row="1"  Style="{StaticResource LoginGridStyle}">
+                <Grid Grid.Row="1" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />

@@ -42,8 +42,7 @@
                 </StackPanel>
 
                 <!--Profiles-->
-                <Grid Grid.Row="1"
-                  Style="{StaticResource LoginGridStyle}">
+                <Grid Grid.Row="1">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
@@ -55,9 +54,9 @@
 
                     <!--Description-->
                     <TextBlock Grid.Row="0"
-                           TextWrapping="WrapWholeWords"
-                           Margin="0,0,0,12">
-                    Select a profile from the list, or create a new profile. You can also restore a profile from a backup.
+                               TextWrapping="WrapWholeWords"
+                               Margin="0,0,0,12">
+                        Select a profile from the list, or create a new profile. You can also restore a profile from a backup.
                     </TextBlock>
 
                     <!--Create or restore profile-->
