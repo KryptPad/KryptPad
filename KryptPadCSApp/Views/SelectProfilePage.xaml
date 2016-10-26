@@ -16,7 +16,7 @@
         <Models:SelectProfilePageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource SignInBackgroundGradientBrush}">
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
 
         <ScrollViewer>
 
@@ -26,23 +26,24 @@
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
+                    <!--<RowDefinition Height="auto" />-->
                 </Grid.RowDefinitions>
 
-                <!--Header-->
+                <!--Header--><!--
                 <StackPanel Grid.Row="0"
                        >
-                    <!--<TextBlock Text="Krypt Pad" 
+                    --><!--<TextBlock Text="Krypt Pad" 
                            Style="{ThemeResource HeaderTextBlockStyle}"    
-                           Foreground="White"/>-->
+                           Foreground="White"/>--><!--
                     <TextBlock Text="PROFILES" 
                            Margin="0,0,0,12"    
                            Style="{ThemeResource SubtitleTextBlockStyle}"    
                            />
-                </StackPanel>
+                </StackPanel>-->
 
                 <!--Profiles-->
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="0"
+                      Margin="12">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
