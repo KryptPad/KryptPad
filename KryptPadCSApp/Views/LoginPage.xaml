@@ -8,6 +8,16 @@
     x:Class="KryptPadCSApp.Views.LoginPage"
     mc:Ignorable="d" Loaded="Page_Loaded">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+
     <Page.DataContext>
         <Models:LoginPageViewModel/>
     </Page.DataContext>
@@ -57,12 +67,18 @@
                 </StackPanel>-->
 
                 <!--Content is positioned with RelativePanel for dynamic placement with VisualStateManager-->
-                <RelativePanel Grid.Row="1">
+                <RelativePanel Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               >
 
                     <!--Main grid for input-->
                     <Grid x:Name="LoginGrid"
-                          Margin="12"
-                          MaxWidth="400">
+                          
+                          MaxWidth="400"
+                          Padding="12"
+                          
+                          BorderThickness="0,0,1,0"
+                          BorderBrush="#FF3E3E3E">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
@@ -128,9 +144,9 @@
 
                     <!--Social-->
                     <Grid x:Name="SocialGrid"
-                          Margin="12"
+                          Padding="12"
                           RelativePanel.RightOf="LoginGrid"
-                          >
+                          MaxWidth="400">
 
                         <StackPanel>
                             <!--Message-->
@@ -149,6 +165,7 @@
                         </StackPanel>
 
                     </Grid>
+                    
                 </RelativePanel>
 
             </Grid>
@@ -171,6 +188,7 @@
                         <Setter Target="MainGrid.VerticalAlignment" Value="Top" />
                         <Setter Target="SocialGrid.(RelativePanel.Below)" Value="LoginGrid" />
                         <Setter Target="SocialGrid.(RelativePanel.AlignLeftWith)" Value="LoginGrid" />
+                        <Setter Target="LoginGrid.BorderThickness" Value="0,0,0,1" />
                     </VisualState.Setters>
                 </VisualState>
 
