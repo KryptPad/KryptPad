@@ -9,9 +9,9 @@
     mc:Ignorable="d"
     >
 
-    
-    
-    <Grid>
+
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid>
             <Grid.RowDefinitions>
@@ -22,7 +22,7 @@
             <!--Nav grid-->
             <Grid Grid.Row="0"
               Padding="12"
-              Background="{StaticResource AppHeaderBackgroundThemeBrush}"
+              Background="{ThemeResource AppHeaderBackgroundThemeBrush}"
               >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />

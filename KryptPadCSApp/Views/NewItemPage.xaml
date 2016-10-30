@@ -9,6 +9,16 @@
     mc:Ignorable="d"
     Name="AddNewItemPage">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    
     <Page.DataContext>
         <Models:EditItemPageViewModel/>
     </Page.DataContext>

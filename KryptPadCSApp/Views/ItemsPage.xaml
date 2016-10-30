@@ -13,6 +13,16 @@
     xmlns:Commanding="using:Commanding"
     x:Name="ItemsViewPage" Loaded="ItemsViewPage_Loaded">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    
     <Page.Resources>
         
 
@@ -80,7 +90,7 @@
         </CommandBar>
     </Page.BottomAppBar>-->
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

@@ -86,6 +86,7 @@ namespace KryptPadCSApp
                         // Hide the warning
                         //SessionEndWarning.Visibility = Visibility.Collapsed;
                         BorderStoryBoardFadeOut.Begin();
+                        BorderStoryBoardFadeIn.Stop();
 
                         _messageShowing = false;
                     }
@@ -218,16 +219,12 @@ namespace KryptPadCSApp
             // Hide the message
             //SessionEndWarning.Visibility = Visibility.Collapsed;
             BorderStoryBoardFadeOut.Begin();
+            BorderStoryBoardFadeIn.Stop();
             
             _messageShowing = false;
         }
 
-        private void BorderStoryBoardFadeOut_Completed(object sender, object e)
-        {
-            //SessionEndWarning.Visibility = Visibility.Collapsed;
-
-        }
-
+        
         #region Helper Methods
 
         ///// <summary>

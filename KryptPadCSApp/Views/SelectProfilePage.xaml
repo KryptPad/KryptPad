@@ -42,7 +42,8 @@
                 
                 <!--Profiles-->
                 <Grid Grid.Row="0"
-                      Margin="12">
+                      Margin="12"
+                      MaxWidth="400">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
