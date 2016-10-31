@@ -78,7 +78,7 @@ namespace KryptPadCSApp.Models
                 // Notify of change
                 OnPropertyChanged(nameof(Password));
                 // Set primary command enabled or not
-                PrimaryCommand.CommandCanExecute = !string.IsNullOrWhiteSpace(Password);
+                PrimaryCommand.OnCanExecuteChanged();
             }
         }
 
@@ -171,7 +171,7 @@ namespace KryptPadCSApp.Models
 
             });
 
-            PrimaryCommand = new Command();
+            PrimaryCommand = new Command(null, IsValid);
         }
 
         /// <summary>
@@ -195,6 +195,13 @@ namespace KryptPadCSApp.Models
             return new string(array);
 
         }
+
+        /// <summary>
+        /// Gets whether the input is valid
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        private bool IsValid(object p) => !string.IsNullOrWhiteSpace(Password);
 
     }
 }

@@ -33,7 +33,7 @@ namespace KryptPadCSApp.Models
                 // Notify change
                 OnPropertyChanged(nameof(Email));
                 // Is login enabled?
-                LogInCommand.CommandCanExecute = IsLoginEnabled();
+                LogInCommand.OnCanExecuteChanged();
             }
         }
 
@@ -50,7 +50,7 @@ namespace KryptPadCSApp.Models
                 // Notify change
                 OnPropertyChanged(nameof(Password));
                 // Is login enabled?
-                LogInCommand.CommandCanExecute = IsLoginEnabled();
+                LogInCommand.OnCanExecuteChanged();
             }
         }
 
@@ -117,7 +117,7 @@ namespace KryptPadCSApp.Models
             LogInCommand = new Command(async (p) =>
             {
                 await LoginAsync();
-            }, false);
+            }, IsLoginEnabled);
 
             CreateAccountCommand = new Command((p) =>
             {
@@ -231,7 +231,7 @@ namespace KryptPadCSApp.Models
         /// Gets whether the login command is enabled
         /// </summary>
         /// <returns></returns>
-        private bool IsLoginEnabled() => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
+        private bool IsLoginEnabled(object p) => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
         #endregion
         
     }

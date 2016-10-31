@@ -71,6 +71,38 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private ListViewSelectionMode _selectionMode;
+
+        /// <summary>
+        /// Gets or sets the grid view's selection mode
+        /// </summary>
+        public ListViewSelectionMode SelectionMode
+        {
+            get { return _selectionMode; }
+            set
+            {
+                _selectionMode = value;
+                // Notify change
+                OnPropertyChanged(nameof(SelectionMode));
+            }
+        }
+
+        private bool _canSelectItems;
+
+        /// <summary>
+        /// Gets or sets whether the grid view's items can be selected
+        /// </summary>
+        public bool CanSelectItems
+        {
+            get { return _canSelectItems; }
+            set
+            {
+                _canSelectItems = value;
+                // Notify change
+                OnPropertyChanged(nameof(CanSelectItems));
+            }
+        }
+
 
         /// <summary>
         /// Opens new category page
@@ -98,23 +130,28 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Opens rename dialog
         /// </summary>
-        public Command RenameCategoryCommand { get; private set; }
+        public Command RenameCategoryCommand { get; protected set; }
 
         /// <summary>
         /// Deletes the category
         /// </summary>
-        public Command DeleteCategoryCommand { get; private set; }
+        public Command DeleteCategoryCommand { get; protected set; }
+
+        public Command SelectModeCommand { get; protected set; }
+
+        public Command MoveItemsCommand { get; protected set; }
 
         #endregion
 
 
         public ItemsPageViewModel()
         {
+            // Set properties
+            CanSelectItems = true;
+
             // Register commands
             RegisterCommands();
 
-            // Hide the message
-            //EmptyMessageVisibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -185,7 +222,7 @@ namespace KryptPadCSApp.Models
                     });
 
 
-            }, false);
+            });
 
             // Handle change passphrase command
             ChangePassphraseCommand = new Command(async (p) =>
@@ -319,10 +356,13 @@ namespace KryptPadCSApp.Models
             // Handle category delete
             DeleteCategoryCommand = new Command(DeleteCategoryCommandHandler);
 
+            // Handle selection mode
+            SelectModeCommand = new Command(SelectModeCommandHandler);
+
+            // Handle the move command
+            MoveItemsCommand = new Command(MoveItemsCommandHandler );
         }
-
         
-
         #region Methods
 
         /// <summary>
@@ -410,6 +450,33 @@ namespace KryptPadCSApp.Models
         #endregion
 
         #region Command handlers
+
+        /// <summary>
+        /// Handles the move command
+        /// </summary>
+        /// <param name="obj"></param>
+        private void MoveItemsCommandHandler(object obj)
+        {
+            // Show a dialog to pick a new category
+        }
+
+        /// <summary>
+        /// Handles the SelectModeCommand
+        /// </summary>
+        /// <param name="obj"></param>
+        private void SelectModeCommandHandler(object obj)
+        {
+            if (SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                SelectionMode = ListViewSelectionMode.None;
+                CanSelectItems = true;
+            }
+            else
+            {
+                SelectionMode = ListViewSelectionMode.Multiple;
+                CanSelectItems = false;
+            }
+        }
 
         private async void AddItemCommandHandler(object p)
         {
@@ -553,6 +620,12 @@ namespace KryptPadCSApp.Models
 
 
         }
+        #endregion
+
+        #region Helper methods
+
+        
+
         #endregion
     }
 }

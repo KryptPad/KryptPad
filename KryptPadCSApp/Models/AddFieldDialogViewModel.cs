@@ -27,7 +27,7 @@ namespace KryptPadCSApp.Models
                 // Notify change
                 OnPropertyChanged(nameof(FieldName));
                 // Change can execure
-                PrimaryCommand.CommandCanExecute = AddFieldCommandCanExecute;
+                PrimaryCommand.OnCanExecuteChanged();
             }
         }
 
@@ -51,7 +51,7 @@ namespace KryptPadCSApp.Models
                 // Notify change
                 OnPropertyChanged(nameof(SelectedFieldType));
                 // Change can execure
-                PrimaryCommand.CommandCanExecute = AddFieldCommandCanExecute;
+                PrimaryCommand.OnCanExecuteChanged();
             }
         }
 
@@ -89,12 +89,12 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            PrimaryCommand = new Command();
+            PrimaryCommand = new Command(null, AddFieldCommandCanExecute);
 
 
         }
 
-        private bool AddFieldCommandCanExecute => !string.IsNullOrWhiteSpace(FieldName) && SelectedFieldType != null;
+        private bool AddFieldCommandCanExecute(object p) => !string.IsNullOrWhiteSpace(FieldName) && SelectedFieldType != null;
 
     }
 }

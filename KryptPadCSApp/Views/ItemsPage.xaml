@@ -84,11 +84,12 @@
         <Models:ItemsPageViewModel/>
     </Page.DataContext>
 
-    <!--<Page.BottomAppBar>
+    <Page.BottomAppBar>
         <CommandBar Visibility="{Binding BottomAppBarVisible}">
-            <AppBarButton Icon="Delete" Label="Delete Item" Command="{Binding DeleteItemCommand}" />
+            <AppBarButton Icon="ViewAll" Label="Select" Command="{Binding SelectModeCommand}" />
+            <AppBarButton Icon="MoveToFolder" Label="Move Items" Command="{Binding MoveItemsCommand}" />
         </CommandBar>
-    </Page.BottomAppBar>-->
+    </Page.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -155,7 +156,8 @@
                       Grid.Row="0"
                       Margin="0"
                       ItemsSource="{Binding ItemsView.View}"
-                      IsItemClickEnabled="true"
+                      IsItemClickEnabled="{Binding DataContext.CanSelectItems, ElementName=ItemsGridView}"
+                      SelectionMode="{Binding DataContext.SelectionMode, ElementName=ItemsGridView}"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                       ItemTemplate="{StaticResource GridViewItemsTemplate }"
                       ItemsPanel="{StaticResource DesktopCategoryItemPanelTemplate}"

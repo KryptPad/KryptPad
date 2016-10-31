@@ -63,10 +63,8 @@ namespace KryptPadCSApp
                     // Clear backstack too
                     NavigationHelper.ClearBackStack();
 
-                    // Hide the warning message
-                    SessionEndWarning.Visibility = Visibility.Collapsed;
-
-                    _messageShowing = false;
+                    // Hide the message
+                    ShowSessionWarningMessage(false);
                 });
 
             };
@@ -82,19 +80,12 @@ namespace KryptPadCSApp
                     if (DateTime.Now >= warningTime && !_messageShowing)
                     {
                         // Show the warning
-                        //SessionEndWarning.Visibility = Visibility.Visible;
-                        BorderStoryBoardFadeIn.Begin();
-                        
-                        _messageShowing = true;
+                        ShowSessionWarningMessage(true);
                     }
                     else if (DateTime.Now < warningTime && _messageShowing)
                     {
-                        // Hide the warning
-                        //SessionEndWarning.Visibility = Visibility.Collapsed;
-                        BorderStoryBoardFadeOut.Begin();
-                        BorderStoryBoardFadeIn.Stop();
-
-                        _messageShowing = false;
+                        // Hide the message
+                        ShowSessionWarningMessage(false);
                     }
 
                     // Show time remaining
@@ -198,29 +189,28 @@ namespace KryptPadCSApp
         {
             KryptPadApi.ExtendSessionTime();
             // Hide the message
-            BorderStoryBoardFadeOut.Begin();
-            BorderStoryBoardFadeIn.Stop();
-            
-            _messageShowing = false;
+            ShowSessionWarningMessage(false);
         }
 
         
         #region Helper Methods
 
-        ///// <summary>
-        ///// Closes the pane if in CompactOverlay mode
-        ///// </summary>
-        //private void ClosePane()
-        //{
-        //    // Check to see if the pane is in overlay mode, if it is, then we close it,
-        //    // otherwise, we do not close it
-        //    if (ShellSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
-        //    {
-        //        // Only force closed when in CompactOverlay mode
-        //        ShellSplitView.IsPaneOpen = false;
-        //    }
-        //}
+        private void ShowSessionWarningMessage(bool value)
+        {
+            if (value)
+            {
+                // Show the message
+                BorderStoryBoardFadeIn.Begin();
+            }
+            else
+            {
+                // Hide the message
+                BorderStoryBoardFadeOut.Begin();
+            }
+            
 
+            _messageShowing = value;
+        }
 
         #endregion
 
