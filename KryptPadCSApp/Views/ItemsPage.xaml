@@ -132,15 +132,31 @@
         </Grid>
 
         <!--No categories message-->
-        <StackPanel Grid.Row="1" Visibility="{Binding EmptyMessageVisibility}" Margin="12" Padding="12"
-                    Background="AliceBlue"
+        <Border Grid.Row="1" 
+                    Visibility="{Binding EmptyMessageVisibility}"
+                    Margin="12"
+                    Padding="12"
+                    Background="{ThemeResource InformationMessageThemeBrush}"
+                    BorderBrush="{ThemeResource InformationMessageBorderThemeBrush}"
                     BorderThickness="1"
-                    BorderBrush="CornflowerBlue">
-            <TextBlock TextWrapping="WrapWholeWords" >
-                You haven't added any categories yet. Click the <Span FontFamily="{StaticResource SymbolThemeFontFamily}">&#xE710;</Span>
-                to add a new category.
-            </TextBlock>
-        </StackPanel>
+                    >
+            <StackPanel Orientation="Horizontal">
+                
+                <TextBlock TextWrapping="WrapWholeWords"
+                       VerticalAlignment="Center">
+                    <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#xE8C9;" FontSize="32" />
+                </TextBlock>
+                
+                <TextBlock TextWrapping="WrapWholeWords"
+                       VerticalAlignment="Center">
+                
+                    You haven't added any categories yet. Click the
+                    <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#xE710;" />
+                    to add a new category.
+                </TextBlock>
+            </StackPanel>
+            
+        </Border>
 
 
         <!--Search and items-->

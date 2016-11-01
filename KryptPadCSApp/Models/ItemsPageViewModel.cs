@@ -148,6 +148,7 @@ namespace KryptPadCSApp.Models
         {
             // Set properties
             CanSelectItems = true;
+            EmptyMessageVisibility = Visibility.Collapsed;
 
             // Register commands
             RegisterCommands();

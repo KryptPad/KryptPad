@@ -12,6 +12,8 @@
             <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#FF191919" />
             <SolidColorBrush x:Key="GridViewItemBackgroundThemeBrush" Color="#FF191919" />
             <SolidColorBrush x:Key="GridViewItemAccentThemeBrush" Color="#FF2B2B2B" />
+            <SolidColorBrush x:Key="InformationMessageThemeBrush" Color="#FF1867D8" />
+            <SolidColorBrush x:Key="InformationMessageBorderThemeBrush" Color="#FF0068FF" />
         </ResourceDictionary>
 
         <!--Styles for light theme-->
@@ -21,7 +23,8 @@
             <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#FFE4E4E4" />
             <SolidColorBrush x:Key="GridViewItemBackgroundThemeBrush" Color="#FFE4E4E4" />
             <SolidColorBrush x:Key="GridViewItemAccentThemeBrush" Color="#FFC5C5C5" />
-            
+            <SolidColorBrush x:Key="InformationMessageThemeBrush" Color="#FFA5CAFF" />
+            <SolidColorBrush x:Key="InformationMessageBorderThemeBrush" Color="#FF0068FF" />
         </ResourceDictionary>
 
     </ResourceDictionary.ThemeDictionaries>
