@@ -39,7 +39,7 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}"  >
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"  >
 
         <ScrollViewer>
 

@@ -62,15 +62,12 @@
                 </StackPanel>
             </Grid>
 
-
             <!--Main frame-->
             <Frame x:Name="NavFrame" Grid.Row="1"/>
-
-            
             
             <!--Session ending message-->
             <Border x:Name="SessionEndWarning"
-                    Grid.Row="2" 
+                    Grid.Row="1" 
                     Background="#FFFF4A4A"
                     VerticalAlignment="Bottom"
                     Padding="12"

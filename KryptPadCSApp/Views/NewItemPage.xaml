@@ -23,7 +23,7 @@
         <Models:EditItemPageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>

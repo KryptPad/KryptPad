@@ -18,7 +18,7 @@
 
         <!--Styles for light theme-->
         <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FFE7F6FF" />
+            <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="White" />
             <SolidColorBrush x:Key="AppHeaderBackgroundThemeBrush" Color="#FF93D4F9" />
             <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#FFE4E4E4" />
             <SolidColorBrush x:Key="GridViewItemBackgroundThemeBrush" Color="#FFE4E4E4" />

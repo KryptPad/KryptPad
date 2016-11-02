@@ -22,7 +22,7 @@
         <Models:CreateAccountPageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <ScrollViewer>
 
