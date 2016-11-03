@@ -7,6 +7,7 @@ using KryptPadCSApp.Dialogs;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -37,6 +38,11 @@ namespace KryptPadCSApp.Models
             IsSourceGrouped = true,
             ItemsPath = new PropertyPath("Items")
         };
+
+        /// <summary>
+        /// Gets the selected items
+        /// </summary>
+        public ObservableCollection<ApiItem> SelectedItems { get; set; } = new ObservableCollection<ApiItem>();
 
 
         private string _searchText;
@@ -149,12 +155,16 @@ namespace KryptPadCSApp.Models
             // Set properties
             CanSelectItems = true;
             EmptyMessageVisibility = Visibility.Collapsed;
-
+            SelectionMode = ListViewSelectionMode.None;
+            
             // Register commands
             RegisterCommands();
 
-        }
+            // Events
+            SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
 
+        }
+        
         /// <summary>
         /// Registers commands for UI elements
         /// </summary>
@@ -361,9 +371,9 @@ namespace KryptPadCSApp.Models
             SelectModeCommand = new Command(SelectModeCommandHandler);
 
             // Handle the move command
-            MoveItemsCommand = new Command(MoveItemsCommandHandler );
+            MoveItemsCommand = new Command(MoveItemsCommandHandler, CanMoveItems);
         }
-        
+
         #region Methods
 
         /// <summary>
@@ -623,9 +633,18 @@ namespace KryptPadCSApp.Models
         }
         #endregion
 
+        #region Event handlers
+        private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            // Raise the event on the command to update the CanExecute property
+            MoveItemsCommand.OnCanExecuteChanged();
+        }
+
+        #endregion
+
         #region Helper methods
 
-        
+        private bool CanMoveItems(object p) => SelectedItems.Count > 0;
 
         #endregion
     }

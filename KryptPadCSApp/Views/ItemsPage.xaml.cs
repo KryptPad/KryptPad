@@ -30,60 +30,80 @@ namespace KryptPadCSApp.Views
         public ItemsPage()
         {
             this.InitializeComponent();
-            
+
         }
 
         private async void ItemsViewPage_Loaded(object sender, RoutedEventArgs e)
         {
             await (DataContext as ItemsPageViewModel).RefreshCategoriesAsync();
+
+            // Set the selection changed event
+            ItemsGridView.SelectionChanged += ItemsGridView_SelectionChanged;
         }
 
-        private void GridView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        //private void GridView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        //{
+        //    draggedItem = e.Items[0] as ApiItem;
+
+        //    e.Data.RequestedOperation = DataPackageOperation.Move;
+        //}
+
+        //private async void VariableSizedWrapGrid_Drop(object sender, DragEventArgs e)
+        //{
+        //    try
+
+        //    {
+
+        //        if (draggedItem != null)
+
+        //        {
+        //            //var m = DataContext as ItemsPageViewModel;
+        //            //var sourceCategory = draggedItem.CategoryId;
+
+
+        //            //var child = (((ItemsWrapGrid)sender).Children[0] as GridViewItem).Content as ApiItem;
+
+        //            //draggedItem.CategoryId = child.CategoryId;
+
+        //            //await m.RefreshCategoriesAsync();
+
+        //            //child.Cate.BookList.Add(draggedItem);
+
+        //            //sourceCategory.BookList.Remove(draggedItem);
+
+        //            draggedItem = null;
+
+        //        }
+
+        //    }
+
+        //    catch (Exception ex)
+
+        //    {
+
+        //    }
+        //}
+
+        //private void VariableSizedWrapGrid_DragOver(object sender, DragEventArgs e)
+        //{
+        //    e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
+        //}
+
+        private void ItemsGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            draggedItem = e.Items[0] as ApiItem;
+            var m = DataContext as ItemsPageViewModel;
 
-            e.Data.RequestedOperation = DataPackageOperation.Move;
-        }
-
-        private async void VariableSizedWrapGrid_Drop(object sender, DragEventArgs e)
-        {
-            try
-
+            // Add items
+            foreach (ApiItem item in e.AddedItems)
             {
-
-                if (draggedItem != null)
-
-                {
-                    //var m = DataContext as ItemsPageViewModel;
-                    //var sourceCategory = draggedItem.CategoryId;
-
-
-                    //var child = (((ItemsWrapGrid)sender).Children[0] as GridViewItem).Content as ApiItem;
-
-                    //draggedItem.CategoryId = child.CategoryId;
-
-                    //await m.RefreshCategoriesAsync();
-
-                    //child.Cate.BookList.Add(draggedItem);
-
-                    //sourceCategory.BookList.Remove(draggedItem);
-
-                    draggedItem = null;
-
-                }
-
+                m.SelectedItems.Add(item);
             }
 
-            catch (Exception ex)
-
+            // Remove items
+            foreach (ApiItem item in e.RemovedItems)
             {
-
+                m.SelectedItems.Remove(item);
             }
-        }
-
-        private void VariableSizedWrapGrid_DragOver(object sender, DragEventArgs e)
-        {
-            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
         }
     }
 }

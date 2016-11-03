@@ -84,12 +84,12 @@
         <Models:ItemsPageViewModel/>
     </Page.DataContext>
 
-    <Page.BottomAppBar>
+    <!--<Page.BottomAppBar>
         <CommandBar Visibility="{Binding BottomAppBarVisible}">
             <AppBarButton Icon="ViewAll" Label="Select" Command="{Binding SelectModeCommand}" />
             <AppBarButton Icon="MoveToFolder" Label="Move Items" Command="{Binding MoveItemsCommand}" />
         </CommandBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -119,6 +119,8 @@
             <!--Menu-->
             <CommandBar Grid.Column="1">
 
+                <AppBarButton Icon="ViewAll" Label="Select" Command="{Binding SelectModeCommand}" />
+                <AppBarButton Icon="MoveToFolder" Label="Move Items" Command="{Binding MoveItemsCommand}" />
                 <AppBarButton Icon="Add" Label="Add category" Command="{Binding AddCategoryCommand}" />
 
                 <CommandBar.SecondaryCommands>
@@ -177,9 +179,8 @@
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                       ItemTemplate="{StaticResource GridViewItemsTemplate }"
                       ItemsPanel="{StaticResource DesktopCategoryItemPanelTemplate}"
-                      CanDragItems="True"
-                      DragItemsStarting="GridView_DragItemsStarting"
-                      ItemContainerStyle="{StaticResource GridViewItemStyle1}" >
+                      ItemContainerStyle="{StaticResource GridViewItemStyle1}"
+                      >
 
 
                 <!--Group header style-->
@@ -239,7 +240,7 @@
                         </GroupStyle.HeaderTemplate>
 
                         <!--Panel for items inside the group-->
-                        <GroupStyle.Panel>
+                        <!--<GroupStyle.Panel>
 
                             <ItemsPanelTemplate>
                                 <VariableSizedWrapGrid Orientation="Horizontal"
@@ -249,7 +250,7 @@
                                                        Drop="VariableSizedWrapGrid_Drop" />
                             </ItemsPanelTemplate>
 
-                        </GroupStyle.Panel>
+                        </GroupStyle.Panel>-->
 
                     </GroupStyle>
                 </GridView.GroupStyle>
