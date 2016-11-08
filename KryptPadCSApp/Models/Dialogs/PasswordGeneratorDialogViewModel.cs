@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace KryptPadCSApp.Models
+namespace KryptPadCSApp.Models.Dialogs
 {
     class PasswordGeneratorDialogViewModel : BasePageModel
     {

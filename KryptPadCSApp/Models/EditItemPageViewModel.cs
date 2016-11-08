@@ -4,6 +4,8 @@ using KryptPad.Api.Responses;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Collections;
 using KryptPadCSApp.Dialogs;
+using KryptPadCSApp.Exceptions;
+using KryptPadCSApp.Models.Dialogs;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -13,13 +15,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Foundation;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
-using Windows.Foundation;
-using Windows.UI.Xaml.Media;
-using KryptPadCSApp.Exceptions;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
 
 namespace KryptPadCSApp.Models
 {
@@ -163,7 +164,7 @@ namespace KryptPadCSApp.Models
             {
 
                 // Show the add field dialog
-                var res = await DialogHelper.ShowDialog<AddFieldDialog>(async (d) =>
+                var res = await DialogHelper.ShowClosableDialog<AddFieldDialog>(async (d) =>
                 {
 
                     try

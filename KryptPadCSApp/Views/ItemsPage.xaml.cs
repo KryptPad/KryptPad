@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -25,14 +26,49 @@ namespace KryptPadCSApp.Views
     /// </summary>
     public sealed partial class ItemsPage : Page
     {
-        private ApiItem draggedItem;
+        //private ApiItem draggedItem;
 
         public ItemsPage()
         {
             this.InitializeComponent();
-
+                        
         }
 
+        #region Overrides
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            // Add back button handle
+            (App.Current as App).BackRequested += App_BackRequested;
+
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            // Remove the back button handle
+            (App.Current as App).BackRequested -= App_BackRequested;
+
+            base.OnNavigatingFrom(e);
+        }
+
+        #endregion
+
+        #region Events
+
+        private void App_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            var m = DataContext as ItemsPageViewModel;
+
+            if (!m.CanClickItem)
+            {
+                // Go back to none selection mode
+                m.SelectionMode = ListViewSelectionMode.None;
+                e.Handled = true;
+                
+            }
+        }
+        
         private async void ItemsViewPage_Loaded(object sender, RoutedEventArgs e)
         {
             await (DataContext as ItemsPageViewModel).RefreshCategoriesAsync();
@@ -40,70 +76,29 @@ namespace KryptPadCSApp.Views
             // Set the selection changed event
             ItemsGridView.SelectionChanged += ItemsGridView_SelectionChanged;
         }
-
-        //private void GridView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
-        //{
-        //    draggedItem = e.Items[0] as ApiItem;
-
-        //    e.Data.RequestedOperation = DataPackageOperation.Move;
-        //}
-
-        //private async void VariableSizedWrapGrid_Drop(object sender, DragEventArgs e)
-        //{
-        //    try
-
-        //    {
-
-        //        if (draggedItem != null)
-
-        //        {
-        //            //var m = DataContext as ItemsPageViewModel;
-        //            //var sourceCategory = draggedItem.CategoryId;
-
-
-        //            //var child = (((ItemsWrapGrid)sender).Children[0] as GridViewItem).Content as ApiItem;
-
-        //            //draggedItem.CategoryId = child.CategoryId;
-
-        //            //await m.RefreshCategoriesAsync();
-
-        //            //child.Cate.BookList.Add(draggedItem);
-
-        //            //sourceCategory.BookList.Remove(draggedItem);
-
-        //            draggedItem = null;
-
-        //        }
-
-        //    }
-
-        //    catch (Exception ex)
-
-        //    {
-
-        //    }
-        //}
-
-        //private void VariableSizedWrapGrid_DragOver(object sender, DragEventArgs e)
-        //{
-        //    e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
-        //}
-
+               
         private void ItemsGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var m = DataContext as ItemsPageViewModel;
 
-            // Add items
-            foreach (ApiItem item in e.AddedItems)
+            // Only manage selected items if selection mode is set to multiple
+            if (m.SelectionMode == ListViewSelectionMode.Multiple)
             {
-                m.SelectedItems.Add(item);
-            }
+                // Add items
+                foreach (ApiItem item in e.AddedItems)
+                {
+                    m.SelectedItems.Add(item);
+                }
 
-            // Remove items
-            foreach (ApiItem item in e.RemovedItems)
-            {
-                m.SelectedItems.Remove(item);
+                // Remove items
+                foreach (ApiItem item in e.RemovedItems)
+                {
+                    m.SelectedItems.Remove(item);
+                }
+
             }
         }
+
+        #endregion
     }
 }

@@ -18,6 +18,7 @@ namespace KryptPadCSApp
         private Frame _rootFrame;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<BackRequestedEventArgs> BackRequested;
 
         #region Properties
 
@@ -182,10 +183,17 @@ namespace KryptPadCSApp
 
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            if (_rootFrame != null && _rootFrame.CanGoBack)
+            // Pass the event args to the back requested handler for handling
+            BackRequested?.Invoke(sender, e);
+
+            // If we didn't handle the requerst, do default
+            if (!e.Handled)
             {
-                e.Handled = true;
-                _rootFrame.GoBack();
+                if (_rootFrame != null && _rootFrame.CanGoBack)
+                {
+                    e.Handled = true;
+                    _rootFrame.GoBack();
+                }
             }
         }
         #endregion

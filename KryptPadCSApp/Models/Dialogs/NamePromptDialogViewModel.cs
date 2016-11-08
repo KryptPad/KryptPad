@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.Models
+namespace KryptPadCSApp.Models.Dialogs
 {
     class NamePromptDialogViewModel : BaseModel
     {

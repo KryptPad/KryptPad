@@ -4,6 +4,7 @@ using KryptPad.Api.Responses;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Collections;
 using KryptPadCSApp.Dialogs;
+using KryptPadCSApp.Models.Dialogs;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -88,6 +89,16 @@ namespace KryptPadCSApp.Models
             set
             {
                 _selectionMode = value;
+
+                // If the selection mode is none
+                CanClickItem = (value == ListViewSelectionMode.None);
+
+                // Clear the selected items
+                SelectedItems.Clear();
+
+                // Trigger the move command execution change
+                MoveItemsCommand.OnCanExecuteChanged();
+
                 // Notify change
                 OnPropertyChanged(nameof(SelectionMode));
             }
@@ -98,14 +109,14 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets or sets whether the grid view's items can be selected
         /// </summary>
-        public bool CanSelectItems
+        public bool CanClickItem
         {
             get { return _canSelectItems; }
             set
             {
                 _canSelectItems = value;
                 // Notify change
-                OnPropertyChanged(nameof(CanSelectItems));
+                OnPropertyChanged(nameof(CanClickItem));
             }
         }
 
@@ -152,19 +163,18 @@ namespace KryptPadCSApp.Models
 
         public ItemsPageViewModel()
         {
-            // Set properties
-            CanSelectItems = true;
-            EmptyMessageVisibility = Visibility.Collapsed;
-            SelectionMode = ListViewSelectionMode.None;
-            
             // Register commands
             RegisterCommands();
+
+            // Set properties
+            EmptyMessageVisibility = Visibility.Collapsed;
+            SelectionMode = ListViewSelectionMode.None;
 
             // Events
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
 
         }
-        
+
         /// <summary>
         /// Registers commands for UI elements
         /// </summary>
@@ -174,7 +184,7 @@ namespace KryptPadCSApp.Models
             AddCategoryCommand = new Command(async (p) =>
             {
                 // Prompt for name
-                await DialogHelper.ShowDialog<NamePromptDialog>(async (d) =>
+                await DialogHelper.ShowClosableDialog<NamePromptDialog>(async (d) =>
                 {
                     try
                     {
@@ -466,11 +476,47 @@ namespace KryptPadCSApp.Models
         /// Handles the move command
         /// </summary>
         /// <param name="obj"></param>
-        private void MoveItemsCommandHandler(object obj)
+        private async void MoveItemsCommandHandler(object obj)
         {
             // Show a dialog to pick a new category
-        }
+            var dialog = new ChangeCategoryDialog();
 
+            // Show the dialog
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                // Get the model
+                var m = dialog.DataContext as ChangeCategoryDialogViewModel;
+
+                try
+                {
+                    // Save each item
+                    foreach (var item in SelectedItems)
+                    {
+                        // Store old category
+                        var oldCategoryId = item.CategoryId;
+                        // Set new category
+                        item.CategoryId = m.SelectedCategory.Id;
+                        // Save
+                        await KryptPadApi.SaveItemAsync(oldCategoryId, item);
+                    }
+
+                    // Refresh the view
+                    await RefreshCategoriesAsync();
+                }
+                catch (WebException ex)
+                {
+                    // Something went wrong in the api
+                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
+                }
+                catch (Exception)
+                {
+                    // Failed
+                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                }
+
+            }
+        }
         /// <summary>
         /// Handles the SelectModeCommand
         /// </summary>
@@ -480,12 +526,10 @@ namespace KryptPadCSApp.Models
             if (SelectionMode == ListViewSelectionMode.Multiple)
             {
                 SelectionMode = ListViewSelectionMode.None;
-                CanSelectItems = true;
             }
             else
             {
                 SelectionMode = ListViewSelectionMode.Multiple;
-                CanSelectItems = false;
             }
         }
 
@@ -495,9 +539,9 @@ namespace KryptPadCSApp.Models
             var dialog = new AddItemDialog();
 
             // Show the dialog and wait for a response
-            var dialogResp = await dialog.ShowAsync();
+            var result = await dialog.ShowAsync();
 
-            if (dialogResp == ContentDialogResult.Primary)
+            if (result == ContentDialogResult.Primary)
             {
 
                 try

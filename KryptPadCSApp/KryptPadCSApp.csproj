@@ -137,6 +137,9 @@
     <Compile Include="Dialogs\AddItemDialog.xaml.cs">
       <DependentUpon>AddItemDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ChangeCategoryDialog.xaml.cs">
+      <DependentUpon>ChangeCategoryDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ChangePassphraseDialog.xaml.cs">
       <DependentUpon>ChangePassphraseDialog.xaml</DependentUpon>
     </Compile>
@@ -158,21 +161,22 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\AddFieldDialogViewModel.cs" />
+    <Compile Include="Models\Dialogs\AddFieldDialogViewModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BasePageModel.cs" />
     <Compile Include="Collections\CategoryCollection.cs" />
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\CreateAccountPageViewModel.cs" />
+    <Compile Include="Models\Dialogs\ChangeCategoryDialogViewModel.cs" />
     <Compile Include="Models\DonationPageViewModel.cs" />
     <Compile Include="Models\EditItemPageParams.cs" />
     <Compile Include="Collections\FieldCollection.cs" />
     <Compile Include="Models\FeedbackPageViewModel.cs" />
     <Compile Include="Models\FieldModel.cs" />
-    <Compile Include="Models\PasswordGeneratorDialogViewModel.cs" />
+    <Compile Include="Models\Dialogs\PasswordGeneratorDialogViewModel.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
-    <Compile Include="Models\NamePromptDialogViewModel.cs" />
+    <Compile Include="Models\Dialogs\NamePromptDialogViewModel.cs" />
     <Compile Include="Models\EditItemPageViewModel.cs" />
     <Compile Include="Models\PageNavigationParamsBase.cs" />
     <Compile Include="Models\SelectProfilePageViewModel.cs" />
@@ -236,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\AddItemDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ChangeCategoryDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

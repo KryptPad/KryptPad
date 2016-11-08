@@ -4,7 +4,7 @@
     xmlns:local="using:KryptPadCSApp.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Models="using:KryptPadCSApp.Models"
+    xmlns:Dialogs="using:KryptPadCSApp.Models.Dialogs"
     x:Class="KryptPadCSApp.Dialogs.NamePromptDialog"
     mc:Ignorable="d"
     Title=""
@@ -15,7 +15,7 @@
     >
 
     <local:ClosableContentDialog.DataContext>
-        <Models:NamePromptDialogViewModel/>
+        <Dialogs:NamePromptDialogViewModel/>
     </local:ClosableContentDialog.DataContext>
 
     <Grid>

@@ -174,7 +174,7 @@
                       Grid.Row="0"
                       Margin="0"
                       ItemsSource="{Binding ItemsView.View}"
-                      IsItemClickEnabled="{Binding DataContext.CanSelectItems, ElementName=ItemsGridView}"
+                      IsItemClickEnabled="{Binding DataContext.CanClickItem, ElementName=ItemsGridView}"
                       SelectionMode="{Binding DataContext.SelectionMode, ElementName=ItemsGridView}"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                       ItemTemplate="{StaticResource GridViewItemsTemplate }"

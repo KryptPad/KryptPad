@@ -181,7 +181,7 @@ namespace KryptPadCSApp.Models
                     // Clear out the passphrase
                     Passphrase = null;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Failed
                     await DialogHelper.ShowConnectionErrorMessageDialog();
