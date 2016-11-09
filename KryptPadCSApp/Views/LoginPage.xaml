@@ -159,11 +159,12 @@
 
                                 <!--Twitter-->
                                 <Button Content="Twitter"
-                                        Margin="0,0,12,0" Style="{StaticResource TwitterButtonStyle}"
-                                        />
+                                        Margin="0,0,12,0"
+                                        Style="{StaticResource TwitterButtonStyle}" />
 
                                 <!--Facebook-->
-                                <Button Content="Facebook" Background="#FF3B5998" />
+                                <Button Content="Facebook"
+                                        Style="{StaticResource FacebookButtonStyle}"/>
                             </StackPanel>
                         </StackPanel>
 

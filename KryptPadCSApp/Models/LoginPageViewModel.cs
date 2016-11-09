@@ -17,7 +17,9 @@ namespace KryptPadCSApp.Models
 {
     class LoginPageViewModel : BasePageModel
     {
-
+        /// <summary>
+        /// Resource name for credential locker
+        /// </summary>
 #if DEBUG
         private const string LOCKER_RESOURCE = "KryptPadTest";
 #else
