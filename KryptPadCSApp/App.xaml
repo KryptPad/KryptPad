@@ -31,32 +31,12 @@
 
             </LinearGradientBrush>
 
-
-            <SolidColorBrush x:Key="MenuButtonBackgroundBrush" Color="#FF0078d7" />
-            <SolidColorBrush x:Key="MenuButtonPressedBackgroundBrush" Color="#FF505050" />
-            <SolidColorBrush x:Key="MenuButtonHoverBackgroundBrush" Color="#FF555555" />
-            <SolidColorBrush x:Key="MenuButtonCheckedBackgroundBrush" Color="#FF505050" />
-            <SolidColorBrush x:Key="MenuButtonCheckedPressedBackgroundBrush" Color="#FF606060" />
-            <SolidColorBrush x:Key="MenuButtonCheckedHoverBackgroundBrush" Color="#FF656565" />
-
-            <SolidColorBrush x:Key="NavButtonPressedBackgroundBrush" Color="#FF505050" />
-            <SolidColorBrush x:Key="NavButtonHoverBackgroundBrush" Color="#FF555555" />
-            <SolidColorBrush x:Key="NavButtonCheckedBackgroundBrush" Color="#FF505050" />
-            <SolidColorBrush x:Key="NavButtonCheckedPressedBackgroundBrush" Color="#FF606060" />
-            <SolidColorBrush x:Key="NavButtonCheckedHoverBackgroundBrush" Color="#FF656565" />
-
-            <!--<SolidColorBrush x:Key="TextForegroundBrush" Color="Black" />-->
-
-            <x:Double x:Key="SplitViewNormalNavFontSize">16</x:Double>
-            <x:Double x:Key="SplitViewLargeNavFontSize">20</x:Double>
-            <x:Double x:Key="SplitViewBackButtonHeight">32</x:Double>
-
-
-
+            <!--Font style for small text-->
             <Style x:Key="SmallInfoTextBlock" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="12" />
             </Style>
 
+            <!--Font style for header style text-->
             <Style x:Key="MediumHeaderTextBlock" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="Segoe UI Light" />
                 <Setter Property="FontWeight" Value="Normal" />
@@ -64,20 +44,7 @@
                 <Setter Property="Foreground" Value="{ThemeResource ApplicationForegroundThemeBrush}" />
             </Style>
 
-            <Style TargetType="TextBlock" x:Key="SplitViewTextBlockStyle">
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
-                <Setter Property="FontSize" Value="{ThemeResource SplitViewNormalNavFontSize}" />
-            </Style>
-
-            <Style x:Key="LoginGridWrapperStyle" TargetType="Grid">
-                <Setter Property="HorizontalAlignment" Value="Stretch" />
-                <!--<Setter Property="MaxWidth" Value="800" />-->
-
-            </Style>
-
-            <!--Twitter-->
+            <!--Twitter button-->
             <Style x:Key="TwitterButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="#FF55ACEE"/>
                 <Setter Property="Foreground" Value="White"/>
@@ -152,7 +119,7 @@
                 </Setter>
             </Style>
 
-            <!--Facebook-->
+            <!--Facebook button-->
             <Style x:Key="FacebookButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="#FF3B5998"/>
                 <Setter Property="Foreground" Value="White"/>

@@ -27,8 +27,7 @@
         <ScrollViewer>
 
             <!--Main grid for page-->
-            <Grid x:Name="MainGrid"
-                  Style="{StaticResource LoginGridWrapperStyle}">
+            <Grid x:Name="MainGrid">
 
                 
 
