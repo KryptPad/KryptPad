@@ -111,23 +111,32 @@
                 <!--Search box-->
                 <TextBox x:Name="SearchTextBox" PlaceholderText="Search..." 
                          Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         HorizontalAlignment="Left"
+                         HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"
-                         Width="400" Margin="12,0"/>
+                         Margin="12,0"/>
             </Grid>
 
             <!--Menu-->
-            <CommandBar Grid.Column="1">
+            <CommandBar Grid.Column="1" >
 
-                <AppBarButton Icon="ViewAll" Label="Select" Command="{Binding SelectModeCommand}" />
-                <AppBarButton Icon="MoveToFolder" Label="Move Items" Command="{Binding MoveItemsCommand}" />
+                <!--These buttons will always appear in the list-->
                 <AppBarButton Icon="Add" Label="Add category" Command="{Binding AddCategoryCommand}" />
-
+                                
+                <!--These buttons will hide on mobile view-->
+                <AppBarButton x:Name="SelectAppBarButton" Icon="ViewAll" Label="Toggle select" Command="{Binding SelectModeCommand}" />
+                <AppBarButton x:Name="MoveAppBarButton" Icon="MoveToFolder" Label="Move items" Command="{Binding MoveItemsCommand}" />
+                <AppBarButton x:Name="PassphraseAppBarButton" Icon="Permissions" Label="Change passphrase" Command="{Binding ChangePassphraseCommand}" />
+                <AppBarButton x:Name="DownloadAppBarButton" Icon="SaveLocal" Label="Download profile" Command="{Binding DownloadProfileCommand}" />
+                
+                <!--Overflow area-->
                 <CommandBar.SecondaryCommands>
-                    <AppBarButton Icon="Permissions" Label="Change passphrase" Command="{Binding ChangePassphraseCommand}" />
-                    <AppBarButton Icon="SaveLocal" Label="Download profile" Command="{Binding DownloadProfileCommand}" />
-                    <AppBarButton Icon="Rename" Label="Rename profile" Command="{Binding RenameProfileCommand}" />
-                    <AppBarButton Icon="Delete" Label="Delete profile" Command="{Binding DeleteProfileCommand}"/>
+
+                    <AppBarButton Label="Toggle select" Command="{Binding SelectModeCommand}" />
+                    <AppBarButton Label="Move items" Command="{Binding MoveItemsCommand}" />
+                    <AppBarButton Label="Change passphrase" Command="{Binding ChangePassphraseCommand}" />
+                    <AppBarButton Label="Download profile" Command="{Binding DownloadProfileCommand}" />
+                    <AppBarButton Label="Rename profile" Command="{Binding RenameProfileCommand}" />
+                    <AppBarButton Label="Delete profile" Command="{Binding DeleteProfileCommand}"/>
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
@@ -272,10 +281,15 @@
 
                     <VisualState.Setters>
                         <!--Modify the search bar to stretch full width when in mobile mode-->
-                        <Setter Target="SearchTextBox.HorizontalAlignment" Value="Stretch" />
-                        <Setter Target="SearchTextBox.Width" Value="auto" />
+                        <!--<Setter Target="SearchTextBox.HorizontalAlignment" Value="Stretch" />
+                        <Setter Target="SearchTextBox.Width" Value="auto" />-->
                         <!--Swap the items template out for an ItemsStackPanel for mobile-->
                         <Setter Target="ItemsGridView.ItemsPanel" Value="{StaticResource MobileCategoryItemPanelTemplate}" />
+                        <!--Hide appbar buttons-->
+                        <Setter Target="SelectAppBarButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MoveAppBarButton.Visibility" Value="Collapsed" />
+                        <Setter Target="PassphraseAppBarButton.Visibility" Value="Collapsed" />
+                        <Setter Target="DownloadAppBarButton.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
 
@@ -284,7 +298,7 @@
 
                     <!--Trigger when the width is at least tablet sizeMargin="12"-->
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1024"/>
+                        <AdaptiveTrigger MinWindowWidth="768"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
