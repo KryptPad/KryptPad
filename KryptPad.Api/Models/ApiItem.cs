@@ -32,20 +32,53 @@ namespace KryptPad.Api.Models
         public int CategoryId { get; set; }
 
         private string _background;
-
+        private SolidColorBrush _brush;
         /// <summary>
         /// Gets or sets the background color of the item tile
         /// </summary>
         [JsonIgnore]
         public SolidColorBrush Background
         {
-            get { return new SolidColorBrush(Colors.LightGray); }
-            set { _background = value.Color.ToString(); }
+            get
+            {
+
+                // Is there a color set?
+                if (string.IsNullOrWhiteSpace(_background))
+                {
+                    _background = Colors.LightGray.ToString();
+                }
+
+                // Create a brush if one not already exists
+                if (_brush == null)
+                {
+                    _brush = GetSolidColorBrush(_background);
+                }
+                
+                // Return the color as a SolidColorBrush
+                return _brush;
+            }
+            set
+            {
+                _background = value.Color.ToString();
+                // Update the brush
+                _brush = GetSolidColorBrush(_background);
+            }
         }
 
         /// <summary>
         /// Gets or set the fields for the item
         /// </summary>
         public ApiField[] Fields { get; set; }
+
+        private SolidColorBrush GetSolidColorBrush(string hex)
+        {
+            hex = hex.Replace("#", string.Empty);
+            byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
+            byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
+            byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
+            byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
+            SolidColorBrush myBrush = new SolidColorBrush(Color.FromArgb(a, r, g, b));
+            return myBrush;
+        }
     }
 }

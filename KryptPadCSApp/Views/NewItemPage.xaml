@@ -99,8 +99,24 @@
                             <StackPanel x:Name="BackgroundStackPanel"
                                         RelativePanel.AlignLeftWithPanel="True"
                                         RelativePanel.AlignRightWithPanel="True">
+                                
                                 <TextBlock Text="Color" />
-                                <ComboBox HorizontalAlignment="Stretch" />
+                                
+                                <!--Color choices-->
+                                <ComboBox ItemsSource="{Binding AvailableColors}"
+                                          SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
+                                          HorizontalAlignment="Stretch" >
+                                    
+                                    <!--Define the template-->
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{Binding}" Height="20">
+                                                
+                                            </Border>
+                                            
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </StackPanel>
                             
                         </RelativePanel>

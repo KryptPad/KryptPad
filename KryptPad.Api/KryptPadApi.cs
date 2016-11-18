@@ -163,8 +163,6 @@ namespace KryptPad.Api
             using (var client = new HttpClient())
             {
                 // Prepare form values
-                // TODO: Ideally, we want to pass a client secret here, but this is 
-                // not something we can store in the source code (open-source... d'oh).
                 var values = new Dictionary<string, string>
                 {
                     { "client_id", "KryptPadUniversal" },
