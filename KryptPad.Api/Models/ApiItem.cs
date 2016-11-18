@@ -31,7 +31,12 @@ namespace KryptPad.Api.Models
         /// </summary>
         public int CategoryId { get; set; }
 
-        private string _background;
+        /// <summary>
+        /// Gets or sets the background color
+        /// </summary>
+        public string BackgroundColor { get; set; }
+
+
         private SolidColorBrush _brush;
         /// <summary>
         /// Gets or sets the background color of the item tile
@@ -43,15 +48,15 @@ namespace KryptPad.Api.Models
             {
 
                 // Is there a color set?
-                if (string.IsNullOrWhiteSpace(_background))
+                if (string.IsNullOrWhiteSpace(BackgroundColor))
                 {
-                    _background = Colors.LightGray.ToString();
+                    BackgroundColor = Colors.LightGray.ToString();
                 }
 
                 // Create a brush if one not already exists
                 if (_brush == null)
                 {
-                    _brush = GetSolidColorBrush(_background);
+                    _brush = GetSolidColorBrush(BackgroundColor);
                 }
                 
                 // Return the color as a SolidColorBrush
@@ -59,9 +64,9 @@ namespace KryptPad.Api.Models
             }
             set
             {
-                _background = value.Color.ToString();
+                BackgroundColor = value.Color.ToString();
                 // Update the brush
-                _brush = GetSolidColorBrush(_background);
+                _brush = GetSolidColorBrush(BackgroundColor);
             }
         }
 

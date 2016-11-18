@@ -321,7 +321,7 @@
 
                             <!--Item icon-->
                             <Border Grid.Column="0"
-                                    Background="{ThemeResource GridViewItemAccentThemeBrush}"
+                                    Background="{Binding Background}"
                                     Width="64"
                                     Height="64">
 

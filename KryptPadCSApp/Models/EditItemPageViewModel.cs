@@ -347,6 +347,7 @@ namespace KryptPadCSApp.Models
                 // Set properties
                 ItemName = item.Name;
                 Notes = item.Notes;
+                SelectedColor = item.Background;
 
                 // Set fields
                 foreach (var field in item.Fields)

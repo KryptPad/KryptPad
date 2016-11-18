@@ -236,7 +236,7 @@ namespace KryptPadCSApp.Models
             {
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
