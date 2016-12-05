@@ -59,7 +59,13 @@ namespace KryptPadCSApp.Models
             get { return _selectedColor; }
             set
             {
-                _selectedColor = value;
+                // Find the selected color from the list of available colors
+                var c = (from color in AvailableColors
+                         where color.Color == value.Color
+                         select color).FirstOrDefault();
+                // Set the color
+                _selectedColor = c;
+                //_selectedColor = value;
                 // Notify change
                 OnPropertyChanged(nameof(SelectedColor));
                 // Save the item (fire and forget)
@@ -389,7 +395,7 @@ namespace KryptPadCSApp.Models
         {
             // If we are loading, do not save the item
             if (_isLoading) return;
-            
+
             try
             {
                 // Set item properties
@@ -414,7 +420,7 @@ namespace KryptPadCSApp.Models
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
-                        
+
         }
 
         /// <summary>
