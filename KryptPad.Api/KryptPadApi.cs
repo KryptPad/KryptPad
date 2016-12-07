@@ -38,12 +38,12 @@ namespace KryptPad.Api
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; } = "http://localhost:50821/"; //
+        public static string ServiceHost { get; set; } = "http://localhost:50821/"; //
 #elif DEBUG
         /// <summary>
-        /// Gets the host address of the API service.
+        /// Gets or sets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; } = "http://test.kryptpad.com/";
+        public static string ServiceHost { get; set; } = "http://test.kryptpad.com/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
