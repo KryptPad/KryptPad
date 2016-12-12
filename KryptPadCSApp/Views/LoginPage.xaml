@@ -7,7 +7,7 @@
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.LoginPage"
     mc:Ignorable="d" Loaded="Page_Loaded">
-    
+
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
@@ -155,17 +155,21 @@
                             <StackPanel Orientation="Horizontal"
                                         Margin="0,12,0,0">
 
-                                <!--Twitter-->
-                                <Button Content="Twitter"
-                                        Margin="0,0,12,0"
-                                        Style="{StaticResource TwitterButtonStyle}" />
-
                                 <!--Facebook-->
                                 <Button Content="Facebook"
+                                        Margin="0,0,12,0"
+                                        Command="{Binding GoToFacebookCommand}"
                                         Style="{StaticResource FacebookButtonStyle}"/>
+                                
+                                <!--Twitter-->
+                                <Button Content="Twitter"
+                                        Command="{Binding GoToTwitterCommand}"
+                                        Style="{StaticResource TwitterButtonStyle}" />
+
+
                             </StackPanel>
 
-                            
+
                             <CheckBox x:Name="LiveModeCheckBox" Content="Enable Live mode" IsChecked="{Binding IsLiveMode, Mode=TwoWay}"
                                       Visibility="Collapsed"/>
                         </StackPanel>

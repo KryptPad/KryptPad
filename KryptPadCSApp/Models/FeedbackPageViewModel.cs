@@ -30,7 +30,7 @@ namespace KryptPadCSApp.Models
         {
             ReviewAppCommand = new Command(async (p) =>
             {
-
+                
                 try
                 {
                     // Get the package family name

@@ -107,6 +107,10 @@ namespace KryptPadCSApp.Models
 
         public Command CreateAccountCommand { get; protected set; }
 
+        public Command GoToFacebookCommand { get; protected set; }
+
+        public Command GoToTwitterCommand { get; protected set; }
+
         #endregion
 
         public LoginPageViewModel()
@@ -139,18 +143,12 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            LogInCommand = new Command(async (p) =>
-            {
-                await LoginAsync();
-            }, IsLoginEnabled);
-
-            CreateAccountCommand = new Command((p) =>
-            {
-                // Navigate to the create account page
-                NavigationHelper.Navigate(typeof(CreateAccountPage), null);
-            });
+            LogInCommand = new Command(LogInCommandHandler, IsLoginEnabled);
+            CreateAccountCommand = new Command(CreateAccountCommandHandler);
+            GoToFacebookCommand = new Command(GoToFacebookCommandHandler);
+            GoToTwitterCommand = new Command(GoToTwitterCommandHandler);
         }
-
+        
         /// <summary>
         /// Checks to see if there are any saved credentials. If there are, the app is auto-logged in.
         /// Only logs in if there is no access token already
@@ -270,5 +268,49 @@ namespace KryptPadCSApp.Models
         private bool IsLoginEnabled(object p) => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
         #endregion
 
+        #region Command handlers
+
+        private async void LogInCommandHandler(object p)
+        {
+            await LoginAsync();
+        }
+
+        private void CreateAccountCommandHandler(object p)
+        {
+            // Navigate to the create account page
+            NavigationHelper.Navigate(typeof(CreateAccountPage), null);
+        }
+
+        private async void GoToFacebookCommandHandler(object obj)
+        {
+            try
+            {
+                // Launch the uri
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(ResourceStrings.GetString("FacebookUrl")));
+
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowMessageDialogAsync(ResourceStrings.GetString("UriFail"));
+            }
+        }
+
+        private async void GoToTwitterCommandHandler(object obj)
+        {
+            try
+            {
+                // Launch the uri
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(ResourceStrings.GetString("TwitterUrl")));
+
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowMessageDialogAsync(ResourceStrings.GetString("UriFail"));
+            }
+        }
+        
+        #endregion
     }
 }
