@@ -208,6 +208,9 @@ namespace KryptPadCSApp.Models
 
                         // Refresh
                         OnPropertyChanged(nameof(ItemsView));
+
+                        // Hide empty message
+                        EmptyMessageVisibility = Visibility.Collapsed;
                     }
                     catch (WebException ex)
                     {

@@ -40,13 +40,21 @@ namespace KryptPadCSApp.Models
         /// Gets the available colors
         /// </summary>
         public SolidColorBrush[] AvailableColors { get; protected set; } = {
-            new SolidColorBrush(Colors.SkyBlue),
-            new SolidColorBrush(Colors.CornflowerBlue),
-            new SolidColorBrush(Colors.Pink),
             new SolidColorBrush(Colors.LightPink),
-            new SolidColorBrush(Colors.Chartreuse),
+            new SolidColorBrush(Colors.Magenta),
+            new SolidColorBrush(Colors.Red),
+            new SolidColorBrush(Colors.DarkRed),
+            new SolidColorBrush(Colors.OrangeRed),
+            new SolidColorBrush(Colors.Orange),
+            new SolidColorBrush(Colors.DarkOrange),
+            new SolidColorBrush(Colors.Yellow),
+            new SolidColorBrush(Colors.PaleGreen),
+            new SolidColorBrush(Colors.ForestGreen),
+            new SolidColorBrush(Colors.CornflowerBlue),
+            new SolidColorBrush(Colors.Navy),
             new SolidColorBrush(Colors.Violet),
-            new SolidColorBrush(Colors.Orange)
+            new SolidColorBrush(Colors.Purple),
+            new SolidColorBrush(Colors.LightGray)
         };
 
 
