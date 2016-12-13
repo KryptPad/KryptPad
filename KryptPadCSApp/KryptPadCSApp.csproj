@@ -160,6 +160,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\AboutPageViewModel.cs" />
     <Compile Include="Models\Dialogs\AddFieldDialogViewModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BasePageModel.cs" />
