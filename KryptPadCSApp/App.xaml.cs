@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Views;
+﻿using KryptPad.Api;
+using KryptPadCSApp.Views;
 using System;
 using System.ComponentModel;
 using Windows.ApplicationModel;
@@ -18,6 +19,7 @@ namespace KryptPadCSApp
         private Frame _rootFrame;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<BackRequestedEventArgs> BackRequested;
 
         #region Properties
 
@@ -41,6 +43,43 @@ namespace KryptPadCSApp
                 OnPropertyChanged(nameof(IsSignedIn));
             }
 
+        }
+
+#if DEBUG
+        private bool _isLiveMode;
+#endif
+        /// <summary>
+        /// Gets whether the app is in Live mode
+        /// </summary>
+        internal bool IsLiveMode
+        {
+            get
+            {
+#if DEBUG
+                return _isLiveMode;
+#else
+                return true;
+#endif
+            }
+#if DEBUG
+            set
+            {
+                _isLiveMode = value;
+                
+                // Change the host url
+                if (_isLiveMode)
+                {
+                    KryptPadApi.ServiceHost = "https://www.kryptpad.com/";
+                } else
+                {
+                    KryptPadApi.ServiceHost = "http://test.kryptpad.com/";
+                }
+                
+                // Notify change
+                OnPropertyChanged(nameof(IsLiveMode));
+
+            }
+#endif
         }
 
         #endregion
@@ -116,16 +155,16 @@ namespace KryptPadCSApp
             Window.Current.Activate();
 
             // Check for presence of the status bar
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                // Get status bar
-                //#FF173A55
-                var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-                statusBar.BackgroundColor = Windows.UI.ColorHelper.FromArgb(255, 17, 58, 85);
-                statusBar.BackgroundOpacity = 1;
-                statusBar.ForegroundColor = Windows.UI.Colors.White;
+            //if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            //{
+            //    // Get status bar
+            //    //#FF173A55
+            //    var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+            //    statusBar.BackgroundColor = Windows.UI.ColorHelper.FromArgb(255, 17, 58, 85);
+            //    statusBar.BackgroundOpacity = 1;
+            //    statusBar.ForegroundColor = Windows.UI.Colors.White;
 
-            }
+            //}
         }
 
         protected override void OnActivated(IActivatedEventArgs args)
@@ -182,10 +221,17 @@ namespace KryptPadCSApp
 
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            if (_rootFrame != null && _rootFrame.CanGoBack)
+            // Pass the event args to the back requested handler for handling
+            BackRequested?.Invoke(sender, e);
+
+            // If we didn't handle the requerst, do default
+            if (!e.Handled)
             {
-                e.Handled = true;
-                _rootFrame.GoBack();
+                if (_rootFrame != null && _rootFrame.CanGoBack)
+                {
+                    e.Handled = true;
+                    _rootFrame.GoBack();
+                }
             }
         }
         #endregion

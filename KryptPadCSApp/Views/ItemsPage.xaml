@@ -12,18 +12,86 @@
     mc:Ignorable="d"
     xmlns:Commanding="using:Commanding"
     x:Name="ItemsViewPage" Loaded="ItemsViewPage_Loaded">
+
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
     
+    <Page.Resources>
+        
+
+        <Style x:Key="GridViewItemStyle1" TargetType="GridViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="Background" Value="{ThemeResource GridViewItemBackground}"/>
+            <Setter Property="Foreground" Value="{ThemeResource GridViewItemForeground}"/>
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="IsHoldingEnabled" Value="True"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="0,0,4,4"/>
+            <Setter Property="MinWidth" Value="{ThemeResource GridViewItemMinWidth}"/>
+            <Setter Property="MinHeight" Value="{ThemeResource GridViewItemMinHeight}"/>
+            <Setter Property="AllowDrop" Value="False"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
+            <Setter Property="FocusVisualMargin" Value="-2"/>
+            <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource GridViewItemFocusVisualPrimaryBrush}"/>
+            <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
+            <Setter Property="FocusVisualSecondaryBrush" Value="{ThemeResource GridViewItemFocusVisualSecondaryBrush}"/>
+            <Setter Property="FocusVisualSecondaryThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewItem">
+                        <ListViewItemPresenter Margin="12,12,12,0"
+                                               CheckBrush="{ThemeResource GridViewItemCheckBrush}" 
+                                               ContentMargin="{TemplateBinding Padding}"
+                                               CheckMode="{ThemeResource GridViewItemCheckMode}"
+                                               ContentTransitions="{TemplateBinding ContentTransitions}"
+                                               CheckBoxBrush="{ThemeResource GridViewItemCheckBoxBrush}"
+                                               DragForeground="{ThemeResource GridViewItemDragForeground}"
+                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
+                                               DragBackground="{ThemeResource GridViewItemDragBackground}"
+                                               DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" 
+                                               FocusBorderBrush="{ThemeResource GridViewItemFocusBorderBrush}"
+                                               FocusSecondaryBorderBrush="{ThemeResource GridViewItemFocusSecondaryBorderBrush}"                                              
+                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               Control.IsTemplateFocusTarget="True"
+                                               PointerOverForeground="{ThemeResource GridViewItemForegroundPointerOver}"
+                                               PressedBackground="{ThemeResource GridViewItemBackgroundPressed}" 
+                                               PlaceholderBackground="{ThemeResource GridViewItemPlaceholderBackground}" 
+                                               PointerOverBackground="{ThemeResource GridViewItemBackgroundPointerOver}"
+                                               ReorderHintOffset="{ThemeResource GridViewItemReorderHintThemeOffset}"
+                                               SelectedPressedBackground="{ThemeResource GridViewItemBackgroundSelectedPressed}"
+                                               SelectionCheckMarkVisualEnabled="{ThemeResource GridViewItemSelectionCheckMarkVisualEnabled}"
+                                               SelectedForeground="{ThemeResource GridViewItemForegroundSelected}" 
+                                               SelectedPointerOverBackground="{ThemeResource GridViewItemBackgroundSelectedPointerOver}"
+                                               SelectedBackground="{ThemeResource GridViewItemBackgroundSelected}"
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                               />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
     <Page.DataContext>
         <Models:ItemsPageViewModel/>
     </Page.DataContext>
 
     <!--<Page.BottomAppBar>
         <CommandBar Visibility="{Binding BottomAppBarVisible}">
-            <AppBarButton Icon="Delete" Label="Delete Item" Command="{Binding DeleteItemCommand}" />
+            <AppBarButton Icon="ViewAll" Label="Select" Command="{Binding SelectModeCommand}" />
+            <AppBarButton Icon="MoveToFolder" Label="Move Items" Command="{Binding MoveItemsCommand}" />
         </CommandBar>
     </Page.BottomAppBar>-->
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -43,33 +111,63 @@
                 <!--Search box-->
                 <TextBox x:Name="SearchTextBox" PlaceholderText="Search..." 
                          Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         HorizontalAlignment="Left"
+                         HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"
-                         Width="400" Margin="12,0"/>
+                         Margin="12,0"/>
             </Grid>
 
             <!--Menu-->
-            <CommandBar Grid.Column="1">
+            <CommandBar Grid.Column="1" >
 
+                <!--These buttons will always appear in the list-->
                 <AppBarButton Icon="Add" Label="Add category" Command="{Binding AddCategoryCommand}" />
-
+                                
+                <!--These buttons will hide on mobile view-->
+                <AppBarButton x:Name="SelectAppBarButton" Icon="ViewAll" Label="Toggle select" Command="{Binding SelectModeCommand}" />
+                <AppBarButton x:Name="MoveAppBarButton" Icon="MoveToFolder" Label="Move items" Command="{Binding MoveItemsCommand}" />
+                <AppBarButton x:Name="PassphraseAppBarButton" Icon="Permissions" Label="Change passphrase" Command="{Binding ChangePassphraseCommand}" />
+                <AppBarButton x:Name="DownloadAppBarButton" Icon="SaveLocal" Label="Download profile" Command="{Binding DownloadProfileCommand}" />
+                
+                <!--Overflow area-->
                 <CommandBar.SecondaryCommands>
-                    <AppBarButton Icon="Permissions" Label="Change passphrase" Command="{Binding ChangePassphraseCommand}" />
-                    <AppBarButton Icon="SaveLocal" Label="Download profile" Command="{Binding DownloadProfileCommand}" />
-                    <AppBarButton Icon="Rename" Label="Rename profile" Command="{Binding RenameProfileCommand}" />
-                    <AppBarButton Icon="Delete" Label="Delete profile" Command="{Binding DeleteProfileCommand}"/>
+
+                    <AppBarButton Label="Toggle select" Command="{Binding SelectModeCommand}" />
+                    <AppBarButton Label="Move items" Command="{Binding MoveItemsCommand}" />
+                    <AppBarButton Label="Change passphrase" Command="{Binding ChangePassphraseCommand}" />
+                    <AppBarButton Label="Download profile" Command="{Binding DownloadProfileCommand}" />
+                    <AppBarButton Label="Rename profile" Command="{Binding RenameProfileCommand}" />
+                    <AppBarButton Label="Delete profile" Command="{Binding DeleteProfileCommand}"/>
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
         </Grid>
 
         <!--No categories message-->
-        <StackPanel Grid.Row="1" Visibility="{Binding EmptyMessageVisibility}">
-            <TextBlock TextWrapping="WrapWholeWords" Margin="12">
-                You haven't added any categories yet. Click the <Span FontFamily="{StaticResource SymbolThemeFontFamily}">&#xE710;</Span>
-                to add a new category.
-            </TextBlock>
-        </StackPanel>
+        <Border Grid.Row="1" 
+                    Visibility="{Binding EmptyMessageVisibility}"
+                    Margin="12"
+                    Padding="12"
+                    Background="{ThemeResource InformationMessageThemeBrush}"
+                    BorderBrush="{ThemeResource InformationMessageBorderThemeBrush}"
+                    BorderThickness="1"
+                    >
+            <StackPanel Orientation="Horizontal">
+                
+                <TextBlock TextWrapping="WrapWholeWords"
+                       VerticalAlignment="Center">
+                    <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#xE8C9;" FontSize="32" />
+                </TextBlock>
+                
+                <TextBlock TextWrapping="WrapWholeWords"
+                       VerticalAlignment="Center">
+                
+                    You haven't added any categories yet. Click the
+                    <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#xE710;" />
+                    to add a new category.
+                </TextBlock>
+            </StackPanel>
+            
+        </Border>
 
 
         <!--Search and items-->
@@ -80,20 +178,26 @@
             </Grid.RowDefinitions>
 
             <!--Items grid-->
-            <GridView Grid.Row="0"
-                      Padding="12"
+            <!---->
+            <GridView x:Name="ItemsGridView"
+                      Grid.Row="0"
                       Margin="0"
                       ItemsSource="{Binding ItemsView.View}"
-                      IsItemClickEnabled="true"
+                      IsItemClickEnabled="{Binding DataContext.CanClickItem, ElementName=ItemsGridView}"
+                      SelectionMode="{Binding DataContext.SelectionMode, ElementName=ItemsGridView}"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
-                      ItemTemplate="{StaticResource GridViewItemsTemplate }" >
+                      ItemTemplate="{StaticResource GridViewItemsTemplate }"
+                      ItemsPanel="{StaticResource DesktopCategoryItemPanelTemplate}"
+                      ItemContainerStyle="{StaticResource GridViewItemStyle1}"
+                      >
 
 
                 <!--Group header style-->
                 <GridView.GroupStyle>
-                    <GroupStyle>
+                    <GroupStyle >
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
+
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -108,7 +212,8 @@
                                     </Button>
 
                                     <!--Name of category-->
-                                    <TextBlock Grid.Column="1" 
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
                                                Text="{Binding Name}"
                                                Margin="8,0,0,0"
                                                Style="{StaticResource MediumHeaderTextBlock}" >
@@ -143,6 +248,19 @@
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
 
+                        <!--Panel for items inside the group-->
+                        <!--<GroupStyle.Panel>
+
+                            <ItemsPanelTemplate>
+                                <VariableSizedWrapGrid Orientation="Horizontal"
+                                                       Background="Black"
+                                                       AllowDrop="True"
+                                                       DragOver="VariableSizedWrapGrid_DragOver"
+                                                       Drop="VariableSizedWrapGrid_Drop" />
+                            </ItemsPanelTemplate>
+
+                        </GroupStyle.Panel>-->
+
                     </GroupStyle>
                 </GridView.GroupStyle>
 
@@ -150,30 +268,44 @@
 
         </Grid>
 
+        <!--Handle visual states-->
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
+
                 <VisualState x:Name="VisualStatePhone">
+
+                    <!--Trigger when the width is at least 0-->
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-
-                        <Setter Target="SearchTextBox.HorizontalAlignment" Value="Stretch" />
-                        <Setter Target="SearchTextBox.Width" Value="auto" />
+                        <!--Modify the search bar to stretch full width when in mobile mode-->
+                        <!--<Setter Target="SearchTextBox.HorizontalAlignment" Value="Stretch" />
+                        <Setter Target="SearchTextBox.Width" Value="auto" />-->
+                        <!--Swap the items template out for an ItemsStackPanel for mobile-->
+                        <Setter Target="ItemsGridView.ItemsPanel" Value="{StaticResource MobileCategoryItemPanelTemplate}" />
+                        <!--Hide appbar buttons-->
+                        <Setter Target="SelectAppBarButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MoveAppBarButton.Visibility" Value="Collapsed" />
+                        <Setter Target="PassphraseAppBarButton.Visibility" Value="Collapsed" />
+                        <Setter Target="DownloadAppBarButton.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
 
+
                 <VisualState x:Name="VisualStateTablet">
+
+                    <!--Trigger when the width is at least tablet sizeMargin="12"-->
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1024"/>
+                        <AdaptiveTrigger MinWindowWidth="768"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-
-
+                        <!--Reset-->
                     </VisualState.Setters>
                 </VisualState>
+
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>

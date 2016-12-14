@@ -31,6 +31,11 @@ namespace KryptPadCSApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        #region Fields
+        private bool _messageShowing = false;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets the main frame for content
@@ -38,14 +43,13 @@ namespace KryptPadCSApp
         public Frame RootFrame { get { return NavFrame; } }
 
         private bool IsBusy { get; set; }
+        
         #endregion
 
-        private bool _messageShowing = false;
+
         public MainPage()
         {
             this.InitializeComponent();
-
-            //BorderStoryBoardFadeOut.Completed += BorderStoryBoardFadeOut_Completed;
 
             // Some API events
             KryptPadApi.SessionEnded += async () =>
@@ -58,10 +62,8 @@ namespace KryptPadCSApp
                     // Clear backstack too
                     NavigationHelper.ClearBackStack();
 
-                    // Hide the warning message
-                    SessionEndWarning.Visibility = Visibility.Collapsed;
-
-                    _messageShowing = false;
+                    // Hide the message
+                    ShowSessionWarningMessage(false);
                 });
 
             };
@@ -77,16 +79,12 @@ namespace KryptPadCSApp
                     if (DateTime.Now >= warningTime && !_messageShowing)
                     {
                         // Show the warning
-                        SessionEndWarning.Visibility = Visibility.Visible;
-
-                        _messageShowing = true;
+                        ShowSessionWarningMessage(true);
                     }
                     else if (DateTime.Now < warningTime && _messageShowing)
                     {
-                        // Hide the warning
-                        SessionEndWarning.Visibility = Visibility.Collapsed;
-
-                        _messageShowing = false;
+                        // Hide the message
+                        ShowSessionWarningMessage(false);
                     }
 
                     // Show time remaining
@@ -114,6 +112,8 @@ namespace KryptPadCSApp
 
         }
 
+        #region Navigation
+        
         private void RootFrame_Navigated(object sender, NavigationEventArgs e)
         {
             // Get the MainPage instance and hide the pane
@@ -141,39 +141,16 @@ namespace KryptPadCSApp
             }
 
         }
-
-        //private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //    // This button should not be checked
-        //    //MenuRadioButton.IsChecked = false;
-        //    // Command the split view to be closed or opened
-        //    ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
-
-        //}
-
+       
         private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            //if (IsBusy) return;
-
             // Navigate
             NavigationHelper.Navigate(typeof(ItemsPage), null);
 
         }
 
-        //private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //if (IsBusy) return;
-
-        //    // Navigate
-        //    NavigationHelper.Navigate(typeof(ManageCategoriesPage), null);
-
-        //}
-
         private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            //if (IsBusy) return;
-
             // Navigate
             NavigationHelper.Navigate(typeof(DonatePage), null);
 
@@ -181,8 +158,6 @@ namespace KryptPadCSApp
 
         private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            //if (IsBusy) return;
-
             // Navigate
             NavigationHelper.Navigate(typeof(FeedbackPage), null);
 
@@ -190,8 +165,6 @@ namespace KryptPadCSApp
 
         private void AboutRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            //if (IsBusy) return;
-
             // Navigate
             NavigationHelper.Navigate(typeof(AboutPage), null);
 
@@ -199,8 +172,6 @@ namespace KryptPadCSApp
 
         private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            //if (IsBusy) return;
-
             await DialogHelper.Confirm("Are you sure you want to sign out?", "SIGN OUT", (p) =>
             {
                 // Navigate
@@ -211,36 +182,34 @@ namespace KryptPadCSApp
 
         }
 
+        #endregion
+
         private void SessionEndWarning_Tapped(object sender, TappedRoutedEventArgs e)
         {
             KryptPadApi.ExtendSessionTime();
             // Hide the message
-            SessionEndWarning.Visibility = Visibility.Collapsed;
-
-            _messageShowing = false;
+            ShowSessionWarningMessage(false);
         }
 
-        private void BorderStoryBoardFadeOut_Completed(object sender, object e)
-        {
-            SessionEndWarning.Visibility = Visibility.Collapsed;
-        }
-
+        
         #region Helper Methods
 
-        ///// <summary>
-        ///// Closes the pane if in CompactOverlay mode
-        ///// </summary>
-        //private void ClosePane()
-        //{
-        //    // Check to see if the pane is in overlay mode, if it is, then we close it,
-        //    // otherwise, we do not close it
-        //    if (ShellSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
-        //    {
-        //        // Only force closed when in CompactOverlay mode
-        //        ShellSplitView.IsPaneOpen = false;
-        //    }
-        //}
+        private void ShowSessionWarningMessage(bool value)
+        {
+            if (value)
+            {
+                // Show the message
+                BorderStoryBoardFadeIn.Begin();
+            }
+            else
+            {
+                // Hide the message
+                BorderStoryBoardFadeOut.Begin();
+            }
+            
 
+            _messageShowing = value;
+        }
 
         #endregion
 

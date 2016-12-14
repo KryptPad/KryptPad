@@ -4,6 +4,8 @@ using KryptPad.Api.Responses;
 using KryptPadCSApp.Classes;
 using KryptPadCSApp.Collections;
 using KryptPadCSApp.Dialogs;
+using KryptPadCSApp.Exceptions;
+using KryptPadCSApp.Models.Dialogs;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
@@ -13,13 +15,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
-using Windows.Foundation;
-using Windows.UI.Xaml.Media;
-using KryptPadCSApp.Exceptions;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
 
 namespace KryptPadCSApp.Models
 {
@@ -33,6 +35,52 @@ namespace KryptPadCSApp.Models
         /// Gets the list of categories
         /// </summary>
         public CollectionViewSource CategoriesView { get; protected set; } = new CollectionViewSource();
+
+        /// <summary>
+        /// Gets the available colors
+        /// </summary>
+        public SolidColorBrush[] AvailableColors { get; protected set; } = {
+            new SolidColorBrush(Colors.LightPink),
+            new SolidColorBrush(Colors.Magenta),
+            new SolidColorBrush(Colors.Red),
+            new SolidColorBrush(Colors.DarkRed),
+            new SolidColorBrush(Colors.OrangeRed),
+            new SolidColorBrush(Colors.Orange),
+            new SolidColorBrush(Colors.DarkOrange),
+            new SolidColorBrush(Colors.Yellow),
+            new SolidColorBrush(Colors.PaleGreen),
+            new SolidColorBrush(Colors.ForestGreen),
+            new SolidColorBrush(Colors.CornflowerBlue),
+            new SolidColorBrush(Colors.Navy),
+            new SolidColorBrush(Colors.Violet),
+            new SolidColorBrush(Colors.Purple),
+            new SolidColorBrush(Colors.LightGray)
+        };
+
+
+        private SolidColorBrush _selectedColor;
+        /// <summary>
+        /// Gets or sets the selected color
+        /// </summary>
+        public SolidColorBrush SelectedColor
+        {
+            get { return _selectedColor; }
+            set
+            {
+                // Find the selected color from the list of available colors
+                var c = (from color in AvailableColors
+                         where color.Color == value.Color
+                         select color).FirstOrDefault();
+                // Set the color
+                _selectedColor = c;
+                //_selectedColor = value;
+                // Notify change
+                OnPropertyChanged(nameof(SelectedColor));
+                // Save the item (fire and forget)
+                SaveItemAsync();
+            }
+        }
+
 
         private ApiCategory _category;
         /// <summary>
@@ -163,7 +211,7 @@ namespace KryptPadCSApp.Models
             {
 
                 // Show the add field dialog
-                var res = await DialogHelper.ShowDialog<AddFieldDialog>(async (d) =>
+                var res = await DialogHelper.ShowClosableDialog<AddFieldDialog>(async (d) =>
                 {
 
                     try
@@ -313,6 +361,7 @@ namespace KryptPadCSApp.Models
                 // Set properties
                 ItemName = item.Name;
                 Notes = item.Notes;
+                SelectedColor = item.Background;
 
                 // Set fields
                 foreach (var field in item.Fields)
@@ -355,14 +404,12 @@ namespace KryptPadCSApp.Models
             // If we are loading, do not save the item
             if (_isLoading) return;
 
-            // Set main window busy state
-            //(Window.Current.Content as MainPage).SetIsBusy(true);
-
             try
             {
                 // Set item properties
                 Item.Name = ItemName;
                 Item.Notes = Notes;
+                Item.Background = SelectedColor;
 
                 var oldCategoryId = Item.CategoryId;
 
@@ -382,8 +429,6 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
 
-            // Set main window busy state
-            //(Window.Current.Content as MainPage).SetIsBusy(false);
         }
 
         /// <summary>
@@ -515,7 +560,7 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.Confirm(
                     "This will replace your existing password with a new one. Are you sure?",
                     (c) => { result = true; });
-                
+
             }
 
             // If the result is true, then show the dialog
@@ -538,6 +583,6 @@ namespace KryptPadCSApp.Models
         }
 
         #endregion
-        
+
     }
 }

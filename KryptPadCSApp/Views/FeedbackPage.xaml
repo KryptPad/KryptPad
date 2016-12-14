@@ -8,6 +8,16 @@
     x:Class="KryptPadCSApp.Views.FeedbackPage"
     mc:Ignorable="d">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    
     <Page.DataContext>
         <Models:FeedbackPageViewModel/>
     </Page.DataContext>
@@ -51,7 +61,7 @@
 					Margin="0,0,24,0"
 					FontFamily="{ThemeResource SymbolThemeFontFamily}"
 					FontSize="144"
-					Foreground="{StaticResource SplitViewBackgroundBrush}" />
+					Foreground="{StaticResource SystemControlHighlightAccentBrush}" />
 
                     <!--Text-->
                     <StackPanel x:Name="MessageTextBlock">

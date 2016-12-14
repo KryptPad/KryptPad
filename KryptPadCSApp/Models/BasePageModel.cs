@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -41,6 +42,11 @@ namespace KryptPadCSApp.Models
                 OnIsBusyChanged();
             }
         }
+
+        /// <summary>
+        /// Gets the ResourceLoader for the current view
+        /// </summary>
+        public ResourceLoader ResourceStrings { get { return ResourceLoader.GetForCurrentView(); } }
 
         private Visibility _busyIndicatorVisibility;
         /// <summary>

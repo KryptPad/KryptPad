@@ -38,12 +38,12 @@ namespace KryptPad.Api
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; } = "http://localhost:50821/"; //
+        public static string ServiceHost { get; set; } = "http://localhost:50821/"; //
 #elif DEBUG
         /// <summary>
-        /// Gets the host address of the API service.
+        /// Gets or sets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; } = "http://test.kryptpad.com/";
+        public static string ServiceHost { get; set; } = "http://test.kryptpad.com/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
@@ -163,8 +163,6 @@ namespace KryptPad.Api
             using (var client = new HttpClient())
             {
                 // Prepare form values
-                // TODO: Ideally, we want to pass a client secret here, but this is 
-                // not something we can store in the source code (open-source... d'oh).
                 var values = new Dictionary<string, string>
                 {
                     { "client_id", "KryptPadUniversal" },

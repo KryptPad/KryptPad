@@ -8,68 +8,70 @@ namespace KryptPadCSApp.Models
         public event EventHandler CanExecuteChanged;
 
         private Action<object> _action;
+        private Func<object, bool> _canExecute;
 
+        //#region Properties
+        //private bool _commandCanExecute;
+        ///// <summary>
+        ///// Gets or sets whether or not this command can execute
+        ///// </summary>
+        //public bool CommandCanExecute
+        //{
+        //    get { return _commandCanExecute; }
+        //    set
+        //    {
+        //        _commandCanExecute = value;
+        //        // Raise event
+        //        OnCanExecuteChanged();
+        //    }
+        //}
 
-        #region Properties
-        private bool _commandCanExecute;
-        /// <summary>
-        /// Gets or sets whether or not this command can execute
-        /// </summary>
-        public bool CommandCanExecute
-        {
-            get { return _commandCanExecute; }
-            set
-            {
-                _commandCanExecute = value;
-                // Raise event
-                OnCanExecuteChanged();
-            }
-        }
-
-        #endregion
+        //#endregion
 
         public Command()
         {
             _action = null;
-            CommandCanExecute = true;
+            _canExecute = CanExecuteHandler;
         }
 
         public Command(Action<object> action)
         {
             _action = action;
-            CommandCanExecute = true;
+            _canExecute = CanExecuteHandler;
         }
 
-        public Command(Action<object> action, bool canExecute)
+        public Command(Action<object> action, Func<object, bool> canExecute)
         {
             _action = action;
-            CommandCanExecute = canExecute;
+            _canExecute = canExecute;
         }
 
         public bool CanExecute(object parameter)
         {
-            return CommandCanExecute;
+            return _canExecute(parameter);
         }
 
         public void Execute(object parameter)
         {
-            var handler = _action;
-            if (handler != null)
-            {
-                handler(parameter);
-            }
+            _action?.Invoke(parameter);
         }
 
         /// <summary>
         /// Raises CanExecuteChanged event
         /// </summary>
-        private void OnCanExecuteChanged()
+        public void OnCanExecuteChanged()
         {
-            var handler = CanExecuteChanged;
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Default handler
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        private bool CanExecuteHandler(object p)
+        {
+            return true;
         }
     }
 }

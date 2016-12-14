@@ -91,7 +91,7 @@ namespace KryptPadCSApp.Classes
         /// <typeparam name="T"></typeparam>
         /// <param name="primaryAction"></param>
         /// <returns></returns>
-        public static async Task<ContentDialogResult> ShowDialog<T>(Action<T> primaryAction, string title = null) where T : ClosableContentDialog, new()
+        public static async Task<ContentDialogResult> ShowClosableDialog<T>(Action<T> primaryAction, string title = null) where T : ClosableContentDialog, new()
         {
             // Create instance of content dialog
             var d = new T();
@@ -113,7 +113,7 @@ namespace KryptPadCSApp.Classes
 
             return res;
         }
-
+        
         ///// <summary>
         ///// Displays the specified content dialog type
         ///// </summary>

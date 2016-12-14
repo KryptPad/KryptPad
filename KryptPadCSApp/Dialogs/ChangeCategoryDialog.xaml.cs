@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Models.Dialogs;
+﻿using KryptPad.Api.Models;
+using KryptPadCSApp.Models.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,15 +20,16 @@ using Windows.UI.Xaml.Navigation;
 
 namespace KryptPadCSApp.Dialogs
 {
-    public sealed partial class AddFieldDialog : ClosableContentDialog
+    public sealed partial class ChangeCategoryDialog : ContentDialog
     {
-        public AddFieldDialog()
+        
+        public ChangeCategoryDialog()
         {
             this.InitializeComponent();
 
             // Determine the command's can execute state, and hook into the changed event
-            var m = DataContext as AddFieldDialogViewModel;
-            if (m != null && m.PrimaryCommand != null)
+            var m = DataContext as ChangeCategoryDialogViewModel;
+            if (m.PrimaryCommand != null)
             {
                 m.PrimaryCommand.CanExecuteChanged += (sender, e) =>
                 {
@@ -35,5 +37,18 @@ namespace KryptPadCSApp.Dialogs
                 };
             }
         }
+
+       
+        #region Events
+        
+        private async void ContentDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            var m = DataContext as ChangeCategoryDialogViewModel;
+
+            await m.LoadCategoriesAsync();
+        }
+        #endregion
+
+
     }
 }

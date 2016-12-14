@@ -8,6 +8,16 @@
     x:Class="KryptPadCSApp.Views.LoginPage"
     mc:Ignorable="d" Loaded="Page_Loaded">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+
     <Page.DataContext>
         <Models:LoginPageViewModel/>
     </Page.DataContext>
@@ -29,50 +39,61 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{StaticResource SignInBackgroundGradientBrush}"  >
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"  >
 
         <ScrollViewer>
+
             <!--Main grid for page-->
-            <Grid x:Name="MainGrid"
-              Style="{StaticResource LoginGridWrapperStyle}" 
-              Visibility="{Binding LoginVisibility}">
+            <Grid x:Name="MainGrid">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
+                    <!--<RowDefinition Height="auto" />-->
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <!--Header-->
-                <StackPanel Grid.Row="0"
+                <!--<StackPanel Grid.Row="0"
                        >
-                    <!--<TextBlock Text="Krypt Pad" 
+                    -->
+                <!--<TextBlock Text="Krypt Pad" 
                            Style="{ThemeResource HeaderTextBlockStyle}"    
                            Foreground="White"/>-->
+                <!--
                     <TextBlock Text="SIGN IN" 
                            Margin="0,0,0,12"    
                            Style="{ThemeResource SubtitleTextBlockStyle}" />
-                </StackPanel>
+                </StackPanel>-->
 
-                <!--Main grid for input-->
-                <Grid Grid.Row="1"
-                  Style="{StaticResource LoginGridStyle}">
+                <!--Content is positioned with RelativePanel for dynamic placement with VisualStateManager-->
+                <RelativePanel Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               >
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
+                    <!--Main grid for input-->
+                    <Grid x:Name="LoginGrid"
+                          
+                          MaxWidth="400"
+                          Padding="12"
+                          
+                          BorderThickness="0,0,1,0"
+                          BorderBrush="#FF3E3E3E">
 
-                    <TextBlock Grid.Row="0" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
-                    Sign in to your account. If you don't have an account, sign up. It's free!
-                    </TextBlock>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <!--<RowDefinition Height="auto" />-->
+                        </Grid.RowDefinitions>
 
-                    <!--Login email address-->
-                    <TextBox x:Name="EmailTextBox"
+                        <TextBlock Grid.Row="0" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
+                            Sign in to your account. If you don't have an account, sign up. It's free!
+                        </TextBlock>
+
+                        <!--Login email address-->
+                        <TextBox x:Name="EmailTextBox"
                              Grid.Row="1"
                              PlaceholderText="Email"
                              Margin="0,0,0,12"
@@ -80,55 +101,88 @@
                              Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              KeyUp="Login_KeyUp"/>
 
-                    <!--Password-->
-                    <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,12" 
+                        <!--Password-->
+                        <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,12" 
 					             Password="{Binding Password, Mode=TwoWay}"
                                  KeyUp="Login_KeyUp"/>
 
-                    <!--Remember me-->
-                    <CheckBox Grid.Row="3"
+                        <!--Remember me-->
+                        <CheckBox Grid.Row="3"
                           IsChecked="{Binding AutoSignIn, Mode=TwoWay}"  
                           Content="Sign me in automatically"  
                           Margin="0,0,0,12" />
 
-                    <!--Login / Sign up buttons-->
-                    <Grid Grid.Row="4" Margin="0,0,0,12">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
+                        <!--Login / Sign up buttons-->
+                        <Grid Grid.Row="4" Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Button Content="Sign In" Grid.Column="0" Margin="0,0,12,0"
+                            <Button Content="Sign In" Grid.Column="0" Margin="0,0,12,0"
 						Command="{Binding LogInCommand}" />
 
-                        <Button Content="Sign Up for Free" Grid.Column="1" 
+                            <Button Content="Sign Up for Free" Grid.Column="1" 
 						Command="{Binding CreateAccountCommand}" />
+
+                        </Grid>
+
+                        <!--Link to terms page-->
+                        <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
+                            Krypt Pad is licensed under MIT. By using this software, you accept this
+                            <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the 
+                            <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
+                        </TextBlock>
+
+                        <!--<TextBlock Grid.Row="6">
+                            <Hyperlink NavigateUri="{Binding WebsiteUrl}"><Run Text="{Binding WebsiteUrl}" /></Hyperlink>
+                        </TextBlock>-->
 
                     </Grid>
 
-                    <!--Link to terms page-->
-                    <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
-                    Krypt Pad is licensed under MIT. By using this software, you accept this
-                    <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the 
-                    <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
-                    </TextBlock>
+                    <!--Social-->
+                    <Grid x:Name="SocialGrid"
+                          Padding="12"
+                          RelativePanel.RightOf="LoginGrid"
+                          MaxWidth="400">
 
-                    <TextBlock Grid.Row="6">
-                    <Hyperlink NavigateUri="{Binding WebsiteUrl}"><Run Text="{Binding WebsiteUrl}" /></Hyperlink>
-                    </TextBlock>
+                        <StackPanel>
+                            <!--Message-->
+                            <TextBlock Text="For status updates and information, follow Krypt Pad on Facebook and Twitter."
+                                       TextWrapping="WrapWholeWords"/>
 
-                </Grid>
+                            <!--Social buttons-->
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,12,0,0">
+
+                                <!--Facebook-->
+                                <Button Content="Facebook"
+                                        Margin="0,0,12,0"
+                                        Command="{Binding GoToFacebookCommand}"
+                                        Style="{StaticResource FacebookButtonStyle}"/>
+                                
+                                <!--Twitter-->
+                                <Button Content="Twitter"
+                                        Command="{Binding GoToTwitterCommand}"
+                                        Style="{StaticResource TwitterButtonStyle}" />
+
+
+                            </StackPanel>
+
+
+                            <CheckBox x:Name="LiveModeCheckBox" Content="Enable Live mode" IsChecked="{Binding IsLiveMode, Mode=TwoWay}"
+                                      Visibility="Collapsed"/>
+                        </StackPanel>
+
+                    </Grid>
+
+                </RelativePanel>
 
             </Grid>
 
         </ScrollViewer>
 
-        <!--Progress indicator-->
-        <!--<ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
-                      IsActive="{Binding IsBusy}"
-                      Width="50"
-                      Height="50"
-                      Foreground="White"/>-->
+
 
         <!--Visual state manager-->
         <VisualStateManager.VisualStateGroups>
@@ -142,6 +196,9 @@
 
                     <VisualState.Setters>
                         <Setter Target="MainGrid.VerticalAlignment" Value="Top" />
+                        <Setter Target="SocialGrid.(RelativePanel.Below)" Value="LoginGrid" />
+                        <Setter Target="SocialGrid.(RelativePanel.AlignLeftWith)" Value="LoginGrid" />
+                        <Setter Target="LoginGrid.BorderThickness" Value="0,0,0,1" />
                     </VisualState.Setters>
                 </VisualState>
 

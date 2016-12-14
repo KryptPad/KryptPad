@@ -7,40 +7,42 @@
     xmlns:Models="using:KryptPadCSApp.Models"
     x:Class="KryptPadCSApp.Views.SelectProfilePage"
     mc:Ignorable="d"
-    x:Name="SelectProfileViewPage" Loaded="SelectProfileViewPage_Loaded">
+    x:Name="SelectProfileViewPage"
+    Loaded="SelectProfileViewPage_Loaded"
+    LayoutUpdated="SelectProfileViewPage_LayoutUpdated"
+    >
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    
     <Page.DataContext>
         <Models:SelectProfilePageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource SignInBackgroundGradientBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <ScrollViewer>
 
             <!--Main grid for page-->
-            <Grid x:Name="MainGrid"
-              Style="{StaticResource LoginGridWrapperStyle}" >
+            <Grid x:Name="MainGrid" >
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
+                    <!--<RowDefinition Height="auto" />-->
                 </Grid.RowDefinitions>
 
-                <!--Header-->
-                <StackPanel Grid.Row="0"
-                       >
-                    <!--<TextBlock Text="Krypt Pad" 
-                           Style="{ThemeResource HeaderTextBlockStyle}"    
-                           Foreground="White"/>-->
-                    <TextBlock Text="PROFILES" 
-                           Margin="0,0,0,12"    
-                           Style="{ThemeResource SubtitleTextBlockStyle}"    
-                           />
-                </StackPanel>
-
+                
                 <!--Profiles-->
-                <Grid Grid.Row="1"
-                  Style="{StaticResource LoginGridStyle}">
+                <Grid Grid.Row="0"
+                      Margin="12"
+                      MaxWidth="400">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
@@ -52,14 +54,14 @@
 
                     <!--Description-->
                     <TextBlock Grid.Row="0"
-                           TextWrapping="WrapWholeWords"
-                           Margin="0,0,0,12">
-                    Select a profile from the list, or create a new profile. You can also restore a profile from a backup.
+                               TextWrapping="WrapWholeWords"
+                               Margin="0,0,0,12">
+                        Select a profile from the list, or create a new profile. You can also restore a profile from a backup.
                     </TextBlock>
 
                     <!--Create or restore profile-->
                     <StackPanel Grid.Row="1"
-                            Margin="0,0,0,24"
+                            Margin="0,0,0,12"
                             Orientation="Horizontal">
 
                         <!--Create new profile-->

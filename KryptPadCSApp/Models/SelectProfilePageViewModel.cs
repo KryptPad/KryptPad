@@ -43,7 +43,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(Passphrase));
 
                 // Enable login button
-                EnterProfileCommand.CommandCanExecute = CanLogIn;
+                EnterProfileCommand.OnCanExecuteChanged();
             }
         }
 
@@ -60,7 +60,7 @@ namespace KryptPadCSApp.Models
                 // Notify
                 OnPropertyChanged(nameof(SelectedProfile));
                 // Enable login button}
-                EnterProfileCommand.CommandCanExecute = CanLogIn;
+                EnterProfileCommand.OnCanExecuteChanged();
             }
         }
 
@@ -181,12 +181,12 @@ namespace KryptPadCSApp.Models
                     // Clear out the passphrase
                     Passphrase = null;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Failed
                     await DialogHelper.ShowConnectionErrorMessageDialog();
                 }
-            });
+            }, CanLogIn);
 
             RestoreBackupCommand = new Command(async (p) =>
             {
@@ -234,7 +234,7 @@ namespace KryptPadCSApp.Models
             });
         }
 
-        private bool CanLogIn => !string.IsNullOrWhiteSpace(Passphrase) && SelectedProfile != null;
+        private bool CanLogIn(object p) => !string.IsNullOrWhiteSpace(Passphrase) && SelectedProfile != null;
 
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryptPadCSApp.Models
+namespace KryptPadCSApp.Models.Dialogs
 {
     class NamePromptDialogViewModel : BaseModel
     {
@@ -22,7 +22,7 @@ namespace KryptPadCSApp.Models
                 // Notify change
                 OnPropertyChanged(nameof(Value));
                 // Check if valid
-                PrimaryCommand.CommandCanExecute = IsValid;
+                PrimaryCommand.OnCanExecuteChanged();
             }
         }
 
@@ -37,10 +37,10 @@ namespace KryptPadCSApp.Models
 
         #region Methods
         private void RegisterCommands() {
-            PrimaryCommand = new Command(null, false);
+            PrimaryCommand = new Command(null, IsValid);
         }
 
-        private bool IsValid => !string.IsNullOrWhiteSpace(Value);
+        private bool IsValid(object p) => !string.IsNullOrWhiteSpace(Value);
         #endregion
     }
 }

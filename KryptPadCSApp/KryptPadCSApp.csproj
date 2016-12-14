@@ -22,7 +22,7 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <AppxPackageDir>C:\Users\ebutler\Desktop\Packages\</AppxPackageDir>
+    <AppxPackageDir>C:\Users\neptu\Desktop\KryptPadApp\</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -128,12 +128,16 @@
     <Compile Include="Collections\ProfileCollection.cs" />
     <Compile Include="Collections\RefreshableCollection.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />
+    <Compile Include="Converters\NotVisibleConverter.cs" />
     <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">
       <DependentUpon>AddFieldDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\AddItemDialog.xaml.cs">
       <DependentUpon>AddItemDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ChangeCategoryDialog.xaml.cs">
+      <DependentUpon>ChangeCategoryDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\ChangePassphraseDialog.xaml.cs">
       <DependentUpon>ChangePassphraseDialog.xaml</DependentUpon>
@@ -156,21 +160,23 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\AddFieldDialogViewModel.cs" />
+    <Compile Include="Models\AboutPageViewModel.cs" />
+    <Compile Include="Models\Dialogs\AddFieldDialogViewModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BasePageModel.cs" />
     <Compile Include="Collections\CategoryCollection.cs" />
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\CreateAccountPageViewModel.cs" />
+    <Compile Include="Models\Dialogs\ChangeCategoryDialogViewModel.cs" />
     <Compile Include="Models\DonationPageViewModel.cs" />
     <Compile Include="Models\EditItemPageParams.cs" />
     <Compile Include="Collections\FieldCollection.cs" />
     <Compile Include="Models\FeedbackPageViewModel.cs" />
     <Compile Include="Models\FieldModel.cs" />
-    <Compile Include="Models\PasswordGeneratorDialogViewModel.cs" />
+    <Compile Include="Models\Dialogs\PasswordGeneratorDialogViewModel.cs" />
     <Compile Include="Models\ItemsPageViewModel.cs" />
     <Compile Include="Models\LoginPageViewModel.cs" />
-    <Compile Include="Models\NamePromptDialogViewModel.cs" />
+    <Compile Include="Models\Dialogs\NamePromptDialogViewModel.cs" />
     <Compile Include="Models\EditItemPageViewModel.cs" />
     <Compile Include="Models\PageNavigationParamsBase.cs" />
     <Compile Include="Models\SelectProfilePageViewModel.cs" />
@@ -237,6 +243,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\ChangeCategoryDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\ChangePassphraseDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -260,6 +270,11 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Views\AboutPage.xaml">
       <SubType>Designer</SubType>

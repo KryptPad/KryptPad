@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FacebookUrl" xml:space="preserve">
+    <value>https://www.facebook.com/KryptPad</value>
+  </data>
   <data name="PassphraseNote.Text" xml:space="preserve">
     <value>Note: Changing your passphrase does not change your account password.</value>
   </data>
@@ -125,5 +128,11 @@
   </data>
   <data name="PasswordRequirement.Text" xml:space="preserve">
     <value>Your password should be at least eight characters long and contain at least one symbol, one lower-case letter, one upper-case letter, and one number.</value>
+  </data>
+  <data name="TwitterUrl" xml:space="preserve">
+    <value>https://twitter.com/KryptPad</value>
+  </data>
+  <data name="UriFail" xml:space="preserve">
+    <value>Could not launch the requested url.</value>
   </data>
 </root>
