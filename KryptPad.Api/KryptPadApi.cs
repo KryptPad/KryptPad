@@ -64,12 +64,31 @@ namespace KryptPad.Api
         #endregion
 
         #region Properties
+        private static Guid _appId;
+
+        /// <summary>
+        /// Gets the app id of the current instance of the app
+        /// </summary>
+        private static Guid AppId
+        {
+            get
+            {
+                if (_appId == Guid.Empty)
+                {
+                    // Generate a new app id for the lifetime of this app's
+                    // instance. It will be appended to the client id.
+                    _appId = Guid.NewGuid();
+                }
+
+                return _appId;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the API OAuth access token to authorize API calls
         /// </summary>
         private static OAuthTokenResponse TokenResponse { get; set; }
-        
+
         /// <summary>
         /// Gets or sets when the token is supposed to expire
         /// </summary>
@@ -165,7 +184,7 @@ namespace KryptPad.Api
                 // Prepare form values
                 var values = new Dictionary<string, string>
                 {
-                    { "client_id", "KryptPadUniversal" },
+                    { "client_id", "KryptPadUniversal_" + AppId.ToString() },
                     { "grant_type", "password" },
                     { "username", username },
                     { "password", password }
@@ -215,7 +234,7 @@ namespace KryptPad.Api
                 // not something we can store in the source code (open-source... d'oh).
                 var values = new Dictionary<string, string>
                 {
-                    { "client_id", "KryptPadUniversal" },
+                    { "client_id", "KryptPadUniversal_" + AppId.ToString() },
                     { "grant_type", "refresh_token" },
                     { "refresh_token", TokenResponse.RefreshToken }
                 };
@@ -437,7 +456,7 @@ namespace KryptPad.Api
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
-                
+
                 // Create JSON content.
                 var content = JsonContent(profile);
 
@@ -481,13 +500,13 @@ namespace KryptPad.Api
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
-                
+
                 // Create JSON content.
                 var content = JsonContent(profile);
 
                 // Send request and get a response
                 var response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}"), content);
-                
+
                 // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
@@ -1036,7 +1055,7 @@ namespace KryptPad.Api
                 // If we have a token, use it to authorize the request
                 if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
                 {
-                    
+
                     // Check the expiration time
                     if (TokenExpirationDate <= DateTime.Now)
                     {
