@@ -31,102 +31,147 @@ namespace KryptPadCSApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        #region Fields
+        private bool _messageShowing = false;
+        #endregion
+
         #region Properties
-        public Frame RootFrame { get; private set; }
+        /// <summary>
+        /// Gets the main frame for content
+        /// </summary>
+        public Frame RootFrame { get { return NavFrame; } }
 
         private bool IsBusy { get; set; }
+        
         #endregion
 
 
-        public MainPage(Frame frame)
+        public MainPage()
         {
             this.InitializeComponent();
 
-            RootFrame = frame;
-            ShellSplitView.Content = RootFrame;
-
-            KryptPadApi.AccessTokenExpirationTimer += async (expiration) =>
+            // Some API events
+            KryptPadApi.SessionEnded += async () =>
             {
-                // Get time remaining
-                var timeRemaining = DateTime.Now.Subtract(expiration);
-
+                // Get the dispatcher
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    CountDownTextBlock.Text = timeRemaining.ToString(@"mm\:ss");
+                    // Triggered when the access token has reached its expiration date
+                    NavigationHelper.Navigate(typeof(LoginPage), null);
+                    // Clear backstack too
+                    NavigationHelper.ClearBackStack();
+
+                    // Hide the message
+                    ShowSessionWarningMessage(false);
+                });
+
+            };
+
+            KryptPadApi.SessionEnding += async (expiration) =>
+            {
+                var warningTime = expiration.AddMinutes(-1);
+
+                // Show the message
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    
+                    if (DateTime.Now >= warningTime && !_messageShowing)
+                    {
+                        // Show the warning
+                        ShowSessionWarningMessage(true);
+                    }
+                    else if (DateTime.Now < warningTime && _messageShowing)
+                    {
+                        // Hide the message
+                        ShowSessionWarningMessage(false);
+                    }
+
+                    // Show time remaining
+                    if (DateTime.Now >= warningTime)
+                    {
+                        // Get time remaining
+                        var timeRemaining = DateTime.Now.Subtract(expiration);
+                        // Set the label with how much time the user has left
+                        TimeRemainingRun.Text = timeRemaining.ToString(@"mm\:ss");
+                    }
                 });
             };
 
+            // Success, tell the app we are signed in
+            (App.Current as App).PropertyChanged += (sender, e) =>
+            {
+                // Success, tell the app we are signed in
+                if (e.PropertyName == nameof(App.IsSignedIn))
+                {
+                    ShowPane((App.Current as App).IsSignedIn);
+                }
+            };
+
+            RootFrame.Navigated += RootFrame_Navigated;
+
         }
 
-        private void MenuRadioButton_Click(object sender, RoutedEventArgs e)
+        #region Navigation
+        
+        private void RootFrame_Navigated(object sender, NavigationEventArgs e)
         {
+            // Get the MainPage instance and hide the pane
+            var page = Window.Current.Content as MainPage;
+            if (page != null)
+            {
+                // Check the page type, and hide or show the pane
+                if (e.Content is ItemsPage)
+                {
+                    HomeRadioButton.IsChecked = true;
+                }
+                else if (e.Content is DonatePage)
+                {
+                    DonateRadioButton.IsChecked = true;
+                }
+                else if (e.Content is FeedbackPage)
+                {
+                    FeedbackRadioButton.IsChecked = true;
+                }
+                else if (e.Content is AboutPage)
+                {
+                    AboutRadioButton.IsChecked = true;
+                }
 
-            // This button should not be checked
-            MenuRadioButton.IsChecked = false;
-            // Command the split view to be closed or opened
-            ShellSplitView.IsPaneOpen = !ShellSplitView.IsPaneOpen;
+            }
 
         }
-
+       
         private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
-
             // Navigate
             NavigationHelper.Navigate(typeof(ItemsPage), null);
 
-            // Close the pane
-            ClosePane();
-        }
-
-        private void CategoriesRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsBusy) return;
-
-            // Navigate
-            NavigationHelper.Navigate(typeof(ManageCategoriesPage), null);
-
-            // Close the pane
-            ClosePane();
         }
 
         private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
-
             // Navigate
             NavigationHelper.Navigate(typeof(DonatePage), null);
 
-            // Close the pane
-            ClosePane();
         }
 
         private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
-
             // Navigate
             NavigationHelper.Navigate(typeof(FeedbackPage), null);
 
-            // Close the pane
-            ClosePane();
         }
 
         private void AboutRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
-
             // Navigate
             NavigationHelper.Navigate(typeof(AboutPage), null);
 
-            // Close the pane
-            ClosePane();
         }
 
         private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsBusy) return;
-
             await DialogHelper.Confirm("Are you sure you want to sign out?", "SIGN OUT", (p) =>
             {
                 // Navigate
@@ -135,25 +180,36 @@ namespace KryptPadCSApp
                 NavigationHelper.ClearBackStack();
             });
 
-
         }
 
+        #endregion
+
+        private void SessionEndWarning_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            KryptPadApi.ExtendSessionTime();
+            // Hide the message
+            ShowSessionWarningMessage(false);
+        }
+
+        
         #region Helper Methods
 
-        /// <summary>
-        /// Closes the pane if in CompactOverlay mode
-        /// </summary>
-        private void ClosePane()
+        private void ShowSessionWarningMessage(bool value)
         {
-            // Check to see if the pane is in overlay mode, if it is, then we close it,
-            // otherwise, we do not close it
-            if (ShellSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
+            if (value)
             {
-                // Only force closed when in CompactOverlay mode
-                ShellSplitView.IsPaneOpen = false;
+                // Show the message
+                BorderStoryBoardFadeIn.Begin();
             }
+            else
+            {
+                // Hide the message
+                BorderStoryBoardFadeOut.Begin();
+            }
+            
+
+            _messageShowing = value;
         }
-        
 
         #endregion
 
@@ -165,8 +221,13 @@ namespace KryptPadCSApp
         /// <param name="value"></param>
         public void ShowPane(bool value)
         {
-            ShellSplitView.CompactPaneLength = (value ? 48 : 0);
-            ShellSplitView.OpenPaneLength = (value ? 300 : 0);
+            // Hide nav panel
+            NavPanel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+
+            //// Hide buttons we can't access yet
+            //var visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            //SignOutRadioButton.Visibility = visibility;
+            //HomeRadioButton.Visibility = visibility;
         }
 
         /// <summary>
@@ -180,5 +241,7 @@ namespace KryptPadCSApp
             BusyIndicator.IsActive = value;
         }
         #endregion
+
+
     }
 }

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace KryptPadCSApp.Models
+namespace KryptPadCSApp.Models.Dialogs
 {
     class PasswordGeneratorDialogViewModel : BasePageModel
     {
@@ -78,7 +78,7 @@ namespace KryptPadCSApp.Models
                 // Notify of change
                 OnPropertyChanged(nameof(Password));
                 // Set primary command enabled or not
-                PrimaryCommand.CommandCanExecute = !string.IsNullOrWhiteSpace(Password);
+                PrimaryCommand.OnCanExecuteChanged();
             }
         }
 
@@ -94,7 +94,10 @@ namespace KryptPadCSApp.Models
             // Register commands
             RegisterCommands();
 
+            // Set defaults
             Length = 12;
+            UseUpperLowerCase = true;
+            UseNumbers = true;
         }
 
         /// <summary>
@@ -168,7 +171,7 @@ namespace KryptPadCSApp.Models
 
             });
 
-            PrimaryCommand = new Command();
+            PrimaryCommand = new Command(null, IsValid);
         }
 
         /// <summary>
@@ -192,6 +195,13 @@ namespace KryptPadCSApp.Models
             return new string(array);
 
         }
+
+        /// <summary>
+        /// Gets whether the input is valid
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        private bool IsValid(object p) => !string.IsNullOrWhiteSpace(Password);
 
     }
 }

@@ -1,33 +1,12 @@
-﻿
-using KryptPad.Api;
-using KryptPad.Api.Models;
-using KryptPadCSApp.Classes;
-using KryptPadCSApp.Interfaces;
-using KryptPadCSApp.Models;
+﻿using KryptPad.Api;
 using KryptPadCSApp.Views;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage;
-using Windows.Storage.AccessCache;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace KryptPadCSApp
@@ -40,6 +19,7 @@ namespace KryptPadCSApp
         private Frame _rootFrame;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<BackRequestedEventArgs> BackRequested;
 
         #region Properties
 
@@ -48,24 +28,58 @@ namespace KryptPadCSApp
         /// </summary>
         internal bool DisableAutoLogin { get; set; }
 
-        private TimeSpan _timeRemaining;
+        private bool _isSignedIn;
         /// <summary>
         /// Gets or sets the time remaining on the session
         /// </summary>
-        internal TimeSpan TimeRemaining
+        internal bool IsSignedIn
+        {
+            get { return _isSignedIn; }
+            set
+            {
+                // Set value
+                _isSignedIn = value;
+                // Value changed
+                OnPropertyChanged(nameof(IsSignedIn));
+            }
+
+        }
+
+#if DEBUG
+        private bool _isLiveMode;
+#endif
+        /// <summary>
+        /// Gets whether the app is in Live mode
+        /// </summary>
+        internal bool IsLiveMode
         {
             get
             {
-                return _timeRemaining;
+#if DEBUG
+                return _isLiveMode;
+#else
+                return true;
+#endif
             }
+#if DEBUG
             set
             {
-                // Set time
-                _timeRemaining = value;
-                // Value changed
-                OnPropertyChanged(nameof(TimeRemaining));
-            }
+                _isLiveMode = value;
+                
+                // Change the host url
+                if (_isLiveMode)
+                {
+                    KryptPadApi.ServiceHost = "https://www.kryptpad.com/";
+                } else
+                {
+                    KryptPadApi.ServiceHost = "http://test.kryptpad.com/";
+                }
+                
+                // Notify change
+                OnPropertyChanged(nameof(IsLiveMode));
 
+            }
+#endif
         }
 
         #endregion
@@ -99,9 +113,14 @@ namespace KryptPadCSApp
             // just ensure that the window is active
             if (Window.Current.Content == null)
             {
-                // Create a Frame to act as the navigation context and navigate to the first page
-                _rootFrame = new Frame();
+                // Create main page instance
+                var mainPage = new MainPage();
 
+
+                //Get the Frame to act as the navigation context and navigate to the first page
+                _rootFrame = mainPage.RootFrame;
+
+                // Add some event handlers
                 _rootFrame.NavigationFailed += OnNavigationFailed;
                 _rootFrame.Navigated += OnNavigated;
 
@@ -111,10 +130,7 @@ namespace KryptPadCSApp
                 }
 
                 // Place the frame in the current Window
-                //Window.Current.Content = _rootFrame;
-                Window.Current.Content = new MainPage(_rootFrame);
-
-
+                Window.Current.Content = mainPage;
 
 
                 // Register a handler for BackRequested events and set the
@@ -125,23 +141,7 @@ namespace KryptPadCSApp
                     _rootFrame.CanGoBack ?
                     AppViewBackButtonVisibility.Visible :
                     AppViewBackButtonVisibility.Collapsed;
-
-                // Some API events
-                KryptPadApi.AccessTokenExpired += async (s, ev) =>
-                {
-                    // Get the dispatcher
-                    var dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
-
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        // Triggered when the access token has reached its expiration date
-                        NavigationHelper.Navigate(typeof(LoginPage), null);
-                        // Clear backstack too
-                        NavigationHelper.ClearBackStack();
-                    });
-
-                };
-
+                
             }
 
             if (_rootFrame.Content == null)
@@ -154,6 +154,17 @@ namespace KryptPadCSApp
             // Ensure the current window is active
             Window.Current.Activate();
 
+            // Check for presence of the status bar
+            //if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            //{
+            //    // Get status bar
+            //    //#FF173A55
+            //    var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+            //    statusBar.BackgroundColor = Windows.UI.ColorHelper.FromArgb(255, 17, 58, 85);
+            //    statusBar.BackgroundOpacity = 1;
+            //    statusBar.ForegroundColor = Windows.UI.Colors.White;
+
+            //}
         }
 
         protected override void OnActivated(IActivatedEventArgs args)
@@ -187,24 +198,6 @@ namespace KryptPadCSApp
                 ((Frame)sender).CanGoBack ?
                 AppViewBackButtonVisibility.Visible :
                 AppViewBackButtonVisibility.Collapsed;
-
-            // Get the MainPage instance and hide the pane
-            var page = Window.Current.Content as MainPage;
-            if (page != null)
-            {
-                // Check the page type, and hide or show the pane
-                if (typeof(INoSideNavPage).IsAssignableFrom(e.SourcePageType))
-                {
-                    // Hide pane
-                    page.ShowPane(false);
-                }
-                else
-                {
-                    // Show pane
-                    page.ShowPane(true);
-
-                }
-            }
         }
 
         /// <summary>
@@ -228,10 +221,17 @@ namespace KryptPadCSApp
 
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            if (_rootFrame != null && _rootFrame.CanGoBack)
+            // Pass the event args to the back requested handler for handling
+            BackRequested?.Invoke(sender, e);
+
+            // If we didn't handle the requerst, do default
+            if (!e.Handled)
             {
-                e.Handled = true;
-                _rootFrame.GoBack();
+                if (_rootFrame != null && _rootFrame.CanGoBack)
+                {
+                    e.Handled = true;
+                    _rootFrame.GoBack();
+                }
             }
         }
         #endregion

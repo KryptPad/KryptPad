@@ -9,11 +9,21 @@
     mc:Ignorable="d"
     Name="AddNewItemPage">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    
     <Page.DataContext>
         <Models:EditItemPageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -54,6 +64,7 @@
 
             <!--Grid for item details and fields-->
             <ScrollViewer Grid.Row="1">
+                
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -68,19 +79,47 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                       
+                        <RelativePanel Grid.Row="0" >
+                            <!--Item info-->
+                            <StackPanel x:Name="ItemNameStackPanel"
+                                        Margin="0,0,0,0"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        RelativePanel.AlignRightWithPanel="True"
+                                        >
+                                
+                                <TextBlock Text="Item name" />
+                                <TextBox x:Name="ItemNameTextBox"
+                                         Text="{Binding ItemName, Mode=TwoWay}"
+                                         />
 
-                        <!--Item info-->
-                        <StackPanel Grid.Row="0" >
-
-                            <TextBlock Text="Item name" />
-                            <TextBox x:Name="ItemNameTextBox"
-                     Text="{Binding ItemName, Mode=TwoWay}" 
-                     HorizontalAlignment="Left"
-                     Width="250"/>
-
-
-                        </StackPanel>
-
+                            </StackPanel>
+                            
+                            <!--Background-->
+                            <StackPanel x:Name="BackgroundStackPanel"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        RelativePanel.AlignRightWithPanel="True">
+                                
+                                <TextBlock Text="Color" />
+                                
+                                <!--Color choices-->
+                                <ComboBox ItemsSource="{Binding AvailableColors}"
+                                          SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
+                                          HorizontalAlignment="Stretch" >
+                                    
+                                    <!--Define the template-->
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{Binding}" Height="20">
+                                                
+                                            </Border>
+                                            
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            
+                        </RelativePanel>
                     </Grid>
 
                     <!--Fields section-->
@@ -89,16 +128,15 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                        
+                            <!--Fields-->
+                            <StackPanel HorizontalAlignment="Left" Margin="12">
 
-                        <StackPanel Grid.Row="0"
-                            HorizontalAlignment="Left"
-                            Margin="12">
-
-                            <TextBlock TextWrapping="WrapWholeWords">
-                        Add fields to this profile (e.g. Username, Password, etc...)
-                            </TextBlock>
-                            <Button Command="{Binding AddFieldCommand}">Add Field</Button>
-                        </StackPanel>
+                                <TextBlock TextWrapping="WrapWholeWords">
+                                Add fields (e.g. Username, Password, etc...)
+                                </TextBlock>
+                                <Button Command="{Binding AddFieldCommand}">Add Field</Button>
+                            </StackPanel>
 
 
                         <!--This grid is for desktop view-->
@@ -133,28 +171,23 @@
 
                             </Grid>
 
-                            <Grid Grid.Column="1" Grid.Row="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                            <StackPanel Grid.Column="1" Grid.Row="0">
 
-                                <TextBlock Style="{StaticResource MediumHeaderTextBlock}"
-                               Grid.Row="0">Notes</TextBlock>
+                                <TextBlock Text="Notes" Style="{StaticResource MediumHeaderTextBlock}" />
 
                                 <!--Notes-->
                                 <TextBox Text="{Binding Notes, Mode=TwoWay}"
-                             AcceptsReturn="True"
-                             Grid.Row="1" />
+                                         Height="400"
+                                         AcceptsReturn="True"/>        
 
 
-                            </Grid>
+                            </StackPanel>
 
                         </Grid>
 
 
                         <!--This grid is for mobile view-->
-                        <Grid x:Name="MobileGrid" Grid.Row="1" Visibility="Collapsed">
+                        <Grid x:Name="MobileGrid" Grid.Row="1" Visibility="Collapsed" Margin="0,0,0,12">
                             <Pivot>
                                 <PivotItem Header="Fields">
                                     <!--Fields-->
@@ -165,8 +198,8 @@
                                 <PivotItem Header="Notes">
                                     <!--Notes-->
                                     <TextBox Text="{Binding Notes, Mode=TwoWay}"
-                                             AcceptsReturn="True"
-                                 />
+                                             VerticalAlignment="Top"
+                                             AcceptsReturn="True" Height="400"/>
                                 </PivotItem>
                             </Pivot>
                         </Grid>
@@ -178,18 +211,6 @@
             </ScrollViewer>
         </Grid>
 
-        <!--Progress indicator-->
-        <Border Background="#3F000000"
-                Visibility="{Binding BusyIndicatorVisibility}">
-            <ProgressRing 
-                      Visibility="Visible"
-                      IsActive="{Binding IsBusy}"
-                      Width="50"
-                      Height="50"
-                      Foreground="{StaticResource ApplicationForegroundThemeBrush}"/>
-        </Border>
-
-
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="VisualStatePhone">
@@ -198,18 +219,35 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
+
+                        <!--Item color-->
+                        <Setter Target="BackgroundStackPanel.(RelativePanel.Below)" Value="ItemNameStackPanel" />
+
+                        <!--Grid-->
                         <Setter Target="MobileGrid.Visibility"  Value="Visible" />
-                        <Setter Target="ItemNameTextBox.HorizontalAlignment" Value="Stretch" />
-                        <Setter Target="ItemNameTextBox.Width" Value="auto" />
+                        
                     </VisualState.Setters>
                 </VisualState>
-
+                
                 <VisualState x:Name="VisualStateTablet">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="641"/>
+                        <AdaptiveTrigger MinWindowWidth="768"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
+
+                        <!--Item name-->
+                        <Setter Target="ItemNameStackPanel.(RelativePanel.AlignRightWithPanel)" Value="false" />
+                        <Setter Target="ItemNameStackPanel.Margin" Value="0,0,12,0" />
+
+                        <Setter Target="ItemNameTextBox.Width" Value="250" />
+
+                        <!--Item color-->
+                        <Setter Target="BackgroundStackPanel.(RelativePanel.RightOf)" Value="ItemNameStackPanel" />
+                        <Setter Target="BackgroundStackPanel.(RelativePanel.AlignRightWithPanel)" Value="false" />
+                        <Setter Target="BackgroundStackPanel.(RelativePanel.AlignLeftWithPanel)" Value="false" />
+
+                        <!--Grid-->
                         <Setter Target="MainGrid.Visibility"  Value="Visible" />
 
                     </VisualState.Setters>

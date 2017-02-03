@@ -1,11 +1,24 @@
 ﻿<Page
-    x:Class="KryptPadCSApp.Views.AboutPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Models="using:KryptPadCSApp.Models"
+    x:Class="KryptPadCSApp.Views.AboutPage"
     mc:Ignorable="d">
+
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <ContinuumNavigationTransitionInfo />
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+
+    <Page.DataContext>
+        <Models:AboutPageViewModel/>
+    </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
@@ -17,8 +30,8 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MessageTextBlock.(RelativePanel.Below)" Value="HeartTextBlock" />
-                        <!--<Setter Target="HeartTextBlock.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="true"/>-->
+                        <!--<Setter Target="MessageTextBlock.(RelativePanel.Below)" Value="IconTextBlock" />-->
+                        <Setter Target="IconTextBlock.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
 
@@ -28,7 +41,7 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MessageTextBlock.(RelativePanel.RightOf)" Value="HeartTextBlock" />
+                        <Setter Target="MessageTextBlock.(RelativePanel.RightOf)" Value="IconTextBlock" />
 
 
                     </VisualState.Setters>
@@ -36,48 +49,51 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Grid Margin="12">
+        <ScrollViewer>
+            <Grid Margin="12">
 
-            <RelativePanel>
+                <RelativePanel>
 
-                <!--Heart-->
-                <TextBlock x:Name="HeartTextBlock" Text="&#xE783;"
-					Margin="0,0,24,0"
-					FontFamily="{ThemeResource SymbolThemeFontFamily}"
-					FontSize="144"
-					Foreground="{StaticResource SplitViewBackgroundBrush}" />
+                    <!--Heart-->
+                    <TextBlock x:Name="IconTextBlock" Text="&#xE910;"
+					           Margin="0,0,24,0"
+					           FontFamily="{ThemeResource SymbolThemeFontFamily}"
+					           FontSize="144"
+					           Foreground="{ThemeResource SystemControlHighlightAccentBrush}" />
 
-                <!--Text-->
-                <StackPanel x:Name="MessageTextBlock">
+                    <!--Text-->
+                    <StackPanel x:Name="MessageTextBlock">
 
-                    <!--Header-->
-                    <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
+                        <!--Header-->
+                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
 						<Run Text="Krypt Pad"/>
-                    </TextBlock>
+                        </TextBlock>
 
-                    <!--Message-->
-                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" TextWrapping="WrapWholeWords">
-						An open source project
-                    </TextBlock>
+                        <!--Message-->
+                        <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" TextWrapping="WrapWholeWords">
+                            <Run Text="An open source project"/>
+                        </TextBlock>
 
-                    <!--About-->
-                    <TextBlock TextWrapping="WrapWholeWords">
-						Version 0.9.0.0 Beta
-                        <LineBreak />
-                        <LineBreak/><Hyperlink NavigateUri="https://www.kryptpad.com">Krypt Pad Website</Hyperlink>
-                    </TextBlock>
-                    
-                    
-                </StackPanel>
-
+                        <!--About-->
+                        <TextBlock TextWrapping="WrapWholeWords">
+                            <Run Text="{Binding Version}" />
+                            <LineBreak />
+                            <LineBreak/><Hyperlink NavigateUri="https://www.kryptpad.com">
+                                <Run Text="Krypt Pad Website"/>
+                            </Hyperlink>
+                        </TextBlock>
 
 
-
-            </RelativePanel>
+                    </StackPanel>
 
 
 
-        </Grid>
 
+                </RelativePanel>
+
+
+
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

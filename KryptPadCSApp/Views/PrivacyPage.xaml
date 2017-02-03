@@ -7,13 +7,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid Margin="12">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <ScrollViewer>
+            <Grid Margin="12">
 
-            <ScrollViewer Grid.Row="0">
                 <StackPanel>
                     <TextBlock Style="{ThemeResource HeaderTextBlockStyle}"
                                 Margin="0,0,0,12">
@@ -24,7 +31,7 @@
                                 Margin="0,0,0,12">
                         Updated 4/15/2016
                     </TextBlock>
-                    
+
                     <TextBlock TextWrapping="WrapWholeWords">
                     The following outlines what information is collected, and how it is used.
                     <LineBreak />
@@ -70,7 +77,8 @@
 
 
                 </StackPanel>
-            </ScrollViewer>
-        </Grid>
+
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

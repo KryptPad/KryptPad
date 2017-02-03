@@ -8,88 +8,77 @@
     x:Class="KryptPadCSApp.Views.CreateAccountPage"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource AppLoginBackgroundBrush}">
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    
+    <Page.DataContext>
+        <Models:CreateAccountPageViewModel/>
+    </Page.DataContext>
 
-        <Grid.DataContext>
-            <Models:CreateAccountPageViewModel/>
-        </Grid.DataContext>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <!--Main grid for page-->
-        <Grid x:Name="MainGrid"
-              Visibility="{Binding AccountInfoVisibility}"
-              Style="{StaticResource LoginGridWrapperStyle}">
+        <ScrollViewer>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+            <!--Main grid for page-->
+            <Grid x:Name="MainGrid">
 
-            <!--Header-->
-            <StackPanel Grid.Row="0"
-                       >
-                <TextBlock Text="Krypt Pad" 
-                           Style="{ThemeResource HeaderTextBlockStyle}"    
-                           Foreground="White"/>
-                <TextBlock Text="SIGN UP" 
-                           Margin="0,0,0,12"    
-                           Style="{ThemeResource SubtitleTextBlockStyle}"    
-                           Foreground="White"/>
-            </StackPanel>
-
-
-            <Grid Grid.Row="1"  Style="{StaticResource LoginGridStyle}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
                 
-                <TextBlock Grid.Row="0"
-					Margin="0,0,0,10"
-					TextWrapping="WrapWholeWords">
-					<Run Text="Before you can use KryptPad, you must create an account with kryptpad.com."/>
-                </TextBlock>
 
-                <!--Login email address-->
-                <TextBox Grid.Row="1" PlaceholderText="Email Address" Margin="0,0,0,10"
+                <StackPanel
+                      MaxWidth="400"
+                      Padding="12">
+                    
+
+                    <TextBlock Margin="0,0,0,12"
+					           TextWrapping="WrapWholeWords">
+					    <Run Text="Create your Krypt Pad account for free."/>
+                    </TextBlock>
+
+                    <!--Login email address-->
+                    <TextBox PlaceholderText="Email Address" Margin="0,0,0,12"
 					InputScope="EmailNameOrAddress"
 					Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <!--Password-->
-                <PasswordBox Grid.Row="2" PlaceholderText="Password" Margin="0,0,0,10" 
+                    <!--Password requirements-->
+                    <TextBlock Style="{StaticResource SmallInfoTextBlock}" TextWrapping="WrapWholeWords" x:Uid="PasswordRequirement" />
+
+                    <!--Password-->
+                    <PasswordBox PlaceholderText="Password" Margin="0,0,0,12" 
 					Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <!--Password-->
-                <PasswordBox Grid.Row="3" PlaceholderText="Confirm Password" Margin="0,0,0,10" 
-					Password="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <!--Password-->
+                    <PasswordBox PlaceholderText="Confirm Password"
+                                 Margin="0,0,0,12" 
+					             Password="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <!--Link to terms page-->
-                <TextBlock Grid.Row="4" TextWrapping="WrapWholeWords" Margin="0,0,0,10">
-                    Krypt Pad is licensed under MIT. By using this software, you accept this
-                    <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the
-                    <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
-                </TextBlock>
+                    <!--Create account-->
+                    <Button Margin="0,0,0,12" 
+                            Content="Create Account" 
+                            Command="{Binding CreateAccountCommand}"/>
+                    
+                    <!--Link to terms page-->
+                    <TextBlock TextWrapping="WrapWholeWords">
+                        Krypt Pad is licensed under MIT. By using this software, you accept this
+                        <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the
+                        <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
+                    </TextBlock>
 
-                <Button Grid.Row="5"
-                        Margin="0,0,10,0" 
-                        Content="Create Account" 
-                        Command="{Binding CreateAccountCommand}"/>
+                    
+
+
+                </StackPanel>
 
 
             </Grid>
 
-            
-        </Grid>
-        <!--Progress indicator-->
-        <ProgressRing Visibility="{Binding BusyIndicatorVisibility}"
-                      IsActive="{Binding IsBusy}"
-                      Width="50"
-                      Height="50"
-                      Foreground="White"/>
-
+        </ScrollViewer>
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
@@ -117,6 +106,6 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        
+
     </Grid>
 </Page>

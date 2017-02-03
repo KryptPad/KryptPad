@@ -17,6 +17,14 @@ namespace KryptPadCSApp.Models
 {
     class LoginPageViewModel : BasePageModel
     {
+        /// <summary>
+        /// Resource name for credential locker
+        /// </summary>
+#if DEBUG
+        private const string LOCKER_RESOURCE = "KryptPadTest";
+#else
+        private const string LOCKER_RESOURCE = "KryptPad";
+#endif
 
         #region Properties
         private string _email;
@@ -33,7 +41,7 @@ namespace KryptPadCSApp.Models
                 // Notify change
                 OnPropertyChanged(nameof(Email));
                 // Is login enabled?
-                LogInCommand.CommandCanExecute = IsLoginEnabled();
+                LogInCommand.OnCanExecuteChanged();
             }
         }
 
@@ -50,7 +58,7 @@ namespace KryptPadCSApp.Models
                 // Notify change
                 OnPropertyChanged(nameof(Password));
                 // Is login enabled?
-                LogInCommand.CommandCanExecute = IsLoginEnabled();
+                LogInCommand.OnCanExecuteChanged();
             }
         }
 
@@ -78,25 +86,30 @@ namespace KryptPadCSApp.Models
             get { return KryptPadApi.ServiceHost; }
         }
 
-        private Visibility _loginVisibility;
+#if DEBUG
         /// <summary>
-        /// Gets or sets whether the ui element is visible
+        /// Gets or sets whether the app is in live mode
         /// </summary>
-        public Visibility LoginVisibility
+        public bool IsLiveMode
         {
-            get { return _loginVisibility; }
+            get
+            {
+                return (App.Current as App).IsLiveMode;
+            }
             set
             {
-                _loginVisibility = value;
-                //notify change
-                OnPropertyChanged(nameof(LoginVisibility));
-
+                (App.Current as App).IsLiveMode = value;
             }
         }
+#endif
 
         public Command LogInCommand { get; protected set; }
 
         public Command CreateAccountCommand { get; protected set; }
+
+        public Command GoToFacebookCommand { get; protected set; }
+
+        public Command GoToTwitterCommand { get; protected set; }
 
         #endregion
 
@@ -105,9 +118,11 @@ namespace KryptPadCSApp.Models
             // Ensure that the access token is cleared upon arrival
             KryptPadApi.SignOutAsync();
 
+            (App.Current as App).IsSignedIn = false;
+
             // Register commands
             RegisterCommands();
-            
+
         }
 
         /// <summary>
@@ -118,7 +133,7 @@ namespace KryptPadCSApp.Models
         {
             // Check the password vault for any saved credentials.
             await LoginFromSavedCredentialsAsync();
-            
+
         }
 
         #region Helper Methods
@@ -128,32 +143,26 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            LogInCommand = new Command(async (p) =>
-            {
-                await LoginAsync();
-            }, false);
-
-            CreateAccountCommand = new Command((p) =>
-            {
-                // Navigate to the create account page
-                NavigationHelper.Navigate(typeof(CreateAccountPage), null);
-            });
+            LogInCommand = new Command(LogInCommandHandler, IsLoginEnabled);
+            CreateAccountCommand = new Command(CreateAccountCommandHandler);
+            GoToFacebookCommand = new Command(GoToFacebookCommandHandler);
+            GoToTwitterCommand = new Command(GoToTwitterCommandHandler);
         }
-
+        
         /// <summary>
         /// Checks to see if there are any saved credentials. If there are, the app is auto-logged in.
         /// Only logs in if there is no access token already
         /// </summary>
         private async Task LoginFromSavedCredentialsAsync()
         {
-
-
-            //create instance to credential locker
+            // Create instance to credential locker
             var locker = new PasswordVault();
+
             try
             {
-                //find the saved credentials
-                var login = locker.FindAllByResource("KryptPad").FirstOrDefault();
+
+                // Find the saved credentials
+                var login = locker.FindAllByResource(LOCKER_RESOURCE).FirstOrDefault();
 
                 if (login != null)
                 {
@@ -164,8 +173,8 @@ namespace KryptPadCSApp.Models
                     Password = login.Password;
                     AutoSignIn = true;
 
-                    // Make sure we can auto login in, and that we don't already have an access token
-                    if (!DisableAutoLogin && !KryptPadApi.IsSignedIn)
+                    // If autologin is enabled, attempt to sign in
+                    if (!DisableAutoLogin)
                     {
                         // Do login
                         await LoginAsync();
@@ -176,10 +185,7 @@ namespace KryptPadCSApp.Models
 
                 }
             }
-            catch (Exception)
-            {
-                //no saved credentials, ignore
-            }
+            catch { /* Nothing to see here */ }
 
         }
 
@@ -188,25 +194,37 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void SaveCredentialsIfAutoSignIn()
         {
+            // Create instance to credential locker
+            var locker = new PasswordVault();
+
+            try
+            {
+                // Clear out the saved credential for the resource
+                var creds = locker.FindAllByResource(LOCKER_RESOURCE);
+                foreach (var cred in creds)
+                {
+                    // Remove only the credentials for the given resource
+                    locker.Remove(cred);
+                }
+            }
+            catch { /* Nothing to see here */ }
+
+
+            // If we chose auto sign in, save the new credential
             if (AutoSignIn)
             {
-                //create instance to credential locker
-                var locker = new PasswordVault();
-
-                //clear out any saved credentials
-                locker.RetrieveAll().ToList().ForEach((l) => locker.Remove(l));
-
-                //create new credential
+                // Create new credential
                 var credential = new PasswordCredential()
                 {
-                    Resource = "KryptPad",
+                    Resource = LOCKER_RESOURCE,
                     UserName = Email,
                     Password = Password
                 };
 
-                //store the credentials
+                // Store the credentials
                 locker.Add(credential);
             }
+
         }
 
         /// <summary>
@@ -233,7 +251,7 @@ namespace KryptPadCSApp.Models
             {
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -247,14 +265,52 @@ namespace KryptPadCSApp.Models
         /// Gets whether the login command is enabled
         /// </summary>
         /// <returns></returns>
-        private bool IsLoginEnabled() => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
+        private bool IsLoginEnabled(object p) => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
         #endregion
 
-        protected override void OnIsBusyChanged()
-        {
-            base.OnIsBusyChanged();
+        #region Command handlers
 
-            LoginVisibility = IsBusy ? Visibility.Collapsed : Visibility.Visible;
+        private async void LogInCommandHandler(object p)
+        {
+            await LoginAsync();
         }
+
+        private void CreateAccountCommandHandler(object p)
+        {
+            // Navigate to the create account page
+            NavigationHelper.Navigate(typeof(CreateAccountPage), null);
+        }
+
+        private async void GoToFacebookCommandHandler(object obj)
+        {
+            try
+            {
+                // Launch the uri
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(ResourceStrings.GetString("FacebookUrl")));
+
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowMessageDialogAsync(ResourceStrings.GetString("UriFail"));
+            }
+        }
+
+        private async void GoToTwitterCommandHandler(object obj)
+        {
+            try
+            {
+                // Launch the uri
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(ResourceStrings.GetString("TwitterUrl")));
+
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowMessageDialogAsync(ResourceStrings.GetString("UriFail"));
+            }
+        }
+        
+        #endregion
     }
 }

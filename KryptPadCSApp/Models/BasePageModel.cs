@@ -1,9 +1,11 @@
 ﻿using KryptPad.Api.Models;
+using KryptPadCSApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -41,6 +43,11 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        /// <summary>
+        /// Gets the ResourceLoader for the current view
+        /// </summary>
+        public ResourceLoader ResourceStrings { get { return ResourceLoader.GetForCurrentView(); } }
+
         private Visibility _busyIndicatorVisibility;
         /// <summary>
         /// Gets or sets whether the ui element is visible
@@ -57,12 +64,31 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        /// <summary>
+        /// Gets the command to view the license terms
+        /// </summary>
+        public Command ViewLicenseTermsCommand { get; protected set; }
+
+        public Command ViewPrivacyPolicyCommand { get; protected set; }
+
+        public Command ViewFeedBackCommand { get; protected set; }
+
+        public Command ViewDonateCommand { get; protected set; }
+
+        public Command ViewAboutCommand { get; protected set; }
         #endregion
 
         #region Ctor
         public BasePageModel()
         {
             BusyIndicatorVisibility = Visibility.Collapsed;
+
+            // Set commands
+            ViewLicenseTermsCommand = new Command((p) => { NavigationHelper.GoToLicenseTerms(); });
+            ViewPrivacyPolicyCommand = new Command((p) => { NavigationHelper.GoToPrivacyPolicy(); });
+            ViewFeedBackCommand = new Command((p) => { NavigationHelper.GoToFeedback(); });
+            ViewDonateCommand = new Command((p) => { NavigationHelper.GoToDonate(); });
+            ViewAboutCommand = new Command((p) => { NavigationHelper.GoToAbout(); });
         }
         #endregion
 
@@ -78,7 +104,8 @@ namespace KryptPadCSApp.Models
         protected virtual void OnIsBusyChanged() {
             // Set the visibility of the busy indicator
             BusyIndicatorVisibility = IsBusy ? Visibility.Visible : Visibility.Collapsed;
-
+            // Set main window busy state
+            (Window.Current.Content as MainPage).SetIsBusy(IsBusy);
         }
 
         #endregion

@@ -1,5 +1,5 @@
 ﻿using KryptPadCSApp.Classes;
-using KryptPadCSApp.Models;
+using KryptPadCSApp.Models.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -1,4 +1,5 @@
 ﻿using KryptPad.Api.Models;
+using KryptPad.Api.Requests;
 using KryptPad.Api.Responses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -23,16 +24,26 @@ namespace KryptPad.Api
     /// </summary>
     public class KryptPadApi
     {
+
+        private const int SESSION_TIME_MINUTES = 5;
+        private const int SESSION_WARNING_MINUTES = 1;
+        // How much time is taken away from the token's ttl to account for network latency
+        private const int EXPIRATION_TIME_THRESHOLD = 10;
+
+        // Use a semaphore to prevent a task from executing simultaniously
+        private static SemaphoreSlim ReauthenticateSemaphore = new SemaphoreSlim(1, 1);
+
+
 #if LOCAL
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; } = "http://localhost:50821/"; //
+        public static string ServiceHost { get; set; } = "http://localhost:50821/"; //
 #elif DEBUG
         /// <summary>
-        /// Gets the host address of the API service.
+        /// Gets or sets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; } = "http://test.kryptpad.com/";
+        public static string ServiceHost { get; set; } = "http://test.kryptpad.com/";
 #else
         /// <summary>
         /// Gets the host address of the API service.
@@ -41,17 +52,37 @@ namespace KryptPad.Api
 #endif
 
         #region Delegates
-        public delegate void AccessTokenExpirationTimerHandler(DateTime expiration);
+        public delegate void SessionEndingHandler(DateTime expiration);
+        public delegate void SessionEndedHandler();
         #endregion
 
         #region Events
+        public static event SessionEndingHandler SessionEnding;
+        public static event SessionEndedHandler SessionEnded;
 
-        public static event EventHandler AccessTokenExpired;
-
-        public static event AccessTokenExpirationTimerHandler AccessTokenExpirationTimer;
+        //public static event AccessTokenExpirationTimerHandler AccessTokenExpirationTimer;
         #endregion
 
         #region Properties
+        private static Guid _appId;
+
+        /// <summary>
+        /// Gets the app id of the current instance of the app
+        /// </summary>
+        private static Guid AppId
+        {
+            get
+            {
+                if (_appId == Guid.Empty)
+                {
+                    // Generate a new app id for the lifetime of this app's
+                    // instance. It will be appended to the client id.
+                    _appId = Guid.NewGuid();
+                }
+
+                return _appId;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the API OAuth access token to authorize API calls
@@ -59,14 +90,9 @@ namespace KryptPad.Api
         private static OAuthTokenResponse TokenResponse { get; set; }
 
         /// <summary>
-        /// Gets or sets the username of the user logged in
+        /// Gets or sets when the token is supposed to expire
         /// </summary>
-        private static string Username { get; set; }
-
-        /// <summary>
-        /// Gets or sets the password of the user logged in
-        /// </summary>
-        private static string Password { get; set; }
+        private static DateTime TokenExpirationDate { get; set; }
 
         /// <summary>
         /// Gets or sets the passphrase for the profile
@@ -79,22 +105,15 @@ namespace KryptPad.Api
         public static ApiProfile CurrentProfile { get; private set; }
 
         /// <summary>
-        /// Gets whether the user is signed in
+        /// Gets or sets the session end time
         /// </summary>
-        public static bool IsSignedIn
-        {
-            get { return !string.IsNullOrWhiteSpace(TokenResponse?.AccessToken); }
-        }
+        private static DateTime SessionEndDate { get; set; }
 
         /// <summary>
         /// Gets or sets the CancellationToken for the task
         /// </summary>
         private static CancellationTokenSource ExpirationTaskCancelTokenSource { get; set; }
 
-        /// <summary>
-        /// Gets or sets the task used to check if the expiration date has passed
-        /// </summary>
-        private static Task ExpirationTask { get; set; }
         #endregion
 
 
@@ -108,7 +127,7 @@ namespace KryptPad.Api
 
             // Start a task that will check the expiration date of the access token, when
             // the current time has passed token expiration, an event will be raised.
-            ExpirationTask = Task.Factory.StartNew(
+            Task.Factory.StartNew(
                 async () => await ExpirationTaskWork(ExpirationTaskCancelTokenSource.Token),
                 ExpirationTaskCancelTokenSource.Token);
         }
@@ -120,19 +139,13 @@ namespace KryptPad.Api
         /// <returns></returns>
         private static async Task ExpirationTaskWork(CancellationToken token)
         {
-            // Check to see if we still have a token response object
-            var tr = TokenResponse;
-            if (tr == null)
-            {
-                return;
-            }
 
             // Get local date from expiration
-            var expiration = TimeZoneInfo.ConvertTime(tr.Expiration, TimeZoneInfo.Local);
+            var expiration = SessionEndDate;
 
-            // Store handle to event
-            EventHandler expHandle = AccessTokenExpired;
-            AccessTokenExpirationTimerHandler tickHandle = AccessTokenExpirationTimer;
+            // Store handle to events
+            var sessionEndingHandler = SessionEnding;
+            var sessionEndedHandler = SessionEnded;
 
             // Enter a while loop and check that the expiration date hasn't passed
             while (DateTime.Now < expiration)
@@ -140,11 +153,14 @@ namespace KryptPad.Api
                 // Wait a bit, then check again
                 token.ThrowIfCancellationRequested();
 
-                // Get local date from expiration
-                expiration = TimeZoneInfo.ConvertTime(tr.Expiration, TimeZoneInfo.Local);
+                // Set date to check
+                expiration = SessionEndDate;
 
-                // Send the tick event
-                tickHandle?.Invoke(expiration);
+                // Calculate the time when the warning should show
+                //var warningTime = expiration.AddMinutes(-SESSION_WARNING_MINUTES);
+
+                // Fire event
+                sessionEndingHandler?.Invoke(expiration);
 
                 // Wait a bit, then check again
                 await Task.Delay(100);
@@ -152,7 +168,7 @@ namespace KryptPad.Api
             }
 
             // If the loop exits, then we have expired
-            expHandle?.Invoke(null, EventArgs.Empty);
+            sessionEndedHandler?.Invoke();
         }
 
         /// <summary>
@@ -163,24 +179,12 @@ namespace KryptPad.Api
         public static async Task AuthenticateAsync(string username, string password)
         {
 
-            if (ExpirationTask != null)
-            {
-                // Cancel task
-                CancelExpirationTask();
-
-                // Wait for task to finish
-                await ExpirationTask;
-
-                // Clear token response
-                TokenResponse = null;
-
-            }
-
             using (var client = new HttpClient())
             {
                 // Prepare form values
                 var values = new Dictionary<string, string>
                 {
+                    { "client_id", "KryptPadUniversal_" + AppId.ToString() },
                     { "grant_type", "password" },
                     { "username", username },
                     { "password", password }
@@ -200,12 +204,58 @@ namespace KryptPad.Api
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
 
-                    // Store the username and password for future use
-                    Username = username;
-                    Password = password;
+                    // Set the expiration date based on the ttl of the access token
+                    TokenExpirationDate = DateTime.Now.AddSeconds(TokenResponse.ExpiresIn - EXPIRATION_TIME_THRESHOLD);
 
-                    // Start the expiration task
+                    // Set the session end time
+                    ExtendSessionTime();
+
+                    // Start session expiration task
                     StartExpirationTask();
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Refreshes the access token using the refresh token
+        /// </summary>
+        /// <returns></returns>
+        public static async Task ReauthenticateAsync()
+        {
+            using (var client = new HttpClient())
+            {
+                // Prepare form values
+                // TODO: Ideally, we want to pass a client secret here, but this is 
+                // not something we can store in the source code (open-source... d'oh).
+                var values = new Dictionary<string, string>
+                {
+                    { "client_id", "KryptPadUniversal_" + AppId.ToString() },
+                    { "grant_type", "refresh_token" },
+                    { "refresh_token", TokenResponse.RefreshToken }
+                };
+
+                // Create the content to send
+                var content = new FormUrlEncodedContent(values);
+                // Send the post request
+                var response = await client.PostAsync(GetUrl("token"), content);
+
+                // Get the data if the response is what we want
+                if (response.IsSuccessStatusCode)
+                {
+                    // Get the response as a string
+                    var data = await response.Content.ReadAsStringAsync();
+
+                    // Deserialize the data and get the access token
+                    TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
+
+                    // Set the expiration date based on the ttl of the access token
+                    TokenExpirationDate = DateTime.Now.AddSeconds(TokenResponse.ExpiresIn - EXPIRATION_TIME_THRESHOLD);
+
                 }
                 else
                 {
@@ -400,31 +450,62 @@ namespace KryptPad.Api
         /// <param name="profile"></param>
         /// <param name="passphrase"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile, string passphrase = null)
+        public static async Task<ApiProfile> CreateProfileAsync(CreateProfileRequest profile)
         {
             using (var client = new HttpClient())
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
-                // Add passphrase to message
-                AddPassphraseHeader(client, passphrase);
+
                 // Create JSON content.
                 var content = JsonContent(profile);
 
                 // Send request and get a response
-                HttpResponseMessage response;
+                var response = await client.PostAsync(GetUrl($"api/profiles"), content);
 
-                if (profile.Id == 0)
+
+                // Deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
                 {
-                    // Create
-                    response = await client.PostAsync(GetUrl($"api/profiles"), content);
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+
+                    // Create an ApiProfile object
+                    var p = new ApiProfile()
+                    {
+                        Name = profile.Name,
+                        Id = Convert.ToInt32(data)
+                    };
+
+                    // Return the profile object
+                    return p;
                 }
                 else
                 {
-                    // Update
-                    response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}"), content);
+                    throw await CreateException(response);
                 }
+            }
 
+        }
+
+        /// <summary>
+        /// Creates a new profile
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <param name="passphrase"></param>
+        /// <returns></returns>
+        public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile)
+        {
+            using (var client = new HttpClient())
+            {
+                // Authorize the request.
+                await AuthorizeRequest(client);
+
+                // Create JSON content.
+                var content = JsonContent(profile);
+
+                // Send request and get a response
+                var response = await client.PutAsync(GetUrl($"api/profiles/{profile.Id}"), content);
 
                 // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
@@ -657,39 +738,6 @@ namespace KryptPad.Api
 
         #region Items
 
-        ///// <summary>
-        ///// Gets all categories for the authenticated user
-        ///// </summary>
-        ///// <returns></returns>
-        //public static async Task<ItemsResponse> GetItemsAsync(int categoryId)
-        //{
-        //    using (var client = new HttpClient())
-        //    {
-        //        //authorize the request
-        //        await AuthorizeRequest(client);
-        //        // Add passphrase to message
-        //        AddPassphraseHeader(client);
-        //        //send request and get a response
-        //        var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items"));
-        //        //read the data
-        //        var data = await response.Content.ReadAsStringAsync();
-
-        //        //deserialize the object based on the result
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            //deserialize the response as an ApiResponse object
-        //            return JsonConvert.DeserializeObject<ItemsResponse>(data);
-        //        }
-        //        else
-        //        {
-        //            var wer = JsonConvert.DeserializeObject<WebExceptionResponse>(data);
-        //            // Throw exception with the WebExceptionResponse
-        //            throw wer.ToException();
-        //        }
-        //    }
-
-        //}
-
         /// <summary>
         /// Gets an item by its id, including all the details
         /// </summary>
@@ -838,7 +886,7 @@ namespace KryptPad.Api
                     // Update
                     response = await client.PutAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields/{field.Id}"), content);
                 }
-                                
+
                 // Check if the response is a success code
                 if (response.IsSuccessStatusCode)
                 {
@@ -876,7 +924,7 @@ namespace KryptPad.Api
                 AddPassphraseHeader(client);
                 // Send request and get a response
                 var response = await client.GetAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields"));
-                
+
                 // Deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
@@ -911,7 +959,7 @@ namespace KryptPad.Api
 
                 // Execute request
                 var response = await client.DeleteAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/categories/{categoryId}/items/{itemId}/fields/{id}"));
-                
+
                 // Check if the response is a success code
                 if (!response.IsSuccessStatusCode)
                 {
@@ -981,7 +1029,7 @@ namespace KryptPad.Api
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                exception = new WebException("Access denied due to invalid credentials.");
+                exception = new WebException("The current request is unauthorized.");
             }
             else
             {
@@ -1001,37 +1049,39 @@ namespace KryptPad.Api
         /// <param name="client"></param>
         private static async Task AuthorizeRequest(HttpClient client)
         {
+            await ReauthenticateSemaphore.WaitAsync();
             try
             {
+                // If we have a token, use it to authorize the request
                 if (TokenResponse != null && !string.IsNullOrWhiteSpace(TokenResponse.AccessToken))
                 {
 
-                    var expiration = TimeZoneInfo.ConvertTime(TokenResponse.Expiration, TimeZoneInfo.Local);
-                    // Before we execute the request, make sure the token isn't about to expire
-                    if (DateTime.Now >= expiration.AddMinutes(-5) && DateTime.Now < expiration)
+                    // Check the expiration time
+                    if (TokenExpirationDate <= DateTime.Now)
                     {
-                        // We are about to lose our access, reauthenticate with saved credentials
-                        await AuthenticateAsync(Username, Password);
-                        // Make sure we have a token
-                        if (TokenResponse == null)
-                        {
-                            throw new Exception();
-                        }
+                        // Attempt to get a new access token
+                        await ReauthenticateAsync();
                     }
 
                     //add the authorize header to the request
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenResponse.AccessToken);
+
+                    // Set the session end time
+                    ExtendSessionTime();
                 }
                 else
                 {
-                    throw new Exception();
+                    // No token? Hmm.
                 }
             }
             catch (Exception)
             {
-                // If an error occurs, log out
-                EventHandler expHandle = AccessTokenExpired;
-                expHandle?.Invoke(null, EventArgs.Empty);
+                //ReauthenticateSemaphore.Release();
+            }
+            finally
+            {
+                ReauthenticateSemaphore.Release();
+
             }
 
         }
@@ -1103,9 +1153,18 @@ namespace KryptPad.Api
             TokenResponse = null;
             CurrentProfile = null;
             Passphrase = null;
-            Username = null;
-            Password = null;
+            //Username = null;
+            //Password = null;
 
+        }
+
+        /// <summary>
+        /// Extends the session time
+        /// </summary>
+        public static void ExtendSessionTime()
+        {
+            // Set the session end time
+            SessionEndDate = DateTime.Now.AddMinutes(SESSION_TIME_MINUTES);
         }
         #endregion
 

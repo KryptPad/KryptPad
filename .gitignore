@@ -212,3 +212,4 @@ _Pvt_Extensions/
 ModelManifest.xml
 /KryptPadCSApp/BundleArtifacts
 /KryptPadCSApp/Package.StoreAssociation.xml
+*.appxmanifest
