@@ -22,10 +22,9 @@
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
-    
-    <Page.Resources>
-        
 
+    <Page.Resources>
+     
         <Style x:Key="GridViewItemStyle1" TargetType="GridViewItem">
             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
             <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
@@ -48,36 +47,13 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="GridViewItem">
-                        <ListViewItemPresenter Margin="12,12,12,0"
-                                               CheckBrush="{ThemeResource GridViewItemCheckBrush}" 
-                                               ContentMargin="{TemplateBinding Padding}"
-                                               CheckMode="{ThemeResource GridViewItemCheckMode}"
-                                               ContentTransitions="{TemplateBinding ContentTransitions}"
-                                               CheckBoxBrush="{ThemeResource GridViewItemCheckBoxBrush}"
-                                               DragForeground="{ThemeResource GridViewItemDragForeground}"
-                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
-                                               DragBackground="{ThemeResource GridViewItemDragBackground}"
-                                               DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" 
-                                               FocusBorderBrush="{ThemeResource GridViewItemFocusBorderBrush}"
-                                               FocusSecondaryBorderBrush="{ThemeResource GridViewItemFocusSecondaryBorderBrush}"                                              
-                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                               Control.IsTemplateFocusTarget="True"
-                                               PointerOverForeground="{ThemeResource GridViewItemForegroundPointerOver}"
-                                               PressedBackground="{ThemeResource GridViewItemBackgroundPressed}" 
-                                               PlaceholderBackground="{ThemeResource GridViewItemPlaceholderBackground}" 
-                                               PointerOverBackground="{ThemeResource GridViewItemBackgroundPointerOver}"
-                                               ReorderHintOffset="{ThemeResource GridViewItemReorderHintThemeOffset}"
-                                               SelectedPressedBackground="{ThemeResource GridViewItemBackgroundSelectedPressed}"
-                                               SelectionCheckMarkVisualEnabled="{ThemeResource GridViewItemSelectionCheckMarkVisualEnabled}"
-                                               SelectedForeground="{ThemeResource GridViewItemForegroundSelected}" 
-                                               SelectedPointerOverBackground="{ThemeResource GridViewItemBackgroundSelectedPointerOver}"
-                                               SelectedBackground="{ThemeResource GridViewItemBackgroundSelected}"
-                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                               />
+                        <ListViewItemPresenter CheckBrush="{ThemeResource GridViewItemCheckBrush}" ContentMargin="{TemplateBinding Padding}" CheckMode="{ThemeResource GridViewItemCheckMode}" ContentTransitions="{TemplateBinding ContentTransitions}" CheckBoxBrush="{ThemeResource GridViewItemCheckBoxBrush}" DragForeground="{ThemeResource GridViewItemDragForeground}" DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}" DragBackground="{ThemeResource GridViewItemDragBackground}" DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" FocusVisualPrimaryBrush="{TemplateBinding FocusVisualPrimaryBrush}" FocusVisualSecondaryThickness="{TemplateBinding FocusVisualSecondaryThickness}" FocusBorderBrush="{ThemeResource GridViewItemFocusBorderBrush}" FocusVisualMargin="{TemplateBinding FocusVisualMargin}" FocusVisualPrimaryThickness="{TemplateBinding FocusVisualPrimaryThickness}" FocusSecondaryBorderBrush="{ThemeResource GridViewItemFocusSecondaryBorderBrush}" FocusVisualSecondaryBrush="{TemplateBinding FocusVisualSecondaryBrush}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Control.IsTemplateFocusTarget="True" PointerOverForeground="{ThemeResource GridViewItemForegroundPointerOver}" PressedBackground="{ThemeResource GridViewItemBackgroundPressed}" PlaceholderBackground="{ThemeResource GridViewItemPlaceholderBackground}" PointerOverBackground="{ThemeResource GridViewItemBackgroundPointerOver}" ReorderHintOffset="{ThemeResource GridViewItemReorderHintThemeOffset}" SelectedPressedBackground="{ThemeResource GridViewItemBackgroundSelectedPressed}" SelectionCheckMarkVisualEnabled="{ThemeResource GridViewItemSelectionCheckMarkVisualEnabled}" SelectedForeground="{ThemeResource GridViewItemForegroundSelected}" SelectedPointerOverBackground="{ThemeResource GridViewItemBackgroundSelectedPointerOver}" SelectedBackground="{ThemeResource GridViewItemBackgroundSelected}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+
     </Page.Resources>
 
     <Page.DataContext>
@@ -121,13 +97,13 @@
 
                 <!--These buttons will always appear in the list-->
                 <AppBarButton Icon="Add" Label="Add category" Command="{Binding AddCategoryCommand}" />
-                                
+
                 <!--These buttons will hide on mobile view-->
                 <AppBarButton x:Name="SelectAppBarButton" Icon="ViewAll" Label="Toggle select" Command="{Binding SelectModeCommand}" />
                 <AppBarButton x:Name="MoveAppBarButton" Icon="MoveToFolder" Label="Move items" Command="{Binding MoveItemsCommand}" />
                 <AppBarButton x:Name="PassphraseAppBarButton" Icon="Permissions" Label="Change passphrase" Command="{Binding ChangePassphraseCommand}" />
                 <AppBarButton x:Name="DownloadAppBarButton" Icon="SaveLocal" Label="Download profile" Command="{Binding DownloadProfileCommand}" />
-                
+
                 <!--Overflow area-->
                 <CommandBar.SecondaryCommands>
 
@@ -152,12 +128,12 @@
                     BorderThickness="1"
                     >
             <StackPanel Orientation="Horizontal">
-                
+
                 <TextBlock TextWrapping="WrapWholeWords"
                        VerticalAlignment="Center">
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#xE8C9;" FontSize="32" />
                 </TextBlock>
-                
+
                 <TextBlock TextWrapping="WrapWholeWords"
                        VerticalAlignment="Center">
                 
@@ -166,7 +142,7 @@
                     to add a new category.
                 </TextBlock>
             </StackPanel>
-            
+
         </Border>
 
 
@@ -193,26 +169,26 @@
 
 
                 <!--Group header style-->
-                <GridView.GroupStyle>
-                    <GroupStyle >
-                        <GroupStyle.HeaderTemplate>
-                            <DataTemplate>
+            <GridView.GroupStyle>
+                <GroupStyle >
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
 
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="auto" />
-                                    </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
 
-                                    <!--Trigger add item with the category as the parameter-->
-                                    <Button Grid.Column="0" 
+                                <!--Trigger add item with the category as the parameter-->
+                                <Button Grid.Column="0" 
                                         Command="{Binding DataContext.AddItemCommand, ElementName=ItemsViewPage }"
                                         CommandParameter="{Binding}">
-                                        <SymbolIcon Symbol="Add" />
-                                    </Button>
+                                    <SymbolIcon Symbol="Add" />
+                                </Button>
 
-                                    <!--Name of category-->
-                                    <TextBlock Grid.Column="1"
+                                <!--Name of category-->
+                                <TextBlock Grid.Column="1"
                                                VerticalAlignment="Center"
                                                Text="{Binding Name}"
                                                Margin="8,0,0,0"
@@ -240,16 +216,16 @@
                                                                 CommandParameter="{Binding}" />
                                             </MenuFlyout>
                                         </FlyoutBase.AttachedFlyout>
-                                    </TextBlock>
+                                </TextBlock>
 
 
 
-                                </Grid>
-                            </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
+                            </Grid>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
 
-                        <!--Panel for items inside the group-->
-                        <!--<GroupStyle.Panel>
+                    <!--Panel for items inside the group-->
+                    <!--<GroupStyle.Panel>
 
                             <ItemsPanelTemplate>
                                 <VariableSizedWrapGrid Orientation="Horizontal"
@@ -261,8 +237,8 @@
 
                         </GroupStyle.Panel>-->
 
-                    </GroupStyle>
-                </GridView.GroupStyle>
+                </GroupStyle>
+            </GridView.GroupStyle>
 
             </GridView>
 
