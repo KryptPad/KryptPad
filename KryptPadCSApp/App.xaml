@@ -44,11 +44,14 @@
                 <Setter Property="Foreground" Value="{ThemeResource ApplicationForegroundThemeBrush}" />
             </Style>
 
+            <!--#FF55ACEE-->
+            <!--#FF5AB8FF-->
+            <!--#FF4D9CD8-->
             <!--Twitter button-->
             <Style x:Key="TwitterButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="#FF55ACEE"/>
                 <Setter Property="Foreground" Value="White"/>
-                <Setter Property="BorderBrush" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+                <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
                 <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
                 <Setter Property="Padding" Value="8,4,8,4"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -56,7 +59,8 @@
                 <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
                 <Setter Property="FontWeight" Value="Normal"/>
                 <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-
+                <Setter Property="UseSystemFocusVisuals" Value="True"/>
+                <Setter Property="FocusVisualMargin" Value="-3"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -74,11 +78,11 @@
                                                     <DiscreteObjectKeyFrame KeyTime="0" Value="#FF5AB8FF"/>
                                                 </ObjectAnimationUsingKeyFrames>
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlForegroundTransparentBrush}"/>
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}"/>
                                                 </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
-                                                </ObjectAnimationUsingKeyFrames>
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value=""/>
+                                                </ObjectAnimationUsingKeyFrames>-->
                                                 <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
                                             </Storyboard>
                                         </VisualState>
@@ -88,11 +92,11 @@
                                                     <DiscreteObjectKeyFrame KeyTime="0" Value="#FF4D9CD8"/>
                                                 </ObjectAnimationUsingKeyFrames>
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlForegroundTransparentBrush}"/>
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
                                                 </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
-                                                </ObjectAnimationUsingKeyFrames>
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value=""/>
+                                                </ObjectAnimationUsingKeyFrames>-->
                                                 <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
                                             </Storyboard>
                                         </VisualState>
@@ -122,7 +126,7 @@
             <Style x:Key="FacebookButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="#FF3B5998"/>
                 <Setter Property="Foreground" Value="White"/>
-                <Setter Property="BorderBrush" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+                <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
                 <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
                 <Setter Property="Padding" Value="8,4,8,4"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -130,7 +134,8 @@
                 <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
                 <Setter Property="FontWeight" Value="Normal"/>
                 <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-
+                <Setter Property="UseSystemFocusVisuals" Value="True"/>
+                <Setter Property="FocusVisualMargin" Value="-3"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -148,11 +153,11 @@
                                                     <DiscreteObjectKeyFrame KeyTime="0" Value="#FF446CBF"/>
                                                 </ObjectAnimationUsingKeyFrames>
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlForegroundTransparentBrush}"/>
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}"/>
                                                 </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
-                                                </ObjectAnimationUsingKeyFrames>
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value=""/>
+                                                </ObjectAnimationUsingKeyFrames>-->
                                                 <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
                                             </Storyboard>
                                         </VisualState>
@@ -162,11 +167,11 @@
                                                     <DiscreteObjectKeyFrame KeyTime="0" Value="#FF324C81"/>
                                                 </ObjectAnimationUsingKeyFrames>
                                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlForegroundTransparentBrush}"/>
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
                                                 </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
-                                                </ObjectAnimationUsingKeyFrames>
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value=""/>
+                                                </ObjectAnimationUsingKeyFrames>-->
                                                 <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
                                             </Storyboard>
                                         </VisualState>
@@ -300,12 +305,12 @@
 
                                         <!--Trigger when the width is at least tablet sizeMargin="12"-->
                                         <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="1024"/>
+                                            <AdaptiveTrigger MinWindowWidth="768"/>
                                         </VisualState.StateTriggers>
 
                                         <VisualState.Setters>
                                             <!--Reset-->
-                                            
+
                                         </VisualState.Setters>
                                     </VisualState>
 
@@ -376,8 +381,6 @@
                         <SymbolIcon Symbol="Copy" />
                     </Button>
 
-                    <!--Command="{Binding DataContext.FieldMenuButtonCommand, ElementName=AddNewItemPage}"-->
-                    <!--CommandParameter="{Binding ElementName=MenuButton}"-->
                     <Button x:Name="MenuButton"
                         Grid.Row="1"
                         Grid.Column="2"

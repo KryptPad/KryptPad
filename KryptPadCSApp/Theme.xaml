@@ -9,7 +9,6 @@
         <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FF0E0E0E" />
             <SolidColorBrush x:Key="AppHeaderBackgroundThemeBrush" Color="#FF212121" />
-            <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#FF191919" />
             <SolidColorBrush x:Key="GridViewItemBackgroundThemeBrush" Color="#FF191919" />
             <SolidColorBrush x:Key="GridViewItemAccentThemeBrush" Color="#FF2B2B2B" />
             <SolidColorBrush x:Key="InformationMessageThemeBrush" Color="#FF1867D8" />
