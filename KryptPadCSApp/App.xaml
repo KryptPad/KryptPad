@@ -305,7 +305,7 @@
 
                                         <!--Trigger when the width is at least tablet sizeMargin="12"-->
                                         <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="1024"/>
+                                            <AdaptiveTrigger MinWindowWidth="768"/>
                                         </VisualState.StateTriggers>
 
                                         <VisualState.Setters>
