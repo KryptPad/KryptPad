@@ -443,13 +443,15 @@ namespace KryptPadCSApp.Models
 
                 // Filter out the items that don't match the search text. Also, filter out empty
                 // categories. Only categories with items will show up
+                // Issue #25 was fixed. Problem was returning an anonymous object instead of an ApiCategory
                 var categories = (from c in Categories
-                                  select new
+                                  select new ApiCategory
                                   {
+                                      Id = c.Id,
                                       Name = c.Name,
                                       Items = (from i in c.Items
                                                where i.Name.IndexOf(SearchText, StringComparison.CurrentCultureIgnoreCase) >= 0
-                                               select i)
+                                               select i).ToArray()
                                   }).Where(c => c.Items.Any());
 
                 // Add view to the ItemsView object
