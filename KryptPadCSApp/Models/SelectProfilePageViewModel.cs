@@ -13,7 +13,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Security.Credentials;
 using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -159,34 +161,7 @@ namespace KryptPadCSApp.Models
                 var result = await dialog.ShowAsync();
             });
 
-            EnterProfileCommand = new Command(async (p) =>
-            {
-                try
-                {
-                    // Check the profile and determine if the passphrase is correct
-                    await KryptPadApi.LoadProfileAsync(SelectedProfile, Passphrase);
-
-                    // Success, tell the app we are signed in
-                    (App.Current as App).IsSignedIn = true;
-
-                    // When a profile is selected, navigate to main page
-                    NavigationHelper.Navigate(typeof(ItemsPage), null);
-
-                }
-                catch (WebException)
-                {
-                    // Something went wrong in the api
-                    await DialogHelper.ShowMessageDialogAsync("The passphrase you entered is incorrect.");
-
-                    // Clear out the passphrase
-                    Passphrase = null;
-                }
-                catch (Exception)
-                {
-                    // Failed
-                    await DialogHelper.ShowConnectionErrorMessageDialog();
-                }
-            }, CanLogIn);
+            EnterProfileCommand = new Command(EnterProfileCommandHandler, CanLogIn);
 
             RestoreBackupCommand = new Command(async (p) =>
             {
@@ -233,6 +208,107 @@ namespace KryptPadCSApp.Models
 
             });
         }
+
+        #region Command handlers
+        private async void EnterProfileCommandHandler(object p)
+        {
+            try
+            {
+                // Check the profile and determine if the passphrase is correct
+                await KryptPadApi.LoadProfileAsync(SelectedProfile, Passphrase);
+
+                // Success, tell the app we are signed in
+                (App.Current as App).IsSignedIn = true;
+
+                // When a profile is selected, navigate to main page
+                //NavigationHelper.Navigate(typeof(ItemsPage), null);
+
+                // Introduce windows hello
+                RegisterUser(SelectedProfile.Id.ToString());
+                //var keyCredentialAvailable = await KeyCredentialManager.IsSupportedAsync();
+                //if (!keyCredentialAvailable)
+                //{
+                //    // Something went wrong in the api
+                //    await DialogHelper.ShowMessageDialogAsync("To use Windows Hello, set up your PIN.");
+                //    // User didn't set up PIN yet
+                //    return;
+                //}
+                //else
+                //{
+                //    // Set up Windows Hello
+                //}
+
+
+            }
+            catch (WebException)
+            {
+                // Something went wrong in the api
+                await DialogHelper.ShowMessageDialogAsync("The passphrase you entered is incorrect.");
+
+                // Clear out the passphrase
+                Passphrase = null;
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
+            }
+        }
+        #endregion
+
+        #region Helper methods
+        private async void RegisterUser(string AccountId)
+        {
+            var keyCredentialAvailable = await KeyCredentialManager.IsSupportedAsync();
+            if (!keyCredentialAvailable)
+            {
+                // The user didn't set up a PIN yet
+                return;
+            }
+
+            var keyCreationResult = await KeyCredentialManager.RequestCreateAsync(AccountId, KeyCredentialCreationOption.ReplaceExisting);
+            if (keyCreationResult.Status == KeyCredentialStatus.Success)
+            {
+                var userKey = keyCreationResult.Credential;
+                var publicKey = userKey.RetrievePublicKey();
+
+                IBuffer keyAttestation = null;
+                IBuffer certificateChain = null;
+                bool keyAttestationIncluded = false;
+                bool keyAttestationCanBeRetrievedLater = false;
+
+                KeyCredentialAttestationResult keyAttestationResult = await userKey.GetAttestationAsync();
+                KeyCredentialAttestationStatus keyAttestationRetryType = 0;
+
+                if (keyAttestationResult.Status == KeyCredentialAttestationStatus.Success)
+                {
+                    keyAttestationIncluded = true;
+                    keyAttestation = keyAttestationResult.AttestationBuffer;
+                    certificateChain = keyAttestationResult.CertificateChainBuffer;
+                }
+                else if (keyAttestationResult.Status == KeyCredentialAttestationStatus.TemporaryFailure)
+                {
+                    keyAttestationRetryType = KeyCredentialAttestationStatus.TemporaryFailure;
+                    keyAttestationCanBeRetrievedLater = true;
+                }
+                else if (keyAttestationResult.Status == KeyCredentialAttestationStatus.NotSupported)
+                {
+                    keyAttestationRetryType = KeyCredentialAttestationStatus.NotSupported;
+                    keyAttestationCanBeRetrievedLater = true;
+                }
+            }
+            else if (keyCreationResult.Status == KeyCredentialStatus.UserCanceled ||
+                keyCreationResult.Status == KeyCredentialStatus.UserPrefersPassword)
+            {
+                // Show error message to the user to get confirmation that user
+                // does not want to enroll.
+            }
+
+            var openKeyResult = await KeyCredentialManager.OpenAsync(AccountId);
+            //openKeyResult.Credential.
+
+        }
+        #endregion
 
         private bool CanLogIn(object p) => !string.IsNullOrWhiteSpace(Passphrase) && SelectedProfile != null;
 
