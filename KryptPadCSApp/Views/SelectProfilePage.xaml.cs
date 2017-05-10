@@ -59,6 +59,10 @@ namespace KryptPadCSApp.Views
         {
             // Focus on the passphrase textbox
             PassphrasePasswordBox.Focus(FocusState.Programmatic);
+
+            
+
+
         }
 
         private void SelectProfileViewPage_LayoutUpdated(object sender, object e)

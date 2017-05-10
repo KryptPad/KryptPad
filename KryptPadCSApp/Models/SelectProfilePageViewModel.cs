@@ -14,6 +14,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Credentials;
+using Windows.Security.Credentials.UI;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Core;
@@ -46,6 +47,7 @@ namespace KryptPadCSApp.Models
 
                 // Enable login button
                 EnterProfileCommand.OnCanExecuteChanged();
+                
             }
         }
 
@@ -63,6 +65,17 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(SelectedProfile));
                 // Enable login button}
                 EnterProfileCommand.OnCanExecuteChanged();
+
+                // Verify identity through Windows Hello. If the user is authenticated, then
+                // release the saved passphrase and automatically enter the profile.
+
+                // If Windows Hello is not available, then the user must enter the passphrase
+                // manually.
+                if (value != null)
+                {
+                    // Introduce windows hello
+                    SayHello(value.Id.ToString());
+                }
             }
         }
 
@@ -221,24 +234,8 @@ namespace KryptPadCSApp.Models
                 (App.Current as App).IsSignedIn = true;
 
                 // When a profile is selected, navigate to main page
-                //NavigationHelper.Navigate(typeof(ItemsPage), null);
-
-                // Introduce windows hello
-                RegisterUser(SelectedProfile.Id.ToString());
-                //var keyCredentialAvailable = await KeyCredentialManager.IsSupportedAsync();
-                //if (!keyCredentialAvailable)
-                //{
-                //    // Something went wrong in the api
-                //    await DialogHelper.ShowMessageDialogAsync("To use Windows Hello, set up your PIN.");
-                //    // User didn't set up PIN yet
-                //    return;
-                //}
-                //else
-                //{
-                //    // Set up Windows Hello
-                //}
-
-
+                NavigationHelper.Navigate(typeof(ItemsPage), null);
+                
             }
             catch (WebException)
             {
@@ -257,55 +254,61 @@ namespace KryptPadCSApp.Models
         #endregion
 
         #region Helper methods
-        private async void RegisterUser(string AccountId)
+        private async void SayHello(string AccountId)
         {
-            var keyCredentialAvailable = await KeyCredentialManager.IsSupportedAsync();
-            if (!keyCredentialAvailable)
+            //var keyCredentialAvailable = await KeyCredentialManager.IsSupportedAsync();
+            //if (!keyCredentialAvailable)
+            //{
+            //    // The user didn't set up a PIN yet
+            //    return;
+            //}
+
+            //var keyCreationResult = await KeyCredentialManager.RequestCreateAsync(AccountId, KeyCredentialCreationOption.ReplaceExisting);
+            //if (keyCreationResult.Status == KeyCredentialStatus.Success)
+            //{
+            //    var userKey = keyCreationResult.Credential;
+            //    var publicKey = userKey.RetrievePublicKey();
+
+            //    IBuffer keyAttestation = null;
+            //    IBuffer certificateChain = null;
+            //    var keyAttestationIncluded = false;
+            //    var keyAttestationCanBeRetrievedLater = false;
+
+            //    var keyAttestationResult = await userKey.GetAttestationAsync();
+            //    KeyCredentialAttestationStatus keyAttestationRetryType = 0;
+
+            //    if (keyAttestationResult.Status == KeyCredentialAttestationStatus.Success)
+            //    {
+            //        keyAttestationIncluded = true;
+            //        keyAttestation = keyAttestationResult.AttestationBuffer;
+            //        certificateChain = keyAttestationResult.CertificateChainBuffer;
+            //    }
+            //    else if (keyAttestationResult.Status == KeyCredentialAttestationStatus.TemporaryFailure)
+            //    {
+            //        keyAttestationRetryType = KeyCredentialAttestationStatus.TemporaryFailure;
+            //        keyAttestationCanBeRetrievedLater = true;
+            //    }
+            //    else if (keyAttestationResult.Status == KeyCredentialAttestationStatus.NotSupported)
+            //    {
+            //        keyAttestationRetryType = KeyCredentialAttestationStatus.NotSupported;
+            //        keyAttestationCanBeRetrievedLater = true;
+            //    }
+            //}
+            //else if (keyCreationResult.Status == KeyCredentialStatus.UserCanceled ||
+            //    keyCreationResult.Status == KeyCredentialStatus.UserPrefersPassword)
+            //{
+            //    // Show error message to the user to get confirmation that user
+            //    // does not want to enroll.
+            //}
+
+            //var openKeyResult = await KeyCredentialManager.OpenAsync(AccountId);
+            ////openKeyResult.Credential.
+
+            UserConsentVerificationResult consentResult = await UserConsentVerifier.RequestVerificationAsync("userMessage");
+            if (consentResult.Equals(UserConsentVerificationResult.Verified))
             {
-                // The user didn't set up a PIN yet
-                return;
+                // continue
             }
-
-            var keyCreationResult = await KeyCredentialManager.RequestCreateAsync(AccountId, KeyCredentialCreationOption.ReplaceExisting);
-            if (keyCreationResult.Status == KeyCredentialStatus.Success)
-            {
-                var userKey = keyCreationResult.Credential;
-                var publicKey = userKey.RetrievePublicKey();
-
-                IBuffer keyAttestation = null;
-                IBuffer certificateChain = null;
-                bool keyAttestationIncluded = false;
-                bool keyAttestationCanBeRetrievedLater = false;
-
-                KeyCredentialAttestationResult keyAttestationResult = await userKey.GetAttestationAsync();
-                KeyCredentialAttestationStatus keyAttestationRetryType = 0;
-
-                if (keyAttestationResult.Status == KeyCredentialAttestationStatus.Success)
-                {
-                    keyAttestationIncluded = true;
-                    keyAttestation = keyAttestationResult.AttestationBuffer;
-                    certificateChain = keyAttestationResult.CertificateChainBuffer;
-                }
-                else if (keyAttestationResult.Status == KeyCredentialAttestationStatus.TemporaryFailure)
-                {
-                    keyAttestationRetryType = KeyCredentialAttestationStatus.TemporaryFailure;
-                    keyAttestationCanBeRetrievedLater = true;
-                }
-                else if (keyAttestationResult.Status == KeyCredentialAttestationStatus.NotSupported)
-                {
-                    keyAttestationRetryType = KeyCredentialAttestationStatus.NotSupported;
-                    keyAttestationCanBeRetrievedLater = true;
-                }
-            }
-            else if (keyCreationResult.Status == KeyCredentialStatus.UserCanceled ||
-                keyCreationResult.Status == KeyCredentialStatus.UserPrefersPassword)
-            {
-                // Show error message to the user to get confirmation that user
-                // does not want to enroll.
-            }
-
-            var openKeyResult = await KeyCredentialManager.OpenAsync(AccountId);
-            //openKeyResult.Credential.
 
         }
         #endregion

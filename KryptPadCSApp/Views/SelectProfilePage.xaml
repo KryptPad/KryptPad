@@ -76,13 +76,13 @@
 
                     <!--Choose profile-->
                     <ListBox Grid.Row="2"
-                         Visibility="{Binding ProfileSelectionVisible}"
-                         HorizontalAlignment="Stretch"
-                         ItemsSource="{Binding Profiles}"
-                         SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
-                         Margin="0,0,0,12"
-                         ItemTemplate="{StaticResource ProfileListDataTemplate}" SelectionChanged="ListBox_SelectionChanged"
-                         >
+                             Visibility="{Binding ProfileSelectionVisible}"
+                             HorizontalAlignment="Stretch"
+                             ItemsSource="{Binding Profiles}"
+                             SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
+                             Margin="0,0,0,12"
+                             ItemTemplate="{StaticResource ProfileListDataTemplate}"
+                             SelectionChanged="ListBox_SelectionChanged" >
 
                     </ListBox>
 
