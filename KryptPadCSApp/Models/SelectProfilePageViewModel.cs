@@ -47,7 +47,7 @@ namespace KryptPadCSApp.Models
 
                 // Enable login button
                 EnterProfileCommand.OnCanExecuteChanged();
-                
+
             }
         }
 
@@ -233,9 +233,12 @@ namespace KryptPadCSApp.Models
                 // Success, tell the app we are signed in
                 (App.Current as App).IsSignedIn = true;
 
+                // Prompt to save profile passphrase if Windows Hello is enabled
+                await StorePassphrase(SelectedProfile.Id.ToString());
+
                 // When a profile is selected, navigate to main page
                 NavigationHelper.Navigate(typeof(ItemsPage), null);
-                
+
             }
             catch (WebException)
             {
@@ -254,61 +257,92 @@ namespace KryptPadCSApp.Models
         #endregion
 
         #region Helper methods
-        private async void SayHello(string AccountId)
+        /// <summary>
+        /// Verifies the user's identity and retrieves the selected profile's passphrase
+        /// </summary>
+        /// <param name="profileId"></param>
+        private async void SayHello(string profileId)
         {
-            //var keyCredentialAvailable = await KeyCredentialManager.IsSupportedAsync();
-            //if (!keyCredentialAvailable)
-            //{
-            //    // The user didn't set up a PIN yet
-            //    return;
-            //}
+            // Check to see if we have a stored passphrase for this profile
+            // Create instance to credential locker
+            var locker = new PasswordVault();
 
-            //var keyCreationResult = await KeyCredentialManager.RequestCreateAsync(AccountId, KeyCredentialCreationOption.ReplaceExisting);
-            //if (keyCreationResult.Status == KeyCredentialStatus.Success)
-            //{
-            //    var userKey = keyCreationResult.Credential;
-            //    var publicKey = userKey.RetrievePublicKey();
-
-            //    IBuffer keyAttestation = null;
-            //    IBuffer certificateChain = null;
-            //    var keyAttestationIncluded = false;
-            //    var keyAttestationCanBeRetrievedLater = false;
-
-            //    var keyAttestationResult = await userKey.GetAttestationAsync();
-            //    KeyCredentialAttestationStatus keyAttestationRetryType = 0;
-
-            //    if (keyAttestationResult.Status == KeyCredentialAttestationStatus.Success)
-            //    {
-            //        keyAttestationIncluded = true;
-            //        keyAttestation = keyAttestationResult.AttestationBuffer;
-            //        certificateChain = keyAttestationResult.CertificateChainBuffer;
-            //    }
-            //    else if (keyAttestationResult.Status == KeyCredentialAttestationStatus.TemporaryFailure)
-            //    {
-            //        keyAttestationRetryType = KeyCredentialAttestationStatus.TemporaryFailure;
-            //        keyAttestationCanBeRetrievedLater = true;
-            //    }
-            //    else if (keyAttestationResult.Status == KeyCredentialAttestationStatus.NotSupported)
-            //    {
-            //        keyAttestationRetryType = KeyCredentialAttestationStatus.NotSupported;
-            //        keyAttestationCanBeRetrievedLater = true;
-            //    }
-            //}
-            //else if (keyCreationResult.Status == KeyCredentialStatus.UserCanceled ||
-            //    keyCreationResult.Status == KeyCredentialStatus.UserPrefersPassword)
-            //{
-            //    // Show error message to the user to get confirmation that user
-            //    // does not want to enroll.
-            //}
-
-            //var openKeyResult = await KeyCredentialManager.OpenAsync(AccountId);
-            ////openKeyResult.Credential.
-
-            UserConsentVerificationResult consentResult = await UserConsentVerifier.RequestVerificationAsync("userMessage");
-            if (consentResult.Equals(UserConsentVerificationResult.Verified))
+            try
             {
-                // continue
+                // Clear out the saved credential for the resource
+                var login = locker.FindAllByUserName($"Profile_{profileId}").FirstOrDefault();
+                if (login != null)
+                {
+                    // We have a stored passphrase, verify the user's identity before releasing it.
+                    UserConsentVerificationResult consentResult = await UserConsentVerifier.RequestVerificationAsync("userMessage");
+                    if (consentResult == UserConsentVerificationResult.Verified)
+                    {
+                        // Verified. Get the passphrase.
+                        login.RetrievePassword();
+                        // Set the passphrase field
+                        Passphrase = login.Password;
+                    }
+                    else if (consentResult == UserConsentVerificationResult.DeviceNotPresent)
+                    {
+                        // Windows Hello isn't available. Perhaps we should inform the user to set a PIN
+                    }
+
+
+                }
+                else
+                {
+                    // No credentials found
+                }
             }
+            catch { /* Nothing to see here */ }
+
+
+
+        }
+
+        /// <summary>
+        /// Stores the passphrase of the profile
+        /// </summary>
+        /// <param name="profileId"></param>
+        private async Task StorePassphrase(string profileId)
+        {
+            var keyCredentialAvailable = await KeyCredentialManager.IsSupportedAsync();
+            if (!keyCredentialAvailable)
+            {
+                // The user didn't set up a PIN yet
+                return;
+            }
+
+            await DialogHelper.Confirm("Would you like Krypt Pad to remember your passphrase (requires unlocking with Windows Hello)?");
+
+            // The user has Windows Hello set up, so let's store the passphrase
+            // Create instance to credential locker
+            var locker = new PasswordVault();
+            var profile = $"Profile_{profileId}";
+
+            try
+            {
+                // Clear out the saved credential for the resource
+                var login = locker.FindAllByUserName(profile).FirstOrDefault();
+                if (login != null)
+                {
+                    // Remove only the credentials for the given resource
+                    locker.Remove(login);
+                }
+            }
+            catch { /* Nothing to see here */ }
+
+            // Create new credential
+            var credential = new PasswordCredential()
+            {
+                Resource = "Profiles",
+                UserName = profile,
+                Password = Passphrase
+            };
+
+            // Store the credentials
+            locker.Add(credential);
+
 
         }
         #endregion

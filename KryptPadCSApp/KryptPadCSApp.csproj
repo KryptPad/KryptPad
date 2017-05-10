@@ -318,11 +318,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
-      <Name>Windows Mobile Extensions for the UWP</Name>
-    </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\KryptPad.Api\KryptPad.Api.csproj">
       <Project>{6a8f9834-4603-4bd9-8aa5-c3a6a3a90b36}</Project>
       <Name>KryptPad.Api</Name>
