@@ -82,7 +82,8 @@
                              SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
                              Margin="0,0,0,12"
                              ItemTemplate="{StaticResource ProfileListDataTemplate}"
-                             SelectionChanged="ListBox_SelectionChanged" >
+                             SelectionChanged="ListBox_SelectionChanged"
+                             Tapped="ListBox_Tapped">
 
                     </ListBox>
 

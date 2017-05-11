@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Interfaces;
+﻿using KryptPad.Api.Models;
+using KryptPadCSApp.Interfaces;
 using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;
@@ -75,6 +76,11 @@ namespace KryptPadCSApp.Views
                 _setFocus = false;
             }
 
+        }
+
+        private void ListBox_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var id = (((ListBox)sender).SelectedItem as ApiProfile).Id;
         }
     }
 }

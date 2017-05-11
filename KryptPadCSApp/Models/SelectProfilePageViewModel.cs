@@ -61,6 +61,10 @@ namespace KryptPadCSApp.Models
             set
             {
                 _selectedProfile = value;
+
+                // Clear passphrase
+                Passphrase = null;
+
                 // Notify
                 OnPropertyChanged(nameof(SelectedProfile));
                 // Enable login button}
@@ -74,7 +78,7 @@ namespace KryptPadCSApp.Models
                 if (value != null)
                 {
                     // Introduce windows hello
-                    SayHello(value.Id.ToString());
+                    PromptForPin(value.Id.ToString());
                 }
             }
         }
@@ -261,7 +265,7 @@ namespace KryptPadCSApp.Models
         /// Verifies the user's identity and retrieves the selected profile's passphrase
         /// </summary>
         /// <param name="profileId"></param>
-        private async void SayHello(string profileId)
+        private async void PromptForPin(string profileId)
         {
             // Check to see if we have a stored passphrase for this profile
             // Create instance to credential locker
@@ -313,36 +317,37 @@ namespace KryptPadCSApp.Models
                 return;
             }
 
-            await DialogHelper.Confirm("Would you like Krypt Pad to remember your passphrase (requires unlocking with Windows Hello)?");
-
-            // The user has Windows Hello set up, so let's store the passphrase
-            // Create instance to credential locker
-            var locker = new PasswordVault();
-            var profile = $"Profile_{profileId}";
-
-            try
+            // If the user wants to save password, store in credential locker, otherwise, exit.
+            var res = await DialogHelper.Confirm("Would you like Krypt Pad to remember your passphrase (requires unlocking with PIN)?", (a) =>
             {
-                // Clear out the saved credential for the resource
-                var login = locker.FindAllByUserName(profile).FirstOrDefault();
-                if (login != null)
+                // The user has Windows Hello set up, so let's store the passphrase
+                // Create instance to credential locker
+                var locker = new PasswordVault();
+                var profile = $"Profile_{profileId}";
+
+                try
                 {
-                    // Remove only the credentials for the given resource
-                    locker.Remove(login);
+                    // Clear out the saved credential for the resource
+                    var login = locker.FindAllByUserName(profile).FirstOrDefault();
+                    if (login != null)
+                    {
+                        // Remove only the credentials for the given resource
+                        locker.Remove(login);
+                    }
                 }
-            }
-            catch { /* Nothing to see here */ }
+                catch { /* Nothing to see here */ }
 
-            // Create new credential
-            var credential = new PasswordCredential()
-            {
-                Resource = "Profiles",
-                UserName = profile,
-                Password = Passphrase
-            };
+                // Create new credential
+                var credential = new PasswordCredential()
+                {
+                    Resource = "Profiles",
+                    UserName = profile,
+                    Password = Passphrase
+                };
 
-            // Store the credentials
-            locker.Add(credential);
-
+                // Store the credentials
+                locker.Add(credential);
+            });
 
         }
         #endregion
