@@ -79,6 +79,7 @@ namespace KryptPadCSApp.Models
                 {
                     // Introduce windows hello
                     PromptForPin(value.Id.ToString());
+                    
                 }
             }
         }
@@ -98,6 +99,21 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private Visibility _passphrasePromptVisibility;
+        /// <summary>
+        /// Gets or sets the visibility of the passphrase box
+        /// </summary>
+        public Visibility PassphrasePromptVisibility
+        {
+            get { return _passphrasePromptVisibility; }
+            set
+            {
+                _passphrasePromptVisibility = value;
+                // Changed
+                OnPropertyChanged(nameof(PassphrasePromptVisibility));
+            }
+        }
+
 
         public Command CreateProfileCommand { get; protected set; }
 
@@ -113,6 +129,7 @@ namespace KryptPadCSApp.Models
 
             // Set the profile selection visibility
             ProfileSelectionVisible = Visibility.Collapsed;
+            PassphrasePromptVisibility = Visibility.Collapsed;
 
             // Ensure the profile is closed and stored passphrase is cleared
             KryptPadApi.CloseProfile();
@@ -146,7 +163,7 @@ namespace KryptPadCSApp.Models
 
                 // Set the selected profile.
                 // TODO: Make this restore last selected profile... somehow
-                SelectedProfile = Profiles.FirstOrDefault();
+                //SelectedProfile = Profiles.FirstOrDefault();
 
                 // If we don't have any profiles, hide the selection
                 ProfileSelectionVisible = Profiles.Any() ? Visibility.Visible : Visibility.Collapsed;
@@ -226,8 +243,11 @@ namespace KryptPadCSApp.Models
             });
         }
 
-        #region Command handlers
-        private async void EnterProfileCommandHandler(object p)
+        /// <summary>
+        /// Decrypts the user's profile and logs in
+        /// </summary>
+        /// <returns></returns>
+        private async Task EnterProfile(bool promptToSave)
         {
             try
             {
@@ -237,8 +257,11 @@ namespace KryptPadCSApp.Models
                 // Success, tell the app we are signed in
                 (App.Current as App).IsSignedIn = true;
 
-                // Prompt to save profile passphrase if Windows Hello is enabled
-                await StorePassphrase(SelectedProfile.Id.ToString());
+                if (promptToSave)
+                {
+                    // Prompt to save profile passphrase if Windows Hello is enabled
+                    await StorePassphrase(SelectedProfile.Id.ToString());
+                }
 
                 // When a profile is selected, navigate to main page
                 NavigationHelper.Navigate(typeof(ItemsPage), null);
@@ -257,6 +280,12 @@ namespace KryptPadCSApp.Models
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
+        }
+
+        #region Command handlers
+        private async void EnterProfileCommandHandler(object p)
+        {
+            await EnterProfile(true);
         }
         #endregion
 
@@ -285,13 +314,16 @@ namespace KryptPadCSApp.Models
                         login.RetrievePassword();
                         // Set the passphrase field
                         Passphrase = login.Password;
+                        // Enter the profile with the saved passphrase
+                        await EnterProfile(false);
+
+                        return;
                     }
                     else if (consentResult == UserConsentVerificationResult.DeviceNotPresent)
                     {
                         // Windows Hello isn't available. Perhaps we should inform the user to set a PIN
                     }
-
-
+                    
                 }
                 else
                 {
@@ -300,7 +332,8 @@ namespace KryptPadCSApp.Models
             }
             catch { /* Nothing to see here */ }
 
-
+            // Show passphrase box
+            PassphrasePromptVisibility = Visibility.Visible;
 
         }
 

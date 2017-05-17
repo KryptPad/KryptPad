@@ -82,14 +82,13 @@
                              SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
                              Margin="0,0,0,12"
                              ItemTemplate="{StaticResource ProfileListDataTemplate}"
-                             SelectionChanged="ListBox_SelectionChanged"
-                             Tapped="ListBox_Tapped">
+                             SelectionChanged="ListBox_SelectionChanged">
 
                     </ListBox>
 
                     <!--Passphrase grid-->
                     <Grid Grid.Row="3"
-                      Visibility="{Binding ProfileSelectionVisible}"
+                      Visibility="{Binding PassphrasePromptVisibility}"
                       Margin="0,0,0,12">
 
                         <Grid.ColumnDefinitions>

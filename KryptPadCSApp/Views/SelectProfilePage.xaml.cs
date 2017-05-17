@@ -78,9 +78,6 @@ namespace KryptPadCSApp.Views
 
         }
 
-        private void ListBox_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var id = (((ListBox)sender).SelectedItem as ApiProfile).Id;
-        }
+        
     }
 }
