@@ -407,7 +407,7 @@ namespace KryptPadCSApp.Models
 
             try
             {
-                // Clear out the saved credential for the resource
+                // Find the saved passphrase for the selected profile
                 var login = locker.FindAllByUserName($"Profile_{profileId}").FirstOrDefault();
                 if (login != null)
                 {
