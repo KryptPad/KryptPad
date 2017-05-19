@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -27,19 +28,32 @@ namespace KryptPadCSApp.Views
     public sealed partial class SelectProfilePage : Page, INoSideNavPage
     {
 
-        private bool _setFocus = false;
-
         public SelectProfilePage()
         {
             this.InitializeComponent();
+
+            // Listen to the back button here
+            SystemNavigationManager currentView = SystemNavigationManager.GetForCurrentView();
+            if (currentView != null)
+            {
+                currentView.BackRequested += CurrentView_BackRequested;
+            }
         }
-        
+
+        private void CurrentView_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            // Tell the app we are signing out so that we don't end up auto-logging in again
+            (App.Current as App).IsSignedIn = false;
+        }
+
         private async void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
         {
             // Load the profiles
-            await (DataContext as SelectProfilePageViewModel).GetProfilesAsync();
+            var model = DataContext as SelectProfilePageViewModel;
 
-            _setFocus = true;
+            await model.CheckIfWindowsHelloSupported();
+            await model.GetProfilesAsync();
+
         }
 
         private void PassphrasePasswordBox_KeyUp(object sender, KeyRoutedEventArgs e)
@@ -61,23 +75,9 @@ namespace KryptPadCSApp.Views
             // Focus on the passphrase textbox
             PassphrasePasswordBox.Focus(FocusState.Programmatic);
 
-            
-
-
         }
 
-        private void SelectProfileViewPage_LayoutUpdated(object sender, object e)
-        {
 
-            if (_setFocus)
-            {
-                // Focus on the passphrase textbox
-                PassphrasePasswordBox.Focus(FocusState.Programmatic);
-                _setFocus = false;
-            }
 
-        }
-
-        
     }
 }

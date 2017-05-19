@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     x:Name="SelectProfileViewPage"
     Loaded="SelectProfileViewPage_Loaded"
-    LayoutUpdated="SelectProfileViewPage_LayoutUpdated"
+    
     >
 
     <Page.Transitions>
@@ -49,7 +49,7 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
-
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
                     <!--Description-->
@@ -74,20 +74,32 @@
                             Command="{Binding RestoreBackupCommand}"/>
                     </StackPanel>
 
+                    <!--Checkbox to save profile password. It's only visible if the user has a pin/windows hello enabled-->
+                    <StackPanel Grid.Row="2" Margin="0,0,0,12" Visibility="{Binding WindowsHelloVisibility}">
+                        <CheckBox Content="Save passphrase and use Windows Hello"
+                                  IsChecked="{Binding SavePassphraseEnabled, Mode=TwoWay}"
+                                  Command="{Binding SavePassphraseCheckedCommand}"/>
+                        <TextBlock TextWrapping="WrapWholeWords">
+                            Krypt Pad can save your passphrase for you and unlock your profile using Windows Hello.
+                        </TextBlock>
+                    </StackPanel>
+                    
+
                     <!--Choose profile-->
-                    <ListBox Grid.Row="2"
+                    <ListBox Grid.Row="3"
                              Visibility="{Binding ProfileSelectionVisible}"
                              HorizontalAlignment="Stretch"
                              ItemsSource="{Binding Profiles}"
                              SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
                              Margin="0,0,0,12"
                              ItemTemplate="{StaticResource ProfileListDataTemplate}"
-                             SelectionChanged="ListBox_SelectionChanged">
-
+                             SelectionChanged="ListBox_SelectionChanged"
+                             >
+                             
                     </ListBox>
 
                     <!--Passphrase grid-->
-                    <Grid Grid.Row="3"
+                    <Grid Grid.Row="4"
                       Visibility="{Binding PassphrasePromptVisibility}"
                       Margin="0,0,0,12">
 
