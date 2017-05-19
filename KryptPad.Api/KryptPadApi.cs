@@ -1,4 +1,5 @@
-﻿using KryptPad.Api.Models;
+﻿using KryptPad.Api.Exceptions;
+using KryptPad.Api.Models;
 using KryptPad.Api.Requests;
 using KryptPad.Api.Responses;
 using Newtonsoft.Json;
@@ -1029,7 +1030,7 @@ namespace KryptPad.Api
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                exception = new WebException("The current request is unauthorized.");
+                exception = new UnauthorizedWebException();
             }
             else
             {

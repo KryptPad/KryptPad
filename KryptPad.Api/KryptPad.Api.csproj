@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enumerators.cs" />
+    <Compile Include="Exceptions\UnauthorizedWebException.cs" />
     <Compile Include="KryptPadApi.cs" />
     <Compile Include="Models\ApiCategory.cs" />
     <Compile Include="Models\ApiField.cs" />

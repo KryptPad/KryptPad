@@ -191,7 +191,8 @@ namespace KryptPadCSApp.Models
                         //create new category
                         var category = new ApiCategory()
                         {
-                            Name = d.Value
+                            Name = d.Value,
+                            Items = new ApiItem[] { }
                         };
 
                         // Send the category to the api
@@ -217,7 +218,7 @@ namespace KryptPadCSApp.Models
                         // Something went wrong in the api
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // Failed
                         await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -280,7 +281,7 @@ namespace KryptPadCSApp.Models
                         // Something went wrong in the api
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // Failed
                         await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -314,7 +315,7 @@ namespace KryptPadCSApp.Models
                             // Something went wrong in the api
                             await DialogHelper.ShowMessageDialogAsync(ex.Message);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             // Failed
                             await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -366,7 +367,7 @@ namespace KryptPadCSApp.Models
                     // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     // Failed
                     await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -420,7 +421,7 @@ namespace KryptPadCSApp.Models
                 // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -465,7 +466,7 @@ namespace KryptPadCSApp.Models
                 // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
                 await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -514,7 +515,7 @@ namespace KryptPadCSApp.Models
                     // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     // Failed
                     await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -600,7 +601,7 @@ namespace KryptPadCSApp.Models
                     // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     // Failed
                     await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -633,7 +634,7 @@ namespace KryptPadCSApp.Models
                     // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     // Failed
                     await DialogHelper.ShowConnectionErrorMessageDialog();
@@ -669,7 +670,7 @@ namespace KryptPadCSApp.Models
                             // Something went wrong in the api
                             await DialogHelper.ShowMessageDialogAsync(ex.Message);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             // Failed
                             await DialogHelper.ShowConnectionErrorMessageDialog();
