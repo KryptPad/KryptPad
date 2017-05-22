@@ -51,8 +51,10 @@ namespace KryptPadCSApp.Views
             // Load the profiles
             var model = DataContext as SelectProfilePageViewModel;
 
-            await model.CheckIfWindowsHelloSupported();
             await model.GetProfilesAsync();
+            await model.CheckIfWindowsHelloSupported();
+            // Focus on the passphrase textbox
+            PassphrasePasswordBox.Focus(FocusState.Programmatic);
 
         }
 

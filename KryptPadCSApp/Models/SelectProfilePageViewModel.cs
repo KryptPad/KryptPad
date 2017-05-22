@@ -195,6 +195,13 @@ namespace KryptPadCSApp.Models
             // Enable or disable the checkbox
             WindowsHelloVisibility = supported ? Visibility.Visible : Visibility.Collapsed;
 
+            // If not supported, pick profile and auto-focus passphrase
+            if (!supported && Profiles.Any())
+            {
+                SelectedProfile = Profiles.FirstOrDefault();
+            }
+
+
             // Look up saved settings for option
             var roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
 
