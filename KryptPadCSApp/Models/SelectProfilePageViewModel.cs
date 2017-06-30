@@ -49,7 +49,7 @@ namespace KryptPadCSApp.Models
 
                 // Changed
                 OnPropertyChanged(nameof(SavePassphraseEnabled));
-                
+
             }
         }
 
@@ -72,11 +72,11 @@ namespace KryptPadCSApp.Models
             }
         }
 
-        private ApiProfile _selectedProfile;
+        private ProfileModel _selectedProfile;
         /// <summary>
         /// Gets or sets the selected profile
         /// </summary>
-        public ApiProfile SelectedProfile
+        public ProfileModel SelectedProfile
         {
             get { return _selectedProfile; }
             set
@@ -96,16 +96,20 @@ namespace KryptPadCSApp.Models
 
                 // If Windows Hello is not available, then the user must enter the passphrase
                 // manually.
-                if (value != null && SavePassphraseEnabled)
+                var id = value?.Id.ToString();
+                if (value != null && SavePassphraseEnabled && HasSavedPassphrase(new PasswordVault(), id))
                 {
+                    // Hide passphrase box
+                    PassphrasePromptVisibility = Visibility.Collapsed;
                     // Introduce windows hello
-                    PromptForPin(value.Id.ToString());
+                    PromptForPin(id);
+                }
+                else
+                {
+                    // Show the passphrase box if an item is selected
+                    PassphrasePromptVisibility = value != null ? Visibility.Visible : Visibility.Collapsed;
 
                 }
-
-                // Show the passphrase box if an item is selected
-                PassphrasePromptVisibility = value != null ? Visibility.Visible : Visibility.Collapsed;
-                
             }
         }
 
@@ -191,7 +195,7 @@ namespace KryptPadCSApp.Models
         /// <returns></returns>
         public async Task CheckIfWindowsHelloSupported()
         {
-            var supported = await IsWindowsHelloEnabled();
+            var supported = await KeyCredentialManager.IsSupportedAsync();
             // Enable or disable the checkbox
             WindowsHelloVisibility = supported ? Visibility.Visible : Visibility.Collapsed;
 
@@ -211,12 +215,13 @@ namespace KryptPadCSApp.Models
             {
                 // Override checkbox checked value
                 SavePassphraseEnabled = (bool)settingValue;
-            } else if(supported)
+            }
+            else if (supported)
             {
                 // Preselect the checkbox
                 SavePassphraseEnabled = true;
             }
-            
+
 
         }
 
@@ -233,14 +238,22 @@ namespace KryptPadCSApp.Models
             try
             {
                 var resp = await KryptPadApi.GetProfilesAsync();
+                // Create instance to credential locker
+                var locker = new PasswordVault();
 
                 // Clear the profiles list
                 Profiles.Clear();
                 // Add the profiles to the list
                 foreach (var profile in resp.Profiles)
                 {
+
+                    var profileModel = new ProfileModel(profile)
+                    {
+                        WindowsHelloEnabled = HasSavedPassphrase(locker, profile.Id.ToString())
+                    };
+
                     // Add profile to list
-                    Profiles.Add(profile);
+                    Profiles.Add(profileModel);
                 }
 
                 // Set the selected profile.
@@ -267,6 +280,15 @@ namespace KryptPadCSApp.Models
         #endregion
 
         #region Command handlers
+
+        private async void CreateProfileCommandHandler(object obj)
+        {
+            // Prompt the user for profile info
+            var dialog = new ProfileDetailsDialog();
+
+            var result = await dialog.ShowAsync();
+        }
+
         private async void EnterProfileCommandHandler(object obj)
         {
             await EnterProfile();
@@ -284,6 +306,49 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        private async void RestoreBackupCommandHandler(object obj)
+        {
+            try
+            {
+                var fop = new FileOpenPicker();
+                // Add supported file types
+                fop.FileTypeFilter.Add(".kdf");
+
+                // Pick file to open and read
+                var result = await fop.PickSingleFileAsync();
+
+                if (result != null)
+                {
+                    var fs = await result.OpenReadAsync();
+                    string profileData;
+                    // Create a stream reader
+                    using (var sr = new StreamReader(fs.AsStreamForRead()))
+                    {
+                        profileData = await sr.ReadToEndAsync();
+
+                    }
+
+                    // Upload the profile data
+                    var resp = await KryptPadApi.UploadProfile(profileData);
+
+                    await DialogHelper.ShowMessageDialogAsync("Profile restored successfully");
+
+                    await GetProfilesAsync();
+
+                }
+            }
+            catch (WebException ex)
+            {
+                // Something went wrong in the api
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowConnectionErrorMessageDialog();
+            }
+        }
+
         #endregion
 
         #region Helper methods
@@ -293,65 +358,16 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            CreateProfileCommand = new Command(async (p) =>
-            {
-                // Prompt the user for profile info
-                var dialog = new ProfileDetailsDialog();
-
-                var result = await dialog.ShowAsync();
-            });
+            CreateProfileCommand = new Command(CreateProfileCommandHandler);
 
             EnterProfileCommand = new Command(EnterProfileCommandHandler, CanLogIn);
 
             SavePassphraseCheckedCommand = new Command(SavePassphraseCheckedCommandHandler);
 
-            RestoreBackupCommand = new Command(async (p) =>
-            {
-                try
-                {
-                    var fop = new FileOpenPicker();
-                    // Add supported file types
-                    fop.FileTypeFilter.Add(".kdf");
-
-                    // Pick file to open and read
-                    var result = await fop.PickSingleFileAsync();
-
-                    if (result != null)
-                    {
-                        var fs = await result.OpenReadAsync();
-                        string profileData;
-                        // Create a stream reader
-                        using (var sr = new StreamReader(fs.AsStreamForRead()))
-                        {
-                            profileData = await sr.ReadToEndAsync();
-
-                        }
-
-                        // Upload the profile data
-                        var resp = await KryptPadApi.UploadProfile(profileData);
-
-                        await DialogHelper.ShowMessageDialogAsync("Profile restored successfully");
-
-                        await GetProfilesAsync();
-
-                    }
-                }
-                catch (WebException ex)
-                {
-                    // Something went wrong in the api
-                    await DialogHelper.ShowMessageDialogAsync(ex.Message);
-                }
-                catch (Exception)
-                {
-                    // Failed
-                    await DialogHelper.ShowConnectionErrorMessageDialog();
-                }
-
-
-            });
+            RestoreBackupCommand = new Command(RestoreBackupCommandHandler);
         }
 
-        
+
         /// <summary>
         /// Decrypts the user's profile and logs in
         /// </summary>
@@ -361,14 +377,14 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Check the profile and determine if the passphrase is correct
-                await KryptPadApi.LoadProfileAsync(SelectedProfile, Passphrase);
+                await KryptPadApi.LoadProfileAsync(SelectedProfile.Profile, Passphrase);
 
 
                 // Success, tell the app we are signed in
                 (App.Current as App).IsSignedIn = true;
 
                 // Check if Windows hellow is supported and save the passphrase
-                var supported = await IsWindowsHelloEnabled();
+                var supported = await KeyCredentialManager.IsSupportedAsync();
                 if (supported && SavePassphraseEnabled)
                 {
                     // Prompt to save profile passphrase if Windows Hello is enabled
@@ -393,16 +409,7 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowConnectionErrorMessageDialog();
             }
         }
-
-        /// <summary>
-        /// Returns true if the user has a PIN set and Windows Hello is enabled
-        /// </summary>
-        /// <returns></returns>
-        private async Task<bool> IsWindowsHelloEnabled()
-        {
-            return await KeyCredentialManager.IsSupportedAsync();
-        }
-
+        
         /// <summary>
         /// Verifies the user's identity and retrieves the selected profile's passphrase
         /// </summary>
@@ -415,11 +422,11 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Find the saved passphrase for the selected profile
-                var login = locker.FindAllByUserName($"Profile_{profileId}").FirstOrDefault();
+                var login = GetSavedCredential(locker, profileId);
                 if (login != null)
                 {
                     // We have a stored passphrase, verify the user's identity before releasing it.
-                    UserConsentVerificationResult consentResult = await UserConsentVerifier.RequestVerificationAsync("Verify your identity to unlock your profile.");
+                    var consentResult = await UserConsentVerifier.RequestVerificationAsync("Verify your identity to unlock your profile.");
                     if (consentResult == UserConsentVerificationResult.Verified)
                     {
                         // Verified. Get the passphrase.
@@ -436,12 +443,59 @@ namespace KryptPadCSApp.Models
                         // Deselect the profile to try again
                         SelectedProfile = null;
                     }
-                    
+
                 }
-                
+
             }
             catch { /* Nothing to see here */ }
-            
+
+        }
+
+        /// <summary>
+        /// Gets the saved credential for the profile
+        /// </summary>
+        /// <param name="locker"></param>
+        /// <param name="profileId"></param>
+        /// <returns></returns>
+        private PasswordCredential GetSavedCredential(PasswordVault locker, string profileId)
+        {
+            try
+            {
+                // Find the saved passphrase for the selected profile
+                var login = locker.FindAllByUserName($"Profile_{profileId}").FirstOrDefault();
+                if (login != null)
+                {
+                    return login;
+                }
+
+            }
+            catch { /* Nothing to see here */ }
+
+            return null;
+        }
+
+
+        /// <summary>
+        /// Determines if the profile has a saved passphrase
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <returns></returns>
+        private bool HasSavedPassphrase(PasswordVault locker, string profileId)
+        {
+
+            try
+            {
+                // Find the saved passphrase for the selected profile
+                var login = GetSavedCredential(locker, profileId);
+                if (login != null)
+                {
+                    return true;
+                }
+
+            }
+            catch { /* Nothing to see here */ }
+
+            return false;
         }
 
         /// <summary>
@@ -449,10 +503,11 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private async void ClearAllSavedPassphrases()
         {
-            await DialogHelper.Confirm(
-                "Unchecking this option will clear any saved passphrases. You will have to re-type them. Are you sure?", 
+            var command = await DialogHelper.Confirm(
+                "Unchecking this option will clear any saved passphrases. You will have to re-type them. Are you sure?",
                 "Confirm",
-                (c) => {
+                (c) =>
+                {
                     try
                     {
                         // Create instance to credential locker
@@ -464,11 +519,24 @@ namespace KryptPadCSApp.Models
                             locker.Remove(login);
                         }
 
-                    } catch { }
-                    
+                        // Reset flag on all profiles
+                        foreach (var profile in Profiles)
+                        {
+                            profile.WindowsHelloEnabled = false;
+                        }
+                        
+
+                    }
+                    catch { }
+
                 });
 
-            
+            if ((int)command.Id == 2)
+            {
+                // User chose to cancel, so re-enable
+                SavePassphraseEnabled = true;
+            }
+
         }
 
         /// <summary>
@@ -477,7 +545,7 @@ namespace KryptPadCSApp.Models
         /// <param name="profileId"></param>
         private void StorePassphrase(string profileId)
         {
-            
+
             // The user has Windows Hello set up, so let's store the passphrase
             // Create instance to credential locker
             var locker = new PasswordVault();

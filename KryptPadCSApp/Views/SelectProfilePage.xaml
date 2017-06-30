@@ -95,7 +95,11 @@
                              ItemTemplate="{StaticResource ProfileListDataTemplate}"
                              SelectionChanged="ListBox_SelectionChanged"
                              >
-                             
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                     </ListBox>
 
                     <!--Passphrase grid-->
