@@ -84,9 +84,18 @@
                         </TextBlock>
                     </StackPanel>
                     
+                    <!--Profile list-->
+                    <ItemsControl Grid.Row="3"
+                                  Visibility="{Binding ProfileSelectionVisible}"
+                                  HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding Profiles}"
+                                  ItemTemplate="{StaticResource ProfileListDataTemplate}">
 
+                        
+                    </ItemsControl>
+                    
                     <!--Choose profile-->
-                    <ListBox Grid.Row="3"
+                    <!--<ListBox Grid.Row="3"
                              Visibility="{Binding ProfileSelectionVisible}"
                              HorizontalAlignment="Stretch"
                              ItemsSource="{Binding Profiles}"
@@ -100,7 +109,7 @@
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
                             </Style>
                         </ListBox.ItemContainerStyle>
-                    </ListBox>
+                    </ListBox>-->
 
                     <!--Passphrase grid-->
                     <Grid Grid.Row="4"

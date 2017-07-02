@@ -422,9 +422,9 @@
 
             <!--Template for the profile list-->
             <DataTemplate x:Key="ProfileListDataTemplate">
-                <Grid x:Name="ProfileGrid" >
+                <Grid x:Name="ProfileGrid" Padding="5" >
+
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
@@ -433,28 +433,59 @@
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <!--A nice little icon-->
-                    <SymbolIcon Grid.Row="0"
-                                Grid.Column="0" 
+                    <!--Profile button-->
+                    <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                        <Grid >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+
+                            </Grid.ColumnDefinitions>
+
+                            <!--Icon-->
+                            <SymbolIcon Grid.Column="0" 
                                 Symbol="ProtectedDocument" 
                                 Margin="0,0,12,0" />
 
-                    <!--Profile name-->
-                    <TextBlock Text="{Binding Name}"
-                               Grid.Row="0"
+                            <!--Profile name-->
+                            <TextBlock Text="{Binding Name}"
                                Grid.Column="1"
-                               HorizontalAlignment="Stretch"
+                               
                                VerticalAlignment="Center"/>
 
-                    <!--A nice little icon-->
-                    <SymbolIcon Grid.Row="0"
-                                Grid.Column="2" 
-                                Symbol="More" 
-                                Visibility="{Binding WindowsHelloEnabled, Converter={StaticResource VisibilityConverter}}"
-                                />
+                        </Grid>
+                    </Button>
+
+
+
+                    <!--Actions-->
+                    <SymbolIcon Symbol="More"
+                                    Grid.Column="1"
+                                    Visibility="{Binding WindowsHelloEnabled, Converter={StaticResource VisibilityConverter}}"
+                                    >
+                        <!--Behavior to open flyout-->
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="Tapped">
+                                <Behaviors:OpenMenuFlyoutAction />
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+
+                        <!--Context menu-->
+                        <FlyoutBase.AttachedFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Forget saved passphrase"
+                                            Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage }"
+                                            CommandParameter="{Binding}" />
+                            </MenuFlyout>
+                        </FlyoutBase.AttachedFlyout>
+
+                    </SymbolIcon>
+
+
                 </Grid>
             </DataTemplate>
-            
+
 
         </ResourceDictionary>
 
