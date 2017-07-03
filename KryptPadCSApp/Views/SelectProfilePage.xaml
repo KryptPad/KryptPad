@@ -86,6 +86,7 @@
                     
                     <!--Profile list-->
                     <ItemsControl Grid.Row="3"
+                                  x:Name="ProfilesList"
                                   Visibility="{Binding ProfileSelectionVisible}"
                                   HorizontalAlignment="Stretch"
                                   ItemsSource="{Binding Profiles}"

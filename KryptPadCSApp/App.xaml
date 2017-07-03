@@ -422,7 +422,7 @@
 
             <!--Template for the profile list-->
             <DataTemplate x:Key="ProfileListDataTemplate">
-                <Grid x:Name="ProfileGrid" Padding="5" >
+                <Grid x:Name="ProfileGrid" Margin="0,4" >
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -434,7 +434,11 @@
                     </Grid.RowDefinitions>
 
                     <!--Profile button-->
-                    <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <Button Grid.Column="0" 
+                            HorizontalAlignment="Stretch" 
+                            HorizontalContentAlignment="Stretch"
+                            Command="{Binding DataContext.ProfileSelectedCommand, ElementName=ProfilesList }"
+                            CommandParameter="{Binding}">
                         <Grid >
 
                             <Grid.ColumnDefinitions>
@@ -461,9 +465,9 @@
 
                     <!--Actions-->
                     <SymbolIcon Symbol="More"
-                                    Grid.Column="1"
-                                    Visibility="{Binding WindowsHelloEnabled, Converter={StaticResource VisibilityConverter}}"
-                                    >
+                                Grid.Column="1"
+                                Visibility="{Binding WindowsHelloEnabled, Converter={StaticResource VisibilityConverter}}"
+                                Margin="4,0,0,0"    >
                         <!--Behavior to open flyout-->
                         <i:Interaction.Behaviors>
                             <core:EventTriggerBehavior EventName="Tapped">
@@ -475,7 +479,7 @@
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout>
                                 <MenuFlyoutItem Text="Forget saved passphrase"
-                                            Command="{Binding DataContext.DeleteFieldCommand, ElementName=AddNewItemPage }"
+                                            Command="{Binding DataContext.DeleteFieldCommand, ElementName=ProfilesList }"
                                             CommandParameter="{Binding}" />
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>

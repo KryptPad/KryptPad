@@ -159,6 +159,7 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        public Command ProfileSelectedCommand { get; protected set; }
 
         public Command CreateProfileCommand { get; protected set; }
 
@@ -281,6 +282,34 @@ namespace KryptPadCSApp.Models
 
         #region Command handlers
 
+        private void ProfileSelectedCommandHandler(object obj)
+        {
+            var profile = obj as ProfileModel;
+
+            // Enable login button}
+            EnterProfileCommand.OnCanExecuteChanged();
+
+            // Verify identity through Windows Hello. If the user is authenticated, then
+            // release the saved passphrase and automatically enter the profile.
+
+            // If Windows Hello is not available, then the user must enter the passphrase
+            // manually.
+            var id = profile?.Id.ToString();
+            if (profile != null && SavePassphraseEnabled && HasSavedPassphrase(new PasswordVault(), id))
+            {
+                // Hide passphrase box
+                PassphrasePromptVisibility = Visibility.Collapsed;
+                // Introduce windows hello
+                PromptForPin(id);
+            }
+            else
+            {
+                // Show the passphrase box if an item is selected
+                PassphrasePromptVisibility = profile != null ? Visibility.Visible : Visibility.Collapsed;
+
+            }
+        }
+
         private async void CreateProfileCommandHandler(object obj)
         {
             // Prompt the user for profile info
@@ -358,6 +387,8 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
+            ProfileSelectedCommand = new Command(ProfileSelectedCommandHandler);
+
             CreateProfileCommand = new Command(CreateProfileCommandHandler);
 
             EnterProfileCommand = new Command(EnterProfileCommandHandler, CanLogIn);
