@@ -160,6 +160,6 @@
     <value>Verify your identity to unlock your profile.</value>
   </data>
   <data name="WindowsHelloNote.Text" xml:space="preserve">
-    <value>Krypt Pad can save your passphrase for you and unlock your profile using Windows Hello.</value>
+    <value>Krypt Pad can save your passphrase for you and unlock your profile using Windows Hello. You may save up to 5 profiles.</value>
   </data>
 </root>

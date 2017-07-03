@@ -26,6 +26,9 @@ namespace KryptPadCSApp.Models
 {
     class SelectProfilePageViewModel : BasePageModel
     {
+        const int MAX_SAVED_PROFILES = 5;
+        const string LOCKER_RESOURCE = "Profiles";
+
         #region Properties
 
         /// <summary>
@@ -86,7 +89,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(ProfileSelectionVisible));
             }
         }
-        
+
         public Command ProfileSelectedCommand { get; protected set; }
 
         public Command CreateProfileCommand { get; protected set; }
@@ -100,7 +103,7 @@ namespace KryptPadCSApp.Models
         #endregion
 
         #region Methods
-        
+
         public SelectProfilePageViewModel()
         {
             RegisterCommands();
@@ -125,7 +128,7 @@ namespace KryptPadCSApp.Models
             var supported = await KeyCredentialManager.IsSupportedAsync();
             // Enable or disable the checkbox
             WindowsHelloVisibility = supported ? Visibility.Visible : Visibility.Collapsed;
-            
+
             // Look up saved settings for option
             var roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
 
@@ -241,7 +244,7 @@ namespace KryptPadCSApp.Models
 
             var result = await dialog.ShowAsync();
         }
-        
+
         private void SavePassphraseCheckedCommandHandler(object obj)
         {
             // If the user unchecks this checkbox, clear any saved passphrases
@@ -312,7 +315,7 @@ namespace KryptPadCSApp.Models
 
 
         #region Helper methods
-        
+
         /// <summary>
         /// Decrypts the user's profile and logs in
         /// </summary>
@@ -352,7 +355,7 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowGenericErrorDialogAsync();
             }
         }
-        
+
         /// <summary>
         /// Verifies the user's identity and retrieves the selected profile's passphrase
         /// </summary>
@@ -395,13 +398,12 @@ namespace KryptPadCSApp.Models
         /// <param name="profile"></param>
         private async Task PromptForPassphrase(ProfileModel profile)
         {
-            var d = new PassphrasePrompt();
-            await d.ShowAsync();
-            if (d.Result == ContentDialogResult.Primary)
+            await DialogHelper.ShowClosableDialog<PassphrasePrompt>(async (d) =>
             {
                 // Enter the profile with the saved passphrase
                 await EnterProfile(profile, d.Passphrase);
-            }
+            });
+
         }
 
         #region PasswordVault methods
@@ -428,7 +430,7 @@ namespace KryptPadCSApp.Models
 
             return null;
         }
-        
+
         /// <summary>
         /// Determines if the profile has a saved passphrase
         /// </summary>
@@ -467,7 +469,7 @@ namespace KryptPadCSApp.Models
                         // Create instance to credential locker
                         var locker = new PasswordVault();
                         // Clear out the saved credential for the resource
-                        var logins = locker.FindAllByResource("Profiles");
+                        var logins = locker.FindAllByResource(LOCKER_RESOURCE);
                         foreach (var login in logins)
                         {
                             locker.Remove(login);
@@ -478,7 +480,7 @@ namespace KryptPadCSApp.Models
                         {
                             profile.WindowsHelloEnabled = false;
                         }
-                        
+
 
                     }
                     catch { }
@@ -499,7 +501,7 @@ namespace KryptPadCSApp.Models
         /// <param name="profileId"></param>
         private void StorePassphrase(string profileId, string passphrase)
         {
-
+            
             // The user has Windows Hello set up, so let's store the passphrase
             // Create instance to credential locker
             var locker = new PasswordVault();
@@ -507,6 +509,14 @@ namespace KryptPadCSApp.Models
 
             try
             {
+
+                // Check how many profiles we have saved already
+                var allLogins = locker.FindAllByResource(LOCKER_RESOURCE);
+                if (allLogins.Count == MAX_SAVED_PROFILES)
+                {
+                    return;
+                }
+
                 // Clear out the saved credential for the resource
                 var login = locker.FindAllByUserName(profile).FirstOrDefault();
                 if (login != null)
@@ -520,7 +530,7 @@ namespace KryptPadCSApp.Models
             // Create new credential
             var credential = new PasswordCredential()
             {
-                Resource = "Profiles",
+                Resource = LOCKER_RESOURCE,
                 UserName = profile,
                 Password = passphrase
             };
@@ -554,7 +564,7 @@ namespace KryptPadCSApp.Models
             }
             catch { /* Nothing to see here */ }
         }
-        
+
         #endregion
 
         #endregion
