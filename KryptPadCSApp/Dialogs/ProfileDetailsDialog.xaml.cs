@@ -122,7 +122,7 @@ namespace KryptPadCSApp.Dialogs
             catch (Exception)
             {
                 // Failed
-                await DialogHelper.ShowConnectionErrorMessageDialog();
+                await DialogHelper.ShowGenericErrorDialogAsync();
 
             }
 

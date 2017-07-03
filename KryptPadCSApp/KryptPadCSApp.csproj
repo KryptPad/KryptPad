@@ -125,6 +125,7 @@
     <Compile Include="Classes\NavigationHelper.cs" />
     <Compile Include="Classes\ItemTemplate.cs" />
     <Compile Include="Classes\ItemTemplateField.cs" />
+    <Compile Include="Classes\ResourceHelper.cs" />
     <Compile Include="Collections\ProfileCollection.cs" />
     <Compile Include="Collections\RefreshableCollection.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />

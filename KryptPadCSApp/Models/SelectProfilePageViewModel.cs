@@ -35,6 +35,9 @@ namespace KryptPadCSApp.Models
 
         private bool _savePassphraseEnabled;
 
+        /// <summary>
+        /// Gets or sets whether the save passphrase feature is enabled.
+        /// </summary>
         public bool SavePassphraseEnabled
         {
             get { return _savePassphraseEnabled; }
@@ -55,7 +58,7 @@ namespace KryptPadCSApp.Models
 
         private Visibility _windowsHelloVisibility;
         /// <summary>
-        /// Gets or sets the Windows Hello checkbox visibility
+        /// Gets or sets the Windows Hello checkbox visibility. Shows up only if Windows Hello is enabled for the device.
         /// </summary>
         public Visibility WindowsHelloVisibility
         {
@@ -71,7 +74,7 @@ namespace KryptPadCSApp.Models
 
         private Visibility _profileSelectionVisible;
         /// <summary>
-        /// Gets or sets whether the profile selection is visible
+        /// Gets or sets whether the profile selection is visible.
         /// </summary>
         public Visibility ProfileSelectionVisible
         {
@@ -83,22 +86,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(ProfileSelectionVisible));
             }
         }
-
-        private Visibility _passphrasePromptVisibility;
-        /// <summary>
-        /// Gets or sets the visibility of the passphrase box
-        /// </summary>
-        public Visibility PassphrasePromptVisibility
-        {
-            get { return _passphrasePromptVisibility; }
-            set
-            {
-                _passphrasePromptVisibility = value;
-                // Changed
-                OnPropertyChanged(nameof(PassphrasePromptVisibility));
-            }
-        }
-
+        
         public Command ProfileSelectedCommand { get; protected set; }
 
         public Command CreateProfileCommand { get; protected set; }
@@ -112,15 +100,13 @@ namespace KryptPadCSApp.Models
         #endregion
 
         #region Methods
-
-
+        
         public SelectProfilePageViewModel()
         {
             RegisterCommands();
 
             // Set the profile selection visibility
             ProfileSelectionVisible = Visibility.Collapsed;
-            PassphrasePromptVisibility = Visibility.Collapsed;
             WindowsHelloVisibility = Visibility.Collapsed;
 
             // Ensure the profile is closed and stored passphrase is cleared
@@ -205,7 +191,7 @@ namespace KryptPadCSApp.Models
             catch (Exception)
             {
                 // Failed
-                await DialogHelper.ShowConnectionErrorMessageDialog();
+                await DialogHelper.ShowGenericErrorDialogAsync();
             }
 
             IsBusy = false;
@@ -214,6 +200,22 @@ namespace KryptPadCSApp.Models
         #endregion
 
         #region Command handlers
+
+        /// <summary>
+        /// Registers commands
+        /// </summary>
+        private void RegisterCommands()
+        {
+            ProfileSelectedCommand = new Command(ProfileSelectedCommandHandler);
+
+            CreateProfileCommand = new Command(CreateProfileCommandHandler);
+
+            SavePassphraseCheckedCommand = new Command(SavePassphraseCheckedCommandHandler);
+
+            RestoreBackupCommand = new Command(RestoreBackupCommandHandler);
+
+            DeleteSavedPassphraseCommand = new Command(DeleteSavedPassphraseCommandHandler);
+        }
 
         private async void ProfileSelectedCommandHandler(object obj)
         {
@@ -276,7 +278,7 @@ namespace KryptPadCSApp.Models
                     // Upload the profile data
                     var resp = await KryptPadApi.UploadProfile(profileData);
 
-                    await DialogHelper.ShowMessageDialogAsync("Profile restored successfully");
+                    await DialogHelper.ShowMessageDialogAsync(ResourceHelper.GetString("ProfileRestored"));
 
                     await GetProfilesAsync();
 
@@ -290,7 +292,7 @@ namespace KryptPadCSApp.Models
             catch (Exception)
             {
                 // Failed
-                await DialogHelper.ShowConnectionErrorMessageDialog();
+                await DialogHelper.ShowGenericErrorDialogAsync();
             }
         }
 
@@ -308,25 +310,9 @@ namespace KryptPadCSApp.Models
 
         #endregion
 
+
         #region Helper methods
-
-        /// <summary>
-        /// Registers commands
-        /// </summary>
-        private void RegisterCommands()
-        {
-            ProfileSelectedCommand = new Command(ProfileSelectedCommandHandler);
-
-            CreateProfileCommand = new Command(CreateProfileCommandHandler);
-
-            SavePassphraseCheckedCommand = new Command(SavePassphraseCheckedCommandHandler);
-
-            RestoreBackupCommand = new Command(RestoreBackupCommandHandler);
-
-            DeleteSavedPassphraseCommand = new Command(DeleteSavedPassphraseCommandHandler);
-        }
-
-
+        
         /// <summary>
         /// Decrypts the user's profile and logs in
         /// </summary>
@@ -357,13 +343,13 @@ namespace KryptPadCSApp.Models
             catch (WebException)
             {
                 // Something went wrong in the api
-                await DialogHelper.ShowMessageDialogAsync("Sorry, you were either logged out or you entered the wrong passphrase.");
+                await DialogHelper.ShowMessageDialogAsync(ResourceHelper.GetString("UnlockProfileFailed"));
 
             }
             catch (Exception)
             {
                 // Failed
-                await DialogHelper.ShowConnectionErrorMessageDialog();
+                await DialogHelper.ShowGenericErrorDialogAsync();
             }
         }
         
@@ -384,7 +370,7 @@ namespace KryptPadCSApp.Models
                 if (login != null)
                 {
                     // We have a stored passphrase, verify the user's identity before releasing it.
-                    var consentResult = await UserConsentVerifier.RequestVerificationAsync("Verify your identity to unlock your profile.");
+                    var consentResult = await UserConsentVerifier.RequestVerificationAsync(ResourceHelper.GetString("WindowsHelloConsentMessage"));
                     if (consentResult == UserConsentVerificationResult.Verified)
                     {
                         // Verified. Get the passphrase.
@@ -418,6 +404,8 @@ namespace KryptPadCSApp.Models
             }
         }
 
+        #region PasswordVault methods
+
         /// <summary>
         /// Gets the saved credential for the profile
         /// </summary>
@@ -440,8 +428,7 @@ namespace KryptPadCSApp.Models
 
             return null;
         }
-
-
+        
         /// <summary>
         /// Determines if the profile has a saved passphrase
         /// </summary>
@@ -471,8 +458,8 @@ namespace KryptPadCSApp.Models
         private async void ClearAllSavedPassphrases()
         {
             var command = await DialogHelper.Confirm(
-                "Unchecking this option will clear any saved passphrases. You will have to re-type them. Are you sure?",
-                "Confirm",
+                ResourceHelper.GetString("ConfirmClearAllPassphrases"),
+                ResourceHelper.GetString("Confirm"),
                 (c) =>
                 {
                     try
@@ -567,6 +554,8 @@ namespace KryptPadCSApp.Models
             }
             catch { /* Nothing to see here */ }
         }
+        
+        #endregion
 
         #endregion
 

@@ -221,7 +221,7 @@ namespace KryptPadCSApp.Models
                     catch (Exception ex)
                     {
                         // Failed
-                        await DialogHelper.ShowConnectionErrorMessageDialog();
+                        await DialogHelper.ShowGenericErrorDialogAsync();
                     }
 
                 }, "Add Category");
@@ -284,7 +284,7 @@ namespace KryptPadCSApp.Models
                     catch (Exception ex)
                     {
                         // Failed
-                        await DialogHelper.ShowConnectionErrorMessageDialog();
+                        await DialogHelper.ShowGenericErrorDialogAsync();
                     }
                 }, "RENAME PROFILE", KryptPadApi.CurrentProfile.Name);
             });
@@ -318,7 +318,7 @@ namespace KryptPadCSApp.Models
                         catch (Exception ex)
                         {
                             // Failed
-                            await DialogHelper.ShowConnectionErrorMessageDialog();
+                            await DialogHelper.ShowGenericErrorDialogAsync();
                         }
 
                     }
@@ -370,7 +370,7 @@ namespace KryptPadCSApp.Models
                 catch (Exception ex)
                 {
                     // Failed
-                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                    await DialogHelper.ShowGenericErrorDialogAsync();
                 }
 
             });
@@ -424,7 +424,7 @@ namespace KryptPadCSApp.Models
             catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowConnectionErrorMessageDialog();
+                await DialogHelper.ShowGenericErrorDialogAsync();
             }
 
             // Not busy any more
@@ -469,7 +469,7 @@ namespace KryptPadCSApp.Models
             catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowConnectionErrorMessageDialog();
+                await DialogHelper.ShowGenericErrorDialogAsync();
             }
 
         }
@@ -518,7 +518,7 @@ namespace KryptPadCSApp.Models
                 catch (Exception ex)
                 {
                     // Failed
-                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                    await DialogHelper.ShowGenericErrorDialogAsync();
                 }
 
             }
@@ -604,7 +604,7 @@ namespace KryptPadCSApp.Models
                 catch (Exception ex)
                 {
                     // Failed
-                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                    await DialogHelper.ShowGenericErrorDialogAsync();
                 }
 
             }
@@ -637,7 +637,7 @@ namespace KryptPadCSApp.Models
                 catch (Exception ex)
                 {
                     // Failed
-                    await DialogHelper.ShowConnectionErrorMessageDialog();
+                    await DialogHelper.ShowGenericErrorDialogAsync();
                 }
             }, "RENAME CATEGORY", category.Name);
         }
@@ -673,7 +673,7 @@ namespace KryptPadCSApp.Models
                         catch (Exception ex)
                         {
                             // Failed
-                            await DialogHelper.ShowConnectionErrorMessageDialog();
+                            await DialogHelper.ShowGenericErrorDialogAsync();
                         }
                     }
                 }
