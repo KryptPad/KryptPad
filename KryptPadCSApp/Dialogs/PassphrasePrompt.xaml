@@ -6,13 +6,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="ENTER YOUR PASSPHRASE"
+    Title="Enter passphrase"
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     >
 
     <Grid>
-        <PasswordBox x:Name="PasswordTextBox" KeyUp="PasswordTextBox_KeyUp"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        
+        <PasswordBox x:Name="PasswordTextBox"
+                     Grid.Row="0"
+                     KeyUp="PasswordTextBox_KeyUp"/>
     </Grid>
 </local:ClosableContentDialog>

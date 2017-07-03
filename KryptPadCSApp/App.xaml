@@ -464,28 +464,31 @@
 
 
                     <!--Actions-->
-                    <SymbolIcon Symbol="More"
-                                Grid.Column="1"
-                                Visibility="{Binding WindowsHelloEnabled, Converter={StaticResource VisibilityConverter}}"
-                                Margin="4,0,0,0"    >
-                        <!--Behavior to open flyout-->
-                        <i:Interaction.Behaviors>
-                            <core:EventTriggerBehavior EventName="Tapped">
-                                <Behaviors:OpenMenuFlyoutAction />
-                            </core:EventTriggerBehavior>
-                        </i:Interaction.Behaviors>
+                    <Button Grid.Column="1"
+                            Visibility="{Binding WindowsHelloEnabled, Converter={StaticResource VisibilityConverter}}"
+                            >
 
-                        <!--Context menu-->
-                        <FlyoutBase.AttachedFlyout>
-                            <MenuFlyout>
-                                <MenuFlyoutItem Text="Forget saved passphrase"
-                                            Command="{Binding DataContext.DeleteFieldCommand, ElementName=ProfilesList }"
+
+                        <SymbolIcon Symbol="More"
+                                    >
+                            <!--Behavior to open flyout-->
+                            <i:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Tapped">
+                                    <Behaviors:OpenMenuFlyoutAction />
+                                </core:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+
+                            <!--Context menu-->
+                            <FlyoutBase.AttachedFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Forget saved passphrase"
+                                            Command="{Binding DataContext.DeleteSavedPassphraseCommand, ElementName=ProfilesList }"
                                             CommandParameter="{Binding}" />
-                            </MenuFlyout>
-                        </FlyoutBase.AttachedFlyout>
+                                </MenuFlyout>
+                            </FlyoutBase.AttachedFlyout>
 
-                    </SymbolIcon>
-
+                        </SymbolIcon>
+                    </Button>
 
                 </Grid>
             </DataTemplate>

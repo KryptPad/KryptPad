@@ -54,30 +54,30 @@ namespace KryptPadCSApp.Views
             await model.GetProfilesAsync();
             await model.CheckIfWindowsHelloSupported();
             // Focus on the passphrase textbox
-            PassphrasePasswordBox.Focus(FocusState.Programmatic);
+            //PassphrasePasswordBox.Focus(FocusState.Programmatic);
 
         }
 
-        private void PassphrasePasswordBox_KeyUp(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                // Get context
-                var m = DataContext as SelectProfilePageViewModel;
-                if (m.EnterProfileCommand.CanExecute(null))
-                {
-                    // Execute button command
-                    m.EnterProfileCommand.Execute(null);
-                }
-            }
-        }
+        //private void PassphrasePasswordBox_KeyUp(object sender, KeyRoutedEventArgs e)
+        //{
+        //    if (e.Key == Windows.System.VirtualKey.Enter)
+        //    {
+        //        // Get context
+        //        var m = DataContext as SelectProfilePageViewModel;
+        //        if (m.EnterProfileCommand.CanExecute(null))
+        //        {
+        //            // Execute button command
+        //            m.EnterProfileCommand.Execute(null);
+        //        }
+        //    }
+        //}
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Focus on the passphrase textbox
-            PassphrasePasswordBox.Focus(FocusState.Programmatic);
+        //private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    // Focus on the passphrase textbox
+        //    PassphrasePasswordBox.Focus(FocusState.Programmatic);
 
-        }
+        //}
 
 
 
