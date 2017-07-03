@@ -123,6 +123,9 @@
   <data name="ConfirmClearAllPassphrases" xml:space="preserve">
     <value>Unchecking this option will clear any saved passphrases. You will have to re-type them. Are you sure?</value>
   </data>
+  <data name="DonationInfo.Text" xml:space="preserve">
+    <value>Krypt Pad runs solely on donations! Tap here to learn more.</value>
+  </data>
   <data name="EnableSavePassphrase.Content" xml:space="preserve">
     <value>Save passphrase and use Windows Hello</value>
   </data>

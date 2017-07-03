@@ -47,27 +47,43 @@
             <Grid x:Name="MainGrid">
 
                 <Grid.RowDefinitions>
-                    <!--<RowDefinition Height="auto" />-->
                     <RowDefinition Height="auto" />
+                    
                 </Grid.RowDefinitions>
 
-                <!--Header-->
-                <!--<StackPanel Grid.Row="0"
-                       >
-                    -->
-                <!--<TextBlock Text="Krypt Pad" 
-                           Style="{ThemeResource HeaderTextBlockStyle}"    
-                           Foreground="White"/>-->
-                <!--
-                    <TextBlock Text="SIGN IN" 
-                           Margin="0,0,0,12"    
-                           Style="{ThemeResource SubtitleTextBlockStyle}" />
-                </StackPanel>-->
-
                 <!--Content is positioned with RelativePanel for dynamic placement with VisualStateManager-->
-                <RelativePanel Grid.Row="1"
+                <RelativePanel Grid.Row="0"
                                HorizontalAlignment="Center"
                                >
+
+                    <!--Donation-->
+                    <Grid x:Name="DonationInfoGrid"
+                          Grid.Row="0"
+                          Margin="12"
+                          RelativePanel.Above="LoginGrid">
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--Heart-->
+                        <TextBlock Grid.Column="0"
+                               Text="&#xE00B;"
+                               VerticalAlignment="Center"
+                               FontSize="72"
+                               FontFamily="{StaticResource SymbolThemeFontFamily}"    
+                               Foreground="#FFFD6060"
+                               />
+
+                        <!--Message-->
+                        <TextBlock Grid.Column="1"
+                               VerticalAlignment="Center"
+                               x:Uid="DonationInfo"
+                               Style="{ThemeResource SubtitleTextBlockStyle}"
+                               Margin="8"
+                               />
+                    </Grid>
 
                     <!--Main grid for input-->
                     <Grid x:Name="LoginGrid"
