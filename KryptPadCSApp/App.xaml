@@ -511,26 +511,24 @@
                             Visibility="{Binding WindowsHelloEnabled, Converter={StaticResource VisibilityConverter}}"
                             >
 
+                        
+                        <SymbolIcon Symbol="More" />
 
-                        <SymbolIcon Symbol="More"
-                                    >
-                            <!--Behavior to open flyout-->
-                            <i:Interaction.Behaviors>
-                                <core:EventTriggerBehavior EventName="Tapped">
-                                    <Behaviors:OpenMenuFlyoutAction />
-                                </core:EventTriggerBehavior>
-                            </i:Interaction.Behaviors>
+                        <!--Behavior to open flyout-->
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="Tapped">
+                                <Behaviors:OpenMenuFlyoutAction />
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
 
-                            <!--Context menu-->
-                            <FlyoutBase.AttachedFlyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem Text="Forget saved passphrase"
+                        <!--Context menu-->
+                        <FlyoutBase.AttachedFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Forget saved passphrase"
                                             Command="{Binding DataContext.DeleteSavedPassphraseCommand, ElementName=ProfilesList }"
                                             CommandParameter="{Binding}" />
-                                </MenuFlyout>
-                            </FlyoutBase.AttachedFlyout>
-
-                        </SymbolIcon>
+                            </MenuFlyout>
+                        </FlyoutBase.AttachedFlyout>
                     </Button>
 
                 </Grid>

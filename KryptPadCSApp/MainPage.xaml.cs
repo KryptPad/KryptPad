@@ -43,7 +43,7 @@ namespace KryptPadCSApp
         public Frame RootFrame { get { return NavFrame; } }
 
         private bool IsBusy { get; set; }
-        
+
         #endregion
 
 
@@ -75,7 +75,7 @@ namespace KryptPadCSApp
                 // Show the message
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    
+
                     if (DateTime.Now >= warningTime && !_messageShowing)
                     {
                         // Show the warning
@@ -113,7 +113,7 @@ namespace KryptPadCSApp
         }
 
         #region Navigation
-        
+
         private void RootFrame_Navigated(object sender, NavigationEventArgs e)
         {
             // Get the MainPage instance and hide the pane
@@ -121,7 +121,7 @@ namespace KryptPadCSApp
             if (page != null)
             {
                 // Check the page type, and hide or show the pane
-                if (e.Content is ItemsPage)
+                if (e.Content is ItemsPage || e.Content is LoginPage)
                 {
                     HomeRadioButton.IsChecked = true;
                 }
@@ -137,15 +137,31 @@ namespace KryptPadCSApp
                 {
                     AboutRadioButton.IsChecked = true;
                 }
-
+                else
+                {
+                    HomeRadioButton.IsChecked = false;
+                    DonateRadioButton.IsChecked = false;
+                    FeedbackRadioButton.IsChecked = false;
+                    AboutRadioButton.IsChecked = false;
+                }
             }
 
         }
-       
+
         private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate
-            NavigationHelper.Navigate(typeof(ItemsPage), null);
+            
+            if ((App.Current as App).IsSignedIn)
+            {
+                // Navigate
+                NavigationHelper.Navigate(typeof(ItemsPage), null);
+
+            }
+            else
+            {
+                // Go to login screen
+                NavigationHelper.Navigate(typeof(LoginPage), null);
+            }
 
         }
 
@@ -191,7 +207,7 @@ namespace KryptPadCSApp
             ShowSessionWarningMessage(false);
         }
 
-        
+
         #region Helper Methods
 
         private void ShowSessionWarningMessage(bool value)
@@ -206,7 +222,7 @@ namespace KryptPadCSApp
                 // Hide the message
                 BorderStoryBoardFadeOut.Begin();
             }
-            
+
 
             _messageShowing = value;
         }
@@ -227,7 +243,7 @@ namespace KryptPadCSApp
             // Hide buttons we can't access yet
             var visibility = value ? Visibility.Visible : Visibility.Collapsed;
             SignOutRadioButton.Visibility = visibility;
-            HomeRadioButton.Visibility = visibility;
+            //HomeRadioButton.Visibility = visibility;
         }
 
         /// <summary>

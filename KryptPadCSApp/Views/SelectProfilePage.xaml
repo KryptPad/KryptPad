@@ -66,8 +66,9 @@
 
                         <!--Create new profile-->
                         <Button Content="Create Profile"
-                            Command="{Binding CreateProfileCommand}"
-                            Margin="0,0,12,0"/>
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Command="{Binding CreateProfileCommand}"
+                                Margin="0,0,12,0"/>
 
                         <!--Restore a profile from a backup-->
                         <Button Content="Restore Backup"
