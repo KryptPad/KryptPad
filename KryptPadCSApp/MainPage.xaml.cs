@@ -222,12 +222,12 @@ namespace KryptPadCSApp
         public void ShowPane(bool value)
         {
             // Hide nav panel
-            NavPanel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            //NavPanel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
 
-            //// Hide buttons we can't access yet
-            //var visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            //SignOutRadioButton.Visibility = visibility;
-            //HomeRadioButton.Visibility = visibility;
+            // Hide buttons we can't access yet
+            var visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            SignOutRadioButton.Visibility = visibility;
+            HomeRadioButton.Visibility = visibility;
         }
 
         /// <summary>
