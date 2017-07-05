@@ -164,8 +164,7 @@ namespace KryptPadCSApp
             }
             else
             {
-                // Go to login screen if we are not signed in and not on the
-                // "Select Profile" page
+                // Go to login screen
                 NavigationHelper.Navigate(typeof(LoginPage), null);
             }
 
