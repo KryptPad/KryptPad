@@ -157,7 +157,6 @@
       <DependentUpon>ProfileDetailsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\WarningException.cs" />
-    <Compile Include="Interfaces\INoSideNavPage.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

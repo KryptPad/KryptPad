@@ -115,8 +115,8 @@ namespace KryptPadCSApp.Models
             // Ensure the profile is closed and stored passphrase is cleared
             KryptPadApi.CloseProfile();
 
-            // Success, tell the app we are not signed in
-            (App.Current as App).IsSignedIn = false;
+            // Success, tell the app we are not signed in with a profile
+            (App.Current as App).SignInStatus = SignInStatus.SignedIn;
         }
 
         /// <summary>
@@ -329,7 +329,7 @@ namespace KryptPadCSApp.Models
 
 
                 // Success, tell the app we are signed in
-                (App.Current as App).IsSignedIn = true;
+                (App.Current as App).SignInStatus = SignInStatus.SignedInWithProfile;
 
                 // Check if Windows hellow is supported and save the passphrase
                 var supported = await KeyCredentialManager.IsSupportedAsync();

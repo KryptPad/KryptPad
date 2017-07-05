@@ -102,9 +102,9 @@ namespace KryptPadCSApp
             (App.Current as App).PropertyChanged += (sender, e) =>
             {
                 // Success, tell the app we are signed in
-                if (e.PropertyName == nameof(App.IsSignedIn))
+                if (e.PropertyName == nameof(App.SignInStatus))
                 {
-                    ShowPane((App.Current as App).IsSignedIn);
+                    ShowPane((App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile);
                 }
             };
 
@@ -121,7 +121,7 @@ namespace KryptPadCSApp
             if (page != null)
             {
                 // Check the page type, and hide or show the pane
-                if (e.Content is ItemsPage || e.Content is LoginPage)
+                if (e.Content is ItemsPage || e.Content is LoginPage || e.Content is SelectProfilePage)
                 {
                     HomeRadioButton.IsChecked = true;
                 }
@@ -150,16 +150,22 @@ namespace KryptPadCSApp
 
         private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            if ((App.Current as App).IsSignedIn)
+            var signInStatus = (App.Current as App).SignInStatus;
+            if (signInStatus == SignInStatus.SignedInWithProfile)
             {
-                // Navigate
+                // Go to items list
                 NavigationHelper.Navigate(typeof(ItemsPage), null);
 
             }
+            else if (signInStatus == SignInStatus.SignedIn)
+            {
+                // Pick a profile
+                NavigationHelper.Navigate(typeof(SelectProfilePage), null);
+            }
             else
             {
-                // Go to login screen
+                // Go to login screen if we are not signed in and not on the
+                // "Select Profile" page
                 NavigationHelper.Navigate(typeof(LoginPage), null);
             }
 

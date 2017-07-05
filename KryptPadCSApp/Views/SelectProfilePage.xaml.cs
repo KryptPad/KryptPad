@@ -1,5 +1,5 @@
 ﻿using KryptPad.Api.Models;
-using KryptPadCSApp.Interfaces;
+using KryptPadCSApp.Classes;
 using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;
@@ -25,26 +25,25 @@ namespace KryptPadCSApp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class SelectProfilePage : Page, INoSideNavPage
+    public sealed partial class SelectProfilePage : Page
     {
+        //private SystemNavigationManager _currentView = SystemNavigationManager.GetForCurrentView();
 
         public SelectProfilePage()
         {
             this.InitializeComponent();
 
             // Listen to the back button here
-            SystemNavigationManager currentView = SystemNavigationManager.GetForCurrentView();
-            if (currentView != null)
-            {
-                currentView.BackRequested += CurrentView_BackRequested;
-            }
+            //_currentView.BackRequested += CurrentView_BackRequested;
         }
 
-        private void CurrentView_BackRequested(object sender, BackRequestedEventArgs e)
-        {
-            // Tell the app we are signing out so that we don't end up auto-logging in again
-            (App.Current as App).IsSignedIn = false;
-        }
+        //private void CurrentView_BackRequested(object sender, BackRequestedEventArgs e)
+        //{
+        //    // Tell the app we are signing out so that we don't end up auto-logging in again
+        //    (App.Current as App).SignInStatus = SignInStatus.SignedOut;
+        //    // Remove handler
+        //    _currentView.BackRequested -= CurrentView_BackRequested;
+        //}
 
         private async void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
         {
