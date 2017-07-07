@@ -85,7 +85,7 @@ namespace KryptPadCSApp.Models.Dialogs
             catch (Exception)
             {
                 // Failed
-                await DialogHelper.ShowConnectionErrorMessageDialog();
+                await DialogHelper.ShowGenericErrorDialogAsync();
             }
         }
         #endregion

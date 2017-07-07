@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -15,41 +16,44 @@ namespace KryptPadCSApp.Classes
     /// </summary>
     class DialogHelper
     {
-
-        //store a reference to the currently open ContentDialog
-        private static ContentDialog _currentDialog;
-
+        
+        #region MessageDialog
+        
         /// <summary>
-        /// Gets or sets the result object
+        /// Shows a generic connection error dialog
         /// </summary>
-        private static object _result;
+        /// <returns></returns>
+        public static async Task<IUICommand> ShowGenericErrorDialogAsync()
+        {
+            // This is a generic error message
+            return await ShowMessageDialogAsync(ResourceHelper.GetString("GenericError"), ResourceHelper.GetString("Error"));
+
+        }
 
         /// <summary>
-        /// Shows a message box with custom content
+        /// Shows a message box with custom message
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
         public static async Task<IUICommand> ShowMessageDialogAsync(string content)
         {
-            var msgBox = new MessageDialog(content);
-            //show
-            return await msgBox.ShowAsync();
-
+            return await ShowMessageDialogAsync(content, string.Empty);
         }
 
         /// <summary>
-        /// Shows a generic connection error dialog
+        /// Shows a message box with custom message and title
         /// </summary>
+        /// <param name="content"></param>
         /// <returns></returns>
-        public static async Task<IUICommand> ShowConnectionErrorMessageDialog()
+        public static async Task<IUICommand> ShowMessageDialogAsync(string content, string title)
         {
-            var msgBox = new MessageDialog(
-                "An error occurred while trying to process your request. Make sure you are connected to the internet.", "No Network");
-            
-            //show
+            var msgBox = new MessageDialog(content, title);
+            // Show
             return await msgBox.ShowAsync();
 
         }
+
+        #endregion
 
         /// <summary>
         /// Displays the specified content dialog type
@@ -113,65 +117,9 @@ namespace KryptPadCSApp.Classes
 
             return res;
         }
+
+        #region Confirm
         
-        ///// <summary>
-        ///// Displays the specified content dialog type
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="primaryAction"></param>
-        ///// <returns></returns>
-        //public static async Task<ContentDialogResult> ShowDialog<T>(Func<T, Task> primaryAction) where T : ContentDialog, new()
-        //{
-        //    // Create instance of content dialog
-        //    var d = new T();
-
-        //    // Show the dialog
-        //    var res = await d.ShowAsync();
-
-        //    // Determine which button was fired, and decide if we need to execute the primary action
-        //    if (res == ContentDialogResult.Primary && primaryAction != null)
-        //    {
-        //        await primaryAction(d);
-        //    }
-
-        //    return res;
-        //}
-
-        /// <summary>
-        /// Displays the create password dialog
-        /// </summary>
-        public static async Task<object> ShowAddFieldDialog()
-        {
-            //prompt for a new password
-            _currentDialog = new AddFieldDialog()
-            {
-                MaxWidth = Window.Current.Bounds.Width
-            };
-
-            //show dialog
-            await _currentDialog.ShowAsync();
-
-            return _result;
-
-            //return await Task.Factory.StartNew(async () => {
-
-            //    //return result
-            //    return _result;
-            //});
-
-        }
-
-        /// <summary>
-        /// Creates a confirm prompt for the user
-        /// </summary>
-        /// <param name="prompt"></param>
-        /// <param name="yes"></param>
-        /// <returns></returns>
-        public static async Task<IUICommand> Confirm(string prompt)
-        {
-            return await Confirm(prompt, "CONFIRM", null);
-        }
-
         /// <summary>
         /// Creates a confirm prompt for the user
         /// </summary>
@@ -180,20 +128,9 @@ namespace KryptPadCSApp.Classes
         /// <returns></returns>
         public static async Task<IUICommand> Confirm(string prompt, UICommandInvokedHandler yes)
         {
-            return await Confirm(prompt, "CONFIRM", yes);
+            return await Confirm(prompt, ResourceHelper.GetString("Confirm"), yes);
         }
-
-        /// <summary>
-        /// Creates a confirm prompt for the user
-        /// </summary>
-        /// <param name="prompt"></param>
-        /// <param name="title"></param>
-        /// <returns></returns>
-        public static async Task<IUICommand> Confirm(string prompt, string title)
-        {
-            return await Confirm(prompt, title, null);
-        }
-
+        
         /// <summary>
         /// Creates a confirm prompt for the user
         /// </summary>
@@ -203,36 +140,30 @@ namespace KryptPadCSApp.Classes
         /// <returns></returns>
         public static async Task<IUICommand> Confirm(string prompt, string title, UICommandInvokedHandler yes)
         {
+            return await Confirm(prompt, title, yes, null);
+        }
+
+        /// <summary>
+        /// Creates a confirm prompt for the user
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <param name="title"></param>
+        /// <param name="yes"></param>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public static async Task<IUICommand> Confirm(string prompt, string title, UICommandInvokedHandler yes, UICommandInvokedHandler no)
+        {
             var msg = new MessageDialog(prompt, title);
             //, async (ap) => { })
             msg.Commands.Add(new UICommand("Yes", yes, 1));
-            msg.Commands.Add(new UICommand("No", null, 2));
+            msg.Commands.Add(new UICommand("No", no, 2));
 
             msg.DefaultCommandIndex = 1;
 
             return await msg.ShowAsync();
         }
 
-        /// <summary>
-        /// Closes the dialog window
-        /// </summary>
-        public static void CloseDialog()
-        {
-            CloseDialog(null);
-        }
-
-        /// <summary>
-        /// Closes the dialog window
-        /// </summary>
-        /// <param name="parent">The framework element set as the Content of the ContentDialog</param>
-        public static void CloseDialog(object result)
-        {
-            if (_currentDialog != null)
-            {
-                _result = result;
-                //hide the dialog
-                _currentDialog.Hide();
-            }
-        }
+        #endregion
+        
     }
 }

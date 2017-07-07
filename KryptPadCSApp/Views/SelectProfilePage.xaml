@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     x:Name="SelectProfileViewPage"
     Loaded="SelectProfileViewPage_Loaded"
-    LayoutUpdated="SelectProfileViewPage_LayoutUpdated"
+    
     >
 
     <Page.Transitions>
@@ -49,7 +49,7 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
-
+                        
                     </Grid.RowDefinitions>
 
                     <!--Description-->
@@ -66,50 +66,36 @@
 
                         <!--Create new profile-->
                         <Button Content="Create Profile"
-                            Command="{Binding CreateProfileCommand}"
-                            Margin="0,0,12,0"/>
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Command="{Binding CreateProfileCommand}"
+                                Margin="0,0,12,0"/>
 
                         <!--Restore a profile from a backup-->
                         <Button Content="Restore Backup"
                             Command="{Binding RestoreBackupCommand}"/>
                     </StackPanel>
 
-                    <!--Choose profile-->
-                    <ListBox Grid.Row="2"
-                         Visibility="{Binding ProfileSelectionVisible}"
-                         HorizontalAlignment="Stretch"
-                         ItemsSource="{Binding Profiles}"
-                         SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
-                         Margin="0,0,0,12"
-                         ItemTemplate="{StaticResource ProfileListDataTemplate}" SelectionChanged="ListBox_SelectionChanged"
-                         >
+                    <!--Checkbox to save profile password. It's only visible if the user has a pin/windows hello enabled-->
+                    <StackPanel Grid.Row="2" Margin="0,0,0,12" Visibility="{Binding WindowsHelloVisibility}">
+                        <TextBlock TextWrapping="WrapWholeWords" x:Uid="WindowsHelloNote" />
+                        <!--Enable passphrase saving-->
+                        <CheckBox x:Uid="EnableSavePassphrase"
+                                  IsChecked="{Binding SavePassphraseEnabled, Mode=TwoWay}"
+                                  Command="{Binding SavePassphraseCheckedCommand}"/>
+                        
+                    </StackPanel>
+                    
+                    <!--Profile list-->
+                    <ItemsControl Grid.Row="3"
+                                  x:Name="ProfilesList"
+                                  Visibility="{Binding ProfileSelectionVisible}"
+                                  HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding Profiles}"
+                                  ItemTemplate="{StaticResource ProfileListDataTemplate}">
 
-                    </ListBox>
-
-                    <!--Passphrase grid-->
-                    <Grid Grid.Row="3"
-                      Visibility="{Binding ProfileSelectionVisible}"
-                      Margin="0,0,0,12">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <!--Enter passphrase-->
-                        <PasswordBox x:Name="PassphrasePasswordBox"
-                                 Grid.Column="0"
-                                 Password="{Binding Passphrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 PlaceholderText="Enter passphrase" KeyUp="PassphrasePasswordBox_KeyUp"/>
-
-                        <Button Grid.Column="1"
-                            Command="{Binding EnterProfileCommand}" VerticalAlignment="Bottom">
-                            <SymbolIcon Symbol="Forward" />
-                        </Button>
-                    </Grid>
-
-
-
+                        
+                    </ItemsControl>
+                    
                 </Grid>
 
             </Grid>

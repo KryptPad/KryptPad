@@ -1,1 +1,1 @@
-C:\Users\neptu\OneDrive\Projects\KryptPad-Common\KryptPadApp\KryptPadCSApp_10.2.24.0\KryptPadCSApp_10.2.24.0_x86_x64_arm.appxbundle
+C:\Users\Eric\Source\Repos\KryptPad\KryptPadCSApp\bin\ARM\Release\Upload\KryptPadCSApp_10.3.28.0\KryptPadCSApp_10.3.28.0_x86_x64_arm.appxbundle

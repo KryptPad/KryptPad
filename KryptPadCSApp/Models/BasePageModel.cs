@@ -42,12 +42,7 @@ namespace KryptPadCSApp.Models
                 OnIsBusyChanged();
             }
         }
-
-        /// <summary>
-        /// Gets the ResourceLoader for the current view
-        /// </summary>
-        public ResourceLoader ResourceStrings { get { return ResourceLoader.GetForCurrentView(); } }
-
+        
         private Visibility _busyIndicatorVisibility;
         /// <summary>
         /// Gets or sets whether the ui element is visible

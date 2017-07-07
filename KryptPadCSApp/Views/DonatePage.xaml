@@ -79,6 +79,7 @@
                         </TextBlock>
 
                         <Button Content="Make a Donation"
+                                Style="{StaticResource PrimaryButtonStyle}"
                             Margin="0,24,0,0"
 						Command="{Binding DonateCommand}"/>
                     </StackPanel>

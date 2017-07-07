@@ -76,7 +76,9 @@
                         </TextBlock>
 
                         <!--Rate button-->
-                        <Button Margin="0,24,0,48" Command="{Binding ReviewAppCommand}">
+                        <Button Margin="0,24,0,48"
+                                Command="{Binding ReviewAppCommand}"
+                                Style="{StaticResource PrimaryButtonStyle}">
                             Review this App
                         </Button>
 

@@ -117,8 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ConfirmClearAllPassphrases" xml:space="preserve">
+    <value>Unchecking this option will clear any saved passphrases. You will have to re-type them. Are you sure?</value>
+  </data>
+  <data name="DonationInfo.Text" xml:space="preserve">
+    <value>Krypt Pad runs solely on donations! Tap here to learn more.</value>
+  </data>
+  <data name="EnableSavePassphrase.Content" xml:space="preserve">
+    <value>Save passphrase and use Windows Hello</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
   <data name="FacebookUrl" xml:space="preserve">
     <value>https://www.facebook.com/KryptPad</value>
+  </data>
+  <data name="GenericError" xml:space="preserve">
+    <value>Something happened and we were unable to complete the operation. Please ensure you are connected to the internet and try again. If the problem persists, visit our GitHub issues page.</value>
   </data>
   <data name="PassphraseNote.Text" xml:space="preserve">
     <value>Note: Changing your passphrase does not change your account password.</value>
@@ -129,10 +147,22 @@
   <data name="PasswordRequirement.Text" xml:space="preserve">
     <value>Your password should be at least eight characters long and contain at least one symbol, one lower-case letter, one upper-case letter, and one number.</value>
   </data>
+  <data name="ProfileRestored" xml:space="preserve">
+    <value>Profile restored successfully!</value>
+  </data>
   <data name="TwitterUrl" xml:space="preserve">
     <value>https://twitter.com/KryptPad</value>
   </data>
+  <data name="UnlockProfileFailed" xml:space="preserve">
+    <value>Sorry, you were either logged out or you entered the wrong passphrase.</value>
+  </data>
   <data name="UriFail" xml:space="preserve">
     <value>Could not launch the requested url.</value>
+  </data>
+  <data name="WindowsHelloConsentMessage" xml:space="preserve">
+    <value>Verify your identity to unlock your profile.</value>
+  </data>
+  <data name="WindowsHelloNote.Text" xml:space="preserve">
+    <value>Krypt Pad can save your passphrase for you and unlock your profile using Windows Hello. You may save up to 5 profiles.</value>
   </data>
 </root>

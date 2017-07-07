@@ -37,15 +37,6 @@ namespace KryptPadCSApp.Classes
             return frame;
         }
 
-        ///// <summary>
-        ///// Navigates to a page using the frame
-        ///// </summary>
-        ///// <param name="pageType"></param>
-        ///// <param name="parameter"></param>
-        //public static void Navigate(Type pageType, object parameter)
-        //{
-        //    Navigate(pageType, parameter, NavigationType.Frame);
-        //}
 
         /// <summary>
         /// Navigates to a page using the frame
@@ -56,7 +47,10 @@ namespace KryptPadCSApp.Classes
         {
             var frame = GetFrame();
 
-            if (frame != null)
+            // Navigate if we have a frame object and if the new page type is not
+            // the same as the old page. This prevents the back stack from getting
+            // weird.
+            if (frame != null && frame.CurrentSourcePageType != pageType)
             {
                 // Navigate
                 frame.Navigate(pageType, parameter);

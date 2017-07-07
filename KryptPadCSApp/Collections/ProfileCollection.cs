@@ -1,4 +1,4 @@
-﻿using KryptPad.Api.Models;
+﻿using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.Collections
 {
-    class ProfileCollection : RefreshableCollection<ApiProfile>
+    class ProfileCollection : RefreshableCollection<ProfileModel>
     {
     }
 }
