@@ -118,7 +118,7 @@ namespace KryptPadCSApp.Models
             // Ensure that the access token is cleared upon arrival
             KryptPadApi.SignOutAsync();
 
-            (App.Current as App).IsSignedIn = false;
+            (App.Current as App).SignInStatus = SignInStatus.SignedOut;
 
             // Register commands
             RegisterCommands();
@@ -254,7 +254,7 @@ namespace KryptPadCSApp.Models
             catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowConnectionErrorMessageDialog();
+                await DialogHelper.ShowGenericErrorDialogAsync();
             }
 
 
@@ -286,13 +286,13 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Launch the uri
-                await Windows.System.Launcher.LaunchUriAsync(new Uri(ResourceStrings.GetString("FacebookUrl")));
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(ResourceHelper.GetString("FacebookUrl")));
 
             }
             catch (Exception)
             {
                 // Failed
-                await DialogHelper.ShowMessageDialogAsync(ResourceStrings.GetString("UriFail"));
+                await DialogHelper.ShowMessageDialogAsync(ResourceHelper.GetString("UriFail"));
             }
         }
 
@@ -301,13 +301,13 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Launch the uri
-                await Windows.System.Launcher.LaunchUriAsync(new Uri(ResourceStrings.GetString("TwitterUrl")));
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(ResourceHelper.GetString("TwitterUrl")));
 
             }
             catch (Exception)
             {
                 // Failed
-                await DialogHelper.ShowMessageDialogAsync(ResourceStrings.GetString("UriFail"));
+                await DialogHelper.ShowMessageDialogAsync(ResourceHelper.GetString("UriFail"));
             }
         }
         

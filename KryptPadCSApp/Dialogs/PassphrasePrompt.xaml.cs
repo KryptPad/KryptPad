@@ -52,11 +52,15 @@ namespace KryptPadCSApp.Dialogs
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            var deferral = args.GetDeferral();
+
             // If the user entered a passphrase, return it and hide the dialog
             if (!await ValidateInput())
             {
                 args.Cancel = true;
             }
+
+            deferral.Complete();
         }
 
         

@@ -14,10 +14,6 @@ namespace KryptPadCSApp.Models
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
-        #region Methods
-        
-        #endregion
-
         #region Event Handlers
 
         /// <summary>
@@ -26,11 +22,7 @@ namespace KryptPadCSApp.Models
         /// <param name="name"></param>
         protected void OnPropertyChanged(string name)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         #endregion

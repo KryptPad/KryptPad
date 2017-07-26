@@ -1,4 +1,5 @@
-﻿using KryptPadCSApp.Interfaces;
+﻿using KryptPad.Api.Models;
+using KryptPadCSApp.Classes;
 using KryptPadCSApp.Models;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -23,54 +25,36 @@ namespace KryptPadCSApp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class SelectProfilePage : Page, INoSideNavPage
+    public sealed partial class SelectProfilePage : Page
     {
-
-        private bool _setFocus = false;
+        //private SystemNavigationManager _currentView = SystemNavigationManager.GetForCurrentView();
 
         public SelectProfilePage()
         {
             this.InitializeComponent();
+
+            // Listen to the back button here
+            //_currentView.BackRequested += CurrentView_BackRequested;
         }
-        
+
+        //private void CurrentView_BackRequested(object sender, BackRequestedEventArgs e)
+        //{
+        //    // Tell the app we are signing out so that we don't end up auto-logging in again
+        //    (App.Current as App).SignInStatus = SignInStatus.SignedOut;
+        //    // Remove handler
+        //    _currentView.BackRequested -= CurrentView_BackRequested;
+        //}
+
         private async void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
         {
             // Load the profiles
-            await (DataContext as SelectProfilePageViewModel).GetProfilesAsync();
+            var model = DataContext as SelectProfilePageViewModel;
 
-            _setFocus = true;
-        }
-
-        private void PassphrasePasswordBox_KeyUp(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                // Get context
-                var m = DataContext as SelectProfilePageViewModel;
-                if (m.EnterProfileCommand.CanExecute(null))
-                {
-                    // Execute button command
-                    m.EnterProfileCommand.Execute(null);
-                }
-            }
-        }
-
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Focus on the passphrase textbox
-            PassphrasePasswordBox.Focus(FocusState.Programmatic);
-        }
-
-        private void SelectProfileViewPage_LayoutUpdated(object sender, object e)
-        {
-
-            if (_setFocus)
-            {
-                // Focus on the passphrase textbox
-                PassphrasePasswordBox.Focus(FocusState.Programmatic);
-                _setFocus = false;
-            }
+            await model.GetProfilesAsync();
+            await model.CheckIfWindowsHelloSupported();
 
         }
+
+       
     }
 }

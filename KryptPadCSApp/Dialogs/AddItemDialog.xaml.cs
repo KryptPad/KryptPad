@@ -41,17 +41,8 @@ namespace KryptPadCSApp.Dialogs
 
         public ObservableCollection<ItemTemplate> ItemTemplates { get; set; } = new ObservableCollection<ItemTemplate>();
 
-        //private ItemTemplate _selectedItemTemplate;
         public ItemTemplate SelectedItemTemplate { get; set; }
-        //{
-        //    get { return _selectedItemTemplate; }
-        //    set
-        //    {
-        //        _selectedItemTemplate = value;
-
-
-        //    }
-        //}
+        
         #endregion
 
 

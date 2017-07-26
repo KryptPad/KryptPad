@@ -1,4 +1,5 @@
 ﻿using KryptPad.Api;
+using KryptPadCSApp.Classes;
 using KryptPadCSApp.Views;
 using System;
 using System.ComponentModel;
@@ -28,19 +29,19 @@ namespace KryptPadCSApp
         /// </summary>
         internal bool DisableAutoLogin { get; set; }
 
-        private bool _isSignedIn;
+        private SignInStatus _signInStatus;
         /// <summary>
         /// Gets or sets the time remaining on the session
         /// </summary>
-        internal bool IsSignedIn
+        internal SignInStatus SignInStatus
         {
-            get { return _isSignedIn; }
+            get { return _signInStatus; }
             set
             {
                 // Set value
-                _isSignedIn = value;
+                _signInStatus = value;
                 // Value changed
-                OnPropertyChanged(nameof(IsSignedIn));
+                OnPropertyChanged(nameof(SignInStatus));
             }
 
         }
