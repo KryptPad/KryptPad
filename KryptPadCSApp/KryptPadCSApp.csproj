@@ -18,11 +18,11 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>KryptPadCSApp_StoreKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>A7AB7D6358650F9AEC5D30FB383CD7F1149E19A8</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>3A5A45B42C4C4E13440CCC23B3B8D80EF84ECFD8</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <AppxPackageDir>C:\Users\Eric\OneDrive\Projects\KryptPad-Common\KryptPadApp\</AppxPackageDir>
+    <AppxPackageDir>C:\Users\ebutler\OneDrive\Projects\KryptPad-Common\KryptPadApp</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
