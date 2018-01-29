@@ -39,7 +39,8 @@ namespace KryptPad.Api
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; set; } = "http://localhost:50821/"; //
+        public static string ServiceHost { get; set; } = "http://localhost:51267/";
+        //public static string ServiceHost { get; set; } = "https://www.kryptpad.com/";
 #elif DEBUG
         /// <summary>
         /// Gets or sets the host address of the API service.
@@ -115,6 +116,11 @@ namespace KryptPad.Api
         /// </summary>
         private static CancellationTokenSource ExpirationTaskCancelTokenSource { get; set; }
 
+        /// <summary>
+        /// Gets the api token endpoint to use for authentication
+        /// </summary>
+        private static string ApiTokenEndpoint { get; set; }
+
         #endregion
 
 
@@ -136,9 +142,9 @@ namespace KryptPad.Api
         /// <summary>
         /// Performs the work of the expiration task
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="cancelToken"></param>
         /// <returns></returns>
-        private static async Task ExpirationTaskWork(CancellationToken token)
+        private static async Task ExpirationTaskWork(CancellationToken cancelToken)
         {
 
             // Get local date from expiration
@@ -152,7 +158,7 @@ namespace KryptPad.Api
             while (DateTime.Now < expiration)
             {
                 // Wait a bit, then check again
-                token.ThrowIfCancellationRequested();
+                cancelToken.ThrowIfCancellationRequested();
 
                 // Set date to check
                 expiration = SessionEndDate;
@@ -173,12 +179,45 @@ namespace KryptPad.Api
         }
 
         /// <summary>
+        /// Gets the endpoint information from the server
+        /// </summary>
+        /// <returns></returns>
+        private static async Task SetEndpointConfigurationAsync()
+        {
+            var tokenEndpoint = GetUrl("token");
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var resp = await client.GetStringAsync(GetUrl(".well-known/openid-configuration"));
+                    if (!string.IsNullOrWhiteSpace(resp)) {
+                        // Deserialize the configuration and set the endpoints
+                        var config = JsonConvert.DeserializeObject<EndpointConfigurationResponse>(resp);
+                        tokenEndpoint = config?.TokenEndpoint;
+                    }
+
+                }
+            }
+            catch (Exception) { }
+
+            // Set the token endpoint
+            ApiTokenEndpoint = tokenEndpoint;
+        }
+
+        /// <summary>
         /// Creates an authorization request
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
         public static async Task AuthenticateAsync(string username, string password)
         {
+            // Check if we have a token endpoint configured
+            if (string.IsNullOrWhiteSpace(ApiTokenEndpoint))
+            {
+                // Get the token endpoint
+                await SetEndpointConfigurationAsync();
+            }
+
 
             using (var client = new HttpClient())
             {
@@ -194,7 +233,7 @@ namespace KryptPad.Api
                 // Create the content to send
                 var content = new FormUrlEncodedContent(values);
                 // Send the post request
-                var response = await client.PostAsync(GetUrl("token"), content);
+                var response = await client.PostAsync(ApiTokenEndpoint, content);
 
                 // Get the data if the response is what we want
                 if (response.IsSuccessStatusCode)
@@ -228,6 +267,13 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task ReauthenticateAsync()
         {
+            // Check if we have a token endpoint configured
+            if (string.IsNullOrWhiteSpace(ApiTokenEndpoint))
+            {
+                // Get the token endpoint
+                await SetEndpointConfigurationAsync();
+            }
+
             using (var client = new HttpClient())
             {
                 // Prepare form values
@@ -243,7 +289,7 @@ namespace KryptPad.Api
                 // Create the content to send
                 var content = new FormUrlEncodedContent(values);
                 // Send the post request
-                var response = await client.PostAsync(GetUrl("token"), content);
+                var response = await client.PostAsync(ApiTokenEndpoint, content);
 
                 // Get the data if the response is what we want
                 if (response.IsSuccessStatusCode)
@@ -568,8 +614,7 @@ namespace KryptPad.Api
         /// <summary>
         /// Deletes the profile
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="token"></param>
+        /// <param name="profile"></param>
         /// <returns></returns>
         public static async Task DeleteProfileAsync(ApiProfile profile)
         {

@@ -119,6 +119,7 @@
     <Compile Include="Responses\ApiResponse.cs" />
     <Compile Include="Responses\ApiWebExceptionResponse.cs" />
     <Compile Include="Responses\CategoryResponse.cs" />
+    <Compile Include="Responses\EndpointConfigurationResponse.cs" />
     <Compile Include="Responses\FieldsResponse.cs" />
     <Compile Include="Responses\ItemsResponse.cs" />
     <Compile Include="Responses\ModelState.cs" />
