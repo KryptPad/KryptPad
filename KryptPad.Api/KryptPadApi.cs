@@ -39,7 +39,7 @@ namespace KryptPad.Api
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; set; } = "http://localhost:51267/";
+        public static string ServiceHost { get; set; } = "http://localhost:50821/";
         //public static string ServiceHost { get; set; } = "https://www.kryptpad.com/";
 #elif DEBUG
         /// <summary>
@@ -198,7 +198,9 @@ namespace KryptPad.Api
 
                 }
             }
-            catch (Exception) { }
+            catch (Exception ex) {
+
+            }
 
             // Set the token endpoint
             ApiTokenEndpoint = tokenEndpoint;
@@ -224,7 +226,8 @@ namespace KryptPad.Api
                 // Prepare form values
                 var values = new Dictionary<string, string>
                 {
-                    { "client_id", "KryptPadUniversal_" + AppId.ToString() },
+                    { "client_id", "KryptPadUWP" },
+                    { "client_secret", "secret" },
                     { "grant_type", "password" },
                     { "username", username },
                     { "password", password }
@@ -351,6 +354,42 @@ namespace KryptPad.Api
             }
 
         }
+
+        #region App
+        /// <summary>
+        /// Gets the system broadcast message
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<string> GetBroadcastMessage()
+        {
+            using (var client = new HttpClient())
+            {
+                
+                //send request and get a response
+                var response = await client.GetAsync(GetUrl("api/app/broadcast-message"));
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        // Read the response
+                        var data = await response.Content.ReadAsStringAsync();
+                        return data;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+
+        }
+        #endregion
 
         #region Profiles
 

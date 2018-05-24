@@ -15,7 +15,7 @@ namespace KryptPadCSApp.Models
     {
 
         #region Properties
-               
+
         /// <summary>
         /// Gets or sets whether the auto login is temporarily disabled
         /// </summary>
@@ -37,12 +37,12 @@ namespace KryptPadCSApp.Models
                 _isBusy = value;
                 // Notify change
                 OnPropertyChanged(nameof(IsBusy));
-                
+
                 // Call the OnIsBusyChanged method so derived classes can handle it
                 OnIsBusyChanged();
             }
         }
-        
+
         private Visibility _busyIndicatorVisibility;
         /// <summary>
         /// Gets or sets whether the ui element is visible
@@ -58,7 +58,7 @@ namespace KryptPadCSApp.Models
 
             }
         }
-
+        
         /// <summary>
         /// Gets the command to view the license terms
         /// </summary>
@@ -88,7 +88,7 @@ namespace KryptPadCSApp.Models
         #endregion
 
         #region Helper Methods
-        
+
         #endregion
 
         #region Event Handlers
@@ -96,7 +96,8 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// When overriden in a derived class, handles the IsBusy property
         /// </summary>
-        protected virtual void OnIsBusyChanged() {
+        protected virtual void OnIsBusyChanged()
+        {
             // Set the visibility of the busy indicator
             BusyIndicatorVisibility = IsBusy ? Visibility.Visible : Visibility.Collapsed;
             // Set main window busy state

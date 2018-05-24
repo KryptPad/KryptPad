@@ -41,8 +41,9 @@
                 
                 <!--Profiles-->
                 <Grid Grid.Row="0"
-                      Margin="12"
-                      MaxWidth="400">
+                      MaxWidth="400"
+                      Padding="12"
+                      Background="{ThemeResource AppHeaderBackgroundThemeBrush}">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />

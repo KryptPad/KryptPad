@@ -21,6 +21,7 @@ using Windows.Security.Authentication.OnlineId;
 using KryptPadCSApp.Classes;
 using KryptPad.Api;
 using Windows.UI.Core;
+using System.Net;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -43,7 +44,7 @@ namespace KryptPadCSApp
         public Frame RootFrame { get { return NavFrame; } }
 
         private bool IsBusy { get; set; }
-
+                
         #endregion
 
 
@@ -109,10 +110,13 @@ namespace KryptPadCSApp
             };
 
             RootFrame.Navigated += RootFrame_Navigated;
+                       
 
         }
 
         #region Navigation
+
+       
 
         private void RootFrame_Navigated(object sender, NavigationEventArgs e)
         {
@@ -261,8 +265,39 @@ namespace KryptPadCSApp
             BusyBorder.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
             BusyIndicator.IsActive = value;
         }
+
         #endregion
 
+        private async void BroadcastMessageText_Loaded(object sender, RoutedEventArgs e)
+        {
 
+            try
+            {
+                // Get broadcast message
+                var message = await KryptPadApi.GetBroadcastMessage();
+                if (!string.IsNullOrWhiteSpace(message))
+                {
+                    BroadcastMessage.Visibility = Visibility.Visible;
+                    BroadcastMessageText.Text = message;
+                }
+
+            }
+            catch (WebException ex)
+            {
+                // Something went wrong in the api
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowGenericErrorDialogAsync();
+            }
+            
+        }
+
+        private void BroadcastCloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            BroadcastMessage.Visibility = Visibility.Collapsed;
+        }
     }
 }

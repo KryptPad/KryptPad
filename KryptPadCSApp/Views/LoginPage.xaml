@@ -45,10 +45,15 @@
 
             <!--Main grid for page-->
             <Grid x:Name="MainGrid" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+               
 
                 <!--Content is positioned with RelativePanel for dynamic placement with VisualStateManager-->
                 <RelativePanel HorizontalAlignment="Center"
-                               >
+                               Background="{ThemeResource AppHeaderBackgroundThemeBrush}">
 
                     <!--Main grid for input-->
                     <Grid x:Name="LoginGrid"
