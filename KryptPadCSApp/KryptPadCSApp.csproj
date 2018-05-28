@@ -17,12 +17,15 @@
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>KryptPadCSApp_StoreKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>3A5A45B42C4C4E13440CCC23B3B8D80EF84ECFD8</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>KryptPadCSApp_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>7BD71AB602C341653C3A7479F4ED13AD14BDBF29</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <AppxPackageDir>C:\Users\ebutler\OneDrive\Projects\KryptPad-Common\KryptPadApp</AppxPackageDir>
+    <AppxPackageDir>C:\Users\neptu\OneDrive\Projects\KryptPad-Common\KryptPadApp</AppxPackageDir>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
+    <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -111,7 +114,6 @@
     <Content Include="Assets\Square71x71Logo.scale-400.png" />
     <Content Include="Assets\templates.json" />
     <PRIResource Include="Assets\Resources.resw" />
-    <None Include="KryptPadCSApp_StoreKey.pfx" />
     <None Include="KryptPadCSApp_TemporaryKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
@@ -221,7 +223,6 @@
   <ItemGroup>
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
-    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
