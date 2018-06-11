@@ -226,7 +226,7 @@ namespace KryptPad.Api
                 // Prepare form values
                 var values = new Dictionary<string, string>
                 {
-                    { "client_id", "KryptPadUWP" },
+                    { "client_id", "KryptPadUniversal_" + AppId.ToString() },
                     { "client_secret", "secret" },
                     { "grant_type", "password" },
                     { "username", username },
