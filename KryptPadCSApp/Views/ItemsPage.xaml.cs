@@ -39,7 +39,7 @@ namespace KryptPadCSApp.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             // Add back button handle
-            (App.Current as App).BackRequested += App_BackRequested;
+            //(App.Current as App).BackRequested += App_BackRequested;
 
             base.OnNavigatedTo(e);
         }
@@ -47,7 +47,7 @@ namespace KryptPadCSApp.Views
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             // Remove the back button handle
-            (App.Current as App).BackRequested -= App_BackRequested;
+            //(App.Current as App).BackRequested -= App_BackRequested;
 
             base.OnNavigatingFrom(e);
         }

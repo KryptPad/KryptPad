@@ -10,7 +10,7 @@ namespace KryptPadCSApp.Exceptions
     {
         public WarningException(string message) : base(message)
         {
-            
+
         }
     }
 }

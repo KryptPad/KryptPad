@@ -22,6 +22,7 @@ using KryptPadCSApp.Classes;
 using KryptPad.Api;
 using Windows.UI.Core;
 using System.Net;
+using OneCode.Windows.UWP.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -32,19 +33,32 @@ namespace KryptPadCSApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
+        
         #region Fields
         private bool _messageShowing = false;
+
+        // List of ValueTuple holding the Navigation Tag and the relative Navigation Page  
+        private readonly IList<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
+        {
+            ("home", typeof(ItemsPage)),
+            ("favs", typeof(ItemsPage)),
+            ("about", typeof(AboutPage)),
+            ("feedback", typeof(FeedbackPage)),
+            ("donate", typeof(DonatePage))
+        };
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets the main frame for content
         /// </summary>
-        public Frame RootFrame { get { return NavFrame; } }
+        public Frame RootFrame { get { return NavigationFrame; } }
 
+        /// <summary>
+        /// Gets or sets whether the app is busy
+        /// </summary>
         private bool IsBusy { get; set; }
-                
+
         #endregion
 
 
@@ -108,92 +122,101 @@ namespace KryptPadCSApp
                     ShowPane((App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile);
                 }
             };
-
-            RootFrame.Navigated += RootFrame_Navigated;
-                       
-
+            
         }
 
         #region Navigation
 
-       
-
-        private void RootFrame_Navigated(object sender, NavigationEventArgs e)
+        private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
-            // Get the MainPage instance and hide the pane
-            var page = Window.Current.Content as MainPage;
-            if (page != null)
+            // This turns the back button on if the frame can go back
+            UpdateBackButtonVisibility();
+
+            // Set up back request handler
+            SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+
+            // Set the nav frame events
+            NavigationFrame.Navigated += On_Navigated;
+            
+            // NavView doesn't load any page by default: you need to specify it
+            NavView_Navigate(typeof(LoginPage));
+
+        }
+
+        private void NavView_Navigate(string navItemTag)
+        {
+            var item = _pages.First(p => p.Tag.Equals(navItemTag));
+            NavigationFrame.Navigate(item.Page);
+        }
+        private void NavView_Navigate(Type page)
+        {
+            NavigationFrame.Navigate(page);
+        }
+
+        private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+
+            //if (args.IsSettingsInvoked)
+            //    NavigationFrame.Navigate(typeof(SettingsPage));
+            //else
             {
-                // Check the page type, and hide or show the pane
-                if (e.Content is ItemsPage || e.Content is LoginPage || e.Content is SelectProfilePage)
+                // Getting the Tag from Content (args.InvokedItem is the content of NavigationViewItem)
+                var navItemTag = NavView.MenuItems
+                    .OfType<NavigationViewItem>()
+                    .First(i => args.InvokedItem.Equals(i.Content))
+                    .Tag.ToString();
+
+                NavView_Navigate(navItemTag);
+            }
+        }
+
+
+        private void On_Navigated(object sender, NavigationEventArgs e)
+        {
+
+
+            //if (NavigationFrame.SourcePageType == typeof(SettingsPage))
+            //{
+            //    // SettingsItem is not part of NavView.MenuItems, and doesn't have a Tag
+            //    NavView.SelectedItem = (NavigationViewItem)NavView.SettingsItem;
+            //}
+            //else
+            {
+                var item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
+                if (item.Page != null)
                 {
-                    HomeRadioButton.IsChecked = true;
-                }
-                else if (e.Content is DonatePage)
-                {
-                    DonateRadioButton.IsChecked = true;
-                }
-                else if (e.Content is FeedbackPage)
-                {
-                    FeedbackRadioButton.IsChecked = true;
-                }
-                else if (e.Content is AboutPage)
-                {
-                    AboutRadioButton.IsChecked = true;
+                    NavView.SelectedItem = NavView.MenuItems
+                        .OfType<NavigationViewItem>()
+                        .First(n => n.Tag.Equals(item.Tag));
                 }
                 else
                 {
-                    HomeRadioButton.IsChecked = false;
-                    DonateRadioButton.IsChecked = false;
-                    FeedbackRadioButton.IsChecked = false;
-                    AboutRadioButton.IsChecked = false;
+                    // No page in the list
+                    NavView.SelectedItem = null;
                 }
             }
 
+            // Each time a navigation event occurs, update the Back button's visibility
+            UpdateBackButtonVisibility();
         }
 
-        private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
+        private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            var signInStatus = (App.Current as App).SignInStatus;
-            if (signInStatus == SignInStatus.SignedInWithProfile)
+            // Pass the event args to the back requested handler for handling
+            //BackRequested?.Invoke(sender, e);
+
+            // If we didn't handle the requerst, do default
+            if (!e.Handled)
             {
-                // Go to items list
-                NavigationHelper.Navigate(typeof(ItemsPage), null);
-
+                if (NavigationFrame.CanGoBack)
+                {
+                    e.Handled = true;
+                    NavigationFrame.GoBack();
+                }
             }
-            else if (signInStatus == SignInStatus.SignedIn)
-            {
-                // Pick a profile
-                NavigationHelper.Navigate(typeof(SelectProfilePage), null);
-            }
-            else
-            {
-                // Go to login screen
-                NavigationHelper.Navigate(typeof(LoginPage), null);
-            }
-
         }
 
-        private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate
-            NavigationHelper.Navigate(typeof(DonatePage), null);
-
-        }
-
-        private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate
-            NavigationHelper.Navigate(typeof(FeedbackPage), null);
-
-        }
-
-        private void AboutRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate
-            NavigationHelper.Navigate(typeof(AboutPage), null);
-
-        }
+        
 
         private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
@@ -236,6 +259,18 @@ namespace KryptPadCSApp
             _messageShowing = value;
         }
 
+        /// <summary>
+        /// Shows or hides the back button
+        /// </summary>
+        private void UpdateBackButtonVisibility()
+        {
+            // Each time a navigation event occurs, update the Back button's visibility
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                NavigationFrame.CanGoBack ?
+                AppViewBackButtonVisibility.Visible :
+                AppViewBackButtonVisibility.Collapsed;
+        }
+
         #endregion
 
         #region Public methods
@@ -251,7 +286,7 @@ namespace KryptPadCSApp
 
             // Hide buttons we can't access yet
             var visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            SignOutRadioButton.Visibility = visibility;
+            //SignOutRadioButton.Visibility = visibility;
             //HomeRadioButton.Visibility = visibility;
         }
 
@@ -292,12 +327,13 @@ namespace KryptPadCSApp
                 // Failed
                 await DialogHelper.ShowGenericErrorDialogAsync();
             }
-            
+
         }
 
         private void BroadcastCloseButton_Click(object sender, RoutedEventArgs e)
         {
             BroadcastMessage.Visibility = Visibility.Collapsed;
         }
+
     }
 }
