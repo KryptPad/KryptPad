@@ -23,8 +23,10 @@ namespace KryptPadCSApp.Classes
         /// Shows a generic connection error dialog
         /// </summary>
         /// <returns></returns>
-        public static async Task<IUICommand> ShowGenericErrorDialogAsync()
+        public static async Task<IUICommand> ShowGenericErrorDialogAsync(Exception ex)
         {
+            // TODO: Implement some kind of error logging.
+
             // This is a generic error message
             return await ShowMessageDialogAsync(ResourceHelper.GetString("GenericError"), ResourceHelper.GetString("Error"));
 

@@ -198,7 +198,7 @@ namespace KryptPad.Api
 
                 }
             }
-            catch (Exception ex) {
+            catch (Exception) {
 
             }
 

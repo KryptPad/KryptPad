@@ -254,7 +254,7 @@ namespace KryptPadCSApp.Models
             catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
             }
 
 

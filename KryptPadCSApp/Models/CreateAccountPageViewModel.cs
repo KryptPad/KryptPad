@@ -115,10 +115,10 @@ namespace KryptPadCSApp.Models
                     // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     // Failed
-                    await DialogHelper.ShowGenericErrorDialogAsync();
+                    await DialogHelper.ShowGenericErrorDialogAsync(ex);
                 }
 
 
