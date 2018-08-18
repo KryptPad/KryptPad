@@ -40,12 +40,19 @@ namespace KryptPad.Api
         /// Gets the host address of the API service.
         /// </summary>
         public static string ServiceHost { get; set; } = "http://localhost:50821/";
-        //public static string ServiceHost { get; set; } = "https://www.kryptpad.com/";
+
+#elif DEBUG_LIVE
+        /// <summary>
+        /// Gets the host address of the API service.
+        /// </summary>
+        public static string ServiceHost { get; set; } = "https://www.kryptpad.com/";
+
 #elif DEBUG
         /// <summary>
         /// Gets or sets the host address of the API service.
         /// </summary>
         public static string ServiceHost { get; set; } = "http://test.kryptpad.com/";
+
 #else
         /// <summary>
         /// Gets the host address of the API service.
@@ -190,7 +197,8 @@ namespace KryptPad.Api
                 using (var client = new HttpClient())
                 {
                     var resp = await client.GetStringAsync(GetUrl(".well-known/openid-configuration"));
-                    if (!string.IsNullOrWhiteSpace(resp)) {
+                    if (!string.IsNullOrWhiteSpace(resp))
+                    {
                         // Deserialize the configuration and set the endpoints
                         var config = JsonConvert.DeserializeObject<EndpointConfigurationResponse>(resp);
                         tokenEndpoint = config?.TokenEndpoint;
@@ -198,7 +206,8 @@ namespace KryptPad.Api
 
                 }
             }
-            catch (Exception) {
+            catch (Exception)
+            {
 
             }
 
@@ -364,7 +373,7 @@ namespace KryptPad.Api
         {
             using (var client = new HttpClient())
             {
-                
+
                 //send request and get a response
                 var response = await client.GetAsync(GetUrl("api/app/broadcast-message"));
 

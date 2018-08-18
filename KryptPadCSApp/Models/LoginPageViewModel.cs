@@ -86,23 +86,6 @@ namespace KryptPadCSApp.Models
             get { return KryptPadApi.ServiceHost; }
         }
 
-#if DEBUG
-        /// <summary>
-        /// Gets or sets whether the app is in live mode
-        /// </summary>
-        public bool IsLiveMode
-        {
-            get
-            {
-                return (App.Current as App).IsLiveMode;
-            }
-            set
-            {
-                (App.Current as App).IsLiveMode = value;
-            }
-        }
-#endif
-
         public Command LogInCommand { get; protected set; }
 
         public Command CreateAccountCommand { get; protected set; }

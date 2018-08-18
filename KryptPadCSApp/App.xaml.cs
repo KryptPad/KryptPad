@@ -46,43 +46,6 @@ namespace KryptPadCSApp
 
         }
 
-#if DEBUG
-        private bool _isLiveMode;
-#endif
-        /// <summary>
-        /// Gets whether the app is in Live mode
-        /// </summary>
-        internal bool IsLiveMode
-        {
-            get
-            {
-#if DEBUG
-                return _isLiveMode;
-#else
-                return true;
-#endif
-            }
-#if DEBUG
-            set
-            {
-                _isLiveMode = value;
-                
-                // Change the host url
-                if (_isLiveMode)
-                {
-                    KryptPadApi.ServiceHost = "https://www.kryptpad.com/";
-                } else
-                {
-                    KryptPadApi.ServiceHost = "http://test.kryptpad.com/";
-                }
-                
-                // Notify change
-                OnPropertyChanged(nameof(IsLiveMode));
-
-            }
-#endif
-        }
-
         #endregion
 
 

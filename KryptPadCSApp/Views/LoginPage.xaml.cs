@@ -28,16 +28,12 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
 
-#if DEBUG
-            // Show the option to turn on live mode
-            LiveModeCheckBox.Visibility = Visibility.Visible;
-#endif
         }
 
         private void Hyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {
             // Go to terms page
-            NavigationHelper.GoToLicenseTerms();
+            NavigationHelper.Navigate(typeof(TermsPage), null);
         }
 
         private void PrivacyHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
