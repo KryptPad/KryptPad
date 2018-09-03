@@ -41,6 +41,12 @@ namespace KryptPad.Api
         /// </summary>
         public static string ServiceHost { get; set; } = "http://localhost:50821/";
 
+#elif LOCAL_NET_CORE
+        /// <summary>
+        /// Gets the host address of the API service.
+        /// </summary>
+        public static string ServiceHost { get; set; } = "http://localhost:5000/";
+
 #elif DEBUG_LIVE
         /// <summary>
         /// Gets the host address of the API service.
@@ -60,19 +66,19 @@ namespace KryptPad.Api
         public static string ServiceHost { get; } = "https://www.kryptpad.com/";
 #endif
 
-        #region Delegates
+#region Delegates
         public delegate void SessionEndingHandler(DateTime expiration);
         public delegate void SessionEndedHandler();
-        #endregion
+#endregion
 
-        #region Events
+#region Events
         public static event SessionEndingHandler SessionEnding;
         public static event SessionEndedHandler SessionEnded;
 
         //public static event AccessTokenExpirationTimerHandler AccessTokenExpirationTimer;
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
         private static Guid _appId;
 
         /// <summary>
@@ -128,7 +134,7 @@ namespace KryptPad.Api
         /// </summary>
         private static string ApiTokenEndpoint { get; set; }
 
-        #endregion
+#endregion
 
 
         /// <summary>
@@ -364,7 +370,7 @@ namespace KryptPad.Api
 
         }
 
-        #region App
+#region App
         /// <summary>
         /// Gets the system broadcast message
         /// </summary>
@@ -398,9 +404,9 @@ namespace KryptPad.Api
             }
 
         }
-        #endregion
+#endregion
 
-        #region Profiles
+#region Profiles
 
         /// <summary>
         /// Gets all profiles for the authenticated user
@@ -683,9 +689,9 @@ namespace KryptPad.Api
 
         }
 
-        #endregion
+#endregion
 
-        #region Categories
+#region Categories
 
         /// <summary>
         /// Gets all categories for the authenticated user
@@ -828,9 +834,9 @@ namespace KryptPad.Api
                 }
             }
         }
-        #endregion
+#endregion
 
-        #region Items
+#region Items
 
         /// <summary>
         /// Gets an item by its id, including all the details
@@ -943,9 +949,9 @@ namespace KryptPad.Api
 
         }
 
-        #endregion
+#endregion
 
-        #region Fields
+#region Fields
         /// <summary>
         /// Creates a new field
         /// </summary>
@@ -1063,9 +1069,9 @@ namespace KryptPad.Api
 
             }
         }
-        #endregion
+#endregion
 
-        #region Helper methods
+#region Helper methods
 
         /// <summary>
         /// Process a failed request
@@ -1260,7 +1266,7 @@ namespace KryptPad.Api
             // Set the session end time
             SessionEndDate = DateTime.Now.AddMinutes(SESSION_TIME_MINUTES);
         }
-        #endregion
+#endregion
 
     }
 }
