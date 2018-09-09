@@ -424,7 +424,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Live|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug Live\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;DEBUG_LIVE</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
@@ -434,7 +434,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LOCAL_NET_CORE|ARM'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local Net Core|ARM' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM\LOCAL_NET_CORE\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS</DefineConstants>
@@ -447,7 +447,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LOCAL_NET_CORE|x64'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local Net Core|x64' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\LOCAL_NET_CORE\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS</DefineConstants>
@@ -460,10 +460,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LOCAL_NET_CORE|x86'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local Net Core|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\LOCAL_NET_CORE\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;LOCAL;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;LOCAL_NET_CORE</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>

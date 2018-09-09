@@ -159,7 +159,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Local\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;LOCAL</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
@@ -206,7 +206,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Live|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug Live\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;DEBUG_LIVE</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
@@ -239,7 +239,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LOCAL_NET_CORE|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local Net Core|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\LOCAL_NET_CORE\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;LOCAL_NET_CORE</DefineConstants>
@@ -250,10 +250,10 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LOCAL_NET_CORE|x86'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local Net Core|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\LOCAL_NET_CORE\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;LOCAL_NET_CORE</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
@@ -262,7 +262,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LOCAL_NET_CORE|ARM'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local Net Core|ARM' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM\LOCAL_NET_CORE\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
@@ -274,7 +274,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LOCAL_NET_CORE|x64'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local Net Core|x64' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\LOCAL_NET_CORE\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>

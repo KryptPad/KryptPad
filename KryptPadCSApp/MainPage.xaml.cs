@@ -23,6 +23,7 @@ using KryptPad.Api;
 using Windows.UI.Core;
 using System.Net;
 using OneCode.Windows.UWP.Controls;
+using System.ComponentModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -33,7 +34,7 @@ namespace KryptPadCSApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        
+
         #region Fields
         private bool _messageShowing = false;
 
@@ -59,13 +60,25 @@ namespace KryptPadCSApp
         /// </summary>
         private bool IsBusy { get; set; }
 
+        /// <summary>
+        /// Gets whether the user is signed in
+        /// </summary>
+        public bool IsSignedIn
+        {
+            get
+            {
+                return (App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile;
+            }
+        }
+
         #endregion
 
+        
 
         public MainPage()
         {
             this.InitializeComponent();
-
+            
             // Some API events
             KryptPadApi.SessionEnded += async () =>
             {
@@ -119,10 +132,10 @@ namespace KryptPadCSApp
                 // Success, tell the app we are signed in
                 if (e.PropertyName == nameof(App.SignInStatus))
                 {
-                    ShowPane((App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile);
+                    ShowSignedInControls((App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile);
                 }
             };
-            
+
         }
 
         #region Navigation
@@ -137,7 +150,7 @@ namespace KryptPadCSApp
 
             // Set the nav frame events
             NavigationFrame.Navigated += On_Navigated;
-            
+
             // NavView doesn't load any page by default: you need to specify it
             NavView_Navigate(typeof(LoginPage));
 
@@ -216,7 +229,7 @@ namespace KryptPadCSApp
             }
         }
 
-        
+
 
         private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
         {
@@ -279,15 +292,15 @@ namespace KryptPadCSApp
         /// Shows or hides the pane
         /// </summary>
         /// <param name="value"></param>
-        public void ShowPane(bool value)
+        public void ShowSignedInControls(bool value)
         {
             // Hide nav panel
             //NavPanel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
 
             // Hide buttons we can't access yet
             var visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            //SignOutRadioButton.Visibility = visibility;
-            //HomeRadioButton.Visibility = visibility;
+            HomeNavButton.Visibility = visibility;
+            FavNavButton.Visibility = visibility;
         }
 
         /// <summary>

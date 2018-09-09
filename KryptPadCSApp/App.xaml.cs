@@ -42,9 +42,13 @@ namespace KryptPadCSApp
                 _signInStatus = value;
                 // Value changed
                 OnPropertyChanged(nameof(SignInStatus));
+
             }
 
         }
+
+
+        
 
         #endregion
 

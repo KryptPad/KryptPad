@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
     xmlns:OneCode="using:OneCode.Windows.UWP.Controls"
+    xmlns:Converters="using:KryptPadCSApp.Converters"
     x:Class="KryptPadCSApp.MainPage"
     mc:Ignorable="d"
     >
@@ -64,8 +65,8 @@
                                     >
                 <OneCode:NavigationView.MenuItems>
                     <!--<OneCode:NavigationViewItemHeader Content="Section A" />-->
-                    <OneCode:NavigationViewItem Content="Home" Icon="Home" Tag="home" />
-                    <OneCode:NavigationViewItem Content="Favorites" Icon="Favorite" Tag="favs" />
+                    <OneCode:NavigationViewItem x:Name="HomeNavButton" Content="Home" Icon="Home" Tag="home" />
+                    <OneCode:NavigationViewItem x:Name="FavNavButton" Content="Favorites" Icon="Favorite" Tag="favs" />
 
                     <!--<OneCode:NavigationViewItemHeader Content="Section A" />-->
                     <OneCode:NavigationViewItemSeparator/>
