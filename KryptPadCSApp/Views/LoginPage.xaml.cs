@@ -30,7 +30,7 @@ namespace KryptPadCSApp.Views
 
         }
 
-        private void Hyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        private void TermsHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {
             // Go to terms page
             NavigationHelper.Navigate(typeof(TermsPage), null);
@@ -60,6 +60,6 @@ namespace KryptPadCSApp.Views
                 }
             }
         }
-        
+                
     }
 }

@@ -104,7 +104,6 @@
                             </Grid.ColumnDefinitions>
 
                             <Button Content="Sign In" 
-                                    Style="{StaticResource PrimaryButtonStyle}"
                                     Grid.Column="0"
                                     Margin="0,0,12,0"
 						            Command="{Binding LogInCommand}" />
@@ -118,7 +117,7 @@
                         <!--Link to terms page-->
                         <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
                             Krypt Pad is licensed under MIT. By using this software, you accept this
-                            <Hyperlink Click="Hyperlink_Click">license</Hyperlink>. View the 
+                            <Hyperlink x:Name="TermsHyperlink" Click="TermsHyperlink_Click">license</Hyperlink>. View the 
                             <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
                         </TextBlock>
 

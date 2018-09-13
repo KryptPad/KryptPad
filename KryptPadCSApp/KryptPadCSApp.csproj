@@ -132,6 +132,7 @@
     <Compile Include="Collections\ProfileCollection.cs" />
     <Compile Include="Collections\RefreshableCollection.cs" />
     <Compile Include="Commanding\GridViewItemClickCommand.cs" />
+    <Compile Include="Commanding\HyperlinkClickCommand.cs" />
     <Compile Include="Converters\NotVisibleConverter.cs" />
     <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">
