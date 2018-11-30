@@ -176,7 +176,7 @@
 
             <!--Primary button-->
             <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-                <Setter Property="Background" Value="#FF319143"/>
+                <Setter Property="Background" Value="{StaticResource SystemControlHighlightAccentBrush}"/>
                 <Setter Property="Foreground" Value="White"/>
                 
                 <Setter Property="Template">
@@ -239,67 +239,69 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
-            <!--Style for tab navigation icons-->
-            <Style TargetType="RadioButton" x:Key="TabNavButtonStyle">
-                <Setter Property="MinWidth" Value="0" />
-                <Setter Property="Margin" Value="8,0" />
+
+            <!--Negative button-->
+            <Style x:Key="NegativeButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="#FFA20505"/>
+                <Setter Property="Foreground" Value="White"/>
 
                 <Setter Property="Template">
                     <Setter.Value>
-
-                        <ControlTemplate TargetType="RadioButton">
-
-                            <Grid>
+                        <ControlTemplate TargetType="Button">
+                            <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Normal">
+                                            <Storyboard>
+                                                <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                            </Storyboard>
+                                        </VisualState>
                                         <VisualState x:Name="PointerOver">
                                             <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Glyph"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             To=".5"
-                                                             Duration="0:0:0.2" />
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="#FFC14141"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value=""/>
+                                                </ObjectAnimationUsingKeyFrames>-->
+                                                <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
                                             </Storyboard>
                                         </VisualState>
-                                    </VisualStateGroup>
-
-                                    <VisualStateGroup x:Name="CheckStates">
-                                        <VisualState x:Name="Checked">
+                                        <VisualState x:Name="Pressed">
                                             <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Glyph"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             To="0"
-                                                             Duration="0" />
-                                                <DoubleAnimation Storyboard.TargetName="GlyphChecked"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             To="1"
-                                                             Duration="0" />
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="#FF760101"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value=""/>
+                                                </ObjectAnimationUsingKeyFrames>-->
+                                                <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
                                             </Storyboard>
-
                                         </VisualState>
-                                        <VisualState x:Name="Unchecked" />
-                                        <VisualState x:Name="Indeterminate" />
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-
-                                <!--Glyph to use when not checked-->
-                                <TextBlock x:Name="Glyph" Text="{TemplateBinding Tag}"
-                                       FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                       Foreground="{TemplateBinding Foreground}"
-                                       Opacity=".25"
-                                       FontSize="20"/>
-
-                                <!--Glyph to use when checked-->
-                                <TextBlock x:Name="GlyphChecked" Text="{TemplateBinding Tag}"
-                                       FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                       Foreground="{TemplateBinding Foreground}"
-                                       Opacity="0"
-                                       FontSize="20"/>
-
+                                <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             </Grid>
                         </ControlTemplate>
-
                     </Setter.Value>
                 </Setter>
             </Style>
@@ -542,6 +544,7 @@
                 </Grid>
             </DataTemplate>
             
+            <!--Symbol button-->
             <Style x:Key="SymbolButton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Foreground" Value="Black"/>

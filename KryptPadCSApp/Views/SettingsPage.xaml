@@ -1,29 +1,27 @@
 ﻿<Page
+    x:Class="KryptPadCSApp.Views.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KryptPadCSApp.Views"
+    xmlns:Models="using:KryptPadCSApp.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Models="using:KryptPadCSApp.Models"
-    x:Class="KryptPadCSApp.Views.FeedbackPage"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
-                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
-                    <ContinuumNavigationTransitionInfo />
-                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                <ContinuumNavigationTransitionInfo />
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
-    
+
     <Page.DataContext>
-        <Models:FeedbackPageViewModel/>
+        <Models:SettingsPageViewModel/>
     </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup" >
 
@@ -45,60 +43,49 @@
 
                     <VisualState.Setters>
                         <Setter Target="MessageTextBlock.(RelativePanel.RightOf)" Value="IconTextBlock" />
+
+
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <ScrollViewer>
-
             <Grid Margin="12">
 
                 <RelativePanel>
 
-                    <!--Icon-->
-                    <TextBlock x:Name="IconTextBlock" Text="&#xE76E;"
-					Margin="0,0,24,0"
-					FontFamily="{ThemeResource SymbolThemeFontFamily}"
-					FontSize="144"
-					Foreground="{StaticResource SystemControlHighlightAccentBrush}" />
+                    <!--Heart-->
+                    <TextBlock x:Name="IconTextBlock" Text="&#xE713;"
+					           Margin="0,0,24,0"
+					           FontFamily="{ThemeResource SymbolThemeFontFamily}"
+					           FontSize="144"
+					           Foreground="{ThemeResource SystemControlHighlightAccentBrush}" />
 
-                    <!--Text-->
+                    <!--Settings go here-->
                     <StackPanel x:Name="MessageTextBlock">
-
                         <!--Header-->
                         <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Margin="0,0,0,12">
-						<Run Text="Feedback"/>
+						<Run Text="Settings"/>
+                        </TextBlock>
+                        
+                        <!--Delete account-->
+                        <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
+                            <Run Text="Account Management"/>
                         </TextBlock>
 
                         <TextBlock TextWrapping="WrapWholeWords">
-                        Like this app? Leave us a comment in the Windows Store.
+                            If you want to delete you account, you can do so here. This deletes ALL of your data. Be sure
+                            to download your profile data first if you plan to come back in the future.
                         </TextBlock>
-
-                        <!--Rate button-->
-                        <Button Margin="0,8,0,48"
-                                Command="{Binding ReviewAppCommand}"
-                                Style="{StaticResource PrimaryButtonStyle}">
-                            Review this App
-                        </Button>
-
-                        <!--Bugs and feature requests-->
-                        <TextBlock TextWrapping="WrapWholeWords">
-                        To request new features, or report issues, please visit our <Hyperlink NavigateUri="{Binding IssuesUri}">Issues</Hyperlink> page on GitHub.
-                        You'll need to create an account with GitHub if you don't have one.
-                        </TextBlock>
-
-                        <!--Issues button-->
-                        <Button Margin="0,24,0,0" Command="{Binding SubmitIssueCommand}">
-                            Visit the GitHub Issues Page
-                        </Button>
+                        <Button Content="Delete Account" ToolTipService.ToolTip="WARNING: THIS CANNOT BE UNDONE!"
+                                Style="{StaticResource NegativeButtonStyle}" Margin="0,8,0,0"/>
 
                     </StackPanel>
 
                 </RelativePanel>
 
             </Grid>
-
         </ScrollViewer>
     </Grid>
 </Page>

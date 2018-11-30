@@ -90,51 +90,7 @@
                 <Frame x:Name="NavigationFrame" />
             </OneCode:NavigationView>
 
-            <!--Nav grid--><!--
-            <Grid Grid.Row="0"
-              Padding="12"
-              Background="{ThemeResource AppHeaderBackgroundThemeBrush}"
-              >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-
-                --><!--Header text--><!--
-                <TextBlock Grid.Column="0" Style="{StaticResource SubtitleTextBlockStyle}" Text="Krypt Pad" />
-
-                --><!--Navigation icons--><!--
-                <StackPanel x:Name="NavPanel"
-                        Grid.Column="1" 
-                        Orientation="Horizontal"
-                        FlowDirection="RightToLeft">
-                    --><!--Symbols-->
-                    <!--Sign out--><!--
-                    <RadioButton x:Name="SignOutRadioButton" Tag="&#xE72B;"
-                             Style="{StaticResource TabNavButtonStyle}"
-                             Click="SignOutRadioButton_Click" />
-                    --><!--About--><!--
-                    <RadioButton x:Name="AboutRadioButton" Tag="&#xE783;"
-                             Style="{StaticResource TabNavButtonStyle}" 
-                             Click="AboutRadioButton_Click" IsChecked="True" />
-                    --><!--Feedback--><!--
-                    <RadioButton x:Name="FeedbackRadioButton" Tag="&#xE76E;"
-                             Style="{StaticResource TabNavButtonStyle}" 
-                             Click="FeedbackRadioButton_Click"/>
-                    --><!--Donate--><!--
-                    <RadioButton x:Name="DonateRadioButton" Tag="&#xE00B;"
-                             Style="{StaticResource TabNavButtonStyle}" 
-                             Click="DonateRadioButton_Click"/>
-                    --><!--Home--><!--
-                    <RadioButton x:Name="HomeRadioButton" Tag="&#xE10F;" Content="Home" 
-                             Style="{StaticResource TabNavButtonStyle}" IsChecked="True" 
-                             Click="HomeRadioButton_Click" />
-                </StackPanel>
-            </Grid>-->
-
-            <!--Main frame-->
-                       
+            
             <!--Session ending message-->
             <Border x:Name="SessionEndWarning"
                     Grid.Row="1" 

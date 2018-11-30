@@ -6,16 +6,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Security.Cryptography.Certificates;
+using Windows.Web.Http;
+using Windows.Web.Http.Filters;
+using Windows.Web.Http.Headers;
 
 namespace KryptPad.Api
 {
@@ -39,7 +36,7 @@ namespace KryptPad.Api
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; set; } = "http://localhost:50821/";
+        public static string ServiceHost { get; set; } = "https://localhost:44310/";
 
 #elif LOCAL_NET_CORE
         /// <summary>
@@ -66,19 +63,19 @@ namespace KryptPad.Api
         public static string ServiceHost { get; } = "https://www.kryptpad.com/";
 #endif
 
-#region Delegates
+        #region Delegates
         public delegate void SessionEndingHandler(DateTime expiration);
         public delegate void SessionEndedHandler();
-#endregion
+        #endregion
 
-#region Events
+        #region Events
         public static event SessionEndingHandler SessionEnding;
         public static event SessionEndedHandler SessionEnded;
 
         //public static event AccessTokenExpirationTimerHandler AccessTokenExpirationTimer;
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
         private static Guid _appId;
 
         /// <summary>
@@ -132,10 +129,21 @@ namespace KryptPad.Api
         /// <summary>
         /// Gets the api token endpoint to use for authentication
         /// </summary>
-        private static string ApiTokenEndpoint { get; set; }
+        private static Uri ApiTokenEndpoint { get; set; }
 
-#endregion
+        
 
+
+
+        #endregion
+
+        #region Constructor
+        static KryptPadApi()
+        {
+
+
+        }
+        #endregion
 
         /// <summary>
         /// Starts the expiration task
@@ -200,14 +208,14 @@ namespace KryptPad.Api
             var tokenEndpoint = GetUrl("token");
             try
             {
-                using (var client = new HttpClient())
+                using (var client = new HttpClient(CreateHttpProtocolFilter()))
                 {
                     var resp = await client.GetStringAsync(GetUrl(".well-known/openid-configuration"));
                     if (!string.IsNullOrWhiteSpace(resp))
                     {
                         // Deserialize the configuration and set the endpoints
                         var config = JsonConvert.DeserializeObject<EndpointConfigurationResponse>(resp);
-                        tokenEndpoint = config?.TokenEndpoint;
+                        tokenEndpoint = new Uri(config?.TokenEndpoint);
                     }
 
                 }
@@ -229,15 +237,16 @@ namespace KryptPad.Api
         public static async Task AuthenticateAsync(string username, string password)
         {
             // Check if we have a token endpoint configured
-            if (string.IsNullOrWhiteSpace(ApiTokenEndpoint))
+            if (ApiTokenEndpoint == null)
             {
                 // Get the token endpoint
                 await SetEndpointConfigurationAsync();
             }
 
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
+
                 // Prepare form values
                 var values = new Dictionary<string, string>
                 {
@@ -249,7 +258,8 @@ namespace KryptPad.Api
                 };
 
                 // Create the content to send
-                var content = new FormUrlEncodedContent(values);
+                var content = new HttpFormUrlEncodedContent(values);
+
                 // Send the post request
                 var response = await client.PostAsync(ApiTokenEndpoint, content);
 
@@ -286,13 +296,13 @@ namespace KryptPad.Api
         public static async Task ReauthenticateAsync()
         {
             // Check if we have a token endpoint configured
-            if (string.IsNullOrWhiteSpace(ApiTokenEndpoint))
+            if (ApiTokenEndpoint == null)
             {
                 // Get the token endpoint
                 await SetEndpointConfigurationAsync();
             }
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Prepare form values
                 // TODO: Ideally, we want to pass a client secret here, but this is 
@@ -305,7 +315,7 @@ namespace KryptPad.Api
                 };
 
                 // Create the content to send
-                var content = new FormUrlEncodedContent(values);
+                var content = new HttpFormUrlEncodedContent(values);
                 // Send the post request
                 var response = await client.PostAsync(ApiTokenEndpoint, content);
 
@@ -338,7 +348,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<SuccessResponse> CreateAccountAsync(string username, string password, string confirmPassword)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 //create object to pass
                 var values = new
@@ -370,14 +380,14 @@ namespace KryptPad.Api
 
         }
 
-#region App
+        #region App
         /// <summary>
         /// Gets the system broadcast message
         /// </summary>
         /// <returns></returns>
         public static async Task<string> GetBroadcastMessage()
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
 
                 //send request and get a response
@@ -386,7 +396,7 @@ namespace KryptPad.Api
                 //deserialize the object based on the result
                 if (response.IsSuccessStatusCode)
                 {
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    if (response.StatusCode == HttpStatusCode.Ok)
                     {
                         // Read the response
                         var data = await response.Content.ReadAsStringAsync();
@@ -404,9 +414,9 @@ namespace KryptPad.Api
             }
 
         }
-#endregion
+        #endregion
 
-#region Profiles
+        #region Profiles
 
         /// <summary>
         /// Gets all profiles for the authenticated user
@@ -414,7 +424,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<ProfileResponse> GetProfilesAsync()
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 //authorize the request
                 await AuthorizeRequest(client);
@@ -446,7 +456,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task LoadProfileAsync(ApiProfile profile, string passphrase)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 //authorize the request
                 await AuthorizeRequest(client);
@@ -487,7 +497,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<string> DownloadCurrentProfileAsync()
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 //authorize the request
                 await AuthorizeRequest(client);
@@ -520,12 +530,12 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<SuccessResponse> UploadProfile(string profileData)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request
                 await AuthorizeRequest(client);
 
-                var content = new StringContent(profileData, Encoding.UTF8, "application/json");
+                var content = new HttpStringContent(profileData, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json");
                 // Send request and get a response
                 var response = await client.PostAsync(GetUrl($"api/profiles/upload"), content);
 
@@ -553,7 +563,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<ApiProfile> CreateProfileAsync(CreateProfileRequest profile)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
@@ -597,7 +607,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<SuccessResponse> SaveProfileAsync(ApiProfile profile)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
@@ -632,7 +642,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task ChangePassphraseAsync(string oldPassphrase, string newPassphrase)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
@@ -672,7 +682,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task DeleteProfileAsync(ApiProfile profile)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
@@ -689,9 +699,9 @@ namespace KryptPad.Api
 
         }
 
-#endregion
+        #endregion
 
-#region Categories
+        #region Categories
 
         /// <summary>
         /// Gets all categories for the authenticated user
@@ -700,7 +710,7 @@ namespace KryptPad.Api
         public static async Task<CategoryResponse> GetCategoriesWithItemsAsync()
         {
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request
                 await AuthorizeRequest(client);
@@ -732,7 +742,7 @@ namespace KryptPad.Api
         public static async Task<CategoryResponse> GetCategoriesAsync()
         {
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request
                 await AuthorizeRequest(client);
@@ -766,7 +776,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<SuccessResponse> SaveCategoryAsync(ApiCategory category)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
@@ -814,7 +824,7 @@ namespace KryptPad.Api
         public static async Task<bool> DeleteCategoryAsync(int categoryId)
         {
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request.
                 await AuthorizeRequest(client);
@@ -834,9 +844,9 @@ namespace KryptPad.Api
                 }
             }
         }
-#endregion
+        #endregion
 
-#region Items
+        #region Items
 
         /// <summary>
         /// Gets an item by its id, including all the details
@@ -846,7 +856,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<ItemsResponse> GetItemAsync(int categoryId, int itemId)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request
                 await AuthorizeRequest(client);
@@ -880,7 +890,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<SuccessResponse> SaveItemAsync(int categoryId, ApiItem item)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
 
                 // Authorize the request.
@@ -929,7 +939,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task DeleteItemAsync(int categoryId, int itemId)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
 
                 // Authorize the request.
@@ -949,9 +959,9 @@ namespace KryptPad.Api
 
         }
 
-#endregion
+        #endregion
 
-#region Fields
+        #region Fields
         /// <summary>
         /// Creates a new field
         /// </summary>
@@ -963,7 +973,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<SuccessResponse> SaveFieldAsync(int categoryId, int itemId, ApiField field)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
 
                 // Authorize the request.
@@ -1016,7 +1026,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<FieldsResponse> GetFieldsAsync(int categoryId, int itemId)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 // Authorize the request
                 await AuthorizeRequest(client);
@@ -1051,7 +1061,7 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task DeleteFieldAsync(int categoryId, int itemId, int id)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
 
                 // Authorize the request.
@@ -1069,17 +1079,33 @@ namespace KryptPad.Api
 
             }
         }
-#endregion
+        #endregion
 
-#region Helper methods
+        #region Helper methods
+
+        /// <summary>
+        /// Build http protocol filter
+        /// </summary>
+        /// <returns></returns>
+        private static HttpBaseProtocolFilter CreateHttpProtocolFilter()
+        {
+            var filter = new HttpBaseProtocolFilter();
+#if LOCAL
+            // Be careful with this
+            filter.IgnorableServerCertificateErrors.Add(ChainValidationResult.Expired);
+            filter.IgnorableServerCertificateErrors.Add(ChainValidationResult.Untrusted);
+            filter.IgnorableServerCertificateErrors.Add(ChainValidationResult.InvalidName);
+#endif
+            return filter;
+        }
 
         /// <summary>
         /// Process a failed request
         /// </summary>
         /// <param name="response"></param>
-        private static async Task<WebException> CreateException(HttpResponseMessage response)
+        private static async Task<System.Net.WebException> CreateException(HttpResponseMessage response)
         {
-            WebException exception;
+            System.Net.WebException exception;
 
             // If a bad request is received, try and figure out why
             if (response.StatusCode == HttpStatusCode.BadRequest)
@@ -1122,7 +1148,7 @@ namespace KryptPad.Api
                 catch (Exception ex)
                 {
                     // Epic fail
-                    exception = new WebException("The server responded with a Bad Request status, but gave no reason.", ex);
+                    exception = new System.Net.WebException("The server responded with a Bad Request status, but gave no reason.", ex);
                 }
 
 
@@ -1133,7 +1159,7 @@ namespace KryptPad.Api
             }
             else
             {
-                exception = new WebException("An error occurred while trying to process your request.");
+                exception = new System.Net.WebException("An error occurred while trying to process your request.");
             }
 
 
@@ -1164,7 +1190,7 @@ namespace KryptPad.Api
                     }
 
                     //add the authorize header to the request
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenResponse.AccessToken);
+                    client.DefaultRequestHeaders.Authorization = new HttpCredentialsHeaderValue("Bearer", TokenResponse.AccessToken);
 
                     // Set the session end time
                     ExtendSessionTime();
@@ -1204,11 +1230,11 @@ namespace KryptPad.Api
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        private static HttpContent JsonContent(object values)
+        private static IHttpContent JsonContent(object values)
         {
             var data = JsonConvert.SerializeObject(values);
 
-            return new StringContent(data, Encoding.UTF8, "application/json");
+            return new HttpStringContent(data, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json");
         }
 
         /// <summary>
@@ -1216,7 +1242,7 @@ namespace KryptPad.Api
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        private static string GetUrl(string uri) => $"{ServiceHost}{uri}";
+        private static Uri GetUrl(string uri) => new Uri($"{ServiceHost}{uri}");
 
         /// <summary>
         /// Cancels the expiration task
@@ -1266,7 +1292,7 @@ namespace KryptPad.Api
             // Set the session end time
             SessionEndDate = DateTime.Now.AddMinutes(SESSION_TIME_MINUTES);
         }
-#endregion
+        #endregion
 
     }
 }

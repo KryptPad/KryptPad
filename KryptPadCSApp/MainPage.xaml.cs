@@ -45,7 +45,8 @@ namespace KryptPadCSApp
             ("favs", typeof(ItemsPage)),
             ("about", typeof(AboutPage)),
             ("feedback", typeof(FeedbackPage)),
-            ("donate", typeof(DonatePage))
+            ("donate", typeof(DonatePage)),
+            ("settings", typeof(SettingsPage))
         };
         #endregion
 
@@ -73,7 +74,7 @@ namespace KryptPadCSApp
 
         #endregion
 
-        
+        #region Constructor
 
         public MainPage()
         {
@@ -138,6 +139,8 @@ namespace KryptPadCSApp
 
         }
 
+        #endregion
+
         #region Navigation
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
@@ -169,9 +172,9 @@ namespace KryptPadCSApp
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
 
-            //if (args.IsSettingsInvoked)
-            //    NavigationFrame.Navigate(typeof(SettingsPage));
-            //else
+            if (args.IsSettingsInvoked)
+                NavigationFrame.Navigate(typeof(SettingsPage));
+            else
             {
                 // Getting the Tag from Content (args.InvokedItem is the content of NavigationViewItem)
                 var navItemTag = NavView.MenuItems
@@ -188,12 +191,12 @@ namespace KryptPadCSApp
         {
 
 
-            //if (NavigationFrame.SourcePageType == typeof(SettingsPage))
-            //{
-            //    // SettingsItem is not part of NavView.MenuItems, and doesn't have a Tag
-            //    NavView.SelectedItem = (NavigationViewItem)NavView.SettingsItem;
-            //}
-            //else
+            if (NavigationFrame.SourcePageType == typeof(SettingsPage))
+            {
+                // SettingsItem is not part of NavView.MenuItems, and doesn't have a Tag
+                NavView.SelectedItem = (NavigationViewItem)NavView.SettingsItem;
+            }
+            else
             {
                 var item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
                 if (item.Page != null)
@@ -245,13 +248,14 @@ namespace KryptPadCSApp
 
         #endregion
 
+        #region Session management
         private void SessionEndWarning_Tapped(object sender, TappedRoutedEventArgs e)
         {
             KryptPadApi.ExtendSessionTime();
             // Hide the message
             ShowSessionWarningMessage(false);
         }
-
+        #endregion
 
         #region Helper Methods
 
@@ -316,6 +320,13 @@ namespace KryptPadCSApp
 
         #endregion
 
+        #region System broadcast message
+
+        /// <summary>
+        /// Fetch the system message if there is one
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void BroadcastMessageText_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -347,6 +358,7 @@ namespace KryptPadCSApp
         {
             BroadcastMessage.Visibility = Visibility.Collapsed;
         }
-
+        #endregion
+        
     }
 }

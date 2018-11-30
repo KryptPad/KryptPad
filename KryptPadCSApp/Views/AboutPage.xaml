@@ -66,7 +66,7 @@
                     <StackPanel x:Name="MessageTextBlock">
 
                         <!--Header-->
-                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
+                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Margin="0,0,0,12">
 						<Run Text="Krypt Pad"/>
                         </TextBlock>
 
