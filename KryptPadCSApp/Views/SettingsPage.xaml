@@ -79,6 +79,7 @@
                             to download your profile data first if you plan to come back in the future.
                         </TextBlock>
                         <Button Content="Delete Account" ToolTipService.ToolTip="WARNING: THIS CANNOT BE UNDONE!"
+                                Command="{Binding DeleteAccountCommand}"
                                 Style="{StaticResource NegativeButtonStyle}" Margin="0,8,0,0"/>
 
                     </StackPanel>
