@@ -388,6 +388,33 @@ namespace KryptPad.Api
 
         }
 
+        #region Account
+        public static async Task<SuccessResponse> DeleteAccountAsync()
+        {
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
+            {
+                // Authorize the request
+                await AuthorizeRequest(client);
+
+                // Execute request
+                var response = await client.DeleteAsync(GetUrl("api/account/"));
+
+                //check if the response is a success code
+                if (response.IsSuccessStatusCode)
+                {
+                    //get the response content
+                    var data = await response.Content.ReadAsStringAsync();
+
+                    return new SuccessResponse();
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+        }
+        #endregion
+
         #region App
         /// <summary>
         /// Gets the system broadcast message
