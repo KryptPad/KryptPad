@@ -81,20 +81,7 @@ namespace KryptPad.Api
         /// <summary>
         /// Gets the app id of the current instance of the app
         /// </summary>
-        private static Guid AppId
-        {
-            get
-            {
-                if (_appId == Guid.Empty)
-                {
-                    // Generate a new app id for the lifetime of this app's
-                    // instance. It will be appended to the client id.
-                    _appId = Guid.NewGuid();
-                }
-
-                return _appId;
-            }
-        }
+        public static Guid AppId { get; set; }
 
         /// <summary>
         /// Gets or sets the API OAuth access token to authorize API calls
@@ -236,6 +223,12 @@ namespace KryptPad.Api
         /// <param name="password"></param>
         public static async Task AuthenticateAsync(string username, string password)
         {
+            // Make sure we have an app id
+            if (AppId == Guid.Empty)
+            {
+                throw new Exception("AppId Cannot be empty.");
+            }
+
             // Check if we have a token endpoint configured
             if (ApiTokenEndpoint == null)
             {
@@ -246,15 +239,16 @@ namespace KryptPad.Api
 
             using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
-
+                var appId = AppId.ToString();
                 // Prepare form values
                 var values = new Dictionary<string, string>
                 {
-                    { "client_id", "KryptPadUniversal_" + AppId.ToString() },
+                    { "client_id", "KryptPadUniversal_" + appId },
                     { "client_secret", "secret" },
                     { "grant_type", "password" },
                     { "username", username },
-                    { "password", password }
+                    { "password", password },
+                    { "app_id", appId }
                 };
 
                 // Create the content to send
@@ -295,6 +289,12 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task ReauthenticateAsync()
         {
+            // Make sure we have an app id
+            if (AppId == Guid.Empty)
+            {
+                throw new Exception("AppId Cannot be empty.");
+            }
+
             // Check if we have a token endpoint configured
             if (ApiTokenEndpoint == null)
             {
@@ -304,14 +304,15 @@ namespace KryptPad.Api
 
             using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
+
+                var appId = AppId.ToString();
                 // Prepare form values
-                // TODO: Ideally, we want to pass a client secret here, but this is 
-                // not something we can store in the source code (open-source... d'oh).
                 var values = new Dictionary<string, string>
                 {
-                    { "client_id", "KryptPadUniversal_" + AppId.ToString() },
+                    { "client_id", "KryptPadUniversal_" + appId },
                     { "grant_type", "refresh_token" },
-                    { "refresh_token", TokenResponse.RefreshToken }
+                    { "refresh_token", TokenResponse.RefreshToken },
+                    { "app_id",  appId}
                 };
 
                 // Create the content to send
@@ -348,14 +349,21 @@ namespace KryptPad.Api
         /// <returns></returns>
         public static async Task<SuccessResponse> CreateAccountAsync(string username, string password, string confirmPassword)
         {
+            // Make sure we have an app id
+            if (AppId == Guid.Empty)
+            {
+                throw new Exception("AppId Cannot be empty.");
+            }
+
             using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
                 //create object to pass
                 var values = new
                 {
                     email = username,
-                    password = password,
-                    confirmPassword = confirmPassword
+                    password,
+                    confirmPassword,
+                    appId = AppId
                 };
 
                 //create content

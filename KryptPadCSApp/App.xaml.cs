@@ -76,6 +76,23 @@ namespace KryptPadCSApp
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            // Get the lifetime app installation instance id
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if (localSettings != null)
+            {
+                // Do we have a GUID?
+                var appId = localSettings.Values["AppId"];
+                if (appId == null || (Guid)appId == Guid.Empty)
+                {
+                    appId = Guid.NewGuid();
+                    localSettings.Values["AppId"] = appId;
+                }
+
+                // Set the app ID in the API
+                KryptPadApi.AppId = (Guid)appId;
+            }
+
+
             var rootFrame = Window.Current.Content as Frame;
 
             if (rootFrame == null)
