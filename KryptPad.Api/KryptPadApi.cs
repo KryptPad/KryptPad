@@ -76,7 +76,6 @@ namespace KryptPad.Api
         #endregion
 
         #region Properties
-        private static Guid _appId;
 
         /// <summary>
         /// Gets the app id of the current instance of the app
@@ -389,6 +388,11 @@ namespace KryptPad.Api
         }
 
         #region Account
+
+        /// <summary>
+        /// Deletes the user's account
+        /// </summary>
+        /// <returns></returns>
         public static async Task<SuccessResponse> DeleteAccountAsync()
         {
             using (var client = new HttpClient(CreateHttpProtocolFilter()))
