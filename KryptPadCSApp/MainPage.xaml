@@ -68,8 +68,11 @@
                     <OneCode:NavigationViewItem x:Name="HomeNavButton" Content="Home" Icon="Home" Tag="home" />
                     <OneCode:NavigationViewItem x:Name="FavNavButton" Content="Favorites" Icon="Favorite" Tag="favs" />
 
+                    <!--When not signed in-->
+                    <OneCode:NavigationViewItem x:Name="SignInNavButton" Content="Sign In" Icon="Contact" Tag="signin" />
+                    
                     <!--<OneCode:NavigationViewItemHeader Content="Section A" />-->
-                    <OneCode:NavigationViewItemSeparator/>
+                    <OneCode:NavigationViewItemSeparator />
                     
                     <OneCode:NavigationViewItem Content="About" Tag="about">
                         <OneCode:NavigationViewItem.Icon>

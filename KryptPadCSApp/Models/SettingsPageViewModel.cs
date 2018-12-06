@@ -20,6 +20,22 @@ namespace KryptPadCSApp.Models
 
         #region Properties
 
+        private bool _isSignedIn;
+        /// <summary>
+        /// Gets or sets the current item for editing
+        /// </summary>
+        public bool IsSignedIn
+        {
+            get { return _isSignedIn; }
+            set
+            {
+                _isSignedIn = value;
+                //notify change
+                OnPropertyChanged(nameof(IsSignedIn));
+
+            }
+        }
+
         public Command DeleteAccountCommand { get; protected set; }
 
         #endregion
@@ -29,6 +45,9 @@ namespace KryptPadCSApp.Models
         {
             // Register commands
             RegisterCommands();
+
+            // This is used to restrict or hide certain settings
+            IsSignedIn = (App.Current as App).SignInStatus == SignInStatus.SignedIn;
         }
         #endregion
 

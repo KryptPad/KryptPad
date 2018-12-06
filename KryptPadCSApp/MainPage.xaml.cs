@@ -43,6 +43,7 @@ namespace KryptPadCSApp
         {
             ("home", typeof(ItemsPage)),
             ("favs", typeof(ItemsPage)),
+            ("signin", typeof(LoginPage)),
             ("about", typeof(AboutPage)),
             ("feedback", typeof(FeedbackPage)),
             ("donate", typeof(DonatePage)),
@@ -298,13 +299,14 @@ namespace KryptPadCSApp
         /// <param name="value"></param>
         public void ShowSignedInControls(bool value)
         {
-            // Hide nav panel
-            //NavPanel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
 
             // Hide buttons we can't access yet
             var visibility = value ? Visibility.Visible : Visibility.Collapsed;
             HomeNavButton.Visibility = visibility;
             FavNavButton.Visibility = visibility;
+
+            // Show signed out buttons
+            SignInNavButton.Visibility = value ? Visibility.Collapsed : Visibility.Visible;
         }
 
         /// <summary>

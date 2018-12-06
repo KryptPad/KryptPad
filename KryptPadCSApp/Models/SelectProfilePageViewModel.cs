@@ -223,9 +223,14 @@ namespace KryptPadCSApp.Models
         private async void ProfileSelectedCommandHandler(object obj)
         {
             var profile = obj as ProfileModel;
+            // Get whether credential manager is supported
+            var credentialManagerSupported = await KeyCredentialManager.IsSupportedAsync();
 
             // If Windows Hello is enabled, ask for verification of consent
-            if (profile != null && SavePassphraseEnabled && HasSavedPassphrase(new PasswordVault(), profile?.Id.ToString()))
+            if (profile != null 
+                && credentialManagerSupported 
+                && SavePassphraseEnabled 
+                && HasSavedPassphrase(new PasswordVault(), profile?.Id.ToString()))
             {
                 // Introduce windows hello
                 await PromptForConsent(profile);
