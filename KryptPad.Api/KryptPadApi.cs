@@ -923,7 +923,6 @@ namespace KryptPad.Api
         /// <summary>
         /// Creates a new item in the specified category
         /// </summary>
-        /// <param name="profileId"></param>
         /// <param name="categoryId"></param>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -968,6 +967,37 @@ namespace KryptPad.Api
             }
 
         }
+
+        /// <summary>
+        /// Sets an existing item as a favorite. Requires API v2.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static async Task<SuccessResponse> SetItemAsFavoriteAsync(ApiItem item)
+        {
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
+            {
+                // Authorize the request.
+                await AuthorizeRequest(client);
+                // Add passphrase to message
+                AddPassphraseHeader(client);
+                
+                // Execute request
+                var response = await client.PutAsync(GetUrl($"api/v2/items/{item.Id}/favorite"), null);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new SuccessResponse();
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+
+
+            }
+
+        }
+
 
         /// <summary>
         /// Deletes an item and all its fields from the database
