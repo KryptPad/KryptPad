@@ -387,7 +387,9 @@
 
                             <!--Buttons-->
                             <StackPanel Grid.Column="2">
-                                <Button Style="{StaticResource SymbolButton}" Foreground="#FFE8D412">
+                                <Button Style="{StaticResource SymbolButton}" Foreground="{Binding FavoritesForeground}" 
+                                        Command="{Binding DataContext.SetFavoriteCommand, ElementName=ItemsViewPage }" 
+                                        CommandParameter="{Binding}">
                                     <SymbolIcon Symbol="Favorite"  />
                                 </Button>
                             </StackPanel>
@@ -548,7 +550,6 @@
             <Style x:Key="SymbolButton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="Opacity" Value=".25" />
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="Template">
                     <Setter.Value>

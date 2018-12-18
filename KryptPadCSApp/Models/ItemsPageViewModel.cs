@@ -136,6 +136,11 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public Command ItemClickCommand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the command that is fired when user sets or unsets a favorite
+        /// </summary>
+        public Command SetFavoriteCommand { get; set; }
+
         public Command ChangePassphraseCommand { get; protected set; }
 
         public Command RenameProfileCommand { get; protected set; }
@@ -386,6 +391,9 @@ namespace KryptPadCSApp.Models
 
             // Handle the move command
             MoveItemsCommand = new Command(MoveItemsCommandHandler, CanMoveItems);
+
+            // Handle setting favorites
+            SetFavoriteCommand = new Command(SetFavoriteCommandHandler);
         }
 
         #region Methods
@@ -680,6 +688,35 @@ namespace KryptPadCSApp.Models
             );
 
 
+        }
+
+        private async void SetFavoriteCommandHandler(object obj)
+        {
+            var item = obj as ApiItem;
+            try
+            {
+
+                // Set / remove favorite
+                if (!item.IsFavorite)
+                {
+                    await KryptPadApi.AddItemToFavoritesAsync(item);
+                }
+                else
+                {
+                    await KryptPadApi.DeleteItemFromFavoritesAsync(item);
+                }
+                
+            }
+            catch (WebException ex)
+            {
+                // Something went wrong in the api
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Failed
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
+            }
         }
         #endregion
 

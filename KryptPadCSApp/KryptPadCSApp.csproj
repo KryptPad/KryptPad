@@ -166,7 +166,6 @@
     </Compile>
     <Compile Include="Models\AboutPageViewModel.cs" />
     <Compile Include="Models\Dialogs\AddFieldDialogViewModel.cs" />
-    <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BasePageModel.cs" />
     <Compile Include="Collections\CategoryCollection.cs" />
     <Compile Include="Models\Command.cs" />

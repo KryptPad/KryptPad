@@ -24,7 +24,7 @@
     </Page.Transitions>
 
     <Page.Resources>
-     
+
         <Style x:Key="GridViewItemStyle1" TargetType="GridViewItem">
             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
             <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
@@ -89,7 +89,7 @@
                          Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"
-                         Margin="12,0"/>
+                         Margin="12,0" />
             </Grid>
 
             <!--Menu-->
@@ -129,18 +129,18 @@
                     >
             <!--<StackPanel Orientation="Horizontal">-->
 
-                <!--<TextBlock TextWrapping="WrapWholeWords"
+            <!--<TextBlock TextWrapping="WrapWholeWords"
                        VerticalAlignment="Center">
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#xE8C9;" FontSize="32" />
                 </TextBlock>-->
 
-                <TextBlock TextWrapping="WrapWholeWords"
+            <TextBlock TextWrapping="WrapWholeWords"
                            VerticalAlignment="Center">
                 
                     <Run>You haven't added any categories yet. Click</Run>
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#xE710;" />
                     <Run>to add a new category.</Run>
-                </TextBlock>
+            </TextBlock>
             <!--</StackPanel>-->
 
         </Border>

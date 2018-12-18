@@ -973,7 +973,7 @@ namespace KryptPad.Api
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static async Task<SuccessResponse> SetItemAsFavoriteAsync(ApiItem item)
+        public static async Task<SuccessResponse> AddItemToFavoritesAsync(ApiItem item)
         {
             using (var client = new HttpClient(CreateHttpProtocolFilter()))
             {
@@ -986,6 +986,38 @@ namespace KryptPad.Api
                 var response = await client.PutAsync(GetUrl($"api/v2/items/{item.Id}/favorite"), null);
                 if (response.IsSuccessStatusCode)
                 {
+                    item.IsFavorite = true;
+                    return new SuccessResponse();
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+
+
+            }
+
+        }
+
+        /// <summary>
+        /// Removes an item from favorites
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static async Task<SuccessResponse> DeleteItemFromFavoritesAsync(ApiItem item)
+        {
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
+            {
+                // Authorize the request.
+                await AuthorizeRequest(client);
+                // Add passphrase to message
+                AddPassphraseHeader(client);
+
+                // Execute request
+                var response = await client.DeleteAsync(GetUrl($"api/v2/items/{item.Id}/favorite"));
+                if (response.IsSuccessStatusCode)
+                {
+                    item.IsFavorite = false;
                     return new SuccessResponse();
                 }
                 else
