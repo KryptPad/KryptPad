@@ -42,7 +42,7 @@ namespace KryptPadCSApp
         private readonly IList<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
         {
             ("home", typeof(ItemsPage)),
-            ("favs", typeof(ItemsPage)),
+            ("favs", typeof(FavoritesPage)),
             ("signin", typeof(LoginPage)),
             ("about", typeof(AboutPage)),
             ("feedback", typeof(FeedbackPage)),
