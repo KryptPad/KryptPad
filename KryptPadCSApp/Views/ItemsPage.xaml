@@ -154,7 +154,6 @@
             </Grid.RowDefinitions>
 
             <!--Items grid-->
-            <!---->
             <GridView x:Name="ItemsGridView"
                       Grid.Row="0"
                       Margin="0"

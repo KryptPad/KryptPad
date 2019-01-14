@@ -738,6 +738,39 @@ namespace KryptPad.Api
 
         }
 
+        /// <summary>
+        /// Gets the favorites
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <returns></returns>
+        public static async Task<ItemsResponse> GetFavoritesAsync()
+        {
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
+            {
+                //authorize the request
+                await AuthorizeRequest(client);
+                // Add passphrase to message
+                AddPassphraseHeader(client);
+
+                //send request and get a response
+                var response = await client.GetAsync(GetUrl($"api/v2/profiles/{CurrentProfile.Id}/favorites"));
+
+                //deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<ItemsResponse>(data);
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+
+        }
+
         #endregion
 
         #region Categories

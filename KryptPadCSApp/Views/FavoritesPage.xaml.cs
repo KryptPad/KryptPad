@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,14 @@ namespace KryptPadCSApp.Views
         public FavoritesPage()
         {
             this.InitializeComponent();
+        }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            await(DataContext as FavoritesPageViewModel).RefreshItemsAsync();
+
+            // Set the selection changed event
+            //ItemsGridView.SelectionChanged += ItemsGridView_SelectionChanged;
         }
     }
 }
