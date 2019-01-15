@@ -28,9 +28,34 @@
     </Page.DataContext>
     
     <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!--No categories message-->
+        <Border Grid.Row="0" 
+                    Visibility="{Binding EmptyMessageVisibility}"
+                    Margin="12"
+                    Padding="12"
+                    Background="{ThemeResource InformationMessageThemeBrush}"
+                    BorderBrush="{ThemeResource InformationMessageBorderThemeBrush}"
+                    BorderThickness="1"
+                    >
+           
+            <TextBlock TextWrapping="WrapWholeWords"
+                           VerticalAlignment="Center">
+                
+                    <Run>You haven't added any favorites yet.</Run>
+            </TextBlock>
+            <!--</StackPanel>-->
+
+        </Border>
+        
         <!--Items grid-->
         <GridView x:Name="ItemsGridView"
-                      Grid.Row="0"
+                      Grid.Row="1"
                       Margin="0"
                       ItemsSource="{Binding Items}"
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"

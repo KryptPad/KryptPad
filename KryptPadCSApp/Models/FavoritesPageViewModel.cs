@@ -156,6 +156,12 @@ namespace KryptPadCSApp.Models
                 // Remove from list
                 Items.Remove(item);
 
+                // Update empty message
+                if (Items.Count == 0)
+                {
+                    EmptyMessageVisibility = Visibility.Visible;
+                }
+
             }
             catch (WebException ex)
             {
