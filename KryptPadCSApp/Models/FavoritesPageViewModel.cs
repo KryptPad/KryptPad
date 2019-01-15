@@ -29,8 +29,8 @@ namespace KryptPadCSApp.Models
         /// <summary>
         /// Gets the collection of categories
         /// </summary>
-        public List<ApiItem> Items { get; protected set; } = new List<ApiItem>();
-        
+        public ObservableCollection<ApiItem> Items { get; protected set; } = new ObservableCollection<ApiItem>();
+
         private Visibility _emptyMessageVisibility;
         /// <summary>
         /// Gets or sets whether the empty message is visible
@@ -45,7 +45,7 @@ namespace KryptPadCSApp.Models
                 OnPropertyChanged(nameof(EmptyMessageVisibility));
             }
         }
-                
+
         /// <summary>
         /// Gets or sets the command that is fired when an item is clicked
         /// </summary>
@@ -56,7 +56,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         public Command SetFavoriteCommand { get; set; }
 
-       
+
         #endregion
 
 
@@ -67,7 +67,7 @@ namespace KryptPadCSApp.Models
 
             // Set properties
             EmptyMessageVisibility = Visibility.Collapsed;
-            
+
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace KryptPadCSApp.Models
         /// </summary>
         private void RegisterCommands()
         {
-            
+
             // Handle item click
             ItemClickCommand = new Command((p) =>
             {
@@ -114,7 +114,10 @@ namespace KryptPadCSApp.Models
                 var resp = await KryptPadApi.GetFavoritesAsync();
 
                 // Set the list to our list of categories
-                Items = resp.Items.ToList();
+                foreach (var item in resp.Items)
+                {
+                    Items.Add(item);
+                }
 
                 // Refresh
                 OnPropertyChanged(nameof(Items));
@@ -148,16 +151,11 @@ namespace KryptPadCSApp.Models
             try
             {
 
-                // Set / remove favorite
-                if (!item.IsFavorite)
-                {
-                    await KryptPadApi.AddItemToFavoritesAsync(item);
-                }
-                else
-                {
-                    await KryptPadApi.DeleteItemFromFavoritesAsync(item);
-                }
-                
+                // Remove favorite
+                await KryptPadApi.DeleteItemFromFavoritesAsync(item);
+                // Remove from list
+                Items.Remove(item);
+
             }
             catch (WebException ex)
             {
@@ -172,6 +170,6 @@ namespace KryptPadCSApp.Models
         }
         #endregion
 
-        
+
     }
 }
