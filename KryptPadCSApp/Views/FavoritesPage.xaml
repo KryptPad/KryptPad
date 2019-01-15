@@ -9,7 +9,7 @@
     xmlns:Commanding="using:Commanding"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    x:Name="FavoritesViewPage"
+    x:Name="ItemsViewPage"
     Loaded="Page_Loaded">
 
     <Page.Transitions>
@@ -33,7 +33,7 @@
                       Grid.Row="0"
                       Margin="0"
                       ItemsSource="{Binding Items}"
-                      Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=FavoritesViewPage}"
+                      Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                       ItemTemplate="{StaticResource GridViewItemsTemplate }"
                       ItemsPanel="{StaticResource DesktopCategoryItemPanelTemplate}"
                       ItemContainerStyle="{StaticResource GridViewItemStyle}"
