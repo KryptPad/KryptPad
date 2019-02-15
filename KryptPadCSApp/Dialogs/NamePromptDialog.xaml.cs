@@ -61,7 +61,7 @@ namespace KryptPadCSApp.Dialogs
                 PrimaryButtonCommand.Execute(null);
 
                 // Close the dialog
-                Close(ContentDialogResult.Primary);
+                Hide(ContentDialogResult.Primary);
             }
         }
     }
