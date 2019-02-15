@@ -301,10 +301,15 @@ namespace KryptPadCSApp.Models
         {
             try
             {
-                // Log in and get access token
-                await KryptPadApi.SendForgotPasswordLinkAsync(Email);
+                // Get the email address
+                var email = await DialogHelper.GetValueAsync(null, "Email", Email);
+                if (email != null)
+                {
+                    // Log in and get access token
+                    await KryptPadApi.SendForgotPasswordLinkAsync(email);
 
-                await DialogHelper.ShowMessageDialogAsync("If your email address is associated to your account, you should recieve an email with password reset instructions.");
+                    await DialogHelper.ShowMessageDialogAsync("If your email address is associated to your account, you should recieve an email with password reset instructions.");
+                }
             }
             catch (WebException ex)
             {

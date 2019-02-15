@@ -269,7 +269,7 @@ namespace KryptPadCSApp.Models
             {
 
                 // Prompt for name
-                await DialogHelper.ShowNameDialog(async (d) =>
+                await DialogHelper.GetValueAsync(async (d) =>
                 {
                     try
                     {
@@ -624,7 +624,7 @@ namespace KryptPadCSApp.Models
             var category = p as ApiCategory;
 
             // Prompt for name
-            await DialogHelper.ShowNameDialog(async (d) =>
+            await DialogHelper.GetValueAsync(async (d) =>
             {
                 try
                 {

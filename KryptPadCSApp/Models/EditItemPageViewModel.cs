@@ -521,7 +521,7 @@ namespace KryptPadCSApp.Models
             // Get data context
             var field = p as FieldModel;
 
-            await DialogHelper.ShowNameDialog(async (d) =>
+            await DialogHelper.GetValueAsync(async (d) =>
             {
 
                 try

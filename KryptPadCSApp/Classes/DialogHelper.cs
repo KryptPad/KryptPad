@@ -63,7 +63,7 @@ namespace KryptPadCSApp.Classes
         /// <typeparam name="T"></typeparam>
         /// <param name="primaryAction"></param>
         /// <returns></returns>
-        public static async Task<ContentDialogResult> ShowNameDialog(Action<NamePromptDialog> primaryAction, string title = null, string originalValue = null)
+        public static async Task<string> GetValueAsync(Action<NamePromptDialog> primaryAction, string title = null, string originalValue = null)
         {
             // Create instance of content dialog
             var d = new NamePromptDialog();
@@ -88,7 +88,7 @@ namespace KryptPadCSApp.Classes
                 primaryAction(d);
             }
 
-            return res;
+            return (res == ContentDialogResult.Primary ? d.Value : null);
         }
 
         /// <summary>
