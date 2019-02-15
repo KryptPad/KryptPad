@@ -340,6 +340,36 @@ namespace KryptPad.Api
 
         }
 
+        #region Account
+
+        public static async Task<SuccessResponse> SendForgotPasswordLinkAsync(string username)
+        {
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
+            {
+                //create object to pass
+                var values = new
+                {
+                    email = username
+                };
+
+                //create content
+                var content = JsonContent(values);
+
+                // Execute request
+                var response = await client.PostAsync(GetUrl("api/account/forgot-password"), content);
+
+                //check if the response is a success code
+                if (response.IsSuccessStatusCode)
+                {
+                    return new SuccessResponse();
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+        }
+
         /// <summary>
         /// Creates an account in the system
         /// </summary>
@@ -374,9 +404,6 @@ namespace KryptPad.Api
                 //check if the response is a success code
                 if (response.IsSuccessStatusCode)
                 {
-                    //get the response content
-                    var data = await response.Content.ReadAsStringAsync();
-
                     return new SuccessResponse();
                 }
                 else
@@ -386,8 +413,6 @@ namespace KryptPad.Api
             }
 
         }
-
-        #region Account
 
         /// <summary>
         /// Deletes the user's account

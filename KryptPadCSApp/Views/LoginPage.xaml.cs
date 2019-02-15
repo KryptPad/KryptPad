@@ -60,6 +60,11 @@ namespace KryptPadCSApp.Views
                 }
             }
         }
-                
+
+        private async void ForgotPasswordLink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            var m = DataContext as LoginPageViewModel;
+            await m.SendForgotPasswordLinkAsync();
+        }
     }
 }

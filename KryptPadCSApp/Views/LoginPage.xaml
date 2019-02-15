@@ -66,7 +66,7 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
-
+                            <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
 
 
@@ -90,14 +90,20 @@
 					             Password="{Binding Password, Mode=TwoWay}"
                                  KeyUp="Login_KeyUp"/>
 
+
+                        <!--Forgot password-->
+                        <TextBlock Grid.Row="3" Margin="0,0,0,12">
+                            <Hyperlink x:Name="ForgotPasswordLink" Click="ForgotPasswordLink_Click">Forgot password</Hyperlink>
+                        </TextBlock>
+                        
                         <!--Remember me-->
-                        <CheckBox Grid.Row="3"
+                        <CheckBox Grid.Row="4"
                           IsChecked="{Binding AutoSignIn, Mode=TwoWay}"  
                           Content="Sign me in automatically"  
                           Margin="0,0,0,12" />
 
                         <!--Login / Sign up buttons-->
-                        <Grid Grid.Row="4" Margin="0,0,0,12">
+                        <Grid Grid.Row="5" Margin="0,0,0,12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
@@ -115,7 +121,7 @@
                         </Grid>
 
                         <!--Link to terms page-->
-                        <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
+                        <TextBlock Grid.Row="6" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
                             Krypt Pad is licensed under MIT. By using this software, you accept this
                             <Hyperlink x:Name="TermsHyperlink" Click="TermsHyperlink_Click">license</Hyperlink>. View the 
                             <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.

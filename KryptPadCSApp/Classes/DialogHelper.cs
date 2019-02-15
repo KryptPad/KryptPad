@@ -83,7 +83,7 @@ namespace KryptPadCSApp.Classes
             var res = await d.ShowAsync();
 
             // Determine which button was fired, and decide if we need to execute the primary action
-            if ((res == ContentDialogResult.Primary || d.Result == ContentDialogResult.Primary) && primaryAction != null)
+            if ((res == ContentDialogResult.Primary) && primaryAction != null)
             {
                 primaryAction(d);
             }
@@ -112,7 +112,7 @@ namespace KryptPadCSApp.Classes
             var res = await d.ShowAsync();
 
             // Determine which button was fired, and decide if we need to execute the primary action
-            if ((res == ContentDialogResult.Primary || d.Result == ContentDialogResult.Primary) && primaryAction != null)
+            if ((res == ContentDialogResult.Primary) && primaryAction != null)
             {
                 primaryAction(d);
             }

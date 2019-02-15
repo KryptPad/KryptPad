@@ -293,7 +293,29 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowMessageDialogAsync(ResourceHelper.GetString("UriFail"));
             }
         }
-        
+
+        #endregion
+
+        #region Public methods
+        public async Task SendForgotPasswordLinkAsync()
+        {
+            try
+            {
+                // Log in and get access token
+                await KryptPadApi.SendForgotPasswordLinkAsync(Email);
+
+                await DialogHelper.ShowMessageDialogAsync("If your email address is associated to your account, you should recieve an email with password reset instructions.");
+            }
+            catch (WebException ex)
+            {
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Failed
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
+            }
+        }
         #endregion
     }
 }
