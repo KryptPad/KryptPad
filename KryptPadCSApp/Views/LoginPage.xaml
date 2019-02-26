@@ -112,6 +112,7 @@
                             <Button Content="Sign In" 
                                     Grid.Column="0"
                                     Margin="0,0,12,0"
+                                    Style="{StaticResource AccentButtonStyle}"
 						            Command="{Binding LogInCommand}" />
 
                             <Button Content="Sign Up for Free" 

@@ -311,9 +311,6 @@ namespace KryptPadCSApp.Models
                             // Navigate back to the profiles list
                             NavigationHelper.Navigate(typeof(SelectProfilePage), null);
 
-                            // Clear backstack
-                            NavigationHelper.ClearBackStack();
-
                         }
                         catch (WebException ex)
                         {

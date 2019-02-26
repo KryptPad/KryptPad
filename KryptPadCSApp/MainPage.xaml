@@ -67,7 +67,7 @@
                     <!--<OneCode:NavigationViewItemHeader Content="Section A" />-->
                     <OneCode:NavigationViewItem x:Name="HomeNavButton" Content="Home" Icon="Home" Tag="home" />
                     <OneCode:NavigationViewItem x:Name="FavNavButton" Content="Favorites" Icon="Favorite" Tag="favs" />
-
+                    
                     <!--When not signed in-->
                     <OneCode:NavigationViewItem x:Name="SignInNavButton" Content="Sign In" Icon="Contact" Tag="signin" />
                     
@@ -87,7 +87,11 @@
                             <FontIcon Glyph="&#xE00B;"/>
                         </OneCode:NavigationViewItem.Icon>
                     </OneCode:NavigationViewItem>
+
+                    <OneCode:NavigationViewItemSeparator />
                     
+                    <OneCode:NavigationViewItem x:Name="SwitchProfileButton" Content="Switch Profile" Icon="Switch" Tag="switch" />
+                    <OneCode:NavigationViewItem x:Name="SignOutButton" Content="Sign Out" Icon="Back" Tag="signout" />
                 </OneCode:NavigationView.MenuItems>
                 
                 <Frame x:Name="NavigationFrame" />

@@ -78,7 +78,7 @@
                         <!--Rate button-->
                         <Button Margin="0,8,0,48"
                                 Command="{Binding ReviewAppCommand}"
-                                Style="{StaticResource PrimaryButtonStyle}">
+                                Style="{StaticResource AccentButtonStyle}">
                             Review this App
                         </Button>
 

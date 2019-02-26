@@ -106,8 +106,6 @@ namespace KryptPadCSApp.Models
                     // Go to login page
                     NavigationHelper.Navigate(typeof(LoginPage), null);
 
-                    // Clear backstack
-                    NavigationHelper.ClearBackStack();
 
                 }
                 catch (WebException ex)

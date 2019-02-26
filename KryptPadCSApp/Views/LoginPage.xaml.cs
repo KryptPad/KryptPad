@@ -44,6 +44,9 @@ namespace KryptPadCSApp.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            // Clear backstack
+            NavigationHelper.ClearBackStack();
+
             await (DataContext as LoginPageViewModel).AutoLoginAsync();
         }
 

@@ -9,14 +9,6 @@ namespace KryptPadCSApp.Models
 {
     class SettingsPageViewModel : BasePageModel
     {
-        /// <summary>
-        /// Resource name for credential locker
-        /// </summary>
-#if DEBUG
-        private const string LOCKER_RESOURCE = "KryptPadTest";
-#else
-        private const string LOCKER_RESOURCE = "KryptPad";
-#endif
 
         #region Properties
 
@@ -47,7 +39,8 @@ namespace KryptPadCSApp.Models
             RegisterCommands();
 
             // This is used to restrict or hide certain settings
-            IsSignedIn = (App.Current as App).SignInStatus == SignInStatus.SignedIn;
+            var signinStatus = (App.Current as App).SignInStatus;
+            IsSignedIn = signinStatus != SignInStatus.SignedOut;
         }
         #endregion
 
@@ -58,7 +51,7 @@ namespace KryptPadCSApp.Models
         private void RegisterCommands()
         {
             DeleteAccountCommand = new Command(DeleteAccountCommandHandlerAsync);
-            
+
         }
 
         private async void DeleteAccountCommandHandlerAsync(object obj)
@@ -76,7 +69,7 @@ namespace KryptPadCSApp.Models
                 try
                 {
                     // Clear out the saved credential for the resource
-                    var creds = locker.FindAllByResource(LOCKER_RESOURCE);
+                    var creds = locker.FindAllByResource(Constants.LOCKER_RESOURCE);
                     foreach (var cred in creds)
                     {
                         // Remove only the credentials for the given resource
@@ -101,7 +94,7 @@ namespace KryptPadCSApp.Models
 
 
             IsBusy = false;
-            
+
         }
         #endregion
     }

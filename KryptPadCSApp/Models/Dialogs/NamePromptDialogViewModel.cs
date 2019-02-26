@@ -27,6 +27,19 @@ namespace KryptPadCSApp.Models.Dialogs
             }
         }
 
+        private string _promptText;
+        public string PromptText
+        {
+            get { return _promptText; }
+            set
+            {
+                _promptText = value;
+
+                // Value changed
+                OnPropertyChanged(nameof(PromptText));
+            }
+        }
+
         public Command PrimaryCommand { get; protected set; }
         #endregion
 

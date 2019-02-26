@@ -60,7 +60,7 @@
 
                     <!--Create account-->
                     <Button Margin="0,0,0,12"
-                            Style="{StaticResource PrimaryButtonStyle}"
+                            Style="{StaticResource AccentButtonStyle}"
                             Content="Create Account" 
                             Command="{Binding CreateAccountCommand}"/>
                     

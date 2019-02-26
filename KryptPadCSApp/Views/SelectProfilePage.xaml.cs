@@ -47,6 +47,9 @@ namespace KryptPadCSApp.Views
 
         private async void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
         {
+            // Clear backstack
+            NavigationHelper.ClearBackStack();
+
             // Load the profiles
             var model = DataContext as SelectProfilePageViewModel;
 

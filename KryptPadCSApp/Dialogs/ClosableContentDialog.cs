@@ -9,13 +9,11 @@ using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Dialogs
 {
-    public class ClosableContentDialog : ContentDialog, INotifyPropertyChanged
+    public class ClosableContentDialog : ContentDialog
     {
 
         #region Properties
         TaskCompletionSource<ContentDialogResult> tcs = new TaskCompletionSource<ContentDialogResult>();
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         //public bool Cancel { get; set; }
         #endregion
@@ -53,17 +51,6 @@ namespace KryptPadCSApp.Dialogs
 
         #endregion
 
-        #region Event Handlers
-
-        /// <summary>
-        /// Raises the PropertyChanged event for a property
-        /// </summary>
-        /// <param name="name"></param>
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        #endregion
+        
     }
 }

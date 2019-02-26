@@ -67,7 +67,7 @@
 
                         <!--Create new profile-->
                         <Button Content="Create Profile"
-                                Style="{StaticResource PrimaryButtonStyle}"
+                                Style="{StaticResource AccentButtonStyle}"
                                 Command="{Binding CreateProfileCommand}"
                                 Margin="0,0,12,0"/>
 

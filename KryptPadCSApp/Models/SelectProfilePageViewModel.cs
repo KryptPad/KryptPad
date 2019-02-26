@@ -27,8 +27,7 @@ namespace KryptPadCSApp.Models
     class SelectProfilePageViewModel : BasePageModel
     {
         const int MAX_SAVED_PROFILES = 5;
-        const string LOCKER_RESOURCE = "Profiles";
-
+        
         #region Properties
 
         /// <summary>
@@ -117,6 +116,7 @@ namespace KryptPadCSApp.Models
 
             // Success, tell the app we are not signed in with a profile
             (App.Current as App).SignInStatus = SignInStatus.SignedIn;
+                        
         }
 
         /// <summary>
@@ -474,10 +474,13 @@ namespace KryptPadCSApp.Models
                         // Create instance to credential locker
                         var locker = new PasswordVault();
                         // Clear out the saved credential for the resource
-                        var logins = locker.FindAllByResource(LOCKER_RESOURCE);
+                        var logins = locker.FindAllByResource(KryptPadApi.Username);
                         foreach (var login in logins)
                         {
-                            locker.Remove(login);
+                            if (login.Resource != Constants.LOCKER_RESOURCE)
+                            {
+                                locker.Remove(login);
+                            }
                         }
 
                         // Reset flag on all profiles
@@ -516,7 +519,7 @@ namespace KryptPadCSApp.Models
             {
 
                 // Check how many profiles we have saved already
-                var allLogins = locker.FindAllByResource(LOCKER_RESOURCE);
+                var allLogins = locker.FindAllByResource(KryptPadApi.Username);
                 if (allLogins.Count == MAX_SAVED_PROFILES)
                 {
                     return;
@@ -535,7 +538,7 @@ namespace KryptPadCSApp.Models
             // Create new credential
             var credential = new PasswordCredential()
             {
-                Resource = LOCKER_RESOURCE,
+                Resource = KryptPadApi.Username,
                 UserName = profile,
                 Password = passphrase
             };

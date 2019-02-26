@@ -60,39 +60,6 @@ namespace KryptPadCSApp.Classes
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
             }
         }
-
-        //#region Common navigation tasks
-        //public static void GoToLicenseTerms()
-        //{
-        //    // Go to terms page
-        //    Navigate(typeof(TermsPage), null);
-        //}
-
-        //public static void GoToPrivacyPolicy()
-        //{
-        //    // Go to terms page
-        //    Navigate(typeof(PrivacyPage), null);
-        //}
-
-        //public static void GoToDonate()
-        //{
-        //    // Go to terms page
-        //    Navigate(typeof(DonatePage), null);
-        //}
-
-        //public static void GoToFeedback()
-        //{
-        //    // Go to terms page
-        //    Navigate(typeof(FeedbackPage), null);
-        //}
-
-        //public static void GoToAbout()
-        //{
-        //    // Go to terms page
-        //    Navigate(typeof(AboutPage), null);
-        //}
-        //#endregion
-
-
+        
     }
 }

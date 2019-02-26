@@ -117,7 +117,10 @@ namespace KryptPad.Api
         /// </summary>
         private static Uri ApiTokenEndpoint { get; set; }
 
-        
+        /// <summary>
+        /// Gets the user name of the logged in user (email address)
+        /// </summary>
+        public static string Username { get; private set; }
 
 
 
@@ -264,6 +267,9 @@ namespace KryptPad.Api
 
                     // Deserialize the data and get the access token
                     TokenResponse = JsonConvert.DeserializeObject<OAuthTokenResponse>(data);
+
+                    // Set user name
+                    Username = username;
 
                     // Set the expiration date based on the ttl of the access token
                     TokenExpirationDate = DateTime.Now.AddSeconds(TokenResponse.ExpiresIn - EXPIRATION_TIME_THRESHOLD);
@@ -1438,8 +1444,7 @@ namespace KryptPad.Api
             TokenResponse = null;
             CurrentProfile = null;
             Passphrase = null;
-            //Username = null;
-            //Password = null;
+            Username = null;
 
         }
 

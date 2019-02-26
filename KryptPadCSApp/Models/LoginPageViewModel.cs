@@ -17,14 +17,7 @@ namespace KryptPadCSApp.Models
 {
     class LoginPageViewModel : BasePageModel
     {
-        /// <summary>
-        /// Resource name for credential locker
-        /// </summary>
-#if DEBUG
-        private const string LOCKER_RESOURCE = "KryptPadTest";
-#else
-        private const string LOCKER_RESOURCE = "KryptPad";
-#endif
+        
 
         #region Properties
         private string _email;
@@ -145,7 +138,7 @@ namespace KryptPadCSApp.Models
             {
 
                 // Find the saved credentials
-                var login = locker.FindAllByResource(LOCKER_RESOURCE).FirstOrDefault();
+                var login = locker.FindAllByResource(Constants.LOCKER_RESOURCE).FirstOrDefault();
 
                 if (login != null)
                 {
@@ -183,7 +176,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Clear out the saved credential for the resource
-                var creds = locker.FindAllByResource(LOCKER_RESOURCE);
+                var creds = locker.FindAllByResource(Constants.LOCKER_RESOURCE);
                 foreach (var cred in creds)
                 {
                     // Remove only the credentials for the given resource
@@ -199,7 +192,7 @@ namespace KryptPadCSApp.Models
                 // Create new credential
                 var credential = new PasswordCredential()
                 {
-                    Resource = LOCKER_RESOURCE,
+                    Resource = Constants.LOCKER_RESOURCE,
                     UserName = Email,
                     Password = Password
                 };
@@ -302,7 +295,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Get the email address
-                var email = await DialogHelper.GetValueAsync(null, "Email", Email);
+                var email = await DialogHelper.GetValueAsync(null, "Email", Email, "Enter your account email address");
                 if (email != null)
                 {
                     // Log in and get access token

@@ -47,6 +47,8 @@ namespace KryptPadCSApp
             ("about", typeof(AboutPage)),
             ("feedback", typeof(FeedbackPage)),
             ("donate", typeof(DonatePage)),
+            ("switch", typeof(SelectProfilePage)),
+            ("signout", typeof(LoginPage)),
             ("settings", typeof(SettingsPage))
         };
         #endregion
@@ -65,13 +67,13 @@ namespace KryptPadCSApp
         /// <summary>
         /// Gets whether the user is signed in
         /// </summary>
-        public bool IsSignedIn
-        {
-            get
-            {
-                return (App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile;
-            }
-        }
+        //public bool IsSignedIn
+        //{
+        //    get
+        //    {
+        //        return (App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile;
+        //    }
+        //}
 
         #endregion
 
@@ -89,8 +91,6 @@ namespace KryptPadCSApp
                 {
                     // Triggered when the access token has reached its expiration date
                     NavigationHelper.Navigate(typeof(LoginPage), null);
-                    // Clear backstack too
-                    NavigationHelper.ClearBackStack();
 
                     // Hide the message
                     ShowSessionWarningMessage(false);
@@ -134,7 +134,7 @@ namespace KryptPadCSApp
                 // Success, tell the app we are signed in
                 if (e.PropertyName == nameof(App.SignInStatus))
                 {
-                    ShowSignedInControls((App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile);
+                    ShowSignedInControls();
                 }
             };
 
@@ -156,25 +156,21 @@ namespace KryptPadCSApp
             NavigationFrame.Navigated += On_Navigated;
 
             // NavView doesn't load any page by default: you need to specify it
-            NavView_Navigate(typeof(LoginPage));
+            NavigationHelper.Navigate(typeof(LoginPage), null);
 
         }
 
-        private void NavView_Navigate(string navItemTag)
+        private void NavigateToPage(string navItemTag)
         {
             var item = _pages.First(p => p.Tag.Equals(navItemTag));
-            NavigationFrame.Navigate(item.Page);
+            NavigationHelper.Navigate(item.Page, null);
         }
-        private void NavView_Navigate(Type page)
-        {
-            NavigationFrame.Navigate(page);
-        }
-
+        
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
 
             if (args.IsSettingsInvoked)
-                NavigationFrame.Navigate(typeof(SettingsPage));
+                NavigationHelper.Navigate(typeof(SettingsPage), null);
             else
             {
                 // Getting the Tag from Content (args.InvokedItem is the content of NavigationViewItem)
@@ -183,7 +179,7 @@ namespace KryptPadCSApp
                     .First(i => args.InvokedItem.Equals(i.Content))
                     .Tag.ToString();
 
-                NavView_Navigate(navItemTag);
+                NavigateToPage(navItemTag);
             }
         }
 
@@ -231,20 +227,6 @@ namespace KryptPadCSApp
                     NavigationFrame.GoBack();
                 }
             }
-        }
-
-
-
-        private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            await DialogHelper.Confirm("Are you sure you want to sign out?", "SIGN OUT", (p) =>
-            {
-                // Navigate
-                NavigationHelper.Navigate(typeof(LoginPage), null);
-                // Clear backstack
-                NavigationHelper.ClearBackStack();
-            });
-
         }
 
         #endregion
@@ -297,16 +279,22 @@ namespace KryptPadCSApp
         /// Shows or hides the pane
         /// </summary>
         /// <param name="value"></param>
-        public void ShowSignedInControls(bool value)
+        public void ShowSignedInControls()
         {
+            var signinStatus = (App.Current as App).SignInStatus;
 
             // Hide buttons we can't access yet
-            var visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            HomeNavButton.Visibility = visibility;
-            FavNavButton.Visibility = visibility;
+            var signedInWithProfile = signinStatus == SignInStatus.SignedInWithProfile ? Visibility.Visible : Visibility.Collapsed;
+            HomeNavButton.Visibility = signedInWithProfile;
+            FavNavButton.Visibility = signedInWithProfile;
+            SwitchProfileButton.Visibility = signedInWithProfile;
+            SignOutButton.Visibility = signedInWithProfile;
 
-            // Show signed out buttons
-            SignInNavButton.Visibility = value ? Visibility.Collapsed : Visibility.Visible;
+            // Show settings if user is not signed out
+            NavView.IsSettingsVisible = signinStatus != SignInStatus.SignedOut;
+
+            // Show sign in if user is not signed in with a profile
+            SignInNavButton.Visibility = signinStatus != SignInStatus.SignedInWithProfile ? Visibility.Visible : Visibility.Collapsed;
         }
 
         /// <summary>
