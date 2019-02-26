@@ -19,22 +19,7 @@ namespace KryptPadCSApp.Classes
         /// <returns></returns>
         private static Frame GetFrame()
         {
-            // Get the frame from the main page
-            var mainPage = Window.Current.Content as MainPage;
-            Frame frame = null;
-
-            if (mainPage != null)
-            {
-                // Get frame from main page
-                frame = mainPage.RootFrame;
-            }
-            else
-            {
-                // Try to get the frame from the window content itself
-                frame = Window.Current.Content as Frame;
-            }
-
-            return frame;
+            return ((Window.Current.Content as Frame).Content as MainPage).RootFrame;
         }
 
 
@@ -75,39 +60,6 @@ namespace KryptPadCSApp.Classes
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
             }
         }
-
-        #region Common navigation tasks
-        public static void GoToLicenseTerms()
-        {
-            // Go to terms page
-            Navigate(typeof(TermsPage), null);
-        }
-
-        public static void GoToPrivacyPolicy()
-        {
-            // Go to terms page
-            Navigate(typeof(PrivacyPage), null);
-        }
-
-        public static void GoToDonate()
-        {
-            // Go to terms page
-            Navigate(typeof(DonatePage), null);
-        }
-
-        public static void GoToFeedback()
-        {
-            // Go to terms page
-            Navigate(typeof(FeedbackPage), null);
-        }
-
-        public static void GoToAbout()
-        {
-            // Go to terms page
-            Navigate(typeof(AboutPage), null);
-        }
-        #endregion
-
-
+        
     }
 }

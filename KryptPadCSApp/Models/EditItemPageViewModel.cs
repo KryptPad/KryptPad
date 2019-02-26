@@ -9,6 +9,7 @@ using KryptPadCSApp.Models.Dialogs;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -236,10 +237,10 @@ namespace KryptPadCSApp.Models
                         // Something went wrong in the api
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // Failed
-                        await DialogHelper.ShowGenericErrorDialogAsync();
+                        await DialogHelper.ShowGenericErrorDialogAsync(ex);
                     }
 
 
@@ -271,10 +272,10 @@ namespace KryptPadCSApp.Models
                             // Something went wrong in the api
                             await DialogHelper.ShowMessageDialogAsync(ex.Message);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             // Failed
-                            await DialogHelper.ShowGenericErrorDialogAsync();
+                            await DialogHelper.ShowGenericErrorDialogAsync(ex);
                         }
                     });
 
@@ -384,10 +385,10 @@ namespace KryptPadCSApp.Models
                 // Navigate back to the items page
                 NavigationHelper.Navigate(typeof(ItemsPage), null);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
                 // Navigate back to the items page
                 NavigationHelper.Navigate(typeof(ItemsPage), null);
             }
@@ -423,10 +424,10 @@ namespace KryptPadCSApp.Models
                 // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
             }
 
         }
@@ -473,10 +474,10 @@ namespace KryptPadCSApp.Models
                 // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
             }
 
             // Set main window busy state
@@ -507,10 +508,10 @@ namespace KryptPadCSApp.Models
                         // Something went wrong in the api
                         await DialogHelper.ShowMessageDialogAsync(ex.Message);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // Failed
-                        await DialogHelper.ShowGenericErrorDialogAsync();
+                        await DialogHelper.ShowGenericErrorDialogAsync(ex);
                     }
                 });
         }
@@ -520,7 +521,7 @@ namespace KryptPadCSApp.Models
             // Get data context
             var field = p as FieldModel;
 
-            await DialogHelper.ShowNameDialog(async (d) =>
+            await DialogHelper.GetValueAsync(async (d) =>
             {
 
                 try
@@ -537,10 +538,10 @@ namespace KryptPadCSApp.Models
                     // Something went wrong in the api
                     await DialogHelper.ShowMessageDialogAsync(ex.Message);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     // Failed
-                    await DialogHelper.ShowGenericErrorDialogAsync();
+                    await DialogHelper.ShowGenericErrorDialogAsync(ex);
                 }
             });
         }

@@ -20,7 +20,7 @@
 
     <Grid>
         <StackPanel>
-            <TextBlock Text="Enter name" />
+            <TextBlock Text="{Binding PromptText}" />
             <TextBox x:Name="NameTextBox" 
                      Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      KeyUp="NameTextBox_KeyUp" />

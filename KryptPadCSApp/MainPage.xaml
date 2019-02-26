@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
+    xmlns:OneCode="using:OneCode.Windows.UWP.Controls"
+    xmlns:Converters="using:KryptPadCSApp.Converters"
     x:Class="KryptPadCSApp.MainPage"
     mc:Ignorable="d"
     >
@@ -19,51 +21,82 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!--Nav grid-->
-            <Grid Grid.Row="0"
-              Padding="12"
-              Background="{ThemeResource AppHeaderBackgroundThemeBrush}"
-              >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
+            <!--Broadcast message-->
+            <Border x:Name="BroadcastMessage"
+                    Visibility="Collapsed"
+                    Grid.Row="0" 
+                    Padding="12"
+                    Background="{ThemeResource BroadcastMessageThemeBrush}"
+                    BorderBrush="{ThemeResource BroadcastMessageBorderThemeBrush}"
+                    BorderThickness="1"
+                    >
 
-                <!--Header text-->
-                <TextBlock Grid.Column="0" Style="{StaticResource SubtitleTextBlockStyle}" Text="Krypt Pad" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
 
-                <!--Navigation icons-->
-                <StackPanel x:Name="NavPanel"
-                        Grid.Column="1" 
-                        Orientation="Horizontal"
-                        FlowDirection="RightToLeft">
-                    <!--Symbols-->
-                    <!--Sign out-->
-                    <RadioButton x:Name="SignOutRadioButton" Tag="&#xE72B;"
-                             Style="{StaticResource TabNavButtonStyle}"
-                             Click="SignOutRadioButton_Click" />
-                    <!--About-->
-                    <RadioButton x:Name="AboutRadioButton" Tag="&#xE783;"
-                             Style="{StaticResource TabNavButtonStyle}" 
-                             Click="AboutRadioButton_Click" IsChecked="True" />
-                    <!--Feedback-->
-                    <RadioButton x:Name="FeedbackRadioButton" Tag="&#xE76E;"
-                             Style="{StaticResource TabNavButtonStyle}" 
-                             Click="FeedbackRadioButton_Click"/>
-                    <!--Donate-->
-                    <RadioButton x:Name="DonateRadioButton" Tag="&#xE00B;"
-                             Style="{StaticResource TabNavButtonStyle}" 
-                             Click="DonateRadioButton_Click"/>
-                    <!--Home-->
-                    <RadioButton x:Name="HomeRadioButton" Tag="&#xE10F;" Content="Home" 
-                             Style="{StaticResource TabNavButtonStyle}" IsChecked="True" 
-                             Click="HomeRadioButton_Click" />
-                </StackPanel>
-            </Grid>
+                    <!--Message-->
+                    <TextBlock x:Name="BroadcastMessageText"
+                               Grid.Column="0"
+                               TextWrapping="WrapWholeWords"
+                               VerticalAlignment="Center"
+                               Loaded="BroadcastMessageText_Loaded">
 
-            <!--Main frame-->
-            <Frame x:Name="NavFrame" Grid.Row="1"/>
+                    </TextBlock>
+
+                    <!--Close Button-->
+                    <Button x:Name="BroadcastCloseButton"
+                            Content="Close"
+                            Grid.Column="1"
+                            VerticalAlignment="Top"
+                            Click="BroadcastCloseButton_Click"/>
+                </Grid>
+
+
+            </Border>
+
+            <!--Menu-->
+            <OneCode:NavigationView x:Name="NavView"
+                                    Grid.Row="1" AlwaysShowHeader="false" 
+                                    ItemInvoked="NavView_ItemInvoked"
+                                    Loaded="NavView_Loaded"
+                                    >
+                <OneCode:NavigationView.MenuItems>
+                    <!--<OneCode:NavigationViewItemHeader Content="Section A" />-->
+                    <OneCode:NavigationViewItem x:Name="HomeNavButton" Content="Home" Icon="Home" Tag="home" />
+                    <OneCode:NavigationViewItem x:Name="FavNavButton" Content="Favorites" Icon="Favorite" Tag="favs" />
+                    
+                    <!--When not signed in-->
+                    <OneCode:NavigationViewItem x:Name="SignInNavButton" Content="Sign In" Icon="Contact" Tag="signin" />
+                    
+                    <!--<OneCode:NavigationViewItemHeader Content="Section A" />-->
+                    <OneCode:NavigationViewItemSeparator />
+                    
+                    <OneCode:NavigationViewItem Content="About" Tag="about">
+                        <OneCode:NavigationViewItem.Icon>
+                            <FontIcon Glyph="&#xE783;"/>
+                        </OneCode:NavigationViewItem.Icon>
+                    </OneCode:NavigationViewItem>
+                    
+                    <OneCode:NavigationViewItem Content="Feedback" Icon="LikeDislike" Tag="feedback" />
+                    
+                    <OneCode:NavigationViewItem Content="Donate" Tag="donate">
+                        <OneCode:NavigationViewItem.Icon>
+                            <FontIcon Glyph="&#xE00B;"/>
+                        </OneCode:NavigationViewItem.Icon>
+                    </OneCode:NavigationViewItem>
+
+                    <OneCode:NavigationViewItemSeparator />
+                    
+                    <OneCode:NavigationViewItem x:Name="SwitchProfileButton" Content="Switch Profile" Icon="Switch" Tag="switch" />
+                    <OneCode:NavigationViewItem x:Name="SignOutButton" Content="Sign Out" Icon="Back" Tag="signout" />
+                </OneCode:NavigationView.MenuItems>
+                
+                <Frame x:Name="NavigationFrame" />
+            </OneCode:NavigationView>
+
             
             <!--Session ending message-->
             <Border x:Name="SessionEndWarning"
@@ -158,7 +191,7 @@
             
         </Grid>
 
-        <!--Progress indicator-->
+        <!--Progress indicator. This covers the whole window-->
         <Border x:Name="BusyBorder"
                 Background="#7F000000"
                 Visibility="Collapsed">

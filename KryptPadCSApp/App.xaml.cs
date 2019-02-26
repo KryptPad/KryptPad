@@ -17,10 +17,10 @@ namespace KryptPadCSApp
     /// </summary>
     public partial class App : Application, INotifyPropertyChanged
     {
-        private Frame _rootFrame;
+        //private Frame _rootFrame;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler<BackRequestedEventArgs> BackRequested;
+        //public event EventHandler<BackRequestedEventArgs> BackRequested;
 
         #region Properties
 
@@ -42,46 +42,13 @@ namespace KryptPadCSApp
                 _signInStatus = value;
                 // Value changed
                 OnPropertyChanged(nameof(SignInStatus));
+
             }
 
         }
 
-#if DEBUG
-        private bool _isLiveMode;
-#endif
-        /// <summary>
-        /// Gets whether the app is in Live mode
-        /// </summary>
-        internal bool IsLiveMode
-        {
-            get
-            {
-#if DEBUG
-                return _isLiveMode;
-#else
-                return true;
-#endif
-            }
-#if DEBUG
-            set
-            {
-                _isLiveMode = value;
-                
-                // Change the host url
-                if (_isLiveMode)
-                {
-                    KryptPadApi.ServiceHost = "https://www.kryptpad.com/";
-                } else
-                {
-                    KryptPadApi.ServiceHost = "http://test.kryptpad.com/";
-                }
-                
-                // Notify change
-                OnPropertyChanged(nameof(IsLiveMode));
 
-            }
-#endif
-        }
+        
 
         #endregion
 
@@ -109,21 +76,32 @@ namespace KryptPadCSApp
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            // Get the lifetime app installation instance id
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if (localSettings != null)
+            {
+                // Do we have a GUID?
+                var appId = localSettings.Values["AppId"];
+                if (appId == null || (Guid)appId == Guid.Empty)
+                {
+                    appId = Guid.NewGuid();
+                    localSettings.Values["AppId"] = appId;
+                }
 
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
-            if (Window.Current.Content == null)
+                // Set the app ID in the API
+                KryptPadApi.AppId = (Guid)appId;
+            }
+
+
+            var rootFrame = Window.Current.Content as Frame;
+
+            if (rootFrame == null)
             {
                 // Create main page instance
-                var mainPage = new MainPage();
-
-
-                //Get the Frame to act as the navigation context and navigate to the first page
-                _rootFrame = mainPage.RootFrame;
+                rootFrame = new Frame();
 
                 // Add some event handlers
-                _rootFrame.NavigationFailed += OnNavigationFailed;
-                _rootFrame.Navigated += OnNavigated;
+                rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -131,27 +109,19 @@ namespace KryptPadCSApp
                 }
 
                 // Place the frame in the current Window
-                Window.Current.Content = mainPage;
+                Window.Current.Content = rootFrame;
 
-
-                // Register a handler for BackRequested events and set the
-                // visibility of the Back button
-                SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
-
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
-                    _rootFrame.CanGoBack ?
-                    AppViewBackButtonVisibility.Visible :
-                    AppViewBackButtonVisibility.Collapsed;
-                
             }
 
-            if (_rootFrame.Content == null)
+
+            if (rootFrame.Content == null)
             {
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                _rootFrame.Navigate(typeof(LoginPage), e.Arguments);
+                rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
+            
             // Ensure the current window is active
             Window.Current.Activate();
 
@@ -192,15 +162,6 @@ namespace KryptPadCSApp
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
-        private void OnNavigated(object sender, NavigationEventArgs e)
-        {
-            // Each time a navigation event occurs, update the Back button's visibility
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
-                ((Frame)sender).CanGoBack ?
-                AppViewBackButtonVisibility.Visible :
-                AppViewBackButtonVisibility.Collapsed;
-        }
-
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
         /// without knowing whether the application will be terminated or resumed with the contents
@@ -220,21 +181,7 @@ namespace KryptPadCSApp
 
         }
 
-        private void OnBackRequested(object sender, BackRequestedEventArgs e)
-        {
-            // Pass the event args to the back requested handler for handling
-            BackRequested?.Invoke(sender, e);
-
-            // If we didn't handle the requerst, do default
-            if (!e.Handled)
-            {
-                if (_rootFrame != null && _rootFrame.CanGoBack)
-                {
-                    e.Handled = true;
-                    _rootFrame.GoBack();
-                }
-            }
-        }
+        
         #endregion
 
         #region Event Handlers

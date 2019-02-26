@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPad.Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,19 @@ namespace KryptPadCSApp.Models.Dialogs
                 OnPropertyChanged(nameof(Value));
                 // Check if valid
                 PrimaryCommand.OnCanExecuteChanged();
+            }
+        }
+
+        private string _promptText;
+        public string PromptText
+        {
+            get { return _promptText; }
+            set
+            {
+                _promptText = value;
+
+                // Value changed
+                OnPropertyChanged(nameof(PromptText));
             }
         }
 

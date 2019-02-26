@@ -119,10 +119,10 @@ namespace KryptPadCSApp.Dialogs
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
 
             }
 

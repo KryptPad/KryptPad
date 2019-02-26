@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KryptPadCSApp.Classes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,5 +28,20 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
         }
+
+        #region Events
+        private void TermsHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            // Go to terms page
+            NavigationHelper.Navigate(typeof(TermsPage), null);
+        }
+
+        private void PrivacyHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            // Go to privacy page
+            NavigationHelper.Navigate(typeof(PrivacyPage), null);
+        }
+        #endregion
+
     }
 }

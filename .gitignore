@@ -213,3 +213,4 @@ ModelManifest.xml
 /KryptPadCSApp/BundleArtifacts
 /KryptPadCSApp/Package.StoreAssociation.xml
 *.appxmanifest
+*.props

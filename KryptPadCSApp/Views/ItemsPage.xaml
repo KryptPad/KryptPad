@@ -23,40 +23,7 @@
         </TransitionCollection>
     </Page.Transitions>
 
-    <Page.Resources>
-     
-        <Style x:Key="GridViewItemStyle1" TargetType="GridViewItem">
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-            <Setter Property="Background" Value="{ThemeResource GridViewItemBackground}"/>
-            <Setter Property="Foreground" Value="{ThemeResource GridViewItemForeground}"/>
-            <Setter Property="TabNavigation" Value="Local"/>
-            <Setter Property="IsHoldingEnabled" Value="True"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-            <Setter Property="Margin" Value="0,0,4,4"/>
-            <Setter Property="MinWidth" Value="{ThemeResource GridViewItemMinWidth}"/>
-            <Setter Property="MinHeight" Value="{ThemeResource GridViewItemMinHeight}"/>
-            <Setter Property="AllowDrop" Value="False"/>
-            <Setter Property="UseSystemFocusVisuals" Value="True"/>
-            <Setter Property="FocusVisualMargin" Value="-2"/>
-            <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource GridViewItemFocusVisualPrimaryBrush}"/>
-            <Setter Property="FocusVisualPrimaryThickness" Value="2"/>
-            <Setter Property="FocusVisualSecondaryBrush" Value="{ThemeResource GridViewItemFocusVisualSecondaryBrush}"/>
-            <Setter Property="FocusVisualSecondaryThickness" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="GridViewItem">
-                        <ListViewItemPresenter Margin="12,12,12,0" CheckBrush="{ThemeResource GridViewItemCheckBrush}" ContentMargin="{TemplateBinding Padding}" CheckMode="{ThemeResource GridViewItemCheckMode}" ContentTransitions="{TemplateBinding ContentTransitions}" CheckBoxBrush="{ThemeResource GridViewItemCheckBoxBrush}" DragForeground="{ThemeResource GridViewItemDragForeground}" DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}" DragBackground="{ThemeResource GridViewItemDragBackground}" DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" FocusVisualPrimaryBrush="{TemplateBinding FocusVisualPrimaryBrush}" FocusVisualSecondaryThickness="{TemplateBinding FocusVisualSecondaryThickness}" FocusBorderBrush="{ThemeResource GridViewItemFocusBorderBrush}" FocusVisualMargin="{TemplateBinding FocusVisualMargin}" FocusVisualPrimaryThickness="{TemplateBinding FocusVisualPrimaryThickness}" FocusSecondaryBorderBrush="{ThemeResource GridViewItemFocusSecondaryBorderBrush}" FocusVisualSecondaryBrush="{TemplateBinding FocusVisualSecondaryBrush}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Control.IsTemplateFocusTarget="True" PointerOverForeground="{ThemeResource GridViewItemForegroundPointerOver}" PressedBackground="{ThemeResource GridViewItemBackgroundPressed}" PlaceholderBackground="{ThemeResource GridViewItemPlaceholderBackground}" PointerOverBackground="{ThemeResource GridViewItemBackgroundPointerOver}" ReorderHintOffset="{ThemeResource GridViewItemReorderHintThemeOffset}" SelectedPressedBackground="{ThemeResource GridViewItemBackgroundSelectedPressed}" SelectionCheckMarkVisualEnabled="{ThemeResource GridViewItemSelectionCheckMarkVisualEnabled}" SelectedForeground="{ThemeResource GridViewItemForegroundSelected}" SelectedPointerOverBackground="{ThemeResource GridViewItemBackgroundSelectedPointerOver}" SelectedBackground="{ThemeResource GridViewItemBackgroundSelected}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
-    </Page.Resources>
-
-    <Page.DataContext>
+     <Page.DataContext>
         <Models:ItemsPageViewModel/>
     </Page.DataContext>
 
@@ -89,7 +56,7 @@
                          Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"
-                         Margin="12,0"/>
+                         Margin="12,0" />
             </Grid>
 
             <!--Menu-->
@@ -129,18 +96,18 @@
                     >
             <!--<StackPanel Orientation="Horizontal">-->
 
-                <!--<TextBlock TextWrapping="WrapWholeWords"
+            <!--<TextBlock TextWrapping="WrapWholeWords"
                        VerticalAlignment="Center">
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#xE8C9;" FontSize="32" />
                 </TextBlock>-->
 
-                <TextBlock TextWrapping="WrapWholeWords"
+            <TextBlock TextWrapping="WrapWholeWords"
                            VerticalAlignment="Center">
                 
                     <Run>You haven't added any categories yet. Click</Run>
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#xE710;" />
                     <Run>to add a new category.</Run>
-                </TextBlock>
+            </TextBlock>
             <!--</StackPanel>-->
 
         </Border>
@@ -154,7 +121,6 @@
             </Grid.RowDefinitions>
 
             <!--Items grid-->
-            <!---->
             <GridView x:Name="ItemsGridView"
                       Grid.Row="0"
                       Margin="0"
@@ -164,7 +130,7 @@
                       Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                       ItemTemplate="{StaticResource GridViewItemsTemplate }"
                       ItemsPanel="{StaticResource DesktopCategoryItemPanelTemplate}"
-                      ItemContainerStyle="{StaticResource GridViewItemStyle1}"
+                      ItemContainerStyle="{StaticResource GridViewItemStyle}"
                       >
 
 

@@ -23,8 +23,10 @@ namespace KryptPadCSApp.Classes
         /// Shows a generic connection error dialog
         /// </summary>
         /// <returns></returns>
-        public static async Task<IUICommand> ShowGenericErrorDialogAsync()
+        public static async Task<IUICommand> ShowGenericErrorDialogAsync(Exception ex)
         {
+            // TODO: Implement some kind of error logging.
+
             // This is a generic error message
             return await ShowMessageDialogAsync(ResourceHelper.GetString("GenericError"), ResourceHelper.GetString("Error"));
 
@@ -61,7 +63,7 @@ namespace KryptPadCSApp.Classes
         /// <typeparam name="T"></typeparam>
         /// <param name="primaryAction"></param>
         /// <returns></returns>
-        public static async Task<ContentDialogResult> ShowNameDialog(Action<NamePromptDialog> primaryAction, string title = null, string originalValue = null)
+        public static async Task<string> GetValueAsync(Action<NamePromptDialog> primaryAction, string title = null, string originalValue = null, string promptText = "Enter name")
         {
             // Create instance of content dialog
             var d = new NamePromptDialog();
@@ -77,16 +79,19 @@ namespace KryptPadCSApp.Classes
                 d.Value = originalValue;
             }
 
+            // Set prompt
+            d.PromptText = promptText;
+
             // Show the dialog
             var res = await d.ShowAsync();
 
             // Determine which button was fired, and decide if we need to execute the primary action
-            if ((res == ContentDialogResult.Primary || d.Result == ContentDialogResult.Primary) && primaryAction != null)
+            if ((res == ContentDialogResult.Primary) && primaryAction != null)
             {
                 primaryAction(d);
             }
 
-            return res;
+            return (res == ContentDialogResult.Primary ? d.Value : null);
         }
 
         /// <summary>
@@ -110,7 +115,7 @@ namespace KryptPadCSApp.Classes
             var res = await d.ShowAsync();
 
             // Determine which button was fired, and decide if we need to execute the primary action
-            if ((res == ContentDialogResult.Primary || d.Result == ContentDialogResult.Primary) && primaryAction != null)
+            if ((res == ContentDialogResult.Primary) && primaryAction != null)
             {
                 primaryAction(d);
             }

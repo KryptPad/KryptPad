@@ -1,15 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 
 namespace KryptPad.Api.Models
 {
-    public class ApiItem
+    public class ApiItem : BaseModel
     {
         /// <summary>
         /// Gets or sets the ID of the item
@@ -36,6 +32,41 @@ namespace KryptPad.Api.Models
         /// </summary>
         public string BackgroundColor { get; set; }
 
+        private bool _isFavorite;
+
+        /// <summary>
+        /// Gets or sets this item as a favorite
+        /// </summary>
+        public bool IsFavorite
+        {
+            get { return _isFavorite; }
+            set
+            {
+                _isFavorite = value;
+                OnPropertyChanged(nameof(IsFavorite));
+                OnPropertyChanged(nameof(FavoritesForeground));
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets the foreground color of the favorites button
+        /// </summary>
+        [JsonIgnore]
+        public SolidColorBrush FavoritesForeground
+        {
+            get
+            {
+                if (IsFavorite)
+                {
+                    return new SolidColorBrush(Color.FromArgb(255, 255, 250, 150));
+                }
+                else
+                {
+                    return new SolidColorBrush(Colors.DarkGray);
+                }
+            }
+        }
 
         private SolidColorBrush _brush;
         /// <summary>
@@ -58,7 +89,7 @@ namespace KryptPad.Api.Models
                 {
                     _brush = GetSolidColorBrush(BackgroundColor);
                 }
-                
+
                 // Return the color as a SolidColorBrush
                 return _brush;
             }
@@ -82,7 +113,7 @@ namespace KryptPad.Api.Models
             byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
             byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
             byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
-            SolidColorBrush myBrush = new SolidColorBrush(Color.FromArgb(a, r, g, b));
+            var myBrush = new SolidColorBrush(Color.FromArgb(a, r, g, b));
             return myBrush;
         }
     }

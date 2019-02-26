@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
+    xmlns:Commanding="using:Commanding"
     x:Class="KryptPadCSApp.Views.AboutPage"
     mc:Ignorable="d">
 
@@ -65,7 +66,7 @@
                     <StackPanel x:Name="MessageTextBlock">
 
                         <!--Header-->
-                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
+                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Margin="0,0,0,12">
 						<Run Text="Krypt Pad"/>
                         </TextBlock>
 
@@ -83,7 +84,12 @@
                             </Hyperlink>
                         </TextBlock>
 
-
+                        <!--Link to terms page-->
+                        <TextBlock Grid.Row="5" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
+                            Krypt Pad is licensed under MIT. By using this software, you accept this
+                            <Hyperlink x:Name="TermsHyperlink" Click="TermsHyperlink_Click">license</Hyperlink>. View the 
+                            <Hyperlink x:Name="PrivacyHyperlink" Click="PrivacyHyperlink_Click">privacy policy</Hyperlink>.
+                        </TextBlock>
                     </StackPanel>
 
 

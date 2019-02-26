@@ -28,16 +28,12 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
 
-#if DEBUG
-            // Show the option to turn on live mode
-            LiveModeCheckBox.Visibility = Visibility.Visible;
-#endif
         }
 
-        private void Hyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        private void TermsHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {
             // Go to terms page
-            NavigationHelper.GoToLicenseTerms();
+            NavigationHelper.Navigate(typeof(TermsPage), null);
         }
 
         private void PrivacyHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
@@ -48,6 +44,9 @@ namespace KryptPadCSApp.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            // Clear backstack
+            NavigationHelper.ClearBackStack();
+
             await (DataContext as LoginPageViewModel).AutoLoginAsync();
         }
 
@@ -64,6 +63,11 @@ namespace KryptPadCSApp.Views
                 }
             }
         }
-        
+
+        private async void ForgotPasswordLink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            var m = DataContext as LoginPageViewModel;
+            await m.SendForgotPasswordLinkAsync();
+        }
     }
 }

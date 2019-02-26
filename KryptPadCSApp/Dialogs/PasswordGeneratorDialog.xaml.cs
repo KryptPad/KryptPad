@@ -26,8 +26,7 @@ namespace KryptPadCSApp.Dialogs
             this.InitializeComponent();
 
             // Determine the command's can execute state, and hook into the changed event
-            var m = DataContext as PasswordGeneratorDialogViewModel;
-            if (m != null && m.PrimaryCommand != null)
+            if (DataContext is PasswordGeneratorDialogViewModel m && m.PrimaryCommand != null)
             {
                 m.PrimaryCommand.CanExecuteChanged += (sender, e) =>
                 {

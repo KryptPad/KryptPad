@@ -4,9 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
 
-namespace KryptPadCSApp.Models
+namespace KryptPad.Api.Models
 {
     public class BaseModel : INotifyPropertyChanged
     {

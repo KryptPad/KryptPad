@@ -1,1 +1,1 @@
-C:\Users\Eric\Source\Repos\KryptPad\KryptPadCSApp\bin\ARM\Release\Upload\KryptPadCSApp_10.3.28.0\KryptPadCSApp_10.3.28.0_x86_x64_arm.appxbundle
+C:\Users\Eric\Source\Repos\KryptPad\KryptPadCSApp\bin\ARM\Release\Upload\KryptPadCSApp_10.3.49.0\KryptPadCSApp_10.3.49.0_x86_x64_arm.appxbundle

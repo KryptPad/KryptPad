@@ -71,7 +71,7 @@ namespace KryptPadCSApp.Dialogs
                 // If the user entered a passphrase, return it and hide the dialog
                 if (await ValidateInput())
                 {
-                    Close(ContentDialogResult.Primary);
+                    Hide(ContentDialogResult.Primary);
                 }
             }
         }
