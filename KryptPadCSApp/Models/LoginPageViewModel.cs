@@ -295,7 +295,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Get the email address
-                var email = await DialogHelper.GetValueAsync(null, "Email", Email, "Enter your account email address");
+                var email = await DialogHelper.GetValueAsync(null, ResourceHelper.GetString("ForgotPassword"), Email, ResourceHelper.GetString("ForgotPasswordPrompt"));
                 if (email != null)
                 {
                     // Log in and get access token

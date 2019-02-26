@@ -41,7 +41,7 @@
         <ScrollViewer>
 
             <!--Main grid for page-->
-            <Grid x:Name="MainGrid" >
+            <Grid x:Name="MainGrid"  Background="{ThemeResource AppHeaderBackgroundThemeBrush}" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
@@ -49,8 +49,7 @@
                
 
                 <!--Content is positioned with RelativePanel for dynamic placement with VisualStateManager-->
-                <RelativePanel HorizontalAlignment="Center"
-                               Background="{ThemeResource AppHeaderBackgroundThemeBrush}">
+                <RelativePanel x:Name="MainRelativePanel">
 
                     <!--Main grid for input-->
                     <Grid x:Name="LoginGrid"
@@ -72,8 +71,9 @@
 
 
 
-                        <TextBlock Grid.Row="0" TextWrapping="WrapWholeWords" Margin="0,0,0,12">
-                            Sign in to your account. If you don't have an account, sign up. It's free!
+                        <TextBlock Grid.Row="0" TextWrapping="WrapWholeWords" Margin="0,0,0,12"
+                                   FontSize="24"
+                                   x:Uid="SignIn">
                         </TextBlock>
 
                         <!--Login email address-->
@@ -186,22 +186,23 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
+                        <Setter Target="MainRelativePanel.HorizontalAlignment" Value="Center" />
                         <Setter Target="MainGrid.VerticalAlignment" Value="Top" />
                         <Setter Target="SocialGrid.(RelativePanel.Below)" Value="LoginGrid" />
                         <Setter Target="SocialGrid.(RelativePanel.AlignLeftWith)" Value="LoginGrid" />
                         <Setter Target="LoginGrid.BorderThickness" Value="0,0,0,1" />
-
                     </VisualState.Setters>
                 </VisualState>
 
                 <!--Move the grid to the center of the page-->
                 <VisualState x:Name="VisualStateTablet">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1024"/>
+                        <AdaptiveTrigger MinWindowWidth="640"/>
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MainGrid.VerticalAlignment" Value="Center" />
+                        <Setter Target="MainRelativePanel.HorizontalAlignment" Value="Left" />
+                        <Setter Target="MainGrid.VerticalAlignment" Value="Top" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
