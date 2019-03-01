@@ -17,7 +17,7 @@ namespace KryptPadCSApp
     /// </summary>
     public partial class App : Application, INotifyPropertyChanged
     {
-        //private Frame _rootFrame;
+        private Frame _rootFrame;
 
         public event PropertyChangedEventHandler PropertyChanged;
         //public event EventHandler<BackRequestedEventArgs> BackRequested;
@@ -48,7 +48,7 @@ namespace KryptPadCSApp
         }
 
 
-        
+
 
         #endregion
 
@@ -93,15 +93,16 @@ namespace KryptPadCSApp
             }
 
 
-            var rootFrame = Window.Current.Content as Frame;
+            _rootFrame = Window.Current.Content as Frame;
 
-            if (rootFrame == null)
+            if (_rootFrame == null)
             {
                 // Create main page instance
-                rootFrame = new Frame();
+                _rootFrame = new Frame();
 
                 // Add some event handlers
-                rootFrame.NavigationFailed += OnNavigationFailed;
+                _rootFrame.Navigated += OnNavigated;
+                _rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -109,21 +110,24 @@ namespace KryptPadCSApp
                 }
 
                 // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
+                Window.Current.Content = _rootFrame;
 
             }
 
 
-            if (rootFrame.Content == null)
+            if (_rootFrame.Content == null)
             {
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                _rootFrame.Navigate(typeof(LoginPage), e.Arguments);
             }
-            
+
             // Ensure the current window is active
             Window.Current.Activate();
+
+            // Set up back request handler
+            SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested; ;
 
             // Check for presence of the status bar
             //if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
@@ -136,6 +140,23 @@ namespace KryptPadCSApp
             //    statusBar.ForegroundColor = Windows.UI.Colors.White;
 
             //}
+        }
+
+        private void OnNavigated(object sender, NavigationEventArgs e)
+        {
+            // Each time a navigation event occurs, update the Back button's visibility
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = _rootFrame.CanGoBack ?
+                AppViewBackButtonVisibility.Visible :
+                AppViewBackButtonVisibility.Collapsed;
+        }
+
+        private void App_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            // If we didn't handle the request, do default
+            if (!e.Handled)
+            {
+                NavigationHelper.GoBack(e);
+            }
         }
 
         protected override void OnActivated(IActivatedEventArgs args)
@@ -181,7 +202,7 @@ namespace KryptPadCSApp
 
         }
 
-        
+
         #endregion
 
         #region Event Handlers

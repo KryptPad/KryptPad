@@ -100,8 +100,9 @@ namespace KryptPadCSApp.Models
         {
             // Set the visibility of the busy indicator
             BusyIndicatorVisibility = IsBusy ? Visibility.Visible : Visibility.Collapsed;
-            // Set main window busy state
-            ((Window.Current.Content as Frame).Content as MainPage).SetIsBusy(IsBusy);
+            // If the page is loaded inside of the MainPage, then set the IsBusy property on
+            // that page. Otherwise, we can just ignore it
+            ((Window.Current.Content as Frame).Content as MainPage)?.SetIsBusy(IsBusy);
         }
 
         #endregion

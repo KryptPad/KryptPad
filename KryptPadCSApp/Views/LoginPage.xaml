@@ -41,7 +41,7 @@
         <ScrollViewer>
 
             <!--Main grid for page-->
-            <Grid x:Name="MainGrid"  Background="{ThemeResource AppHeaderBackgroundThemeBrush}" >
+            <Grid x:Name="MainGrid" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
@@ -173,7 +173,19 @@
 
         </ScrollViewer>
 
+        <!--Progress indicator. This covers the whole window-->
+        <Border x:Name="BusyBorder"
+                Background="#7F000000"
+                Visibility="{Binding BusyIndicatorVisibility}">
 
+            <!--Indicates something is happening-->
+            <ProgressRing x:Name="BusyIndicator"
+                          Visibility="Visible"
+                          IsActive="{Binding IsBusy}"
+                          Width="50"
+                          Height="50"
+                          Foreground="White"/>
+        </Border>
 
         <!--Visual state manager-->
         <VisualStateManager.VisualStateGroups>
@@ -201,7 +213,7 @@
                     </VisualState.StateTriggers>
 
                     <VisualState.Setters>
-                        <Setter Target="MainRelativePanel.HorizontalAlignment" Value="Left" />
+                        <Setter Target="MainRelativePanel.HorizontalAlignment" Value="Center" />
                         <Setter Target="MainGrid.VerticalAlignment" Value="Top" />
                     </VisualState.Setters>
                 </VisualState>

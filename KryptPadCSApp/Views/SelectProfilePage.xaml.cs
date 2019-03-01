@@ -33,23 +33,11 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
 
-            // Listen to the back button here
-            //_currentView.BackRequested += CurrentView_BackRequested;
+            
         }
-
-        //private void CurrentView_BackRequested(object sender, BackRequestedEventArgs e)
-        //{
-        //    // Tell the app we are signing out so that we don't end up auto-logging in again
-        //    (App.Current as App).SignInStatus = SignInStatus.SignedOut;
-        //    // Remove handler
-        //    _currentView.BackRequested -= CurrentView_BackRequested;
-        //}
 
         private async void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // Clear backstack
-            NavigationHelper.ClearBackStack();
-
             // Load the profiles
             var model = DataContext as SelectProfilePageViewModel;
 
@@ -58,6 +46,17 @@ namespace KryptPadCSApp.Views
 
         }
 
-       
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            // If we came from the main page, clear the backstack
+            if (this.Frame.BackStack[this.Frame.BackStack.Count-1].SourcePageType == typeof(MainPage))
+            {
+                NavigationHelper.ClearBackStack();
+            }
+
+            base.OnNavigatedTo(e);
+        }
+
     }
 }

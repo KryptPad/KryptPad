@@ -39,17 +39,18 @@ namespace KryptPadCSApp
         private bool _messageShowing = false;
 
         // List of ValueTuple holding the Navigation Tag and the relative Navigation Page  
-        private readonly IList<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
+        private readonly IList<(string Tag, Type Page, NavigationHelper.NavigationType NavType)> _pages = 
+            new List<(string Tag, Type Page, NavigationHelper.NavigationType NavType)>
         {
-            ("home", typeof(ItemsPage)),
-            ("favs", typeof(FavoritesPage)),
-            ("signin", typeof(LoginPage)),
-            ("about", typeof(AboutPage)),
-            ("feedback", typeof(FeedbackPage)),
-            ("donate", typeof(DonatePage)),
-            ("switch", typeof(SelectProfilePage)),
-            ("signout", typeof(LoginPage)),
-            ("settings", typeof(SettingsPage))
+            ("home", typeof(ItemsPage), NavigationHelper.NavigationType.Main),
+            ("favs", typeof(FavoritesPage), NavigationHelper.NavigationType.Main),
+            ("signin", typeof(LoginPage), NavigationHelper.NavigationType.Root),
+            ("about", typeof(AboutPage), NavigationHelper.NavigationType.Main),
+            ("feedback", typeof(FeedbackPage), NavigationHelper.NavigationType.Main),
+            ("donate", typeof(DonatePage), NavigationHelper.NavigationType.Main),
+            ("switch", typeof(SelectProfilePage), NavigationHelper.NavigationType.Root),
+            ("signout", typeof(LoginPage), NavigationHelper.NavigationType.Root),
+            ("settings", typeof(SettingsPage), NavigationHelper.NavigationType.Current)
         };
         #endregion
 
@@ -63,17 +64,6 @@ namespace KryptPadCSApp
         /// Gets or sets whether the app is busy
         /// </summary>
         private bool IsBusy { get; set; }
-
-        /// <summary>
-        /// Gets whether the user is signed in
-        /// </summary>
-        //public bool IsSignedIn
-        //{
-        //    get
-        //    {
-        //        return (App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile;
-        //    }
-        //}
 
         #endregion
 
@@ -128,16 +118,17 @@ namespace KryptPadCSApp
                 });
             };
 
-            // Success, tell the app we are signed in
-            (App.Current as App).PropertyChanged += (sender, e) =>
-            {
-                // Success, tell the app we are signed in
-                if (e.PropertyName == nameof(App.SignInStatus))
-                {
-                    ShowSignedInControls();
-                }
-            };
+            //// Success, tell the app we are signed in
+            //(App.Current as App).PropertyChanged += (sender, e) =>
+            //{
+            //    // Success, tell the app we are signed in
+            //    if (e.PropertyName == nameof(App.SignInStatus))
+            //    {
+            //        ShowSignedInControls();
+            //    }
+            //};
 
+            ShowSignedInControls();
         }
 
         #endregion
@@ -155,15 +146,21 @@ namespace KryptPadCSApp
             // Set the nav frame events
             NavigationFrame.Navigated += On_Navigated;
 
-            // NavView doesn't load any page by default: you need to specify it
-            NavigationHelper.Navigate(typeof(LoginPage), null);
-
         }
 
         private void NavigateToPage(string navItemTag)
         {
             var item = _pages.First(p => p.Tag.Equals(navItemTag));
-            NavigationHelper.Navigate(item.Page, null);
+
+            // If the page is select profile, clear the back stack
+            if (item.Page == typeof(SelectProfilePage))
+            {
+                // Clear backstack
+                NavigationHelper.ClearBackStack();
+
+            }
+
+            NavigationHelper.Navigate(item.Page, null, item.NavType);
         }
         
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -292,6 +289,7 @@ namespace KryptPadCSApp
 
             // Show settings if user is not signed out
             NavView.IsSettingsVisible = signinStatus != SignInStatus.SignedOut;
+            NavView.IsPaneOpen = false;
 
             // Show sign in if user is not signed in with a profile
             SignInNavButton.Visibility = signinStatus != SignInStatus.SignedInWithProfile ? Visibility.Visible : Visibility.Collapsed;

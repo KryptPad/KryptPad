@@ -99,6 +99,8 @@ namespace KryptPadCSApp.Models
 
         public Command DeleteSavedPassphraseCommand { get; protected set; }
 
+        public Command SignOutCommand { get; protected set; }
+
         #endregion
 
         #region Methods
@@ -218,6 +220,8 @@ namespace KryptPadCSApp.Models
             RestoreBackupCommand = new Command(RestoreBackupCommandHandler);
 
             DeleteSavedPassphraseCommand = new Command(DeleteSavedPassphraseCommandHandler);
+
+            SignOutCommand = new Command(SignOutCommandHandler);
         }
 
         private async void ProfileSelectedCommandHandler(object obj)
@@ -316,6 +320,11 @@ namespace KryptPadCSApp.Models
 
         }
 
+        private void SignOutCommandHandler(object obj)
+        {
+            NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Root);
+        }
+
         #endregion
 
 
@@ -345,7 +354,8 @@ namespace KryptPadCSApp.Models
                 }
 
                 // When a profile is selected, navigate to main page
-                NavigationHelper.Navigate(typeof(ItemsPage), null);
+                NavigationHelper.ClearBackStack();
+                NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Main);
 
             }
             catch (WebException)
