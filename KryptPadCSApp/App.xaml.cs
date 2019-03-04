@@ -20,8 +20,7 @@ namespace KryptPadCSApp
         private Frame _rootFrame;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        //public event EventHandler<BackRequestedEventArgs> BackRequested;
-
+        
         #region Properties
 
         /// <summary>
@@ -127,7 +126,7 @@ namespace KryptPadCSApp
             Window.Current.Activate();
 
             // Set up back request handler
-            SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested; ;
+            SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested;
 
             // Check for presence of the status bar
             //if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))

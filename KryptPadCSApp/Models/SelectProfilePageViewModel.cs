@@ -354,7 +354,6 @@ namespace KryptPadCSApp.Models
                 }
 
                 // When a profile is selected, navigate to main page
-                NavigationHelper.ClearBackStack();
                 NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Main);
 
             }

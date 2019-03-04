@@ -36,22 +36,6 @@ namespace KryptPadCSApp.Views
 
         #region Overrides
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            // Add back button handle
-            //(App.Current as App).BackRequested += App_BackRequested;
-
-            base.OnNavigatedTo(e);
-        }
-
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-        {
-            // Remove the back button handle
-            //(App.Current as App).BackRequested -= App_BackRequested;
-
-            base.OnNavigatingFrom(e);
-        }
-
         #endregion
 
         #region Events

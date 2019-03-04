@@ -144,7 +144,7 @@ namespace KryptPadCSApp.Classes
                 e.Handled = true;
                 frame.GoBack();
             }
-            
+
         }
 
         /// <summary>
@@ -162,6 +162,15 @@ namespace KryptPadCSApp.Classes
                 // Hide the back button
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
             }
+        }
+
+        public static void RemoveLastFromBackStack(Frame frame = null)
+        {
+            // Use the supplied frame, or get it if we didn't get it from parameter
+            frame = frame ?? GetFrame();
+
+            // Remove last frame so we can't go back to the main page
+            frame.BackStack.RemoveAt(frame.BackStack.Count - 1);
         }
 
     }

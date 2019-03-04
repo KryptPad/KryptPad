@@ -212,17 +212,10 @@ namespace KryptPadCSApp
 
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            // Pass the event args to the back requested handler for handling
-            //BackRequested?.Invoke(sender, e);
-
             // If we didn't handle the requerst, do default
             if (!e.Handled)
             {
-                if (NavigationFrame.CanGoBack)
-                {
-                    e.Handled = true;
-                    NavigationFrame.GoBack();
-                }
+                NavigationHelper.GoBack(e);
             }
         }
 
