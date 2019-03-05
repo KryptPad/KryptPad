@@ -60,26 +60,32 @@ namespace KryptPadCSApp.Models
 
             try
             {
-                // Log in and get access token
-                await KryptPadApi.DeleteAccountAsync();
 
-                // Create instance to credential locker
-                var locker = new PasswordVault();
+                await DialogHelper.Confirm(
+                    "Are you sure you want to delete your account? ALL OF YOUR DATA WILL BE DELETED! THIS ACTION CANNOT BE UNDONE.",
+                    async (p) => {
+                        // Log in and get access token
+                        await KryptPadApi.DeleteAccountAsync();
 
-                try
-                {
-                    // Clear out the saved credential for the resource
-                    var creds = locker.FindAllByResource(Constants.LOCKER_RESOURCE);
-                    foreach (var cred in creds)
-                    {
-                        // Remove only the credentials for the given resource
-                        locker.Remove(cred);
+                        // Create instance to credential locker
+                        var locker = new PasswordVault();
+
+                        try
+                        {
+                            // Clear out the saved credential for the resource
+                            var creds = locker.FindAllByResource(Constants.LOCKER_RESOURCE);
+                            foreach (var cred in creds)
+                            {
+                                // Remove only the credentials for the given resource
+                                locker.Remove(cred);
+                            }
+                        }
+                        catch { /* Nothing to see here */ }
+
+                        // Navigate to the login page
+                        NavigationHelper.Navigate(typeof(LoginPage), null);
                     }
-                }
-                catch { /* Nothing to see here */ }
-
-                // Navigate to the login page
-                NavigationHelper.Navigate(typeof(LoginPage), null);
+                );
 
             }
             catch (WebException ex)

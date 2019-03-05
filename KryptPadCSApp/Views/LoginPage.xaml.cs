@@ -42,6 +42,21 @@ namespace KryptPadCSApp.Views
             NavigationHelper.Navigate(typeof(PrivacyPage), null);
         }
 
+        private async void DonateLink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            try
+            {
+                // Launch the uri
+                await Windows.System.Launcher.LaunchUriAsync(
+                    new Uri("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5547784"));
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowMessageDialogAsync("Could not launch the requested url.");
+            }
+        }
+
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // Clear backstack
@@ -69,5 +84,7 @@ namespace KryptPadCSApp.Views
             var m = DataContext as LoginPageViewModel;
             await m.SendForgotPasswordLinkAsync();
         }
+
+        
     }
 }

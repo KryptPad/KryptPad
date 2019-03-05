@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace KryptPadCSApp.Exceptions
 {
-    class WarningException : Exception
-    {
-        public WarningException(string message) : base(message)
-        {
+    //class WarningException : Exception
+    //{
+    //    public WarningException(string message) : base(message)
+    //    {
 
-        }
-    }
+    //    }
+    //}
 }

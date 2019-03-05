@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
+    xmlns:Components="using:KryptPadCSApp.Components"
     x:Class="KryptPadCSApp.Views.LoginPage"
     mc:Ignorable="d" Loaded="Page_Loaded">
 
@@ -41,15 +42,20 @@
         <ScrollViewer>
 
             <!--Main grid for page-->
-            <Grid x:Name="MainGrid" >
+            <Grid x:Name="MainGrid"
+                  MaxWidth="800">
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-               
+
+                <!--Branding-->
+                <Components:Logo Grid.Row="0" />
 
                 <!--Content is positioned with RelativePanel for dynamic placement with VisualStateManager-->
-                <RelativePanel x:Name="MainRelativePanel">
+                <RelativePanel x:Name="MainRelativePanel" Grid.Row="1"
+                               Background="{ThemeResource AppHeaderBackgroundThemeBrush}">
 
                     <!--Main grid for input-->
                     <Grid x:Name="LoginGrid"
@@ -67,9 +73,6 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
-
-
-
 
                         <TextBlock Grid.Row="0" TextWrapping="WrapWholeWords" Margin="0,0,0,12"
                                    FontSize="24"
@@ -95,7 +98,7 @@
                         <TextBlock Grid.Row="3" Margin="0,0,0,12">
                             <Hyperlink x:Name="ForgotPasswordLink" Click="ForgotPasswordLink_Click">Forgot password</Hyperlink>
                         </TextBlock>
-                        
+
                         <!--Remember me-->
                         <CheckBox Grid.Row="4"
                           IsChecked="{Binding AutoSignIn, Mode=TwoWay}"  
@@ -162,6 +165,29 @@
 
 
                             </StackPanel>
+
+                            <!--Donation prompt-->
+                            <!--Heart-->
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock x:Name="IconTextBlock" Text="&#xE00B;"
+                                           Grid.Column="0"
+					                       Margin="0,0,24,0"
+					                       FontFamily="{ThemeResource SymbolThemeFontFamily}"
+					                       FontSize="64"
+					                       Foreground="#FFFD6060" />
+                                <TextBlock Grid.Column="1"
+                                           TextWrapping="WrapWholeWords"
+                                           VerticalAlignment="Center">
+                                    Help support development of Krypt Pad. Your donation keeps this software free.
+                                    <LineBreak />
+                                    <Hyperlink x:Name="DonateLink" Click="DonateLink_Click">Donate now!</Hyperlink>
+                                </TextBlock>
+                            </Grid>
 
                         </StackPanel>
 

@@ -108,7 +108,7 @@ namespace KryptPadCSApp.Dialogs
                 (App.Current as App).SignInStatus = SignInStatus.SignedInWithProfile;
 
                 // Redirect to the main item list page
-                NavigationHelper.Navigate(typeof(ItemsPage), null);
+                NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Main);
 
                 // Hide the dialog
                 Hide();

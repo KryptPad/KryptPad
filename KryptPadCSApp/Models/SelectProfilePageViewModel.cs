@@ -101,6 +101,8 @@ namespace KryptPadCSApp.Models
 
         public Command SignOutCommand { get; protected set; }
 
+        public Command SettingsCommand { get; protected set; }
+
         #endregion
 
         #region Methods
@@ -222,6 +224,8 @@ namespace KryptPadCSApp.Models
             DeleteSavedPassphraseCommand = new Command(DeleteSavedPassphraseCommandHandler);
 
             SignOutCommand = new Command(SignOutCommandHandler);
+
+            SettingsCommand = new Command(SettingsCommandHandler);
         }
 
         private async void ProfileSelectedCommandHandler(object obj)
@@ -322,7 +326,12 @@ namespace KryptPadCSApp.Models
 
         private void SignOutCommandHandler(object obj)
         {
-            NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Root);
+            NavigationHelper.Navigate(typeof(LoginPage), null);
+        }
+
+        private void SettingsCommandHandler(object obj)
+        {
+            NavigationHelper.Navigate(typeof(SettingsPage), null);
         }
 
         #endregion

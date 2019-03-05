@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
-    xmlns:OneCode="using:OneCode.Windows.UWP.Controls"
     xmlns:Converters="using:KryptPadCSApp.Converters"
     x:Class="KryptPadCSApp.MainPage"
     mc:Ignorable="d"
@@ -58,44 +57,44 @@
             </Border>
 
             <!--Menu-->
-            <OneCode:NavigationView x:Name="NavView"
+            <NavigationView x:Name="NavView"
                                     Grid.Row="1" AlwaysShowHeader="false" 
                                     ItemInvoked="NavView_ItemInvoked"
                                     Loaded="NavView_Loaded"
                                     >
-                <OneCode:NavigationView.MenuItems>
-                    <!--<OneCode:NavigationViewItemHeader Content="Section A" />-->
-                    <OneCode:NavigationViewItem x:Name="HomeNavButton" Content="Home" Icon="Home" Tag="home" />
-                    <OneCode:NavigationViewItem x:Name="FavNavButton" Content="Favorites" Icon="Favorite" Tag="favs" />
+                <NavigationView.MenuItems>
+                    <!--<NavigationViewItemHeader Content="Section A" />-->
+                    <NavigationViewItem x:Name="HomeNavButton" Content="Home" Icon="Home" Tag="home" />
+                    <NavigationViewItem x:Name="FavNavButton" Content="Favorites" Icon="Favorite" Tag="favs" />
                     
                     <!--When not signed in-->
-                    <OneCode:NavigationViewItem x:Name="SignInNavButton" Content="Sign In" Icon="Contact" Tag="signin" />
+                    <NavigationViewItem x:Name="SignInNavButton" Content="Sign In" Icon="Contact" Tag="signin" />
                     
-                    <!--<OneCode:NavigationViewItemHeader Content="Section A" />-->
-                    <OneCode:NavigationViewItemSeparator />
+                    <!--<NavigationViewItemHeader Content="Section A" />-->
+                    <NavigationViewItemSeparator />
                     
-                    <OneCode:NavigationViewItem Content="About" Tag="about">
-                        <OneCode:NavigationViewItem.Icon>
+                    <NavigationViewItem Content="About" Tag="about">
+                        <NavigationViewItem.Icon>
                             <FontIcon Glyph="&#xE783;"/>
-                        </OneCode:NavigationViewItem.Icon>
-                    </OneCode:NavigationViewItem>
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
                     
-                    <OneCode:NavigationViewItem Content="Feedback" Icon="LikeDislike" Tag="feedback" />
+                    <NavigationViewItem Content="Feedback" Icon="LikeDislike" Tag="feedback" />
                     
-                    <OneCode:NavigationViewItem Content="Donate" Tag="donate">
-                        <OneCode:NavigationViewItem.Icon>
+                    <NavigationViewItem Content="Donate" Tag="donate">
+                        <NavigationViewItem.Icon>
                             <FontIcon Glyph="&#xE00B;"/>
-                        </OneCode:NavigationViewItem.Icon>
-                    </OneCode:NavigationViewItem>
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
 
-                    <OneCode:NavigationViewItemSeparator />
+                    <NavigationViewItemSeparator />
                     
-                    <OneCode:NavigationViewItem x:Name="SwitchProfileButton" Content="Switch Profile" Icon="Switch" Tag="switch" />
-                    <OneCode:NavigationViewItem x:Name="SignOutButton" Content="Sign Out" Icon="Back" Tag="signout" />
-                </OneCode:NavigationView.MenuItems>
+                    <NavigationViewItem x:Name="SwitchProfileButton" Content="Switch Profile" Icon="Switch" Tag="switch" />
+                    <NavigationViewItem x:Name="SignOutButton" Content="Sign Out" Icon="Back" Tag="signout" />
+                </NavigationView.MenuItems>
                 
                 <Frame x:Name="NavigationFrame" />
-            </OneCode:NavigationView>
+            </NavigationView>
 
             
             <!--Session ending message-->

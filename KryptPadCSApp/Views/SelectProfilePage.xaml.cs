@@ -32,15 +32,21 @@ namespace KryptPadCSApp.Views
 
         }
 
-
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            if (e.SourcePageType == typeof(MainPage))
+            {
+                Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
+            }
+            base.OnNavigatedFrom(e);
+        }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
 
             // If we came from the main page, clear the backstack
             if (Frame.BackStack.Count > 0 && Frame.BackStack[Frame.BackStack.Count - 1].SourcePageType == typeof(MainPage))
             {
-                NavigationHelper.RemoveLastFromBackStack();
-
+                Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
             }
 
             base.OnNavigatedTo(e);

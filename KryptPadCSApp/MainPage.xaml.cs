@@ -22,7 +22,7 @@ using KryptPadCSApp.Classes;
 using KryptPad.Api;
 using Windows.UI.Core;
 using System.Net;
-using OneCode.Windows.UWP.Controls;
+//using OneCode.Windows.UWP.Controls;
 using System.ComponentModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
