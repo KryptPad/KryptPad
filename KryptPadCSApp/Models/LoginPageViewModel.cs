@@ -4,6 +4,7 @@ using KryptPadCSApp.Classes;
 using KryptPadCSApp.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -253,6 +254,7 @@ namespace KryptPadCSApp.Models
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
                 // Failed
                 await DialogHelper.ShowGenericErrorDialogAsync();
             }
