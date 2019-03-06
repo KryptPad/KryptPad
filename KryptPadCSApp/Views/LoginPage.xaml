@@ -185,7 +185,7 @@
                                            VerticalAlignment="Center">
                                     Help support development of Krypt Pad. Your donation keeps this software free.
                                     <LineBreak />
-                                    <Hyperlink x:Name="DonateLink" Click="DonateLink_Click">Donate now!</Hyperlink>
+                                    <Hyperlink x:Name="DonateLink" Click="DonateLink_Click">Give a little!</Hyperlink>
                                 </TextBlock>
                             </Grid>
 
