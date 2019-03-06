@@ -54,7 +54,7 @@ namespace KryptPad.Api
         /// <summary>
         /// Gets or sets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; set; } = "http://test.kryptpad.com/";
+        public static string ServiceHost { get; set; } = "https://test.kryptpad.com/";
 
 #else
         /// <summary>
