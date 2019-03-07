@@ -80,17 +80,17 @@ namespace KryptPadCSApp
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     // Triggered when the access token has reached its expiration date
-                    NavigationHelper.Navigate(typeof(LoginPage), null);
+                    //NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Root);
 
                     // Hide the message
-                    ShowSessionWarningMessage(false);
+                    //ShowSessionWarningMessage(false);
                 });
 
             };
 
             KryptPadApi.SessionEnding += async (expiration) =>
             {
-                var warningTime = expiration.AddMinutes(-1);
+                var warningTime = expiration.AddMinutes(-KryptPadApi.SESSION_WARNING_MINUTES);
 
                 // Show the message
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>

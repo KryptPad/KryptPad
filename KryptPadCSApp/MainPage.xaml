@@ -18,6 +18,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <!--Broadcast message-->
@@ -58,10 +59,11 @@
 
             <!--Menu-->
             <NavigationView x:Name="NavView"
-                                    Grid.Row="1" AlwaysShowHeader="false" 
-                                    ItemInvoked="NavView_ItemInvoked"
-                                    Loaded="NavView_Loaded"
-                                    >
+                            Grid.Row="1" 
+                            AlwaysShowHeader="false" 
+                            ItemInvoked="NavView_ItemInvoked"
+                            Loaded="NavView_Loaded">
+                
                 <NavigationView.MenuItems>
                     <!--<NavigationViewItemHeader Content="Section A" />-->
                     <NavigationViewItem x:Name="HomeNavButton" Content="Home" Icon="Home" Tag="home" />
@@ -95,11 +97,10 @@
                 
                 <Frame x:Name="NavigationFrame" />
             </NavigationView>
-
             
             <!--Session ending message-->
             <Border x:Name="SessionEndWarning"
-                    Grid.Row="1" 
+                    Grid.Row="2" 
                     Background="#FFFF4A4A"
                     VerticalAlignment="Bottom"
                     Padding="12"
