@@ -1,0 +1,105 @@
+﻿<Page
+    x:Class="KryptPadCSApp.RootPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KryptPadCSApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded">
+
+    <Grid>
+        <Frame x:Name="NavigationFrame" />
+        <!--Session ending message-->
+        <Border x:Name="SessionEndWarning"
+                    Grid.Row="2" 
+                    Background="#FFFF4A4A"
+                    VerticalAlignment="Bottom"
+                    Padding="12"
+                    Opacity="0.0"
+                    Tapped="SessionEndWarning_Tapped">
+
+            <Border.RenderTransform>
+                <CompositeTransform x:Name="CompositTrans" TranslateY="100" />
+            </Border.RenderTransform>
+
+            <Border.Resources>
+                <Storyboard x:Name="BorderStoryBoardFadeIn">
+
+                    <!--Fade in-->
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SessionEndWarning" 
+                                                       Storyboard.TargetProperty="Opacity" 
+                                                       Duration="500">
+
+                        <!--End keyframe-->
+                        <EasingDoubleKeyFrame KeyTime="00:00:00.5"
+                                                  Value="1.0">
+                            <EasingDoubleKeyFrame.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </EasingDoubleKeyFrame.EasingFunction>
+                        </EasingDoubleKeyFrame>
+
+                    </DoubleAnimationUsingKeyFrames>
+
+                    <!--Slide up-->
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="CompositTrans" 
+                                                       Storyboard.TargetProperty="TranslateY" 
+                                                       Duration="500">
+
+                        <!--End keyframe-->
+                        <EasingDoubleKeyFrame KeyTime="00:00:00.5"
+                                                  Value="0">
+                            <EasingDoubleKeyFrame.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </EasingDoubleKeyFrame.EasingFunction>
+                        </EasingDoubleKeyFrame>
+
+                    </DoubleAnimationUsingKeyFrames>
+
+                </Storyboard>
+                <Storyboard x:Name="BorderStoryBoardFadeOut">
+
+                    <!--Fade out-->
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SessionEndWarning" 
+                                                       Storyboard.TargetProperty="Opacity" 
+                                                       Duration="500">
+
+                        <!--End keyframe-->
+                        <EasingDoubleKeyFrame KeyTime="00:00:00.5"
+                                                  Value="0.0">
+                            <EasingDoubleKeyFrame.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </EasingDoubleKeyFrame.EasingFunction>
+                        </EasingDoubleKeyFrame>
+
+                    </DoubleAnimationUsingKeyFrames>
+
+                    <!--Slide down-->
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="CompositTrans" 
+                                                       Storyboard.TargetProperty="TranslateY" 
+                                                       Duration="500">
+
+                        <!--End keyframe-->
+                        <EasingDoubleKeyFrame KeyTime="00:00:00.5"
+                                                  Value="100">
+                            <EasingDoubleKeyFrame.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </EasingDoubleKeyFrame.EasingFunction>
+                        </EasingDoubleKeyFrame>
+
+                    </DoubleAnimationUsingKeyFrames>
+
+                </Storyboard>
+            </Border.Resources>
+
+            <TextBlock Foreground="White"
+                           TextAlignment="Center">
+                    <Run>Your session will expire in</Run>
+                    <Run x:Name="TimeRemainingRun"/>
+                    <LineBreak />
+                    <Run>Tap to extend your time</Run>
+            </TextBlock>
+        </Border>
+    </Grid>
+</Page>

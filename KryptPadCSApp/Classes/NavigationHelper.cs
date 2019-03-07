@@ -44,23 +44,27 @@ namespace KryptPadCSApp.Classes
         /// <returns></returns>
         private static Frame GetFrame()
         {
-            var rootFrame = (Window.Current.Content as Frame);
-            if (rootFrame != null)
+            // Get the root frame
+            var baseFrame = (Frame)Window.Current.Content;
+            // Find the root frame. Everything is loaded from within this "master" page
+            var rootFrame = ((RootPage)baseFrame.Content).RootFrame;
+            // Check if the root frame's content is the MainPage
+            if (rootFrame.Content is MainPage)
             {
-                // Check if the root frame's content is the MainPage
-                if (rootFrame.Content is MainPage)
-                {
-                    rootFrame = (rootFrame.Content as MainPage).RootFrame;
+                rootFrame = (rootFrame.Content as MainPage).RootFrame;
 
-                }
             }
+
 
             return rootFrame;
         }
 
         private static void NavigateRoot(Type pageType, object parameter)
         {
-            var rootFrame = (Window.Current.Content as Frame);
+            // Get the root frame
+            var baseFrame = (Frame)Window.Current.Content;
+            // Find the root frame. Everything is loaded from within this "master" page
+            var rootFrame = ((RootPage)baseFrame.Content).RootFrame;
             // Navigate
             NavigateToPage(rootFrame, pageType, parameter);
         }
@@ -85,41 +89,44 @@ namespace KryptPadCSApp.Classes
         /// <param name="parameter"></param>
         private static void NavigateMain(Type pageType, object parameter)
         {
-            var rootFrame = (Window.Current.Content as Frame);
-            if (rootFrame != null)
+            // Get the root frame
+            var baseFrame = (Frame)Window.Current.Content;
+            // Find the root frame. Everything is loaded from within this "master" page
+            var rootFrame = ((RootPage)baseFrame.Content).RootFrame;
+
+            // Check if the root frame's content is the MainPage. If not,
+            // we need to navigate to it.
+            if (!(rootFrame.Content is MainPage))
             {
-                // Check if the root frame's content is the MainPage. If not,
-                // we need to navigate to it.
-                if (!(rootFrame.Content is MainPage))
+                // This local function handles the main navigation after the
+                // MainPage has loaded.
+                void handler(object sender, NavigationEventArgs e)
                 {
-                    NavigatedEventHandler handler = null;
-                    handler = (sender, e) =>
-                    {
-                        // Remove handler
-                        rootFrame.Navigated -= handler;
-                        // Get root frame from main page
-                        var mainFrame = (e.Content as MainPage).RootFrame;
-                        // Navigate to our target frame
-                        NavigateToPage(mainFrame, pageType, parameter);
-                    };
-
-                    // Set navigated handler. This will navigate to our target after we
-                    // have navigated to the main page
-                    rootFrame.Navigated += handler;
-                    // Load main page
-                    rootFrame.Navigate(typeof(MainPage));
-
-                }
-                else
-                {
-                    // The content of the root frame is already the main page, so we
-                    // don't need to navigate to it, just use the root frame inside
-                    // the main page.
-                    var mainFrame = (rootFrame.Content as MainPage).RootFrame;
+                    // Remove handler
+                    rootFrame.Navigated -= handler;
+                    // Get root frame from main page
+                    var mainFrame = (e.Content as MainPage).RootFrame;
                     // Navigate to our target frame
                     NavigateToPage(mainFrame, pageType, parameter);
                 }
+
+                // Set navigated handler. This will navigate to our target after we
+                // have navigated to the main page
+                rootFrame.Navigated += handler;
+                // Load main page
+                rootFrame.Navigate(typeof(MainPage));
+
             }
+            else
+            {
+                // The content of the root frame is already the main page, so we
+                // don't need to navigate to it, just use the root frame inside
+                // the main page.
+                var mainFrame = (rootFrame.Content as MainPage).RootFrame;
+                // Navigate to our target frame
+                NavigateToPage(mainFrame, pageType, parameter);
+            }
+
 
         }
 
@@ -154,7 +161,6 @@ namespace KryptPadCSApp.Classes
         {
             // Use the supplied frame, or get it if we didn't get it from parameter
             frame = frame ?? GetFrame();
-
             if (frame != null)
             {
                 // Clear
@@ -164,14 +170,7 @@ namespace KryptPadCSApp.Classes
             }
         }
 
-        //public static void RemoveLastFromBackStack(Frame frame = null)
-        //{
-        //    // Use the supplied frame, or get it if we didn't get it from parameter
-        //    frame = frame ?? GetFrame();
 
-        //    // Remove last frame so we can't go back to the main page
-        //    frame.BackStack.RemoveAt(frame.BackStack.Count - 1);
-        //}
 
     }
 }

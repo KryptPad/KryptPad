@@ -38,6 +38,7 @@ namespace KryptPadCSApp.Views
             {
                 Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
             }
+
             base.OnNavigatedFrom(e);
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)

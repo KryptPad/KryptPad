@@ -24,7 +24,7 @@ namespace KryptPad.Api
     {
 
         public const int SESSION_TIME_MINUTES = 5;
-        public const int SESSION_WARNING_MINUTES = 5;
+        public const int SESSION_WARNING_MINUTES = 1;
         // How much time is taken away from the token's ttl to account for network latency
         private const int EXPIRATION_TIME_THRESHOLD = 10;
 

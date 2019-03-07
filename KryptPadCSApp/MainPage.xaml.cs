@@ -36,8 +36,7 @@ namespace KryptPadCSApp
     {
 
         #region Fields
-        private bool _messageShowing = false;
-
+        
         // List of ValueTuple holding the Navigation Tag and the relative Navigation Page  
         private readonly IList<(string Tag, Type Page, NavigationHelper.NavigationType NavType)> _pages = 
             new List<(string Tag, Type Page, NavigationHelper.NavigationType NavType)>
@@ -72,61 +71,6 @@ namespace KryptPadCSApp
         public MainPage()
         {
             this.InitializeComponent();
-            
-            // Some API events
-            KryptPadApi.SessionEnded += async () =>
-            {
-                // Get the dispatcher
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    // Triggered when the access token has reached its expiration date
-                    //NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Root);
-
-                    // Hide the message
-                    //ShowSessionWarningMessage(false);
-                });
-
-            };
-
-            KryptPadApi.SessionEnding += async (expiration) =>
-            {
-                var warningTime = expiration.AddMinutes(-KryptPadApi.SESSION_WARNING_MINUTES);
-
-                // Show the message
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-
-                    if (DateTime.Now >= warningTime && !_messageShowing)
-                    {
-                        // Show the warning
-                        ShowSessionWarningMessage(true);
-                    }
-                    else if (DateTime.Now < warningTime && _messageShowing)
-                    {
-                        // Hide the message
-                        ShowSessionWarningMessage(false);
-                    }
-
-                    // Show time remaining
-                    if (DateTime.Now >= warningTime)
-                    {
-                        // Get time remaining
-                        var timeRemaining = DateTime.Now.Subtract(expiration);
-                        // Set the label with how much time the user has left
-                        TimeRemainingRun.Text = timeRemaining.ToString(@"mm\:ss");
-                    }
-                });
-            };
-
-            //// Success, tell the app we are signed in
-            //(App.Current as App).PropertyChanged += (sender, e) =>
-            //{
-            //    // Success, tell the app we are signed in
-            //    if (e.PropertyName == nameof(App.SignInStatus))
-            //    {
-            //        ShowSignedInControls();
-            //    }
-            //};
 
             ShowSignedInControls();
         }
@@ -221,33 +165,8 @@ namespace KryptPadCSApp
 
         #endregion
 
-        #region Session management
-        private void SessionEndWarning_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            KryptPadApi.ExtendSessionTime();
-            // Hide the message
-            ShowSessionWarningMessage(false);
-        }
-        #endregion
-
+        
         #region Helper Methods
-
-        private void ShowSessionWarningMessage(bool value)
-        {
-            if (value)
-            {
-                // Show the message
-                BorderStoryBoardFadeIn.Begin();
-            }
-            else
-            {
-                // Hide the message
-                BorderStoryBoardFadeOut.Begin();
-            }
-
-
-            _messageShowing = value;
-        }
 
         /// <summary>
         /// Shows or hides the back button

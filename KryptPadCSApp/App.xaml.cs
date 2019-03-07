@@ -17,8 +17,6 @@ namespace KryptPadCSApp
     /// </summary>
     public partial class App : Application, INotifyPropertyChanged
     {
-        private Frame _rootFrame;
-
         public event PropertyChangedEventHandler PropertyChanged;
         
         #region Properties
@@ -92,15 +90,13 @@ namespace KryptPadCSApp
             }
 
 
-            _rootFrame = Window.Current.Content as Frame;
-
+            var _rootFrame = Window.Current.Content as Frame;
             if (_rootFrame == null)
             {
                 // Create main page instance
                 _rootFrame = new Frame();
 
                 // Add some event handlers
-                _rootFrame.Navigated += OnNavigated;
                 _rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
@@ -119,7 +115,7 @@ namespace KryptPadCSApp
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                _rootFrame.Navigate(typeof(LoginPage), e.Arguments);
+                _rootFrame.Navigate(typeof(RootPage), e.Arguments);
             }
 
             // Ensure the current window is active
@@ -140,14 +136,7 @@ namespace KryptPadCSApp
 
             //}
         }
-
-        private void OnNavigated(object sender, NavigationEventArgs e)
-        {
-            // Each time a navigation event occurs, update the Back button's visibility
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = _rootFrame.CanGoBack ?
-                AppViewBackButtonVisibility.Visible :
-                AppViewBackButtonVisibility.Collapsed;
-        }
+               
 
         private void App_BackRequested(object sender, BackRequestedEventArgs e)
         {
