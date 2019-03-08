@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1271,7 +1272,7 @@ namespace KryptPad.Api
         private static async Task<System.Net.WebException> CreateException(HttpResponseMessage response)
         {
             System.Net.WebException exception;
-
+            
             // If a bad request is received, try and figure out why
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
@@ -1327,7 +1328,8 @@ namespace KryptPad.Api
                 exception = new System.Net.WebException("An error occurred while trying to process your request.");
             }
 
-
+            // Log the error
+            Debug.WriteLine($"API Error calling {response.RequestMessage.RequestUri}: {exception.Message}");
 
             // Return the exception
             return exception;

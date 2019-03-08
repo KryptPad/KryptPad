@@ -23,6 +23,7 @@ namespace KryptPadCSApp
 
         #region Properties
         public Frame RootFrame { get { return NavigationFrame; } }
+        
         #endregion
 
         public RootPage()
@@ -116,6 +117,16 @@ namespace KryptPadCSApp
 
 
             _messageShowing = value;
+        }
+
+        /// <summary>
+        /// Sets the busy state
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetIsBusy(bool value)
+        {
+            BusyBorder.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            BusyIndicator.IsActive = value;
         }
     }
 }

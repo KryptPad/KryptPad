@@ -199,20 +199,6 @@
 
         </ScrollViewer>
 
-        <!--Progress indicator. This covers the whole window-->
-        <Border x:Name="BusyBorder"
-                Background="#7F000000"
-                Visibility="{Binding BusyIndicatorVisibility}">
-
-            <!--Indicates something is happening-->
-            <ProgressRing x:Name="BusyIndicator"
-                          Visibility="Visible"
-                          IsActive="{Binding IsBusy}"
-                          Width="50"
-                          Height="50"
-                          Foreground="White"/>
-        </Border>
-
         <!--Visual state manager-->
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">

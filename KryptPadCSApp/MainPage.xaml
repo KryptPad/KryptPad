@@ -15,47 +15,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <!--Broadcast message-->
-            <Border x:Name="BroadcastMessage"
-                    Visibility="Collapsed"
-                    Grid.Row="0" 
-                    Padding="12"
-                    Background="{ThemeResource BroadcastMessageThemeBrush}"
-                    BorderBrush="{ThemeResource BroadcastMessageBorderThemeBrush}"
-                    BorderThickness="1"
-                    >
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <!--Message-->
-                    <TextBlock x:Name="BroadcastMessageText"
-                               Grid.Column="0"
-                               TextWrapping="WrapWholeWords"
-                               VerticalAlignment="Center"
-                               Loaded="BroadcastMessageText_Loaded">
-
-                    </TextBlock>
-
-                    <!--Close Button-->
-                    <Button x:Name="BroadcastCloseButton"
-                            Content="Close"
-                            Grid.Column="1"
-                            VerticalAlignment="Top"
-                            Click="BroadcastCloseButton_Click"/>
-                </Grid>
-
-
-            </Border>
-
+            
             <!--Menu-->
             <NavigationView x:Name="NavView"
                             Grid.Row="1" 
@@ -99,20 +59,7 @@
             
         </Grid>
 
-        <!--Progress indicator. This covers the whole window-->
-        <Border x:Name="BusyBorder"
-                Background="#7F000000"
-                Visibility="Collapsed">
-
-            <!--Indicates something is happening-->
-            <ProgressRing x:Name="BusyIndicator"
-                          Visibility="Visible"
-                          IsActive="False"
-                          Width="50"
-                          Height="50"
-                          Foreground="White"/>
-        </Border>
-
+        
         <!--Manage layout-->
         <!--<VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup" >

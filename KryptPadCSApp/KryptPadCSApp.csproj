@@ -139,6 +139,9 @@
     <Compile Include="Components\Logo.xaml.cs">
       <DependentUpon>Logo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\SystemBroadcastMessage.xaml.cs">
+      <DependentUpon>SystemBroadcastMessage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\NotVisibleConverter.cs" />
     <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="Dialogs\AddFieldDialog.xaml.cs">
@@ -257,6 +260,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Components\Logo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\SystemBroadcastMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

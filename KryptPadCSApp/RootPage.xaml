@@ -2,7 +2,7 @@
     x:Class="KryptPadCSApp.RootPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:KryptPadCSApp"
+    xmlns:Components="using:KryptPadCSApp.Components"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -10,7 +10,22 @@
     Loaded="Page_Loaded">
 
     <Grid>
-        <Frame x:Name="NavigationFrame" />
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Broadcast message-->
+            <Components:SystemBroadcastMessage Grid.Row="0" />
+
+            <!--Main nav frame-->
+            <Frame x:Name="NavigationFrame" Grid.Row="1" />
+
+        </Grid>
+
+        <!--These overlay other components and do not have an assigned grid row-->
         <!--Session ending message-->
         <Border x:Name="SessionEndWarning"
                     Grid.Row="2" 
@@ -101,5 +116,19 @@
                     <Run>Tap to extend your time</Run>
             </TextBlock>
         </Border>
+        <!--Progress indicator. This covers the whole window-->
+        <Border x:Name="BusyBorder"
+                Background="#7F000000"
+                Visibility="Collapsed">
+
+            <!--Indicates something is happening-->
+            <ProgressRing x:Name="BusyIndicator"
+                          Visibility="Visible"
+                          IsActive="False"
+                          Width="50"
+                          Height="50"
+                          Foreground="White"/>
+        </Border>
     </Grid>
+    
 </Page>

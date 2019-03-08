@@ -58,12 +58,7 @@ namespace KryptPadCSApp
         /// Gets the main frame for content
         /// </summary>
         public Frame RootFrame { get { return NavigationFrame; } }
-
-        /// <summary>
-        /// Gets or sets whether the app is busy
-        /// </summary>
-        private bool IsBusy { get; set; }
-
+        
         #endregion
 
         #region Constructor
@@ -206,59 +201,10 @@ namespace KryptPadCSApp
             // Show sign in if user is not signed in with a profile
             SignInNavButton.Visibility = signinStatus != SignInStatus.SignedInWithProfile ? Visibility.Visible : Visibility.Collapsed;
         }
-
-        /// <summary>
-        /// Sets the busy state
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetIsBusy(bool value)
-        {
-            IsBusy = value;
-            BusyBorder.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            BusyIndicator.IsActive = value;
-        }
-
+        
         #endregion
 
-        #region System broadcast message
-
-        /// <summary>
-        /// Fetch the system message if there is one
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void BroadcastMessageText_Loaded(object sender, RoutedEventArgs e)
-        {
-
-            try
-            {
-                // Get broadcast message
-                var message = await KryptPadApi.GetBroadcastMessage();
-                if (!string.IsNullOrWhiteSpace(message))
-                {
-                    BroadcastMessage.Visibility = Visibility.Visible;
-                    BroadcastMessageText.Text = message;
-                }
-
-            }
-            catch (WebException ex)
-            {
-                // Something went wrong in the api
-                await DialogHelper.ShowMessageDialogAsync(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync(ex);
-            }
-
-        }
-
-        private void BroadcastCloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            BroadcastMessage.Visibility = Visibility.Collapsed;
-        }
-        #endregion
+        
         
     }
 }
