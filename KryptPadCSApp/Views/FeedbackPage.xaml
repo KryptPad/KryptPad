@@ -67,16 +67,16 @@
                     <StackPanel x:Name="MessageTextBlock">
 
                         <!--Header-->
-                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Margin="0,0,0,12">
+                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" >
 						<Run Text="Feedback"/>
                         </TextBlock>
 
-                        <TextBlock TextWrapping="WrapWholeWords">
+                        <TextBlock TextWrapping="WrapWholeWords" Margin="0,24,0,0">
                         Like this app? Leave us a comment in the Windows Store.
                         </TextBlock>
 
                         <!--Rate button-->
-                        <Button Margin="0,8,0,48"
+                        <Button Margin="0,8,0,24"
                                 Command="{Binding ReviewAppCommand}"
                                 Style="{StaticResource AccentButtonStyle}">
                             Review this App
@@ -89,7 +89,7 @@
                         </TextBlock>
 
                         <!--Issues button-->
-                        <Button Margin="0,24,0,0" Command="{Binding SubmitIssueCommand}">
+                        <Button Margin="0,8,0,0" Command="{Binding SubmitIssueCommand}">
                             Visit the GitHub Issues Page
                         </Button>
 

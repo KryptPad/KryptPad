@@ -150,11 +150,11 @@
 
                             <!--Social buttons-->
                             <StackPanel Orientation="Horizontal"
-                                        Margin="0,12,0,0">
+                                        Margin="0,8,0,0">
 
                                 <!--Facebook-->
                                 <Button Content="Facebook"
-                                        Margin="0,0,12,0"
+                                        Margin="0,0,8,0"
                                         Command="{Binding GoToFacebookCommand}"
                                         Style="{StaticResource FacebookButtonStyle}"/>
 
@@ -168,7 +168,7 @@
 
                             <!--Donation prompt-->
                             <!--Heart-->
-                            <Grid Margin="0,12,0,0">
+                            <Grid Margin="0,8,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />

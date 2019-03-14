@@ -76,14 +76,14 @@
                                 <Run Text="Account Management"/>
                             </TextBlock>
 
-                            <TextBlock TextWrapping="WrapWholeWords" Margin="0,12,0,0">
+                            <TextBlock TextWrapping="WrapWholeWords" Margin="0,24,0,0">
                             Sign out of all devices. Do this if you want to revoke access to any device. This will log you out.
                             </TextBlock>
                             <Button Content="Deauthorize All Devices" ToolTipService.ToolTip="Sign out everywhere"
                                 Command="{Binding DeauthorizeDevicesCommand}"
-                                Margin="0,12,0,0"/>
+                                Margin="0,8,0,0"/>
 
-                            <TextBlock TextWrapping="WrapWholeWords" Margin="0,12,0,0">
+                            <TextBlock TextWrapping="WrapWholeWords" Margin="0,24,0,0">
                             If you want to delete you account, you can do so here. This deletes ALL of your data. Be sure
                             to download your profile data first if you plan to come back in the future.
                             </TextBlock>
