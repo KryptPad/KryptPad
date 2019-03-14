@@ -438,9 +438,32 @@ namespace KryptPad.Api
                 //check if the response is a success code
                 if (response.IsSuccessStatusCode)
                 {
-                    //get the response content
-                    var data = await response.Content.ReadAsStringAsync();
+                    return new SuccessResponse();
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+        }
 
+        /// <summary>
+        /// Deauthorizes all devices
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<SuccessResponse> DeauthorizeDevices()
+        {
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
+            {
+                // Authorize the request
+                await AuthorizeRequest(client);
+
+                // Execute request
+                var response = await client.PostAsync(GetUrl("api/account/deauthorize-devices"), null);
+
+                //check if the response is a success code
+                if (response.IsSuccessStatusCode)
+                {
                     return new SuccessResponse();
                 }
                 else

@@ -30,6 +30,8 @@ namespace KryptPadCSApp.Models
 
         public Command DeleteAccountCommand { get; protected set; }
 
+        public Command DeauthorizeDevicesCommand { get; protected set; }
+
         #endregion
 
         #region Constructor
@@ -51,6 +53,7 @@ namespace KryptPadCSApp.Models
         private void RegisterCommands()
         {
             DeleteAccountCommand = new Command(DeleteAccountCommandHandlerAsync);
+            DeauthorizeDevicesCommand = new Command(DeauthorizeDevicesCommandHandlerAsync);
 
         }
 
@@ -63,7 +66,8 @@ namespace KryptPadCSApp.Models
 
                 await DialogHelper.Confirm(
                     "Are you sure you want to delete your account? ALL OF YOUR DATA WILL BE DELETED! THIS ACTION CANNOT BE UNDONE.",
-                    async (p) => {
+                    async (p) =>
+                    {
                         // Log in and get access token
                         await KryptPadApi.DeleteAccountAsync();
 
@@ -83,7 +87,7 @@ namespace KryptPadCSApp.Models
                         catch { /* Nothing to see here */ }
 
                         // Navigate to the login page
-                        NavigationHelper.Navigate(typeof(LoginPage), null);
+                        NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Root);
                     }
                 );
 
@@ -101,6 +105,34 @@ namespace KryptPadCSApp.Models
 
             IsBusy = false;
 
+        }
+
+        private async void DeauthorizeDevicesCommandHandlerAsync(object obj)
+        {
+            IsBusy = true;
+
+            try
+            {
+
+                // Log in and get access token
+                await KryptPadApi.DeauthorizeDevices();
+
+                // Navigate to the login page
+                NavigationHelper.Navigate(typeof(LoginPage), null, NavigationHelper.NavigationType.Root);
+
+            }
+            catch (WebException ex)
+            {
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Failed
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
+            }
+
+
+            IsBusy = false;
         }
         #endregion
     }
