@@ -77,7 +77,7 @@
                             </TextBlock>
 
                             <TextBlock TextWrapping="WrapWholeWords" Margin="0,24,0,0">
-                            Sign out of all devices. Do this if you want to revoke access to any device. This will log you out.
+                            Sign out of all devices. Do this if you want to revoke access to any device. This process can take up to a minute to propagate.
                             </TextBlock>
                             <Button Content="Deauthorize All Devices" ToolTipService.ToolTip="Sign out everywhere"
                                 Command="{Binding DeauthorizeDevicesCommand}"
