@@ -26,14 +26,14 @@
     <Page.DataContext>
         <Models:FavoritesPageViewModel />
     </Page.DataContext>
-
+    
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        
         <!--No categories message-->
         <Border Grid.Row="0" 
                     Visibility="{Binding EmptyMessageVisibility}"
@@ -43,7 +43,7 @@
                     BorderBrush="{ThemeResource InformationMessageBorderThemeBrush}"
                     BorderThickness="1"
                     >
-
+           
             <TextBlock TextWrapping="WrapWholeWords"
                            VerticalAlignment="Center">
                 
@@ -52,18 +52,19 @@
             <!--</StackPanel>-->
 
         </Border>
-
+        
         <!--Items grid-->
-        <GridView Grid.Row="1"
+        <GridView x:Name="ItemsGridView"
+                  Grid.Row="1"
                   Margin="0"
-                  IsItemClickEnabled="True"
+                  IsItemClickEnabled="true"
                   ItemsSource="{Binding Items}"
                   Commanding:GridViewItemClickCommand.Command="{Binding DataContext.ItemClickCommand, ElementName=ItemsViewPage}"
                   ItemTemplate="{StaticResource GridViewItemsTemplate }"
                   ItemsPanel="{StaticResource DesktopCategoryItemPanelTemplate}"
                   ItemContainerStyle="{StaticResource GridViewItemStyle}"
-                >
-
+                  >
+            
         </GridView>
     </Grid>
 </Page>
