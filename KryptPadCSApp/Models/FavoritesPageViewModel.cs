@@ -80,7 +80,7 @@ namespace KryptPadCSApp.Models
             ItemClickCommand = new Command((p) =>
             {
                 var item = p as ApiItem;
-                var category = new ApiCategory();
+                var category = new ApiCategory() { Id = item.CategoryId };
 
                 // Navigate to edit
                 NavigationHelper.Navigate(typeof(NewItemPage),

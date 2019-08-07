@@ -31,9 +31,6 @@ namespace KryptPadCSApp.Views
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             await(DataContext as FavoritesPageViewModel).RefreshItemsAsync();
-
-            // Set the selection changed event
-            //ItemsGridView.SelectionChanged += ItemsGridView_SelectionChanged;
         }
     }
 }
