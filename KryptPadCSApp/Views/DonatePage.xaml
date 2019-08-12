@@ -68,19 +68,19 @@
                     <StackPanel x:Name="MessageTextBlock">
 
                         <!--Header-->
-                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}">
+                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" >
 						<Run Text="Donate"/>
                         </TextBlock>
 
                         <!--Message-->
-                        <TextBlock TextWrapping="WrapWholeWords">
+                        <TextBlock TextWrapping="WrapWholeWords" Margin="0,24,0,0">
 						Donations are used to help support my family and the development of Krypt Pad.
                         Your contributions are made securely through PayPal.
                         </TextBlock>
 
                         <Button Content="Make a Donation"
-                                Style="{StaticResource PrimaryButtonStyle}"
-                            Margin="0,24,0,0"
+                                Style="{StaticResource AccentButtonStyle}"
+                            Margin="0,8,0,0"
 						Command="{Binding DonateCommand}"/>
                     </StackPanel>
 

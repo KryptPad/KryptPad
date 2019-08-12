@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
+    xmlns:Components="using:KryptPadCSApp.Components"
     x:Class="KryptPadCSApp.Views.SelectProfilePage"
     mc:Ignorable="d"
     x:Name="SelectProfileViewPage"
@@ -35,17 +36,20 @@
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
-                    <!--<RowDefinition Height="auto" />-->
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
+                <!--Branding-->
+                <Components:Logo Grid.Row="0" />
                 
                 <!--Profiles-->
-                <Grid Grid.Row="0"
+                <Grid Grid.Row="1"
                       MaxWidth="400"
                       Padding="12"
                       Background="{ThemeResource AppHeaderBackgroundThemeBrush}">
 
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
@@ -63,11 +67,11 @@
                     <!--Create or restore profile-->
                     <StackPanel Grid.Row="1"
                             Margin="0,0,0,12"
-                            Orientation="Horizontal">
+                            Orientation="Horizontal" >
 
                         <!--Create new profile-->
                         <Button Content="Create Profile"
-                                Style="{StaticResource PrimaryButtonStyle}"
+                                Style="{StaticResource AccentButtonStyle}"
                                 Command="{Binding CreateProfileCommand}"
                                 Margin="0,0,12,0"/>
 
@@ -96,6 +100,16 @@
 
                         
                     </ItemsControl>
+
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button Command="{Binding SettingsCommand}">
+                            <SymbolIcon Symbol="Setting" />
+                        </Button>
+                        
+                        <Button Command="{Binding SignOutCommand}" Margin="8,0,0,0" >
+                            Sign Out
+                        </Button>
+                    </StackPanel>
                     
                 </Grid>
 
@@ -104,11 +118,11 @@
         </ScrollViewer>
 
         <!--Visual state manager-->
-        <VisualStateManager.VisualStateGroups>
+        <!--<VisualStateManager.VisualStateGroups>
 
             <VisualStateGroup x:Name="VisualStateGroup">
 
-                <!--Vertical align the grid to the top of the page-->
+                --><!--Vertical align the grid to the top of the page--><!--
                 <VisualState x:Name="VisualStatePhone">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0"/>
@@ -119,7 +133,7 @@
                     </VisualState.Setters>
                 </VisualState>
 
-                <!--Move the grid to the center of the page-->
+                --><!--Move the grid to the center of the page--><!--
                 <VisualState x:Name="VisualStateTablet">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1024"/>
@@ -130,7 +144,7 @@
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+        </VisualStateManager.VisualStateGroups>-->
 
     </Grid>
 </Page>

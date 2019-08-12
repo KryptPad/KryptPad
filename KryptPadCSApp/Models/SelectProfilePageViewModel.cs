@@ -27,8 +27,7 @@ namespace KryptPadCSApp.Models
     class SelectProfilePageViewModel : BasePageModel
     {
         const int MAX_SAVED_PROFILES = 5;
-        const string LOCKER_RESOURCE = "Profiles";
-
+        
         #region Properties
 
         /// <summary>
@@ -100,6 +99,10 @@ namespace KryptPadCSApp.Models
 
         public Command DeleteSavedPassphraseCommand { get; protected set; }
 
+        public Command SignOutCommand { get; protected set; }
+
+        public Command SettingsCommand { get; protected set; }
+
         #endregion
 
         #region Methods
@@ -117,6 +120,7 @@ namespace KryptPadCSApp.Models
 
             // Success, tell the app we are not signed in with a profile
             (App.Current as App).SignInStatus = SignInStatus.SignedIn;
+                        
         }
 
         /// <summary>
@@ -191,10 +195,10 @@ namespace KryptPadCSApp.Models
                 // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
             }
 
             IsBusy = false;
@@ -218,14 +222,23 @@ namespace KryptPadCSApp.Models
             RestoreBackupCommand = new Command(RestoreBackupCommandHandler);
 
             DeleteSavedPassphraseCommand = new Command(DeleteSavedPassphraseCommandHandler);
+
+            SignOutCommand = new Command(SignOutCommandHandler);
+
+            SettingsCommand = new Command(SettingsCommandHandler);
         }
 
         private async void ProfileSelectedCommandHandler(object obj)
         {
             var profile = obj as ProfileModel;
+            // Get whether credential manager is supported
+            var credentialManagerSupported = await KeyCredentialManager.IsSupportedAsync();
 
             // If Windows Hello is enabled, ask for verification of consent
-            if (profile != null && SavePassphraseEnabled && HasSavedPassphrase(new PasswordVault(), profile?.Id.ToString()))
+            if (profile != null 
+                && credentialManagerSupported 
+                && SavePassphraseEnabled 
+                && HasSavedPassphrase(new PasswordVault(), profile?.Id.ToString()))
             {
                 // Introduce windows hello
                 await PromptForConsent(profile);
@@ -292,10 +305,10 @@ namespace KryptPadCSApp.Models
                 // Something went wrong in the api
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
             }
         }
 
@@ -309,6 +322,16 @@ namespace KryptPadCSApp.Models
             // Tell profile we deleted the saved passphrase
             profile.WindowsHelloEnabled = false;
 
+        }
+
+        private void SignOutCommandHandler(object obj)
+        {
+            NavigationHelper.Navigate(typeof(LoginPage), null);
+        }
+
+        private void SettingsCommandHandler(object obj)
+        {
+            NavigationHelper.Navigate(typeof(SettingsPage), null);
         }
 
         #endregion
@@ -340,7 +363,7 @@ namespace KryptPadCSApp.Models
                 }
 
                 // When a profile is selected, navigate to main page
-                NavigationHelper.Navigate(typeof(ItemsPage), null);
+                NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Main);
 
             }
             catch (WebException)
@@ -349,10 +372,10 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowMessageDialogAsync(ResourceHelper.GetString("UnlockProfileFailed"));
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
             }
         }
 
@@ -469,10 +492,13 @@ namespace KryptPadCSApp.Models
                         // Create instance to credential locker
                         var locker = new PasswordVault();
                         // Clear out the saved credential for the resource
-                        var logins = locker.FindAllByResource(LOCKER_RESOURCE);
+                        var logins = locker.FindAllByResource(KryptPadApi.Username);
                         foreach (var login in logins)
                         {
-                            locker.Remove(login);
+                            if (login.Resource != Constants.LOCKER_RESOURCE)
+                            {
+                                locker.Remove(login);
+                            }
                         }
 
                         // Reset flag on all profiles
@@ -511,7 +537,7 @@ namespace KryptPadCSApp.Models
             {
 
                 // Check how many profiles we have saved already
-                var allLogins = locker.FindAllByResource(LOCKER_RESOURCE);
+                var allLogins = locker.FindAllByResource(KryptPadApi.Username);
                 if (allLogins.Count == MAX_SAVED_PROFILES)
                 {
                     return;
@@ -530,7 +556,7 @@ namespace KryptPadCSApp.Models
             // Create new credential
             var credential = new PasswordCredential()
             {
-                Resource = LOCKER_RESOURCE,
+                Resource = KryptPadApi.Username,
                 UserName = profile,
                 Password = passphrase
             };

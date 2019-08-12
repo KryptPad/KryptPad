@@ -18,14 +18,7 @@ namespace KryptPadCSApp.Models
 {
     class LoginPageViewModel : BasePageModel
     {
-        /// <summary>
-        /// Resource name for credential locker
-        /// </summary>
-#if DEBUG
-        private const string LOCKER_RESOURCE = "KryptPadTest";
-#else
-        private const string LOCKER_RESOURCE = "KryptPad";
-#endif
+        
 
         #region Properties
         private string _email;
@@ -87,23 +80,6 @@ namespace KryptPadCSApp.Models
             get { return KryptPadApi.ServiceHost; }
         }
 
-#if DEBUG
-        /// <summary>
-        /// Gets or sets whether the app is in live mode
-        /// </summary>
-        public bool IsLiveMode
-        {
-            get
-            {
-                return (App.Current as App).IsLiveMode;
-            }
-            set
-            {
-                (App.Current as App).IsLiveMode = value;
-            }
-        }
-#endif
-
         public Command LogInCommand { get; protected set; }
 
         public Command CreateAccountCommand { get; protected set; }
@@ -163,7 +139,7 @@ namespace KryptPadCSApp.Models
             {
 
                 // Find the saved credentials
-                var login = locker.FindAllByResource(LOCKER_RESOURCE).FirstOrDefault();
+                var login = locker.FindAllByResource(Constants.LOCKER_RESOURCE).FirstOrDefault();
 
                 if (login != null)
                 {
@@ -201,7 +177,7 @@ namespace KryptPadCSApp.Models
             try
             {
                 // Clear out the saved credential for the resource
-                var creds = locker.FindAllByResource(LOCKER_RESOURCE);
+                var creds = locker.FindAllByResource(Constants.LOCKER_RESOURCE);
                 foreach (var cred in creds)
                 {
                     // Remove only the credentials for the given resource
@@ -217,7 +193,7 @@ namespace KryptPadCSApp.Models
                 // Create new credential
                 var credential = new PasswordCredential()
                 {
-                    Resource = LOCKER_RESOURCE,
+                    Resource = Constants.LOCKER_RESOURCE,
                     UserName = Email,
                     Password = Password
                 };
@@ -256,7 +232,7 @@ namespace KryptPadCSApp.Models
             {
                 Debug.WriteLine(ex.Message);
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
             }
 
 
@@ -312,7 +288,34 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowMessageDialogAsync(ResourceHelper.GetString("UriFail"));
             }
         }
-        
+
+        #endregion
+
+        #region Public methods
+        public async Task SendForgotPasswordLinkAsync()
+        {
+            try
+            {
+                // Get the email address
+                var email = await DialogHelper.GetValueAsync(null, ResourceHelper.GetString("ForgotPassword"), Email, ResourceHelper.GetString("ForgotPasswordPrompt"));
+                if (email != null)
+                {
+                    // Log in and get access token
+                    await KryptPadApi.SendForgotPasswordLinkAsync(email);
+
+                    await DialogHelper.ShowMessageDialogAsync("If your email address is associated to your account, you should recieve an email with password reset instructions.");
+                }
+            }
+            catch (WebException ex)
+            {
+                await DialogHelper.ShowMessageDialogAsync(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Failed
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
+            }
+        }
         #endregion
     }
 }

@@ -2,6 +2,7 @@
 using KryptPadCSApp.Models.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -34,12 +35,18 @@ namespace KryptPadCSApp.Dialogs
             get { return (DataContext as NamePromptDialogViewModel).Value; }
             set { (DataContext as NamePromptDialogViewModel).Value = value; }
         }
+
+        public string PromptText
+        {
+            get { return (DataContext as NamePromptDialogViewModel).PromptText; }
+            set { (DataContext as NamePromptDialogViewModel).PromptText = value; }
+        }
         #endregion
 
         public NamePromptDialog()
         {
             this.InitializeComponent();
-
+            
             // Determine the command's can execute state, and hook into the changed event
             var m = DataContext as NamePromptDialogViewModel;
             if (m != null && m.PrimaryCommand != null)
@@ -61,8 +68,10 @@ namespace KryptPadCSApp.Dialogs
                 PrimaryButtonCommand.Execute(null);
 
                 // Close the dialog
-                Close(ContentDialogResult.Primary);
+                Hide(ContentDialogResult.Primary);
             }
         }
+
+        
     }
 }

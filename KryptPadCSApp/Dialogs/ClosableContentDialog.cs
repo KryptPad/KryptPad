@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Dialogs
@@ -11,45 +13,44 @@ namespace KryptPadCSApp.Dialogs
     {
 
         #region Properties
+        TaskCompletionSource<ContentDialogResult> tcs = new TaskCompletionSource<ContentDialogResult>();
 
-        public ContentDialogResult Result { get; private set; }
-
-        public bool Cancel { get; set; }
+        //public bool Cancel { get; set; }
         #endregion
 
-        public ClosableContentDialog()
-        {
-            Closing += (sender, e) =>
-            {
-                if (Cancel)
-                {
-                    e.Cancel = Cancel;
-                    // Reset
-                    Cancel = false;
-                    
-                }
-            };
-        }
+        //public ClosableContentDialog()
+        //{
+        //    Closing += (sender, e) =>
+        //    {
+        //        if (Cancel)
+        //        {
+        //            e.Cancel = Cancel;
+        //            // Reset
+        //            Cancel = false;
 
-        
+        //        }
+        //    };
+        //}
+
+
 
         #region Methods
-        /// <summary>
-        /// Hides the dialog, and sets the Result property
-        /// </summary>
-        /// <param name="result"></param>
-        public void Close(ContentDialogResult result)
+        
+        public void Hide(ContentDialogResult result)
         {
-            // Set the return value
-            Result = result;
-            // Hide the dialog window
-            Hide();
-            
+            tcs.TrySetResult(ContentDialogResult.Primary);
+            base.Hide();
         }
 
-        
+        public new IAsyncOperation<ContentDialogResult> ShowAsync()
+        {
+            var asyncOperation = base.ShowAsync();
+            asyncOperation.AsTask().ContinueWith(task => tcs.TrySetResult(task.Result));
+            return tcs.Task.AsAsyncOperation();
+        }
 
         #endregion
 
+        
     }
 }

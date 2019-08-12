@@ -78,12 +78,12 @@ namespace KryptPadCSApp.Models
         {
             BusyIndicatorVisibility = Visibility.Collapsed;
 
-            // Set commands
-            ViewLicenseTermsCommand = new Command((p) => { NavigationHelper.GoToLicenseTerms(); });
-            ViewPrivacyPolicyCommand = new Command((p) => { NavigationHelper.GoToPrivacyPolicy(); });
-            ViewFeedBackCommand = new Command((p) => { NavigationHelper.GoToFeedback(); });
-            ViewDonateCommand = new Command((p) => { NavigationHelper.GoToDonate(); });
-            ViewAboutCommand = new Command((p) => { NavigationHelper.GoToAbout(); });
+            //// Set commands
+            //ViewLicenseTermsCommand = new Command((p) => { NavigationHelper.GoToLicenseTerms(); });
+            //ViewPrivacyPolicyCommand = new Command((p) => { NavigationHelper.GoToPrivacyPolicy(); });
+            //ViewFeedBackCommand = new Command((p) => { NavigationHelper.GoToFeedback(); });
+            //ViewDonateCommand = new Command((p) => { NavigationHelper.GoToDonate(); });
+            //ViewAboutCommand = new Command((p) => { NavigationHelper.GoToAbout(); });
         }
         #endregion
 
@@ -100,8 +100,9 @@ namespace KryptPadCSApp.Models
         {
             // Set the visibility of the busy indicator
             BusyIndicatorVisibility = IsBusy ? Visibility.Visible : Visibility.Collapsed;
-            // Set main window busy state
-            (Window.Current.Content as MainPage).SetIsBusy(IsBusy);
+            // If the page is loaded inside of the MainPage, then set the IsBusy property on
+            // that page. Otherwise, we can just ignore it
+            ((RootPage)((Frame)(Window.Current.Content )).Content)?.SetIsBusy(IsBusy);
         }
 
         #endregion

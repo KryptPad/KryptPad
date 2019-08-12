@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Models="using:KryptPadCSApp.Models"
+    xmlns:Converters="using:KryptPadCSApp.Converters"
     x:Class="KryptPadCSApp.MainPage"
     mc:Ignorable="d"
     >
@@ -14,201 +15,51 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <!--Nav grid-->
-            <Grid Grid.Row="0"
-              Padding="12"
-              Background="{ThemeResource AppHeaderBackgroundThemeBrush}"
-              >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-
-                <!--Header text-->
-                <TextBlock Grid.Column="0" Style="{StaticResource SubtitleTextBlockStyle}" Text="Krypt Pad" />
-
-                <!--Navigation icons-->
-                <StackPanel x:Name="NavPanel"
-                        Grid.Column="1" 
-                        Orientation="Horizontal"
-                        FlowDirection="RightToLeft">
-                    <!--Symbols-->
-                    <!--Sign out-->
-                    <RadioButton x:Name="SignOutRadioButton" Tag="&#xE72B;"
-                             Style="{StaticResource TabNavButtonStyle}"
-                             Click="SignOutRadioButton_Click" />
-                    <!--About-->
-                    <RadioButton x:Name="AboutRadioButton" Tag="&#xE783;"
-                             Style="{StaticResource TabNavButtonStyle}" 
-                             Click="AboutRadioButton_Click" IsChecked="True" />
-                    <!--Feedback-->
-                    <RadioButton x:Name="FeedbackRadioButton" Tag="&#xE76E;"
-                             Style="{StaticResource TabNavButtonStyle}" 
-                             Click="FeedbackRadioButton_Click"/>
-                    <!--Donate-->
-                    <RadioButton x:Name="DonateRadioButton" Tag="&#xE00B;"
-                             Style="{StaticResource TabNavButtonStyle}" 
-                             Click="DonateRadioButton_Click"/>
-                    <!--Home-->
-                    <RadioButton x:Name="HomeRadioButton" Tag="&#xE10F;" Content="Home" 
-                             Style="{StaticResource TabNavButtonStyle}" IsChecked="True" 
-                             Click="HomeRadioButton_Click" />
-                </StackPanel>
-            </Grid>
-
-            <!--Broadcast message-->
-            <Border x:Name="BroadcastMessage"
-                    Visibility="Collapsed"
-                    Grid.Row="1" 
-                    Padding="12"
-                    Background="{ThemeResource BroadcastMessageThemeBrush}"
-                    BorderBrush="{ThemeResource BroadcastMessageBorderThemeBrush}"
-                    BorderThickness="1"
-                    >
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <!--Message-->
-                    <TextBlock x:Name="BroadcastMessageText"
-                               Grid.Column="0"
-                               TextWrapping="WrapWholeWords"
-                               VerticalAlignment="Center"
-                               Loaded="BroadcastMessageText_Loaded">
-
-                    </TextBlock>
-
-                    <!--Close Button-->
-                    <Button x:Name="BroadcastCloseButton"
-                            Content="Close"
-                            Grid.Column="1"
-                            VerticalAlignment="Top"
-                            Click="BroadcastCloseButton_Click"/>
-                </Grid>
-                
-
-            </Border>
-
-            <!--Main frame-->
-            <Frame x:Name="NavFrame" Grid.Row="2"/>
             
-            <!--Session ending message-->
-            <Border x:Name="SessionEndWarning"
-                    Grid.Row="2" 
-                    Background="#FFFF4A4A"
-                    VerticalAlignment="Bottom"
-                    Padding="12"
-                    Opacity="0.0"
-                    Tapped="SessionEndWarning_Tapped">
+            <!--Menu-->
+            <NavigationView x:Name="NavView"
+                            Grid.Row="1" 
+                            AlwaysShowHeader="false" 
+                            ItemInvoked="NavView_ItemInvoked"
+                            Loaded="NavView_Loaded">
                 
-                <Border.RenderTransform>
-                    <CompositeTransform x:Name="CompositTrans" TranslateY="100" />
-                </Border.RenderTransform>
+                <NavigationView.MenuItems>
+                    <!--<NavigationViewItemHeader Content="Section A" />-->
+                    <NavigationViewItem x:Name="HomeNavButton" Content="Home" Icon="Home" Tag="home" />
+                    <NavigationViewItem x:Name="FavNavButton" Content="Favorites" Icon="Favorite" Tag="favs" />
+                    
+                    <!--When not signed in-->
+                    <NavigationViewItem x:Name="SignInNavButton" Content="Sign In" Icon="Contact" Tag="signin" />
+                    
+                    <!--<NavigationViewItemHeader Content="Section A" />-->
+                    <NavigationViewItemSeparator />
+                    
+                    <NavigationViewItem Content="About" Tag="about">
+                        <NavigationViewItem.Icon>
+                            <FontIcon Glyph="&#xE783;"/>
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                    
+                    <NavigationViewItem Content="Feedback" Icon="LikeDislike" Tag="feedback" />
+                    
+                    <NavigationViewItem Content="Donate" Tag="donate">
+                        <NavigationViewItem.Icon>
+                            <FontIcon Glyph="&#xE00B;"/>
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+
+                    <NavigationViewItemSeparator />
+                    
+                    <NavigationViewItem x:Name="SwitchProfileButton" Content="Switch Profile" Icon="Switch" Tag="switch" />
+                    <NavigationViewItem x:Name="SignOutButton" Content="Sign Out" Icon="Back" Tag="signout" />
+                </NavigationView.MenuItems>
                 
-                <Border.Resources>
-                    <Storyboard x:Name="BorderStoryBoardFadeIn">
-
-                        <!--Fade in-->
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SessionEndWarning" 
-                                                       Storyboard.TargetProperty="Opacity" 
-                                                       Duration="500">
-                            
-                            <!--End keyframe-->
-                            <EasingDoubleKeyFrame KeyTime="00:00:00.5"
-                                                  Value="1.0">
-                                <EasingDoubleKeyFrame.EasingFunction>
-                                    <CubicEase EasingMode="EaseOut" />
-                                </EasingDoubleKeyFrame.EasingFunction>
-                            </EasingDoubleKeyFrame>
-
-                        </DoubleAnimationUsingKeyFrames>
-
-                        <!--Slide up-->
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="CompositTrans" 
-                                                       Storyboard.TargetProperty="TranslateY" 
-                                                       Duration="500">
-                            
-                            <!--End keyframe-->
-                            <EasingDoubleKeyFrame KeyTime="00:00:00.5"
-                                                  Value="0">
-                                <EasingDoubleKeyFrame.EasingFunction>
-                                    <CubicEase EasingMode="EaseOut" />
-                                </EasingDoubleKeyFrame.EasingFunction>
-                            </EasingDoubleKeyFrame>
-
-                        </DoubleAnimationUsingKeyFrames>
-                        
-                    </Storyboard>
-                    <Storyboard x:Name="BorderStoryBoardFadeOut">
-
-                        <!--Fade out-->
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SessionEndWarning" 
-                                                       Storyboard.TargetProperty="Opacity" 
-                                                       Duration="500">
-
-                            <!--End keyframe-->
-                            <EasingDoubleKeyFrame KeyTime="00:00:00.5"
-                                                  Value="0.0">
-                                <EasingDoubleKeyFrame.EasingFunction>
-                                    <CubicEase EasingMode="EaseOut" />
-                                </EasingDoubleKeyFrame.EasingFunction>
-                            </EasingDoubleKeyFrame>
-
-                        </DoubleAnimationUsingKeyFrames>
-                        
-                        <!--Slide down-->
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="CompositTrans" 
-                                                       Storyboard.TargetProperty="TranslateY" 
-                                                       Duration="500">
-                            
-                            <!--End keyframe-->
-                            <EasingDoubleKeyFrame KeyTime="00:00:00.5"
-                                                  Value="100">
-                                <EasingDoubleKeyFrame.EasingFunction>
-                                    <CubicEase EasingMode="EaseOut" />
-                                </EasingDoubleKeyFrame.EasingFunction>
-                            </EasingDoubleKeyFrame>
-
-                        </DoubleAnimationUsingKeyFrames>
-
-                    </Storyboard>
-                </Border.Resources>
-                
-                <TextBlock Foreground="White"
-                           TextAlignment="Center">
-                    <Run>Your session will expire in</Run>
-                    <Run x:Name="TimeRemainingRun"/>
-                    <LineBreak />
-                    <Run>Tap to extend your time</Run>
-                </TextBlock>
-            </Border>
+                <Frame x:Name="NavigationFrame" />
+            </NavigationView>
             
         </Grid>
 
-        <!--Progress indicator-->
-        <Border x:Name="BusyBorder"
-                Background="#7F000000"
-                Visibility="Collapsed">
-
-            <!--Indicates something is happening-->
-            <ProgressRing x:Name="BusyIndicator"
-                          Visibility="Visible"
-                          IsActive="False"
-                          Width="50"
-                          Height="50"
-                          Foreground="White"/>
-        </Border>
-
+        
         <!--Manage layout-->
         <!--<VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup" >

@@ -1,21 +1,7 @@
-﻿using KryptPad.Api.Models;
-using KryptPadCSApp.Classes;
+﻿using KryptPadCSApp.Classes;
 using KryptPadCSApp.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Core;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -33,17 +19,8 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
 
-            // Listen to the back button here
-            //_currentView.BackRequested += CurrentView_BackRequested;
-        }
 
-        //private void CurrentView_BackRequested(object sender, BackRequestedEventArgs e)
-        //{
-        //    // Tell the app we are signing out so that we don't end up auto-logging in again
-        //    (App.Current as App).SignInStatus = SignInStatus.SignedOut;
-        //    // Remove handler
-        //    _currentView.BackRequested -= CurrentView_BackRequested;
-        //}
+        }
 
         private async void SelectProfileViewPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -55,6 +32,26 @@ namespace KryptPadCSApp.Views
 
         }
 
-       
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            if (e.SourcePageType == typeof(MainPage))
+            {
+                Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
+            }
+
+            base.OnNavigatedFrom(e);
+        }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+
+            // If we came from the main page, clear the backstack
+            if (Frame.BackStack.Count > 0 && Frame.BackStack[Frame.BackStack.Count - 1].SourcePageType == typeof(MainPage))
+            {
+                Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
+            }
+
+            base.OnNavigatedTo(e);
+        }
+
     }
 }

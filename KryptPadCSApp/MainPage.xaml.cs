@@ -22,6 +22,8 @@ using KryptPadCSApp.Classes;
 using KryptPad.Api;
 using Windows.UI.Core;
 using System.Net;
+//using OneCode.Windows.UWP.Controls;
+using System.ComponentModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -34,206 +36,143 @@ namespace KryptPadCSApp
     {
 
         #region Fields
-        private bool _messageShowing = false;
+        
+        // List of ValueTuple holding the Navigation Tag and the relative Navigation Page  
+        private readonly IList<(string Tag, Type Page, NavigationHelper.NavigationType NavType)> _pages = 
+            new List<(string Tag, Type Page, NavigationHelper.NavigationType NavType)>
+        {
+            ("home", typeof(ItemsPage), NavigationHelper.NavigationType.Main),
+            ("favs", typeof(FavoritesPage), NavigationHelper.NavigationType.Main),
+            ("signin", typeof(LoginPage), NavigationHelper.NavigationType.Root),
+            ("about", typeof(AboutPage), NavigationHelper.NavigationType.Main),
+            ("feedback", typeof(FeedbackPage), NavigationHelper.NavigationType.Main),
+            ("donate", typeof(DonatePage), NavigationHelper.NavigationType.Main),
+            ("switch", typeof(SelectProfilePage), NavigationHelper.NavigationType.Root),
+            ("signout", typeof(LoginPage), NavigationHelper.NavigationType.Root),
+            ("settings", typeof(SettingsPage), NavigationHelper.NavigationType.Current)
+        };
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets the main frame for content
         /// </summary>
-        public Frame RootFrame { get { return NavFrame; } }
-
-        private bool IsBusy { get; set; }
-                
+        public Frame RootFrame { get { return NavigationFrame; } }
+        
         #endregion
 
+        #region Constructor
 
         public MainPage()
         {
             this.InitializeComponent();
 
-            // Some API events
-            KryptPadApi.SessionEnded += async () =>
-            {
-                // Get the dispatcher
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    // Triggered when the access token has reached its expiration date
-                    NavigationHelper.Navigate(typeof(LoginPage), null);
-                    // Clear backstack too
-                    NavigationHelper.ClearBackStack();
-
-                    // Hide the message
-                    ShowSessionWarningMessage(false);
-                });
-
-            };
-
-            KryptPadApi.SessionEnding += async (expiration) =>
-            {
-                var warningTime = expiration.AddMinutes(-1);
-
-                // Show the message
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-
-                    if (DateTime.Now >= warningTime && !_messageShowing)
-                    {
-                        // Show the warning
-                        ShowSessionWarningMessage(true);
-                    }
-                    else if (DateTime.Now < warningTime && _messageShowing)
-                    {
-                        // Hide the message
-                        ShowSessionWarningMessage(false);
-                    }
-
-                    // Show time remaining
-                    if (DateTime.Now >= warningTime)
-                    {
-                        // Get time remaining
-                        var timeRemaining = DateTime.Now.Subtract(expiration);
-                        // Set the label with how much time the user has left
-                        TimeRemainingRun.Text = timeRemaining.ToString(@"mm\:ss");
-                    }
-                });
-            };
-
-            // Success, tell the app we are signed in
-            (App.Current as App).PropertyChanged += (sender, e) =>
-            {
-                // Success, tell the app we are signed in
-                if (e.PropertyName == nameof(App.SignInStatus))
-                {
-                    ShowPane((App.Current as App).SignInStatus == SignInStatus.SignedInWithProfile);
-                }
-            };
-
-            RootFrame.Navigated += RootFrame_Navigated;
-                       
-
-        }
-
-        #region Navigation
-
-       
-
-        private void RootFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            // Get the MainPage instance and hide the pane
-            var page = Window.Current.Content as MainPage;
-            if (page != null)
-            {
-                // Check the page type, and hide or show the pane
-                if (e.Content is ItemsPage || e.Content is LoginPage || e.Content is SelectProfilePage)
-                {
-                    HomeRadioButton.IsChecked = true;
-                }
-                else if (e.Content is DonatePage)
-                {
-                    DonateRadioButton.IsChecked = true;
-                }
-                else if (e.Content is FeedbackPage)
-                {
-                    FeedbackRadioButton.IsChecked = true;
-                }
-                else if (e.Content is AboutPage)
-                {
-                    AboutRadioButton.IsChecked = true;
-                }
-                else
-                {
-                    HomeRadioButton.IsChecked = false;
-                    DonateRadioButton.IsChecked = false;
-                    FeedbackRadioButton.IsChecked = false;
-                    AboutRadioButton.IsChecked = false;
-                }
-            }
-
-        }
-
-        private void HomeRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            var signInStatus = (App.Current as App).SignInStatus;
-            if (signInStatus == SignInStatus.SignedInWithProfile)
-            {
-                // Go to items list
-                NavigationHelper.Navigate(typeof(ItemsPage), null);
-
-            }
-            else if (signInStatus == SignInStatus.SignedIn)
-            {
-                // Pick a profile
-                NavigationHelper.Navigate(typeof(SelectProfilePage), null);
-            }
-            else
-            {
-                // Go to login screen
-                NavigationHelper.Navigate(typeof(LoginPage), null);
-            }
-
-        }
-
-        private void DonateRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate
-            NavigationHelper.Navigate(typeof(DonatePage), null);
-
-        }
-
-        private void FeedbackRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate
-            NavigationHelper.Navigate(typeof(FeedbackPage), null);
-
-        }
-
-        private void AboutRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate
-            NavigationHelper.Navigate(typeof(AboutPage), null);
-
-        }
-
-        private async void SignOutRadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            await DialogHelper.Confirm("Are you sure you want to sign out?", "SIGN OUT", (p) =>
-            {
-                // Navigate
-                NavigationHelper.Navigate(typeof(LoginPage), null);
-                // Clear backstack
-                NavigationHelper.ClearBackStack();
-            });
-
+            ShowSignedInControls();
         }
 
         #endregion
 
-        private void SessionEndWarning_Tapped(object sender, TappedRoutedEventArgs e)
+        #region Navigation
+
+        private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
-            KryptPadApi.ExtendSessionTime();
-            // Hide the message
-            ShowSessionWarningMessage(false);
+            // This turns the back button on if the frame can go back
+            UpdateBackButtonVisibility();
+
+            // Set up back request handler
+            SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+
+            // Set the nav frame events
+            NavigationFrame.Navigated += On_Navigated;
+
+        }
+
+        private void NavigateToPage(string navItemTag)
+        {
+            var item = _pages.First(p => p.Tag.Equals(navItemTag));
+
+            // If the page is select profile, clear the back stack
+            if (item.Page == typeof(SelectProfilePage))
+            {
+                // Clear backstack
+                NavigationHelper.ClearBackStack();
+
+            }
+
+            NavigationHelper.Navigate(item.Page, null, item.NavType);
+        }
+        
+        private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+
+            if (args.IsSettingsInvoked)
+                NavigationHelper.Navigate(typeof(SettingsPage), null);
+            else
+            {
+                // Getting the Tag from Content (args.InvokedItem is the content of NavigationViewItem)
+                var navItemTag = NavView.MenuItems
+                    .OfType<NavigationViewItem>()
+                    .First(i => args.InvokedItem.Equals(i.Content))
+                    .Tag.ToString();
+
+                NavigateToPage(navItemTag);
+            }
         }
 
 
-        #region Helper Methods
-
-        private void ShowSessionWarningMessage(bool value)
+        private void On_Navigated(object sender, NavigationEventArgs e)
         {
-            if (value)
+
+
+            if (NavigationFrame.SourcePageType == typeof(SettingsPage))
             {
-                // Show the message
-                BorderStoryBoardFadeIn.Begin();
+                // SettingsItem is not part of NavView.MenuItems, and doesn't have a Tag
+                NavView.SelectedItem = (NavigationViewItem)NavView.SettingsItem;
             }
             else
             {
-                // Hide the message
-                BorderStoryBoardFadeOut.Begin();
+                var item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
+                if (item.Page != null)
+                {
+                    NavView.SelectedItem = NavView.MenuItems
+                        .OfType<NavigationViewItem>()
+                        .First(n => n.Tag.Equals(item.Tag));
+                }
+                else
+                {
+                    // No page in the list
+                    NavView.SelectedItem = null;
+                }
             }
 
+            // Each time a navigation event occurs, update the Back button's visibility
+            UpdateBackButtonVisibility();
+        }
 
-            _messageShowing = value;
+        private void OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            // If we didn't handle the requerst, do default
+            if (!e.Handled)
+            {
+                NavigationHelper.GoBack(e);
+            }
+        }
+
+        #endregion
+
+        
+        #region Helper Methods
+
+        /// <summary>
+        /// Shows or hides the back button
+        /// </summary>
+        private void UpdateBackButtonVisibility()
+        {
+            // Each time a navigation event occurs, update the Back button's visibility
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                NavigationFrame.CanGoBack ?
+                AppViewBackButtonVisibility.Visible :
+                AppViewBackButtonVisibility.Collapsed;
         }
 
         #endregion
@@ -244,60 +183,28 @@ namespace KryptPadCSApp
         /// Shows or hides the pane
         /// </summary>
         /// <param name="value"></param>
-        public void ShowPane(bool value)
+        public void ShowSignedInControls()
         {
-            // Hide nav panel
-            //NavPanel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            var signinStatus = (App.Current as App).SignInStatus;
 
             // Hide buttons we can't access yet
-            var visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            SignOutRadioButton.Visibility = visibility;
-            //HomeRadioButton.Visibility = visibility;
-        }
+            var signedInWithProfile = signinStatus == SignInStatus.SignedInWithProfile ? Visibility.Visible : Visibility.Collapsed;
+            HomeNavButton.Visibility = signedInWithProfile;
+            FavNavButton.Visibility = signedInWithProfile;
+            SwitchProfileButton.Visibility = signedInWithProfile;
+            SignOutButton.Visibility = signedInWithProfile;
 
-        /// <summary>
-        /// Sets the busy state
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetIsBusy(bool value)
-        {
-            IsBusy = value;
-            BusyBorder.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            BusyIndicator.IsActive = value;
-        }
+            // Show settings if user is not signed out
+            NavView.IsSettingsVisible = signinStatus != SignInStatus.SignedOut;
+            NavView.IsPaneOpen = false;
 
+            // Show sign in if user is not signed in with a profile
+            SignInNavButton.Visibility = signinStatus != SignInStatus.SignedInWithProfile ? Visibility.Visible : Visibility.Collapsed;
+        }
+        
         #endregion
 
-        private async void BroadcastMessageText_Loaded(object sender, RoutedEventArgs e)
-        {
-
-            try
-            {
-                // Get broadcast message
-                var message = await KryptPadApi.GetBroadcastMessage();
-                if (!string.IsNullOrWhiteSpace(message))
-                {
-                    BroadcastMessage.Visibility = Visibility.Visible;
-                    BroadcastMessageText.Text = message;
-                }
-
-            }
-            catch (WebException ex)
-            {
-                // Something went wrong in the api
-                await DialogHelper.ShowMessageDialogAsync(ex.Message);
-            }
-            catch (Exception)
-            {
-                // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
-            }
-            
-        }
-
-        private void BroadcastCloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            BroadcastMessage.Visibility = Visibility.Collapsed;
-        }
+        
+        
     }
 }

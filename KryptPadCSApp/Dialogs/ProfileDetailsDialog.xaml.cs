@@ -108,7 +108,7 @@ namespace KryptPadCSApp.Dialogs
                 (App.Current as App).SignInStatus = SignInStatus.SignedInWithProfile;
 
                 // Redirect to the main item list page
-                NavigationHelper.Navigate(typeof(ItemsPage), null);
+                NavigationHelper.Navigate(typeof(ItemsPage), null, NavigationHelper.NavigationType.Main);
 
                 // Hide the dialog
                 Hide();
@@ -119,10 +119,10 @@ namespace KryptPadCSApp.Dialogs
                 await DialogHelper.ShowMessageDialogAsync(ex.Message);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Failed
-                await DialogHelper.ShowGenericErrorDialogAsync();
+                await DialogHelper.ShowGenericErrorDialogAsync(ex);
 
             }
 

@@ -28,16 +28,12 @@ namespace KryptPadCSApp.Views
         {
             this.InitializeComponent();
 
-#if DEBUG
-            // Show the option to turn on live mode
-            LiveModeCheckBox.Visibility = Visibility.Visible;
-#endif
         }
 
-        private void Hyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        private void TermsHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {
             // Go to terms page
-            NavigationHelper.GoToLicenseTerms();
+            NavigationHelper.Navigate(typeof(TermsPage), null);
         }
 
         private void PrivacyHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
@@ -46,8 +42,26 @@ namespace KryptPadCSApp.Views
             NavigationHelper.Navigate(typeof(PrivacyPage), null);
         }
 
+        private async void DonateLink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            try
+            {
+                // Launch the uri
+                await Windows.System.Launcher.LaunchUriAsync(
+                    new Uri("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5547784"));
+            }
+            catch (Exception)
+            {
+                // Failed
+                await DialogHelper.ShowMessageDialogAsync("Could not launch the requested url.");
+            }
+        }
+
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            // Clear backstack
+            NavigationHelper.ClearBackStack();
+
             await (DataContext as LoginPageViewModel).AutoLoginAsync();
         }
 
@@ -64,6 +78,13 @@ namespace KryptPadCSApp.Views
                 }
             }
         }
+
+        private async void ForgotPasswordLink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            var m = DataContext as LoginPageViewModel;
+            await m.SendForgotPasswordLinkAsync();
+        }
+
         
     }
 }
