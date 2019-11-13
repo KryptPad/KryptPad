@@ -37,7 +37,7 @@ namespace KryptPad.Api
         /// <summary>
         /// Gets the host address of the API service.
         /// </summary>
-        public static string ServiceHost { get; set; } = "https://localhost:44310/";
+        public static string ServiceHost { get; set; } = "http://localhost:44310/";
 
 #elif LOCAL_NET_CORE
         /// <summary>

@@ -1,12 +1,7 @@
 ﻿using KryptPadCSApp.Dialogs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Resources;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace KryptPadCSApp.Classes
@@ -16,9 +11,9 @@ namespace KryptPadCSApp.Classes
     /// </summary>
     class DialogHelper
     {
-        
+
         #region MessageDialog
-        
+
         /// <summary>
         /// Shows a generic connection error dialog
         /// </summary>
@@ -27,8 +22,14 @@ namespace KryptPadCSApp.Classes
         {
             // TODO: Implement some kind of error logging.
 
-            // This is a generic error message
-            return await ShowMessageDialogAsync(ResourceHelper.GetString("GenericError"), ResourceHelper.GetString("Error"));
+            // This is a generic error message. But in test mode, show the real thing
+            var errorMsg = "";
+#if LOCAL || LOCAL_NET_CORE || DEBUG_LIVE || DEBUG
+            errorMsg = ex.Message;
+#else
+            errorMsg = ResourceHelper.GetString("GenericError");
+#endif
+            return await ShowMessageDialogAsync(errorMsg, ResourceHelper.GetString("Error"));
 
         }
 
@@ -124,7 +125,7 @@ namespace KryptPadCSApp.Classes
         }
 
         #region Confirm
-        
+
         /// <summary>
         /// Creates a confirm prompt for the user
         /// </summary>
@@ -135,7 +136,7 @@ namespace KryptPadCSApp.Classes
         {
             return await Confirm(prompt, ResourceHelper.GetString("Confirm"), yes);
         }
-        
+
         /// <summary>
         /// Creates a confirm prompt for the user
         /// </summary>
@@ -169,6 +170,6 @@ namespace KryptPadCSApp.Classes
         }
 
         #endregion
-        
+
     }
 }
