@@ -82,7 +82,15 @@ namespace KryptPadCSApp.Views
 
             }
         }
+                
 
         #endregion
+
+        private async void ItemSearchBox_QuerySubmitted(SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
+        {
+            var m = DataContext as ItemsPageViewModel;
+
+            await m.Search(args.QueryText);
+        }
     }
 }

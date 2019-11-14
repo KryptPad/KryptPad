@@ -49,15 +49,11 @@
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <!--Search-->
-            <Grid Grid.Column="0">
-                <!--Search box-->
-                <TextBox x:Name="SearchTextBox" PlaceholderText="Search..." 
-                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         HorizontalAlignment="Stretch"
-                         VerticalAlignment="Center"
-                         Margin="12,0" />
-            </Grid>
+            <!--Search box-->
+            <SearchBox Grid.Column="0" VerticalAlignment="Center" x:Name="ItemSearchBox" 
+                           QuerySubmitted="ItemSearchBox_QuerySubmitted"
+                           PlaceholderText="Search" Margin="12,0,12,0"
+                            />
 
             <!--Menu-->
             <CommandBar Grid.Column="1" >

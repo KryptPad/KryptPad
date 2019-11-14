@@ -44,25 +44,7 @@ namespace KryptPadCSApp.Models
         /// Gets the selected items
         /// </summary>
         public ObservableCollection<ApiItem> SelectedItems { get; set; } = new ObservableCollection<ApiItem>();
-
-
-        private string _searchText;
-        /// <summary>
-        /// Gets or sets the search text
-        /// </summary>
-        public string SearchText
-        {
-            get { return _searchText; }
-            set
-            {
-                _searchText = value;
-                // Notify change
-                OnPropertyChanged(nameof(SearchText));
-                // Trigger search
-                var t = SearchForItems();
-            }
-        }
-
+        
         private Visibility _emptyMessageVisibility;
         /// <summary>
         /// Gets or sets whether the empty message is visible
@@ -240,7 +222,7 @@ namespace KryptPadCSApp.Models
             {
                 var item = p as ApiItem;
                 var category = (from c in Categories
-                                where c.Items.Contains(item)
+                                where c.Id == item.CategoryId
                                 select c).FirstOrDefault();
 
                 // Navigate to edit
@@ -391,6 +373,9 @@ namespace KryptPadCSApp.Models
 
             // Handle setting favorites
             SetFavoriteCommand = new Command(SetFavoriteCommandHandler);
+
+            //// Handle search
+            //SearchCommand = new Command(SearchCommandHandler);
         }
 
         #region Methods
@@ -436,35 +421,35 @@ namespace KryptPadCSApp.Models
             IsBusy = false;
 
         }
-
+        
         /// <summary>
-        /// Searches for items using a search string
+        /// Searches for items based on query text
         /// </summary>
-        /// <param name="searchText"></param>
-        public async Task SearchForItems()
+        /// <param name="queryText"></param>
+        /// <returns></returns>
+        public async Task Search(string queryText)
         {
+            // Set busy
+            IsBusy = true;
 
             try
             {
+                if (!string.IsNullOrWhiteSpace(queryText))
+                {
+                    // Search for items in the profile
+                    var resp = await KryptPadApi.Search(queryText);
 
-                // Filter out the items that don't match the search text. Also, filter out empty
-                // categories. Only categories with items will show up
-                // Issue #25 was fixed. Problem was returning an anonymous object instead of an ApiCategory
-                var categories = (from c in Categories
-                                  select new ApiCategory
-                                  {
-                                      Id = c.Id,
-                                      Name = c.Name,
-                                      Items = (from i in c.Items
-                                               where i.Name.IndexOf(SearchText, StringComparison.CurrentCultureIgnoreCase) >= 0
-                                               select i).ToArray()
-                                  }).Where(c => c.Items.Any());
+                    // Add view to the ItemsView object
+                    ItemsView.Source = resp.Categories;
 
-                // Add view to the ItemsView object
-                ItemsView.Source = categories;
+                    // Refresh
+                    OnPropertyChanged(nameof(ItemsView));
+                }
+                else
+                {
+                    await RefreshCategoriesAsync();
+                }
 
-                // Refresh
-                OnPropertyChanged(nameof(ItemsView));
             }
             catch (WebException ex)
             {
@@ -477,12 +462,14 @@ namespace KryptPadCSApp.Models
                 await DialogHelper.ShowGenericErrorDialogAsync(ex);
             }
 
+            // Set busy
+            IsBusy = false;
         }
-
         #endregion
 
         #region Command handlers
 
+        
         /// <summary>
         /// Handles the move command
         /// </summary>

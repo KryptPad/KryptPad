@@ -826,6 +826,41 @@ namespace KryptPad.Api
 
         }
 
+        /// <summary>
+        /// Searches the profile for items that match the query
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static async Task<CategoryResponse> Search(string query)
+        {
+
+            using (var client = new HttpClient(CreateHttpProtocolFilter()))
+            {
+                // Authorize the request
+                await AuthorizeRequest(client);
+                // Add passphrase to message
+                AddPassphraseHeader(client);
+                // Add the search query to the request body
+                var content = JsonContent(query);
+                // Send request and get a response
+                var response = await client.PostAsync(GetUrl($"api/profiles/{CurrentProfile.Id}/search"), content);
+
+                // Deserialize the object based on the result
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the data
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Deserialize the response as an ApiResponse object
+                    return JsonConvert.DeserializeObject<CategoryResponse>(data);
+                }
+                else
+                {
+                    throw await CreateException(response);
+                }
+            }
+
+        }
+
         #endregion
 
         #region Categories
@@ -1348,7 +1383,13 @@ namespace KryptPad.Api
             }
             else
             {
-                exception = new System.Net.WebException("An error occurred while trying to process your request.");
+                var reason = "An error occurred while trying to process your request.";
+#if LOCAL || LOCAL_NET_CORE || DEBUG_LIVE || DEBUG
+                // In debug mode. Get the reason phrase
+                reason = await response.Content.ReadAsStringAsync();
+#endif
+
+                exception = new System.Net.WebException(reason);
             }
 
             // Log the error
